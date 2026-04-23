@@ -13,9 +13,28 @@ class CategoryController {
   });
 
   getAll = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+    const skip = (page - 1) * limit;
+
+    const categories = await Category.find({ isDeleted: false })
+      .select("-isDeleted -__v")
+      .skip(skip)
+      .limit(limit);
+
+    const total = await Category.countDocuments({ isDeleted: false });
+
     new OK({
       message: "Get all categories successfully",
-      metadata: await Category.find({ isDeleted: false }),
+      metadata: {
+        categories,
+        pagination: {
+          total,
+          page,
+          limit,
+          totalPages: Math.ceil(total / limit),
+        },
+      },
     }).send(res);
   });
 
