@@ -1,20 +1,24 @@
-import { Request, Response, NextFunction } from "express";
+import { Controller } from "@tsed/common";
+import { Get, Post, Put, Delete } from "@tsed/schema";
+import { BodyParams, PathParams, QueryParams, UseBefore } from "@tsed/platform-express";
 import Product from "../models/product.model";
 import { OK, CREATED } from "../core/success.response";
 import { BadRequestError } from "../core/error.response";
-import asyncHandler from "../helpers/asyncHandler.helper";
+import { authentication } from "../middlewares/auth.middleware";
+import { uploadImage } from "../middlewares/coudinary.middleware";
+import multer from "multer";
 
-class ProductController {
-  create = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    new CREATED({
-      message: "Product created successfully",
-      metadata: await Product.create(req.body),
-    }).send(res);
-  });
+const upload = multer({ storage: multer.diskStorage({}) });
 
-  getAll = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    const page = parseInt(req.query.page as string) || 1;
-    const limit = parseInt(req.query.limit as string) || 10;
+@Controller("/products")
+export class ProductController {
+  @Get("/")
+  async getAll(
+    @QueryParams("page") pageQuery: string,
+    @QueryParams("limit") limitQuery: string
+  ) {
+    const page = parseInt(pageQuery) || 1;
+    const limit = parseInt(limitQuery) || 10;
     const skip = (page - 1) * limit;
 
     const products = await Product.find({ isDeleted: false })
@@ -26,7 +30,7 @@ class ProductController {
 
     const total = await Product.countDocuments({ isDeleted: false });
 
-    new OK({
+    return new OK({
       message: "Get all products successfully",
       metadata: {
         products,
@@ -37,35 +41,50 @@ class ProductController {
           totalPages: Math.ceil(total / limit),
         },
       },
-    }).send(res);
-  });
+    });
+  }
 
-  getById = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    const product = await Product.findById(req.params.id).populate("category_id location_id");
+  @Get("/:id")
+  async getById(@PathParams("id") id: string) {
+    const product = await Product.findById(id).populate("category_id location_id");
     if (!product || product.isDeleted) throw new BadRequestError("Product not found");
-    new OK({
+    return new OK({
       message: "Get product successfully",
       metadata: product,
-    }).send(res);
-  });
+    });
+  }
 
-  update = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    const product = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true });
+  @Post("/")
+  @UseBefore(authentication)
+  @UseBefore(upload.single("image"))
+  @UseBefore(uploadImage)
+  async create(@BodyParams() body: any) {
+    const product = await Product.create(body);
+    return new CREATED({
+      message: "Product created successfully",
+      metadata: product,
+    });
+  }
+
+  @Put("/:id")
+  @UseBefore(authentication)
+  async update(@PathParams("id") id: string, @BodyParams() body: any) {
+    const product = await Product.findByIdAndUpdate(id, body, { new: true });
     if (!product) throw new BadRequestError("Product not found");
-    new OK({
+    return new OK({
       message: "Product updated successfully",
       metadata: product,
-    }).send(res);
-  });
+    });
+  }
 
-  delete = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    const product = await Product.findByIdAndUpdate(req.params.id, { isDeleted: true }, { new: true });
+  @Delete("/:id")
+  @UseBefore(authentication)
+  async delete(@PathParams("id") id: string) {
+    const product = await Product.findByIdAndUpdate(id, { isDeleted: true }, { new: true });
     if (!product) throw new BadRequestError("Product not found");
-    new OK({
+    return new OK({
       message: "Product deleted successfully",
       metadata: product,
-    }).send(res);
-  });
+    });
+  }
 }
-
-export default new ProductController();
