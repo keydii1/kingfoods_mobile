@@ -13,9 +13,30 @@ class ProductController {
   });
 
   getAll = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+    const skip = (page - 1) * limit;
+
+    const products = await Product.find({ isDeleted: false })
+      .select("-isDeleted -__v -createdAt -updatedAt")
+      .populate("category_id", "name")
+      .populate("location_id", "name")
+      .skip(skip)
+      .limit(limit);
+
+    const total = await Product.countDocuments({ isDeleted: false });
+
     new OK({
       message: "Get all products successfully",
-      metadata: await Product.find({ isDeleted: false }).populate("category_id location_id"),
+      metadata: {
+        products,
+        pagination: {
+          total,
+          page,
+          limit,
+          totalPages: Math.ceil(total / limit),
+        },
+      },
     }).send(res);
   });
 
