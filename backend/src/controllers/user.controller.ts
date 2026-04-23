@@ -1,10 +1,26 @@
 import { Request, Response, NextFunction } from "express";
 import User from "../models/user.model";
 import { OK, CREATED } from "../core/success.response";
-import { BadRequestError } from "../core/error.response";
+import { BadRequestError, BadUserRequestError } from "../core/error.response";
 import asyncHandler from "../helpers/asyncHandler.helper";
+import { createToken } from "../auth/auth.util";
 
 class UserController {
+  login = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    const { username, password } = req.body;
+    const user = await User.findOne({ username });
+    if (!user) throw new BadUserRequestError("Invalid username or password");
+
+    const isMatch = await user.comparePassword(password);
+    if (!isMatch) throw new BadUserRequestError("Invalid username or password");
+
+    const token = createToken({ userId: user._id, isAdmin: user.isAdmin });
+
+    new OK({
+      message: "Login successfully",
+      metadata: { user, token },
+    }).send(res);
+  });
   create = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     new CREATED({
       message: "User created successfully",
