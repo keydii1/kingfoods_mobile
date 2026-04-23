@@ -1,6 +1,5 @@
-import { Controller } from "@tsed/common";
+import { Controller, BodyParams, PathParams, QueryParams, UseBefore } from "@tsed/common";
 import { Get, Post, Put, Delete } from "@tsed/schema";
-import { BodyParams, PathParams, QueryParams, UseBefore } from "@tsed/platform-express";
 import Category from "../models/category.model";
 import { OK, CREATED } from "../core/success.response";
 import { BadRequestError } from "../core/error.response";

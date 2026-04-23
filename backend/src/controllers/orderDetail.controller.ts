@@ -1,6 +1,5 @@
-import { Controller } from "@tsed/common";
+import { Controller, BodyParams, PathParams } from "@tsed/common";
 import { Get, Post, Put, Delete } from "@tsed/schema";
-import { BodyParams, PathParams } from "@tsed/platform-express";
 import OrderDetail from "../models/orderDetail.model";
 import { OK, CREATED } from "../core/success.response";
 import { BadRequestError } from "../core/error.response";

@@ -1,6 +1,5 @@
-import { Controller } from "@tsed/common";
+import { Controller, BodyParams, PathParams } from "@tsed/common";
 import { Get, Post, Put, Delete } from "@tsed/schema";
-import { BodyParams, PathParams } from "@tsed/platform-express";
 import User from "../models/user.model";
 import { OK, CREATED } from "../core/success.response";
 import { BadRequestError, BadUserRequestError } from "../core/error.response";
