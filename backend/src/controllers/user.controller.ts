@@ -4,6 +4,7 @@ import { OK, CREATED } from "../core/success.response";
 import { BadRequestError, BadUserRequestError } from "../core/error.response";
 import asyncHandler from "../helpers/asyncHandler.helper";
 import { createToken } from "../auth/auth.util";
+import bcrypt from "bcrypt";
 
 class UserController {
   login = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
@@ -11,7 +12,7 @@ class UserController {
     const user = await User.findOne({ username });
     if (!user) throw new BadUserRequestError("Invalid username or password");
 
-    const isMatch = await user.comparePassword(password);
+    const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) throw new BadUserRequestError("Invalid username or password");
 
     const token = createToken({ userId: user._id, isAdmin: user.isAdmin });
@@ -21,10 +22,15 @@ class UserController {
       metadata: { user, token },
     }).send(res);
   });
+
   create = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    const { password } = req.body;
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = await User.create({ ...req.body, password: hashedPassword });
+
     new CREATED({
       message: "User created successfully",
-      metadata: await User.create(req.body),
+      metadata: newUser,
     }).send(res);
   });
 
