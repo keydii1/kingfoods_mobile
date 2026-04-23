@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Kingfood WMS – Manager App</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:linear-gradient(145deg,#0a1628 0%,#0f2444 50%,#0a1628 100%);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:24px 10px 60px}
+
+h1.app-title{color:#fff;font-size:22px;font-weight:900;margin-bottom:6px;letter-spacing:.5px}
+.app-subtitle{color:rgba(255,255,255,.5);font-size:13px;margin-bottom:20px}
+
+/* ── SCREEN SELECTOR ── */
+.selector-wrap{width:100%;max-width:900px;margin-bottom:24px}
+.selector-group{margin-bottom:10px}
+.group-label{color:rgba(255,255,255,.45);font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;padding-left:4px}
+.btn-row{display:flex;flex-wrap:wrap;gap:7px}
+.sbtn{padding:8px 14px;border-radius:20px;border:1.5px solid rgba(255,255,255,.15);background:rgba(255,255,255,.06);color:rgba(255,255,255,.8);font-size:11.5px;font-weight:600;cursor:pointer;transition:all .2s;white-space:nowrap;font-family:'Inter',sans-serif}
+.sbtn:hover{background:rgba(255,255,255,.14)}
+.sbtn.active{background:#1565c0;border-color:#42a5f5;color:#fff;box-shadow:0 3px 14px rgba(21,101,192,.55)}
+
+/* ── PHONE ── */
+.phone{width:390px;height:812px;background:#f0f4f8;border-radius:44px;box-shadow:0 60px 120px rgba(0,0,0,.6),0 0 0 10px #111,0 0 0 12px #2e2e2e;overflow:hidden;display:flex;flex-direction:column;position:relative;flex-shrink:0}
+.screen{display:none;position:absolute;inset:0;flex-direction:column;overflow:hidden}
+.screen.active{display:flex}
+
+/* ── STATUS BAR ── */
+.sbar{background:#0d47a1;display:flex;justify-content:space-between;align-items:center;padding:14px 24px 10px;color:#fff;font-size:12px;font-weight:600;flex-shrink:0}
+.sbar-r{display:flex;gap:5px;font-size:11px}
+
+/* ── NAV ── */
+.nav{background:#0d47a1;padding:10px 18px 16px;display:flex;align-items:center;gap:10px;flex-shrink:0}
+.nav .back{color:#90caf9;font-size:24px;cursor:pointer}
+.nav h1{color:#fff;font-size:16px;font-weight:800;flex:1;line-height:1.2}
+.badge{font-size:10px;font-weight:700;padding:3px 9px;border-radius:12px;white-space:nowrap}
+.bg-red{background:#ef5350;color:#fff}
+.bg-green{background:#43a047;color:#fff}
+.bg-blue{background:#1e88e5;color:#fff}
+.bg-orange{background:#fb8c00;color:#fff}
+.bg-gray{background:#546e7a;color:#fff}
+.bg-purple{background:#7b1fa2;color:#fff}
+.bg-teal{background:#00897b;color:#fff}
+
+/* ── CONTENT ── */
+.content{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:12px;background:#eef2f7;min-height:0}
+.content::-webkit-scrollbar{display:none}
+
+/* ── BOTTOM NAV ── */
+.bnav{background:#fff;display:flex;justify-content:space-around;padding:10px 0 22px;border-top:1px solid #e0e0e0;flex-shrink:0}
+.bni{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer}
+.bni .ic{font-size:20px}
+.bni .lb{font-size:9px;color:#aaa;font-weight:600}
+.bni.on .lb{color:#1565c0;font-weight:800}
+
+/* ── CARDS ── */
+.card{background:#fff;border-radius:18px;padding:16px;box-shadow:0 2px 12px rgba(0,0,0,.07)}
+.card-title{font-size:11px;font-weight:700;color:#999;letter-spacing:.8px;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+
+.divider{height:1px;background:#f2f2f2;margin:8px 0}
+
+/* ── TAGS ── */
+.tag{font-size:10px;font-weight:700;padding:3px 9px;border-radius:8px;white-space:nowrap}
+.tg{background:#e8f5e9;color:#2e7d32}
+.tr{background:#ffebee;color:#c62828}
+.to{background:#fff3e0;color:#e65100}
+.tb{background:#e3f2fd;color:#1565c0}
+.tgr{background:#f5f5f5;color:#666}
+.tp{background:#f3e5f5;color:#6a1b9a}
+.tt{background:#e0f2f1;color:#00695c}
+
+/* ── ALERTS ── */
+.alert{border-radius:14px;padding:13px 15px;display:flex;gap:11px;align-items:flex-start}
+.a-red{background:linear-gradient(135deg,#e53935,#b71c1c);box-shadow:0 4px 16px rgba(229,57,53,.35)}
+.a-green{background:linear-gradient(135deg,#43a047,#1b5e3b);box-shadow:0 4px 16px rgba(27,94,59,.3)}
+.a-orange{background:linear-gradient(135deg,#fb8c00,#e65100);box-shadow:0 4px 16px rgba(251,140,0,.3)}
+.a-blue{background:linear-gradient(135deg,#1e88e5,#0d47a1);box-shadow:0 4px 16px rgba(30,136,229,.3)}
+.a-purple{background:linear-gradient(135deg,#8e24aa,#4a148c);box-shadow:0 4px 16px rgba(142,36,170,.3)}
+.alert-ico{font-size:22px;flex-shrink:0;line-height:1.2}
+.alert-body h3{color:#fff;font-size:13px;font-weight:800}
+.alert-body p{color:rgba(255,255,255,.85);font-size:11px;margin-top:3px;line-height:1.4}
+
+/* ── PROGRESS ── */
+.pbar{height:7px;background:#e9ecef;border-radius:10px;overflow:hidden}
+.pf{height:100%;border-radius:10px}
+.pf-g{background:linear-gradient(90deg,#66bb6a,#2e7d32)}
+.pf-r{background:linear-gradient(90deg,#ef5350,#b71c1c)}
+.pf-o{background:linear-gradient(90deg,#ffa726,#e65100)}
+.pf-b{background:linear-gradient(90deg,#42a5f5,#1565c0)}
+
+/* ── BUTTONS ── */
+.btn{border:none;border-radius:14px;padding:14px;width:100%;font-size:14px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;font-family:'Inter',sans-serif;transition:transform .1s}
+.btn:active{transform:scale(.97)}
+.btn-blue{background:linear-gradient(135deg,#1565c0,#0d47a1);color:#fff;box-shadow:0 6px 18px rgba(21,101,192,.4)}
+.btn-red{background:linear-gradient(135deg,#c62828,#b71c1c);color:#fff;box-shadow:0 6px 18px rgba(198,40,40,.35)}
+.btn-green{background:linear-gradient(135deg,#2e7d32,#1b5e3b);color:#fff;box-shadow:0 6px 18px rgba(46,125,50,.35)}
+.btn-orange{background:linear-gradient(135deg,#e65100,#bf360c);color:#fff;box-shadow:0 6px 18px rgba(230,81,0,.3)}
+.btn-out{background:#fff;color:#1565c0;border:2px solid #1565c0}
+.btn-sm{padding:8px 14px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;border:none;font-family:'Inter',sans-serif}
+.bsm-green{background:#e8f5e9;color:#2e7d32}
+.bsm-red{background:#ffebee;color:#c62828}
+.bsm-blue{background:#e3f2fd;color:#1565c0}
+.bsm-orange{background:#fff3e0;color:#e65100}
+
+/* LIVE indicator */
+.live{display:flex;align-items:center;gap:4px;background:rgba(239,83,80,.85);padding:3px 9px;border-radius:12px}
+.live span{color:#fff;font-size:10px;font-weight:700}
+.ldot{width:6px;height:6px;background:#fff;border-radius:50%;animation:blink 1s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+
+/* ── AVATARS ── */
+.av{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;flex-shrink:0}
+.av-b{background:linear-gradient(135deg,#42a5f5,#1565c0)}
+.av-g{background:linear-gradient(135deg,#66bb6a,#2e7d32)}
+.av-o{background:linear-gradient(135deg,#ffa726,#e65100)}
+.av-p{background:linear-gradient(135deg,#ab47bc,#6a1b9a)}
+.av-r{background:linear-gradient(135deg,#ef5350,#c62828)}
+.av-t{background:linear-gradient(135deg,#26c6da,#00838f)}
+
+/* ═════════════════════════════
+   SCREEN SPECIFIC STYLES
+════════════════════════════= */
+
+/* S0: Manager Home */
+.mgr-header{background:linear-gradient(145deg,#0d47a1,#1565c0);border-radius:18px;padding:18px}
+.mh-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px}
+.mh-left h2{color:#fff;font-size:16px;font-weight:800}
+.mh-left p{color:rgba(255,255,255,.65);font-size:12px;margin-top:2px}
+.mh-avatar{width:44px;height:44px;background:rgba(255,255,255,.18);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px}
+.kpi-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.kpi{border-radius:14px;padding:14px;color:#fff}
+.kpi-b{background:linear-gradient(135deg,#1e88e5,#1565c0)}
+.kpi-g{background:linear-gradient(135deg,#43a047,#2e7d32)}
+.kpi-o{background:linear-gradient(135deg,#fb8c00,#e65100)}
+.kpi-p{background:linear-gradient(135deg,#8e24aa,#6a1b9a)}
+.kpi-r{background:linear-gradient(135deg,#e53935,#c62828)}
+.kpi-t{background:linear-gradient(135deg,#00897b,#00695c)}
+.kpi-icon{font-size:20px;margin-bottom:6px}
+.kpi-val{font-size:24px;font-weight:900}
+.kpi-lbl{font-size:10px;opacity:.8;margin-top:2px}
+
+/* S1: Staff Monitoring */
+.staff-filter{display:flex;gap:7px;flex-wrap:wrap}
+.sf-btn{padding:6px 12px;border-radius:12px;border:1.5px solid #ddd;background:#fff;font-size:11px;font-weight:700;cursor:pointer;color:#666;font-family:'Inter',sans-serif;transition:all .2s}
+.sf-btn.active{background:#e3f2fd;border-color:#1e88e5;color:#1565c0}
+.staff-row{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid #f5f5f5}
+.staff-row:last-child{border-bottom:none}
+.sr-info{flex:1}
+.sr-name{font-size:13px;font-weight:700;color:#1a1a1a}
+.sr-detail{font-size:11px;color:#888;margin-top:1px}
+.sr-speed{text-align:right}
+.sp-val{font-size:15px;font-weight:900}
+.sp-g{color:#2e7d32} .sp-r{color:#e53935} .sp-o{color:#e65100}
+.sp-unit{font-size:10px;color:#aaa}
+.status-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.sd-active{background:#4caf50;box-shadow:0 0 0 3px rgba(76,175,80,.25)}
+.sd-break{background:#ff9800}
+.sd-low{background:#f44336;animation:sdpulse 1s infinite}
+@keyframes sdpulse{0%,100%{box-shadow:0 0 0 0 rgba(244,67,54,.5)}50%{box-shadow:0 0 0 5px rgba(244,67,54,0)}}
+.sd-done{background:#9e9e9e}
+
+/* S2: Incident/Alert Center */
+.inc-item{border-radius:14px;padding:13px;margin-bottom:9px;border-left:4px solid transparent;background:#fff;box-shadow:0 1px 8px rgba(0,0,0,.06)}
+.inc-item:last-child{margin-bottom:0}
+.inc-urgent{border-left-color:#f44336;background:#fff8f8}
+.inc-warn{border-left-color:#ff9800;background:#fffcf5}
+.inc-info{border-left-color:#1e88e5;background:#f8fbff}
+.inc-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px}
+.inc-type{font-size:11px;font-weight:700}
+.inc-type-red{color:#f44336} .inc-type-orange{color:#ff9800} .inc-type-blue{color:#1565c0}
+.inc-time{font-size:10px;color:#bbb}
+.inc-title{font-size:13px;font-weight:700;color:#222;margin-bottom:3px}
+.inc-desc{font-size:11px;color:#666;line-height:1.45}
+.inc-footer{display:flex;gap:7px;margin-top:9px}
+
+/* S3: Zone Map / Heatmap */
+.heatmap{background:#0d1b2a;border-radius:16px;height:260px;position:relative;overflow:hidden;border:1px solid #1e3a5f}
+.hmap-grid{position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 31px,rgba(30,136,229,.08) 31px,rgba(30,136,229,.08) 32px),repeating-linear-gradient(90deg,transparent,transparent 31px,rgba(30,136,229,.08) 31px,rgba(30,136,229,.08) 32px)}
+.zone-block{position:absolute;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:all .3s}
+.zone-block h4{color:#fff;font-size:11px;font-weight:800;text-align:center}
+.zone-block p{color:rgba(255,255,255,.7);font-size:10px;margin-top:2px}
+.z-hot{background:rgba(244,67,54,.75);border:1.5px solid #f44336;box-shadow:0 0 20px rgba(244,67,54,.4)}
+.z-warm{background:rgba(255,152,0,.7);border:1.5px solid #ff9800;box-shadow:0 0 15px rgba(255,152,0,.3)}
+.z-cool{background:rgba(30,136,229,.65);border:1.5px solid #1e88e5;box-shadow:0 0 12px rgba(30,136,229,.25)}
+.z-ok{background:rgba(67,160,71,.65);border:1.5px solid #43a047;box-shadow:0 0 12px rgba(67,160,71,.25)}
+.hmap-legend{display:flex;gap:12px;flex-wrap:wrap;padding:6px 0}
+.hml{display:flex;align-items:center;gap:5px;font-size:11px;color:#666}
+.hml-dot{width:10px;height:10px;border-radius:50%}
+.staff-pin{position:absolute;font-size:14px;z-index:5;animation:float .8s ease-in-out infinite alternate}
+@keyframes float{0%{transform:translateY(-2px)}100%{transform:translateY(2px)}}
+
+/* S4: Order Management */
+.order-table-item{display:flex;align-items:center;gap:10px;padding:12px 14px;background:#fff;border-radius:14px;margin-bottom:8px;box-shadow:0 1px 6px rgba(0,0,0,.05)}
+.oti-priority{width:6px;height:44px;border-radius:3px;flex-shrink:0}
+.prio-high{background:#f44336}
+.prio-mid{background:#ff9800}
+.prio-low{background:#43a047}
+.oti-info{flex:1}
+.oti-id{font-size:13px;font-weight:800;color:#1a1a1a}
+.oti-store{font-size:11px;color:#888;margin-top:1px}
+.oti-progress{margin-top:6px}
+.oti-right{text-align:right}
+.oti-pct{font-size:15px;font-weight:900}
+.pct-g{color:#2e7d32} .pct-o{color:#e65100} .pct-r{color:#c62828}
+.oti-assign{font-size:10px;color:#888;margin-top:3px}
+.assign-btn{background:#e3f2fd;color:#1565c0;border:none;font-size:10px;font-weight:700;padding:3px 8px;border-radius:8px;cursor:pointer;font-family:'Inter',sans-serif;margin-top:4px}
+
+/* S5: Shift Report */
+.shift-summary{background:linear-gradient(135deg,#0d47a1,#1565c0);border-radius:18px;padding:18px}
+.ss-title{color:#fff;font-size:16px;font-weight:800;margin-bottom:12px}
+.ss-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.sss{background:rgba(255,255,255,.12);border-radius:12px;padding:12px;text-align:center;color:#fff}
+.sss-val{font-size:22px;font-weight:900}
+.sss-lbl{font-size:10px;opacity:.7;margin-top:2px}
+.perf-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #f5f5f5}
+.perf-row:last-child{border-bottom:none}
+.pr-rank{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;flex-shrink:0}
+.r1{background:linear-gradient(135deg,#ffd700,#ff8800)}
+.r2{background:linear-gradient(135deg,#b0bec5,#78909c)}
+.r3{background:linear-gradient(135deg,#cd7f32,#8d4e0f)}
+.rn{background:#e5e5e5;color:#666;font-size:11px}
+.pr-info{flex:1}
+.pr-name{font-size:13px;font-weight:700;color:#222}
+.pr-zone{font-size:11px;color:#888}
+.pr-score{text-align:right}
+.prs-val{font-size:16px;font-weight:900}
+.prs-g{color:#2e7d32} .prs-r{color:#e53935}
+
+/* S6: Reassign Staff */
+.reassign-header{background:linear-gradient(135deg,#4a148c,#7b1fa2);border-radius:16px;padding:16px;margin-bottom:0}
+.rh-title{color:#fff;font-size:15px;font-weight:800}
+.rh-sub{color:rgba(255,255,255,.7);font-size:12px;margin-top:4px}
+.zone-card{border-radius:14px;padding:14px;margin-bottom:9px;cursor:pointer;transition:all .2s}
+.zone-card:last-child{margin-bottom:0}
+.zc-overload{background:#fff8f8;border:1.5px solid #ffcdd2}
+.zc-normal{background:#f8fff8;border:1.5px solid #e8f5e9}
+.zc-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.zc-name{font-size:14px;font-weight:800;color:#1a1a1a}
+.zc-pbar{margin-bottom:8px}
+.zc-meta{display:flex;justify-content:space-between}
+.zc-meta-item{font-size:11px;color:#888}
+.zc-meta-val{font-weight:700;color:#333}
+.drag-staff{display:flex;align-items:center;gap:8px;background:#fff;border-radius:10px;padding:8px 10px;margin-top:8px;box-shadow:0 1px 4px rgba(0,0,0,.08);cursor:grab}
+.ds-name{font-size:12px;font-weight:700;color:#333}
+.ds-speed{font-size:11px;font-weight:700;color:#1565c0}
+
+/* S7: Inventory Quick Check */
+.iqc-scan{background:#0d1b2a;border-radius:16px;height:180px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;position:relative;overflow:hidden}
+.iqc-corners{position:absolute;inset:16px;border:2px solid transparent;background:linear-gradient(#0d1b2a,#0d1b2a) padding-box, linear-gradient(135deg,#1e88e5,transparent,#1e88e5) border-box;border-radius:10px}
+.iqc-label{position:relative;text-align:center;color:#fff}
+.iqc-label h3{font-size:15px;font-weight:800}
+.iqc-label p{font-size:11px;opacity:.6;margin-top:3px}
+.iqc-btn{position:relative;background:linear-gradient(135deg,#1e88e5,#1565c0);color:#fff;border:none;border-radius:50%;width:56px;height:56px;font-size:24px;cursor:pointer;box-shadow:0 4px 16px rgba(30,136,229,.5);display:flex;align-items:center;justify-content:center}
+.check-item{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid #f5f5f5}
+.check-item:last-child{border-bottom:none}
+.ci-check{width:24px;height:24px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.ci-ok{background:#e8f5e9;color:#2e7d32}
+.ci-bad{background:#ffebee;color:#c62828}
+.ci-info{flex:1}
+.ci-name{font-size:13px;font-weight:700;color:#1a1a1a}
+.ci-sku{font-size:11px;color:#888}
+.ci-qty{font-size:13px;font-weight:800}
+.cq-ok{color:#2e7d32} .cq-bad{color:#f44336}
+</style>
+</head>
+<body>
+
+<h1 class="app-title">👔 Kingfood WMS – Manager App</h1>
+<p class="app-subtitle">Dành riêng cho Quản lý Kho · 7 màn hình</p>
+
+<!-- ── SELECTOR ── -->
+<div class="selector-wrap">
+  <div class="selector-group">
+    <div class="group-label">👔 Manager Screens</div>
+    <div class="btn-row">
+      <button class="sbtn active" onclick="go(0)">📋 Tổng quan Ca</button>
+      <button class="sbtn" onclick="go(1)">👥 Giám sát Nhân sự</button>
+      <button class="sbtn" onclick="go(2)">🚨 Trung tâm Sự cố</button>
+      <button class="sbtn" onclick="go(3)">🗺️ Heatmap Kho</button>
+      <button class="sbtn" onclick="go(4)">📦 Quản lý Đơn hàng</button>
+      <button class="sbtn" onclick="go(5)">📊 Báo cáo Ca</button>
+      <button class="sbtn" onclick="go(6)">🔄 Điều phối Nhân sự</button>
+      <button class="sbtn" onclick="go(7)">🔍 Kiểm tra Kho</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── PHONE ── -->
+<div class="phone">
+
+<!-- S0: Manager Home / Overview -->
+<div class="screen active" id="s0">
+  <div class="sbar"><span id="clock">10:45</span><div class="sbar-r">📶 🛜 🔋 92%</div></div>
+  <div class="nav"><h1>Tổng quan Ca Sáng</h1><div class="live"><div class="ldot"></div><span>LIVE</span></div></div>
+  <div class="content">
+    <!-- Manager Header -->
+    <div class="mgr-header">
+      <div class="mh-top">
+        <div class="mh-left"><h2>Xin chào, Minh Tuấn 👔</h2><p>Quản lý Ca · 08:00 – 16:00 · 22/04</p></div>
+        <div class="mh-avatar">👔</div>
+      </div>
+      <div style="background:rgba(255,255,255,.12);border-radius:12px;padding:11px;display:flex;justify-content:space-around">
+        <div style="text-align:center;color:#fff"><div style="font-size:20px;font-weight:900">87%</div><div style="font-size:10px;opacity:.7">Hoàn thành</div></div>
+        <div style="width:1px;background:rgba(255,255,255,.2)"></div>
+        <div style="text-align:center;color:#fff"><div style="font-size:20px;font-weight:900">8/10</div><div style="font-size:10px;opacity:.7">Nhân sự</div></div>
+        <div style="width:1px;background:rgba(255,255,255,.2)"></div>
+        <div style="text-align:center;color:#fff"><div style="font-size:20px;font-weight:900">1,284</div><div style="font-size:10px;opacity:.7">SKU Done</div></div>
+      </div>
+    </div>
+
+    <!-- KPI Grid -->
+    <div class="kpi-grid">
+      <div class="kpi kpi-g"><div class="kpi-icon">✅</div><div class="kpi-val">1,284</div><div class="kpi-lbl">SKU đã pick</div></div>
+      <div class="kpi kpi-o"><div class="kpi-icon">⚠️</div><div class="kpi-val">5</div><div class="kpi-lbl">Báo thiếu hàng</div></div>
+      <div class="kpi kpi-r"><div class="kpi-icon">🚨</div><div class="kpi-val">2</div><div class="kpi-lbl">Sự cố cần xử lý</div></div>
+      <div class="kpi kpi-b"><div class="kpi-icon">📦</div><div class="kpi-val">3</div><div class="kpi-lbl">Đơn đang tồn</div></div>
+    </div>
+
+    <!-- Zone completion -->
+    <div class="card"><div class="card-title">📊 Tiến độ theo khu vực</div>
+      <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #f5f5f5"><div style="font-size:13px;font-weight:700;color:#333;width:90px;flex-shrink:0">🍬 Bánh kẹo</div><div style="flex:1"><div class="pbar"><div class="pf pf-g" style="width:87%"></div></div></div><div style="font-size:13px;font-weight:800;color:#2e7d32;margin-left:8px">87%</div></div>
+      <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #f5f5f5"><div style="font-size:13px;font-weight:700;color:#333;width:90px;flex-shrink:0">🥤 Đồ uống</div><div style="flex:1"><div class="pbar"><div class="pf pf-g" style="width:95%"></div></div></div><div style="font-size:13px;font-weight:800;color:#2e7d32;margin-left:8px">95%</div></div>
+      <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #f5f5f5"><div style="font-size:13px;font-weight:700;color:#333;width:90px;flex-shrink:0">🧴 Hóa phẩm</div><div style="flex:1"><div class="pbar"><div class="pf pf-r" style="width:64%"></div></div></div><div style="font-size:13px;font-weight:800;color:#f44336;margin-left:8px">64% ⚠️</div></div>
+      <div style="display:flex;align-items:center;gap:10px;padding:8px 0"><div style="font-size:13px;font-weight:700;color:#333;width:90px;flex-shrink:0">🎁 KM</div><div style="flex:1"><div class="pbar"><div class="pf pf-b" style="width:78%"></div></div></div><div style="font-size:13px;font-weight:800;color:#1976d2;margin-left:8px">78%</div></div>
+    </div>
+
+    <!-- Quick actions -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px">
+      <button class="btn btn-red" onclick="go(2)" style="padding:12px;font-size:12px">🚨 Xử lý Sự cố</button>
+      <button class="btn btn-blue" onclick="go(1)" style="padding:12px;font-size:12px">👥 Giám sát NV</button>
+      <button class="btn btn-orange" onclick="go(4)" style="padding:12px;font-size:12px">📦 Quản lý Đơn</button>
+      <button class="btn btn-green" onclick="go(5)" style="padding:12px;font-size:12px">📊 Báo cáo Ca</button>
+    </div>
+  </div>
+  <div class="bnav">
+    <div class="bni on"><span class="ic">📋</span><span class="lb">Tổng quan</span></div>
+    <div class="bni" onclick="go(1)"><span class="ic">👥</span><span class="lb">Nhân sự</span></div>
+    <div class="bni" onclick="go(2)"><span class="ic">🚨</span><span class="lb">Sự cố</span></div>
+    <div class="bni" onclick="go(4)"><span class="ic">📦</span><span class="lb">Đơn hàng</span></div>
+    <div class="bni" onclick="go(5)"><span class="ic">📊</span><span class="lb">Báo cáo</span></div>
+  </div>
+</div>
+
+<!-- S1: Staff Monitoring -->
+<div class="screen" id="s1">
+  <div class="sbar"><span>10:45</span><div class="sbar-r">📶 🛜 🔋 92%</div></div>
+  <div class="nav"><span class="back" onclick="go(0)">‹</span><h1>Giám sát Nhân sự</h1><span class="badge bg-blue">10 người</span></div>
+  <div class="content">
+    <div class="alert a-red"><div class="alert-ico">⚠️</div><div class="alert-body"><h3>2 nhân viên năng suất thấp</h3><p>Phạm Thị Mai và Trần Văn Đức đang dưới 50 SKU/h. Cần can thiệp ngay.</p></div></div>
+
+    <div style="display:flex;gap:7px;flex-wrap:wrap">
+      <div class="sf-btn active">Tất cả (10)</div>
+      <div class="sf-btn">Đang làm (8)</div>
+      <div class="sf-btn">Năng suất thấp (2)</div>
+      <div class="sf-btn">Nghỉ (2)</div>
+    </div>
+
+    <div class="card"><div class="card-title">🍬 Khu Bánh kẹo</div>
+      <div class="staff-row">
+        <div class="status-dot sd-active"></div>
+        <div class="av av-g">LN</div>
+        <div class="sr-info"><div class="sr-name">Trần Thị Lan</div><div class="sr-detail">#KF-12345 · 45/52 SKU</div></div>
+        <div class="sr-speed"><div class="sp-val sp-g">72</div><div class="sp-unit">SKU/h</div></div>
+      </div>
+      <div class="staff-row">
+        <div class="status-dot sd-low"></div>
+        <div class="av av-o">TM</div>
+        <div class="sr-info"><div class="sr-name">Phạm Thị Mai ⚠️</div><div class="sr-detail">#KF-12346 · 20/38 SKU</div></div>
+        <div class="sr-speed"><div class="sp-val sp-r">43</div><div class="sp-unit">SKU/h</div></div>
+      </div>
+      <div class="staff-row">
+        <div class="status-dot sd-break"></div>
+        <div class="av av-p">ĐN</div>
+        <div class="sr-info"><div class="sr-name">Hoàng Văn Đức</div><div class="sr-detail">Nghỉ giải lao · Trở lại 15:30</div></div>
+        <div class="sr-speed"><div class="sp-val" style="color:#aaa">–</div><div class="sp-unit">Nghỉ</div></div>
+      </div>
+    </div>
+
+    <div class="card"><div class="card-title">🥤 Khu Đồ Uống</div>
+      <div class="staff-row">
+        <div class="status-dot sd-active"></div>
+        <div class="av av-b">VS</div>
+        <div class="sr-info"><div class="sr-name">Nguyễn Văn Sơn</div><div class="sr-detail">#KF-12347 · 38/40 SKU</div></div>
+        <div class="sr-speed"><div class="sp-val sp-g">61</div><div class="sp-unit">SKU/h</div></div>
+      </div>
+      <div class="staff-row">
+        <div class="status-dot sd-active"></div>
+        <div class="av av-t">MT</div>
+        <div class="sr-info"><div class="sr-name">Lê Minh Tùng</div><div class="sr-detail">Hoàn thành #KF-12348 ✅</div></div>
+        <div class="sr-speed"><div class="sp-val sp-g">55</div><div class="sp-unit">SKU/h</div></div>
+      </div>
+    </div>
+
+    <div class="card"><div class="card-title">🧴 Khu Hóa Phẩm <span class="tag tr">Thiếu nhân sự</span></div>
+      <div class="staff-row">
+        <div class="status-dot sd-low"></div>
+        <div class="av av-r">VĐ</div>
+        <div class="sr-info"><div class="sr-name">Trần Văn Đức ⚠️</div><div class="sr-detail">#KF-12349 · 12/30 SKU</div></div>
+        <div class="sr-speed"><div class="sp-val sp-r">41</div><div class="sp-unit">SKU/h</div></div>
+      </div>
+      <div style="margin-top:10px"><button class="btn btn-orange" onclick="go(6)" style="padding:10px;font-size:12px">🔄 Điều phối thêm nhân sự</button></div>
+    </div>
+  </div>
+  <div class="bnav">
+    <div class="bni" onclick="go(0)"><span class="ic">📋</span><span class="lb">Tổng quan</span></div>
+    <div class="bni on"><span class="ic">👥</span><span class="lb">Nhân sự</span></div>
+    <div class="bni" onclick="go(2)"><span class="ic">🚨</span><span class="lb">Sự cố</span></div>
+    <div class="bni" onclick="go(4)"><span class="ic">📦</span><span class="lb">Đơn hàng</span></div>
+    <div class="bni" onclick="go(5)"><span class="ic">📊</span><span class="lb">Báo cáo</span></div>
+  </div>
+</div>
+
+<!-- S2: Incident Center -->
+<div class="screen" id="s2">
+  <div class="sbar"><span>10:45</span><div class="sbar-r">📶 🛜 🔋 92%</div></div>
+  <div class="nav"><span class="back" onclick="go(0)">‹</span><h1>Trung tâm Sự cố</h1><span class="badge bg-red">3 cần xử lý</span></div>
+  <div class="content">
+    <div class="card">
+      <div class="card-title">🚨 Khẩn cấp</div>
+      <div class="inc-item inc-urgent">
+        <div class="inc-header"><span class="inc-type inc-type-red">🔴 THIẾU HÀNG</span><span class="inc-time">15:28 · Phạm Thị Mai</span></div>
+        <div class="inc-title">Nước tương Chinsu 500ml – Kệ 14.07.B</div>
+        <div class="inc-desc">Kệ hoàn toàn trống. Ảnh đã được upload. Đơn #KF-12345 đang bị delay.</div>
+        <div class="inc-footer">
+          <button class="btn-sm bsm-blue">📋 Xem ảnh</button>
+          <button class="btn-sm bsm-orange">🔁 Bổ sung hàng</button>
+          <button class="btn-sm bsm-green">✅ Đã xử lý</button>
+        </div>
+      </div>
+      <div class="inc-item inc-urgent" style="margin-top:9px">
+        <div class="inc-header"><span class="inc-type inc-type-red">🔴 NĂNG SUẤT</span><span class="inc-time">10:00 – 11:00</span></div>
+        <div class="inc-title">Phạm Thị Mai – 43 SKU/h (Dưới ngưỡng 50)</div>
+        <div class="inc-desc">Nhân viên liên tục dưới ngưỡng năng suất trong 60 phút. Cần kiểm tra trực tiếp.</div>
+        <div class="inc-footer">
+          <button class="btn-sm bsm-blue">📲 Nhắn tin</button>
+          <button class="btn-sm bsm-orange">🔄 Điều chuyển</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">⚠️ Cần theo dõi</div>
+      <div class="inc-item inc-warn">
+        <div class="inc-header"><span class="inc-type inc-type-orange">🟠 CHUYỂN THÙNG</span><span class="inc-time">15:10</span></div>
+        <div class="inc-title">BIN-205 → BIN-206 · Sữa chua Vinamilk</div>
+        <div class="inc-desc">Nhân viên tự xử lý move. Cần xác nhận lại database đã cập nhật đúng chưa.</div>
+        <div class="inc-footer">
+          <button class="btn-sm bsm-blue">🔍 Kiểm tra</button>
+          <button class="btn-sm bsm-green">✅ Xác nhận</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">ℹ️ Thông tin</div>
+      <div class="inc-item inc-info">
+        <div class="inc-header"><span class="inc-type inc-type-blue">🔵 SAI SẢN PHẨM</span><span class="inc-time">14:22</span></div>
+        <div class="inc-title">Quét nhầm – đã tự xử lý lại</div>
+        <div class="inc-desc">Lê Minh Tùng quét nhầm SKU, đã quét lại đúng. Không ảnh hưởng đơn hàng.</div>
+        <div class="inc-footer">
+          <button class="btn-sm bsm-green">✅ Đã biết</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="bnav">
+    <div class="bni" onclick="go(0)"><span class="ic">📋</span><span class="lb">Tổng quan</span></div>
+    <div class="bni" onclick="go(1)"><span class="ic">👥</span><span class="lb">Nhân sự</span></div>
+    <div class="bni on"><span class="ic">🚨</span><span class="lb">Sự cố</span></div>
+    <div class="bni" onclick="go(4)"><span class="ic">📦</span><span class="lb">Đơn hàng</span></div>
+    <div class="bni" onclick="go(5)"><span class="ic">📊</span><span class="lb">Báo cáo</span></div>
+  </div>
+</div>
+
+<!-- S3: Heatmap -->
+<div class="screen" id="s3">
+  <div class="sbar"><span>10:45</span><div class="sbar-r">📶 🛜 🔋 92%</div></div>
+  <div class="nav"><span class="back" onclick="go(0)">‹</span><h1>Heatmap Kho</h1><div class="live"><div class="ldot"></div><span>LIVE</span></div></div>
+  <div class="content">
+    <div class="alert a-orange"><div class="alert-ico">🌡️</div><div class="alert-body"><h3>Khu Hóa phẩm đang quá tải!</h3><p>Chỉ 1 nhân viên đang pick nhưng còn 36% khối lượng. Cần điều phối thêm.</p></div></div>
+
+    <div class="heatmap">
+      <div class="hmap-grid"></div>
+      <!-- Zone blocks -->
+      <div class="zone-block z-cool" style="left:10px;top:12px;width:140px;height:70px"><h4>🍬 Bánh kẹo</h4><p>3 NV · 87% ✓</p></div>
+      <div class="zone-block z-ok" style="left:160px;top:12px;width:130px;height:70px"><h4>🥤 Đồ uống</h4><p>2 NV · 95% ✅</p></div>
+      <div class="zone-block z-hot" style="left:10px;top:96px;width:140px;height:70px"><h4>🧴 Hóa phẩm</h4><p>1 NV · 64% 🔥</p></div>
+      <div class="zone-block z-warm" style="left:160px;top:96px;width:130px;height:70px"><h4>🎁 KM</h4><p>2 NV · 78% ⚡</p></div>
+      <div class="zone-block z-ok" style="left:10px;top:180px;width:280px;height:60px"><h4>📦 Khu vực Thùng hàng / Xuất kho</h4></div>
+      <!-- Staff pins -->
+      <span class="staff-pin" style="left:20px;top:34px;font-size:16px">👤</span>
+      <span class="staff-pin" style="left:50px;top:34px;font-size:16px">👤</span>
+      <span class="staff-pin" style="left:80px;top:34px;font-size:16px">👤</span>
+      <span class="staff-pin" style="left:168px;top:34px;font-size:16px">👤</span>
+      <span class="staff-pin" style="left:200px;top:34px;font-size:16px">👤</span>
+      <span class="staff-pin" style="left:20px;top:118px;font-size:16px">👤</span>
+      <span class="staff-pin" style="left:168px;top:118px;font-size:16px">👤</span>
+      <span class="staff-pin" style="left:200px;top:118px;font-size:16px">👤</span>
+    </div>
+
+    <div class="hmap-legend">
+      <div class="hml"><div class="hml-dot" style="background:#f44336"></div>Quá tải (1 NV)</div>
+      <div class="hml"><div class="hml-dot" style="background:#ff9800"></div>Cần theo dõi</div>
+      <div class="hml"><div class="hml-dot" style="background:#1e88e5"></div>Ổn định</div>
+      <div class="hml"><div class="hml-dot" style="background:#43a047"></div>Tốt</div>
+    </div>
+
+    <button class="btn btn-orange" onclick="go(6)">🔄 Điều phối nhân sự ngay</button>
+  </div>
+  <div class="bnav">
+    <div class="bni" onclick="go(0)"><span class="ic">📋</span><span class="lb">Tổng quan</span></div>
+    <div class="bni" onclick="go(1)"><span class="ic">👥</span><span class="lb">Nhân sự</span></div>
+    <div class="bni on"><span class="ic">🗺️</span><span class="lb">Heatmap</span></div>
+    <div class="bni" onclick="go(4)"><span class="ic">📦</span><span class="lb">Đơn hàng</span></div>
+    <div class="bni" onclick="go(5)"><span class="ic">📊</span><span class="lb">Báo cáo</span></div>
+  </div>
+</div>
+
+<!-- S4: Order Management -->
+<div class="screen" id="s4">
+  <div class="sbar"><span>10:45</span><div class="sbar-r">📶 🛜 🔋 92%</div></div>
+  <div class="nav"><span class="back" onclick="go(0)">‹</span><h1>Quản lý Đơn hàng</h1><span class="badge bg-orange">3 tồn</span></div>
+  <div class="content">
+    <div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:2px">
+      <div class="sf-btn active">Tất cả (12)</div>
+      <div class="sf-btn">Đang pick (9)</div>
+      <div class="sf-btn">Tồn đọng (3)</div>
+      <div class="sf-btn">Hoàn thành (0)</div>
+    </div>
+
+    <div class="order-table-item">
+      <div class="oti-priority prio-high"></div>
+      <div class="oti-info">
+        <div class="oti-id">#KF-12348 – Kingfood Gò Vấp</div>
+        <div class="oti-store">🏪 30 SKU · Chưa được xử lý</div>
+        <div class="oti-progress"><div class="pbar"><div class="pf pf-r" style="width:0%"></div></div></div>
+      </div>
+      <div class="oti-right"><div class="oti-pct pct-r">0%</div><div class="oti-assign">Chưa gán</div><button class="assign-btn">+ Gán NV</button></div>
+    </div>
+
+    <div class="order-table-item">
+      <div class="oti-priority prio-high"></div>
+      <div class="oti-info">
+        <div class="oti-id">#KF-12347 – Kingfood Thủ Đức</div>
+        <div class="oti-store">🏪 48 SKU · 8 SKU đang thiếu hàng</div>
+        <div class="oti-progress"><div class="pbar"><div class="pf pf-o" style="width:83%"></div></div></div>
+      </div>
+      <div class="oti-right"><div class="oti-pct pct-o">83%</div><div class="oti-assign">→ Trần Thị Lan</div><button class="assign-btn">📋 Chi tiết</button></div>
+    </div>
+
+    <div class="order-table-item">
+      <div class="oti-priority prio-mid"></div>
+      <div class="oti-info">
+        <div class="oti-id">#KF-12345 – Kingfood Q.7</div>
+        <div class="oti-store">🏪 52 SKU · Đang pick</div>
+        <div class="oti-progress"><div class="pbar"><div class="pf pf-g" style="width:87%"></div></div></div>
+      </div>
+      <div class="oti-right"><div class="oti-pct pct-g">87%</div><div class="oti-assign">→ Phạm Thị Mai</div><button class="assign-btn">📋 Chi tiết</button></div>
+    </div>
+
+    <div class="order-table-item">
+      <div class="oti-priority prio-low"></div>
+      <div class="oti-info">
+        <div class="oti-id">#KF-12346 – Kingfood Q.1</div>
+        <div class="oti-store">🏪 38 SKU · Đang pick</div>
+        <div class="oti-progress"><div class="pbar"><div class="pf pf-g" style="width:100%"></div></div></div>
+      </div>
+      <div class="oti-right"><div class="oti-pct pct-g">100%</div><div class="oti-assign">→ Lê Minh Tùng</div><button class="assign-btn">✅ Đóng đơn</button></div>
+    </div>
+
+    <button class="btn btn-blue">📤 Xuất báo cáo đơn hàng</button>
+  </div>
+  <div class="bnav">
+    <div class="bni" onclick="go(0)"><span class="ic">📋</span><span class="lb">Tổng quan</span></div>
+    <div class="bni" onclick="go(1)"><span class="ic">👥</span><span class="lb">Nhân sự</span></div>
+    <div class="bni" onclick="go(2)"><span class="ic">🚨</span><span class="lb">Sự cố</span></div>
+    <div class="bni on"><span class="ic">📦</span><span class="lb">Đơn hàng</span></div>
+    <div class="bni" onclick="go(5)"><span class="ic">📊</span><span class="lb">Báo cáo</span></div>
+  </div>
+</div>
+
+<!-- S5: Shift Report -->
+<div class="screen" id="s5">
+  <div class="sbar"><span>16:00</span><div class="sbar-r">📶 🛜 🔋 78%</div></div>
+  <div class="nav"><span class="back" onclick="go(0)">‹</span><h1>Báo cáo Ca Sáng</h1><span class="badge bg-gray">08:00–16:00</span></div>
+  <div class="content">
+    <div class="shift-summary">
+      <div class="ss-title">📊 Tổng kết Ca Sáng – 22/04/2026</div>
+      <div class="ss-stats">
+        <div class="sss"><div class="sss-val">1,284</div><div class="sss-lbl">SKU đã pick</div></div>
+        <div class="sss"><div class="sss-val">87%</div><div class="sss-lbl">Hoàn thành</div></div>
+        <div class="sss"><div class="sss-val">10</div><div class="sss-lbl">Nhân viên</div></div>
+      </div>
+    </div>
+
+    <!-- Performance ranking -->
+    <div class="card"><div class="card-title">🏆 Xếp hạng Năng suất</div>
+      <div class="perf-row"><div class="pr-rank r1">🥇</div><div class="pr-info"><div class="pr-name">Trần Thị Lan</div><div class="pr-zone">Khu Bánh kẹo</div></div><div class="pr-score"><div class="prs-val prs-g">72 SKU/h</div></div></div>
+      <div class="perf-row"><div class="pr-rank r2">🥈</div><div class="pr-info"><div class="pr-name">Nguyễn Văn Sơn</div><div class="pr-zone">Khu Đồ uống</div></div><div class="pr-score"><div class="prs-val prs-g">61 SKU/h</div></div></div>
+      <div class="perf-row"><div class="pr-rank r3">🥉</div><div class="pr-info"><div class="pr-name">Lê Minh Tùng</div><div class="pr-zone">Khu Đồ uống</div></div><div class="pr-score"><div class="prs-val prs-g">55 SKU/h</div></div></div>
+      <div class="perf-row"><div class="pr-rank rn">4</div><div class="pr-info"><div class="pr-name">Phạm Thị Mai</div><div class="pr-zone">Khu Bánh kẹo</div></div><div class="pr-score"><div class="prs-val prs-r">43 SKU/h ⚠️</div></div></div>
+      <div class="perf-row"><div class="pr-rank rn">5</div><div class="pr-info"><div class="pr-name">Trần Văn Đức</div><div class="pr-zone">Khu Hóa phẩm</div></div><div class="pr-score"><div class="prs-val prs-r">41 SKU/h ⚠️</div></div></div>
+    </div>
+
+    <div class="card"><div class="card-title">📋 Sự cố trong ca</div>
+      <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #f5f5f5"><span style="font-size:13px;color:#333">Báo thiếu hàng</span><span class="tag to">5 lần</span></div>
+      <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #f5f5f5"><span style="font-size:13px;color:#333">Chuyển thùng (Move)</span><span class="tag tb">3 lần</span></div>
+      <div style="display:flex;justify-content:space-between;padding:6px 0"><span style="font-size:13px;color:#333">Quét sai sản phẩm</span><span class="tag tr">2 lần</span></div>
+    </div>
+
+    <button class="btn btn-blue">📤 Gửi Báo cáo Ca lên hệ thống</button>
+    <button class="btn btn-out" style="margin-top:-4px">📋 Tạo Bàn giao Ca sau</button>
+  </div>
+  <div class="bnav">
+    <div class="bni" onclick="go(0)"><span class="ic">📋</span><span class="lb">Tổng quan</span></div>
+    <div class="bni" onclick="go(1)"><span class="ic">👥</span><span class="lb">Nhân sự</span></div>
+    <div class="bni" onclick="go(2)"><span class="ic">🚨</span><span class="lb">Sự cố</span></div>
+    <div class="bni" onclick="go(4)"><span class="ic">📦</span><span class="lb">Đơn hàng</span></div>
+    <div class="bni on"><span class="ic">📊</span><span class="lb">Báo cáo</span></div>
+  </div>
+</div>
+
+<!-- S6: Reassign Staff -->
+<div class="screen" id="s6">
+  <div class="sbar"><span>10:45</span><div class="sbar-r">📶 🛜 🔋 92%</div></div>
+  <div class="nav"><span class="back" onclick="go(1)">‹</span><h1>Điều phối Nhân sự</h1></div>
+  <div class="content">
+    <div class="reassign-header">
+      <div class="rh-title">🔄 Kéo & thả nhân viên vào khu vực cần tăng cường</div>
+      <div class="rh-sub">Khu Hóa phẩm đang quá tải – chỉ còn 1 nhân viên</div>
+    </div>
+
+    <!-- Zone: hot (need more staff) -->
+    <div class="zone-card zc-overload"><div class="zc-header"><span class="zc-name">🧴 Khu Hóa Phẩm</span><span class="tag tr">🔥 Quá tải</span></div><div class="zc-pbar"><div class="pbar"><div class="pf pf-r" style="width:64%"></div></div></div><div class="zc-meta"><span class="zc-meta-item">Nhân sự: <b class="zc-meta-val">1 người</b></span><span class="zc-meta-item">Tiến độ: <b class="zc-meta-val" style="color:#f44336">64%</b></span></div>
+      <div style="background:#ffebee;border-radius:10px;padding:10px;margin-top:10px;border:1.5px dashed #ef9a9a;text-align:center;color:#999;font-size:12px">+ Thả nhân viên vào đây</div>
+    </div>
+
+    <!-- Zone: ok -->
+    <div class="zone-card zc-normal"><div class="zc-header"><span class="zc-name">🥤 Khu Đồ Uống</span><span class="tag tg">✓ Đủ nhân sự</span></div><div class="zc-pbar"><div class="pbar"><div class="pf pf-g" style="width:95%"></div></div></div><div class="zc-meta"><span class="zc-meta-item">Nhân sự: <b class="zc-meta-val">2 người</b></span><span class="zc-meta-item">Tiến độ: <b class="zc-meta-val" style="color:#2e7d32">95%</b></span></div>
+      <div class="drag-staff"><div class="av av-t" style="width:30px;height:30px;font-size:11px">MT</div><div style="flex:1"><div class="ds-name">Lê Minh Tùng</div><div style="font-size:10px;color:#888">Vừa xong đơn ✅</div></div><span class="ds-speed">55 SKU/h</span><span style="font-size:18px;cursor:grab;color:#aaa">⠿</span></div>
+    </div>
+
+    <div class="card"><div class="card-title">👤 Nhân viên khả năng điều phối</div>
+      <div class="staff-row"><div class="av av-t">MT</div><div class="sr-info"><div class="sr-name">Lê Minh Tùng</div><div class="sr-detail">Vừa xong đơn – Đang rảnh</div></div><button class="btn-sm bsm-blue">+ Gán vào HP</button></div>
+      <div class="staff-row"><div class="av av-p">ĐN</div><div class="sr-info"><div class="sr-name">Hoàng Văn Đức</div><div class="sr-detail">Nghỉ giải lao – Sẵn sàng lúc 15:30</div></div><button class="btn-sm bsm-orange">Đang nghỉ</button></div>
+    </div>
+
+    <button class="btn btn-blue">✅ Xác nhận điều phối</button>
+  </div>
+  <div class="bnav">
+    <div class="bni" onclick="go(0)"><span class="ic">📋</span><span class="lb">Tổng quan</span></div>
+    <div class="bni on"><span class="ic">👥</span><span class="lb">Nhân sự</span></div>
+    <div class="bni" onclick="go(2)"><span class="ic">🚨</span><span class="lb">Sự cố</span></div>
+    <div class="bni" onclick="go(4)"><span class="ic">📦</span><span class="lb">Đơn hàng</span></div>
+    <div class="bni" onclick="go(5)"><span class="ic">📊</span><span class="lb">Báo cáo</span></div>
+  </div>
+</div>
+
+<!-- S7: Inventory Quick Check -->
+<div class="screen" id="s7">
+  <div class="sbar"><span>16:30</span><div class="sbar-r">📶 🛜 🔋 74%</div></div>
+  <div class="nav"><span class="back" onclick="go(0)">‹</span><h1>Kiểm tra Nhanh</h1><span class="badge bg-teal">Audit Random</span></div>
+  <div class="content">
+    <div class="alert a-blue"><div class="alert-ico">🎲</div><div class="alert-body"><h3>Kiểm tra ngẫu nhiên thùng BIN-401</h3><p>Kiểm tra xác suất từ hệ thống. Quét QR hoặc nhập mã thùng để bắt đầu.</p></div></div>
+
+    <div class="iqc-scan">
+      <div class="iqc-corners"></div>
+      <div class="iqc-label"><h3>QUÉT MÃ THÙNG</h3><p>BIN-401 · Đơn KF-12345</p></div>
+      <button class="iqc-btn">📷</button>
+    </div>
+
+    <div class="card"><div class="card-title">🔍 Kết quả Kiểm tra – BIN-401</div>
+      <div class="check-item"><div class="ci-check ci-ok">✓</div><div class="ci-info"><div class="ci-name">Bánh quy Hải Hà 200g</div><div class="ci-sku">KF-00123</div></div><div class="ci-qty cq-ok">5/5 ✓</div></div>
+      <div class="check-item"><div class="ci-check ci-ok">✓</div><div class="ci-info"><div class="ci-name">Sữa chua Vinamilk</div><div class="ci-sku">KF-00456</div></div><div class="ci-qty cq-ok">12/12 ✓</div></div>
+      <div class="check-item"><div class="ci-check ci-bad">✗</div><div class="ci-info"><div class="ci-name">Mì gói Hảo Hảo 75g</div><div class="ci-sku">KF-00789</div></div><div class="ci-qty cq-bad">18/20 ✗</div></div>
+      <div class="check-item"><div class="ci-check" style="background:#fff3e0;color:#e65100">–</div><div class="ci-info"><div class="ci-name">Snack Oishi Tôm 68g</div><div class="ci-sku">KF-01024 · Thiếu hàng</div></div><div class="ci-qty" style="color:#ff9800">0 ⚠️</div></div>
+    </div>
+
+    <div style="border-radius:14px;padding:14px;background:#ffebee;border:1.5px solid #ef9a9a;text-align:center">
+      <div style="font-size:26px">❌</div>
+      <div style="font-size:14px;font-weight:800;color:#c62828;margin-top:4px">Không đạt – Cần xử lý</div>
+    </div>
+
+    <button class="btn btn-red">📸 Báo cáo & Đánh dấu lỗi</button>
+    <button class="btn btn-out" style="margin-top:-4px">🔍 Kiểm tra thùng khác</button>
+  </div>
+  <div class="bnav">
+    <div class="bni" onclick="go(0)"><span class="ic">📋</span><span class="lb">Tổng quan</span></div>
+    <div class="bni" onclick="go(1)"><span class="ic">👥</span><span class="lb">Nhân sự</span></div>
+    <div class="bni on"><span class="ic">🔍</span><span class="lb">Kiểm tra</span></div>
+    <div class="bni" onclick="go(4)"><span class="ic">📦</span><span class="lb">Đơn hàng</span></div>
+    <div class="bni" onclick="go(5)"><span class="ic">📊</span><span class="lb">Báo cáo</span></div>
+  </div>
+</div>
+
+</div><!-- s7 bnav -->
+</div><!-- s7 -->
+
+</div><!-- /phone -->
+
+<!-- ═══ NEW MANAGER SCREENS ═══ -->
+<style>
+/* S8: Shift Planning */
+.shift-day{border-radius:12px;padding:12px 14px;margin-bottom:8px;border-left:4px solid #1e88e5;background:#f8fbff;cursor:pointer;transition:all .2s}
+.shift-day:last-child{margin-bottom:0}
+.sd-date{font-size:12px;font-weight:700;color:#1565c0;margin-bottom:6px}
+.sd-shifts{display:flex;flex-direction:column;gap:5px}
+.shift-slot{display:flex;align-items:center;gap:8px;background:#fff;border-radius:8px;padding:7px 10px}
+.ss-time{font-size:11px;font-weight:700;color:#555;width:90px;flex-shrink:0}
+.ss-staff{flex:1;display:flex;flex-wrap:wrap;gap:4px}
+.staff-chip{background:#e3f2fd;color:#1565c0;font-size:10px;font-weight:700;padding:2px 7px;border-radius:6px}
+.add-slot-btn{background:#f0f8ff;border:1.5px dashed #90caf9;border-radius:8px;padding:7px;text-align:center;font-size:11px;color:#1565c0;cursor:pointer;font-weight:700}
+/* S9: KPI Analytics */
+.kpi-chart-bar{display:flex;align-items:flex-end;gap:6px;height:100px;padding:0 4px}
+.kcb{flex:1;border-radius:6px 6px 0 0;position:relative;min-width:22px;transition:height .5s}
+.kcb-label{position:absolute;bottom:-18px;left:50%;transform:translateX(-50%);font-size:8px;color:#aaa;white-space:nowrap}
+.kcb-val{position:absolute;top:-16px;left:50%;transform:translateX(-50%);font-size:8px;font-weight:700;white-space:nowrap}
+.trend-arrow{font-size:18px;font-weight:900}
+.trend-up{color:#2e7d32}
+.trend-dn{color:#f44336}
+/* S10: Announcement */
+.ann-compose{background:#fff;border-radius:14px;border:1.5px solid #e3f2fd;padding:12px}
+.ann-textarea{width:100%;border:none;outline:none;font-size:14px;font-family:'Inter',sans-serif;color:#222;resize:none;min-height:80px}
+.ann-footer{display:flex;justify-content:space-between;align-items:center;margin-top:8px;padding-top:8px;border-top:1px solid #f5f5f5}
+.ann-hist{border-radius:12px;padding:12px;margin-bottom:8px;background:#f8fbff;border:1px solid #e3f2fd}
+.ann-hist:last-child{margin-bottom:0}
+.ah-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
+.ah-target{font-size:11px;font-weight:700;color:#1565c0}
+.ah-time{font-size:10px;color:#bbb}
+.ah-text{font-size:13px;color:#333;line-height:1.45}
+/* S11: User Management */
+.user-row{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid #f5f5f5}
+.user-row:last-child{border-bottom:none}
+.ur-info{flex:1}
+.ur-name{font-size:13px;font-weight:700;color:#222}
+.ur-detail{font-size:11px;color:#888;margin-top:1px}
+.ur-actions{display:flex;gap:5px}
+.ua-btn{font-size:10px;font-weight:700;padding:4px 8px;border-radius:7px;border:none;cursor:pointer;font-family:'Inter',sans-serif}
+/* S12: System Config */
+.conf-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid #f5f5f5}
+.conf-row:last-child{border-bottom:none}
+.cr-label{font-size:13px;font-weight:700;color:#222}
+.cr-sub{font-size:11px;color:#888;margin-top:1px}
+.cr-input{background:#f0f4f8;border:1.5px solid #ddd;border-radius:10px;padding:6px 10px;font-size:14px;font-weight:800;color:#0d47a1;width:70px;text-align:center;font-family:'Inter',sans-serif;outline:none}
+/* S13: Store Management */
+.store-item{display:flex;align-items:center;gap:10px;padding:10px 12px;background:#fff;border-radius:12px;margin-bottom:7px;box-shadow:0 1px 5px rgba(0,0,0,.05)}
+.store-item:last-child{margin-bottom:0}
+.store-ico{font-size:22px;flex-shrink:0}
+.store-info{flex:1}
+.store-name{font-size:13px;font-weight:700;color:#222}
+.store-addr{font-size:11px;color:#888;margin-top:1px}
+.store-stat{text-align:right}
+.ss-orders{font-size:13px;font-weight:800;color:#1565c0}
+.ss-label{font-size:10px;color:#aaa}
+</style>
+
+<!-- ── UPDATE SELECTOR: add new group ── -->
+<script>
+// Inject new selector group
+const selectorWrap = document.querySelector('.selector-wrap');
+const newGroup = document.createElement('div');
+newGroup.className = 'selector-group';
+newGroup.innerHTML = `
+  <div class="group-label">🆕 Tính năng Manager Mới</div>
+  <div class="btn-row">
+    <button class="sbtn" onclick="go(8)">📅 Lên Ca & Phân công</button>
+    <button class="sbtn" onclick="go(9)">📈 KPI Tuần/Tháng</button>
+    <button class="sbtn" onclick="go(10)">💬 Thông báo Nội bộ</button>
+    <button class="sbtn" onclick="go(11)">🧑‍💻 Quản lý Tài khoản</button>
+    <button class="sbtn" onclick="go(12)">⚙️ Cấu hình Hệ thống</button>
+    <button class="sbtn" onclick="go(13)">🏪 Quản lý Cửa hàng</button>
+  </div>
+`;
+selectorWrap.appendChild(newGroup);
+
+// Inject new screens into phone
+const phoneEl = document.querySelector('.phone');
+phoneEl.insertAdjacentHTML('beforeend', `
+<!-- S8: Shift Planning -->
+<div class="screen" id="s8">
+  <div class="sbar"><span>07:30</span><div class="sbar-r">📶 🛜 🔋 95%</div></div>
+  <div class="nav"><span class="back" onclick="go(0)">‹</span><h1>Lên Ca & Phân công</h1><span class="badge bg-blue">Tuần 17</span></div>
+  <div class="content">
+    <div class="mgr-header">
+      <div style="color:#fff;font-size:14px;font-weight:800">📅 Phân công Ca – Tuần 17</div>
+      <div style="color:rgba(255,255,255,.7);font-size:12px;margin-top:4px">21/04 – 27/04/2026 · 10 nhân viên</div>
+    </div>
+    <div class="card"><div class="card-title">📋 Lịch tuần này</div>
+      <div class="shift-day">
+        <div class="sd-date">⭐ Thứ 3, 22/04 – Hôm nay</div>
+        <div class="sd-shifts">
+          <div class="shift-slot"><span class="ss-time">☀️ 08:00–16:00</span><div class="ss-staff"><span class="staff-chip">Lan</span><span class="staff-chip">Mai</span><span class="staff-chip">Đức</span><span class="staff-chip">Sơn</span><span class="staff-chip">Tùng</span></div></div>
+          <div class="shift-slot"><span class="ss-time">🌙 16:00–00:00</span><div class="ss-staff"><span class="staff-chip">Hà</span><span class="staff-chip">Linh</span><span class="staff-chip">Nam</span></div></div>
+        </div>
+      </div>
+      <div class="shift-day" style="border-left-color:#43a047;background:#f8fff8">
+        <div class="sd-date" style="color:#2e7d32">Thứ 4, 23/04</div>
+        <div class="sd-shifts">
+          <div class="shift-slot"><span class="ss-time">☀️ 08:00–16:00</span><div class="ss-staff"><span class="staff-chip">Sơn</span><span class="staff-chip">Tùng</span><span class="staff-chip">Hà</span></div></div>
+          <div class="shift-slot"><span class="ss-time">🌙 16:00–00:00</span><div class="ss-staff"><span class="staff-chip">Lan</span><span class="staff-chip">Đức</span></div></div>
+        </div>
+      </div>
+      <div class="add-slot-btn">+ Thêm ca mới</div>
+    </div>
+    <button class="btn btn-blue">✅ Lưu & Gửi lịch cho nhân viên</button>
+  </div>
+  <div class="bnav"><div class="bni" onclick="go(0)"><span class="ic">📋</span><span class="lb">Tổng quan</span></div><div class="bni on"><span class="ic">📅</span><span class="lb">Lên Ca</span></div><div class="bni" onclick="go(2)"><span class="ic">🚨</span><span class="lb">Sự cố</span></div><div class="bni" onclick="go(4)"><span class="ic">📦</span><span class="lb">Đơn hàng</span></div><div class="bni" onclick="go(5)"><span class="ic">📊</span><span class="lb">Báo cáo</span></div></div>
+</div>
+
+<!-- S9: KPI Analytics -->
+<div class="screen" id="s9">
+  <div class="sbar"><span>10:45</span><div class="sbar-r">📶 🛜 🔋 92%</div></div>
+  <div class="nav"><span class="back" onclick="go(0)">‹</span><h1>KPI Tuần/Tháng</h1><span class="badge bg-blue">T4/2026</span></div>
+  <div class="content">
+    <div style="display:flex;gap:7px;flex-wrap:wrap">
+      <div class="sf-btn active">Tuần này</div>
+      <div class="sf-btn">Tháng 4</div>
+      <div class="sf-btn">So sánh</div>
+    </div>
+    <div class="card"><div class="card-title">📈 SKU/h – 7 ngày qua</div>
+      <div class="kpi-chart-bar">
+        <div class="kcb" style="height:55%;background:#42a5f5"><span class="kcb-val" style="color:#1565c0">51</span><span class="kcb-label">T2</span></div>
+        <div class="kcb" style="height:62%;background:#42a5f5"><span class="kcb-val" style="color:#1565c0">58</span><span class="kcb-label">T3</span></div>
+        <div class="kcb" style="height:48%;background:#ef5350"><span class="kcb-val" style="color:#c62828">45</span><span class="kcb-label">T4</span></div>
+        <div class="kcb" style="height:75%;background:#66bb6a"><span class="kcb-val" style="color:#2e7d32">70</span><span class="kcb-label">T5</span></div>
+        <div class="kcb" style="height:68%;background:#66bb6a"><span class="kcb-val" style="color:#2e7d32">63</span><span class="kcb-label">T6</span></div>
+        <div class="kcb" style="height:80%;background:#66bb6a"><span class="kcb-val" style="color:#2e7d32">75</span><span class="kcb-label">T7</span></div>
+        <div class="kcb" style="height:72%;background:#66bb6a"><span class="kcb-val" style="color:#2e7d32">67</span><span class="kcb-label">CN</span></div>
+      </div>
+      <div style="margin-top:24px;display:flex;justify-content:space-between">
+        <div style="font-size:12px;color:#888">TB tuần này: <b style="color:#1565c0;font-size:15px">61 SKU/h</b></div>
+        <div class="trend-arrow trend-up">↑ +8%</div>
+      </div>
+    </div>
+    <div class="kpi-grid">
+      <div class="kpi kpi-g"><div class="kpi-icon">✅</div><div class="kpi-val">8,904</div><div class="kpi-lbl">SKU tháng này</div></div>
+      <div class="kpi kpi-b"><div class="kpi-icon">📦</div><div class="kpi-val">84</div><div class="kpi-lbl">Đơn hoàn thành</div></div>
+      <div class="kpi kpi-o"><div class="kpi-icon">⚠️</div><div class="kpi-val">23</div><div class="kpi-lbl">Báo thiếu hàng</div></div>
+      <div class="kpi kpi-r"><div class="kpi-icon">🚨</div><div class="kpi-val">7</div><div class="kpi-lbl">Sự cố tháng này</div></div>
+    </div>
+    <button class="btn btn-blue">📤 Xuất báo cáo PDF tháng 4</button>
+  </div>
+  <div class="bnav"><div class="bni" onclick="go(0)"><span class="ic">📋</span><span class="lb">Tổng quan</span></div><div class="bni" onclick="go(1)"><span class="ic">👥</span><span class="lb">Nhân sự</span></div><div class="bni" onclick="go(2)"><span class="ic">🚨</span><span class="lb">Sự cố</span></div><div class="bni" onclick="go(4)"><span class="ic">📦</span><span class="lb">Đơn hàng</span></div><div class="bni on"><span class="ic">📈</span><span class="lb">KPI</span></div></div>
+</div>
+
+<!-- S10: Announcement / Internal Chat -->
+<div class="screen" id="s10">
+  <div class="sbar"><span>10:45</span><div class="sbar-r">📶 🛜 🔋 92%</div></div>
+  <div class="nav"><span class="back" onclick="go(0)">‹</span><h1>Thông báo Nội bộ</h1></div>
+  <div class="content">
+    <div class="card"><div class="card-title">📢 Tạo thông báo mới</div>
+      <div class="ann-compose">
+        <textarea class="ann-textarea" placeholder="Nhập nội dung thông báo tới nhân viên...">⚠️ Khu hóa phẩm đang thiếu người. Ai xong sớm hãy di chuyển sang hỗ trợ.</textarea>
+        <div class="ann-footer">
+          <div style="display:flex;gap:6px">
+            <span class="tag tb" style="cursor:pointer">Tất cả</span>
+            <span class="tag tg" style="cursor:pointer">🍬 Bánh kẹo</span>
+            <span class="tag to" style="cursor:pointer">🧴 HP</span>
+          </div>
+          <button class="btn-sm bsm-blue">📤 Gửi ngay</button>
+        </div>
+      </div>
+    </div>
+    <div class="card"><div class="card-title">📋 Lịch sử thông báo</div>
+      <div class="ann-hist">
+        <div class="ah-meta"><span class="ah-target">📢 Toàn kho</span><span class="ah-time">10:32 hôm nay</span></div>
+        <div class="ah-text">⚠️ Khu hóa phẩm đang thiếu người. Ai xong sớm hãy di chuyển sang hỗ trợ.</div>
+      </div>
+      <div class="ann-hist">
+        <div class="ah-meta"><span class="ah-target">🍬 Khu Bánh kẹo</span><span class="ah-time">08:15 hôm nay</span></div>
+        <div class="ah-text">Đơn #KF-12348 – Gò Vấp cần ưu tiên xử lý trước 10:00. Lấy hàng tại kệ 14-22 trước.</div>
+      </div>
+      <div class="ann-hist">
+        <div class="ah-meta"><span class="ah-target">📢 Toàn kho</span><span class="ah-time">21/04 17:45</span></div>
+        <div class="ah-text">Ca chiều kết thúc đúng giờ. Cảm ơn team! Nhớ bàn giao đầy đủ trước 00:00.</div>
+      </div>
+    </div>
+  </div>
+  <div class="bnav"><div class="bni" onclick="go(0)"><span class="ic">📋</span><span class="lb">Tổng quan</span></div><div class="bni" onclick="go(1)"><span class="ic">👥</span><span class="lb">Nhân sự</span></div><div class="bni on"><span class="ic">💬</span><span class="lb">Thông báo</span></div><div class="bni" onclick="go(4)"><span class="ic">📦</span><span class="lb">Đơn hàng</span></div><div class="bni" onclick="go(5)"><span class="ic">📊</span><span class="lb">Báo cáo</span></div></div>
+</div>
+
+<!-- S11: User Management -->
+<div class="screen" id="s11">
+  <div class="sbar"><span>10:45</span><div class="sbar-r">📶 🛜 🔋 92%</div></div>
+  <div class="nav"><span class="back" onclick="go(0)">‹</span><h1>Quản lý Tài khoản</h1><span class="badge bg-blue">10 NV</span></div>
+  <div class="content">
+    <div class="search-bar" style="background:#fff;border-radius:14px;padding:11px 14px;display:flex;align-items:center;gap:10px;box-shadow:0 2px 10px rgba(0,0,0,.07);border:1.5px solid #e3f2fd"><span style="font-size:20px">🔍</span><input style="flex:1;border:none;outline:none;font-size:14px;font-family:Inter,sans-serif" placeholder="Tìm theo tên hoặc mã NV..."/></div>
+    <div style="display:flex;gap:7px;flex-wrap:wrap">
+      <div class="sf-btn active">Tất cả (10)</div>
+      <div class="sf-btn">Đang làm (8)</div>
+      <div class="sf-btn">Vô hiệu (2)</div>
+    </div>
+    <div class="card"><div class="card-title">👤 Danh sách Nhân viên</div>
+      <div class="user-row"><div class="av av-g">LN</div><div class="ur-info"><div class="ur-name">Trần Thị Lan <span class="tag tg" style="font-size:9px">Active</span></div><div class="ur-detail">KF-NV-038 · 🍬 Bánh kẹo · 72 SKU/h</div></div><div class="ur-actions"><button class="ua-btn" style="background:#e3f2fd;color:#1565c0">✏️</button><button class="ua-btn" style="background:#fff3e0;color:#e65100">🔑</button></div></div>
+      <div class="user-row"><div class="av av-o">TM</div><div class="ur-info"><div class="ur-name">Phạm Thị Mai <span class="tag to" style="font-size:9px">⚠️ Thấp</span></div><div class="ur-detail">KF-NV-042 · 🍬 Bánh kẹo · 43 SKU/h</div></div><div class="ur-actions"><button class="ua-btn" style="background:#e3f2fd;color:#1565c0">✏️</button><button class="ua-btn" style="background:#ffebee;color:#c62828">🚫</button></div></div>
+      <div class="user-row"><div class="av av-b">VS</div><div class="ur-info"><div class="ur-name">Nguyễn Văn Sơn <span class="tag tg" style="font-size:9px">Active</span></div><div class="ur-detail">KF-NV-031 · 🥤 Đồ uống · 61 SKU/h</div></div><div class="ur-actions"><button class="ua-btn" style="background:#e3f2fd;color:#1565c0">✏️</button><button class="ua-btn" style="background:#fff3e0;color:#e65100">🔑</button></div></div>
+      <div class="user-row"><div class="av av-p">NT</div><div class="ur-info"><div class="ur-name">Hoàng Thị Ngọc <span class="tag tgr" style="font-size:9px">Nghỉ phép</span></div><div class="ur-detail">KF-NV-055 · 🧴 Hóa phẩm</div></div><div class="ur-actions"><button class="ua-btn" style="background:#e3f2fd;color:#1565c0">✏️</button><button class="ua-btn" style="background:#e8f5e9;color:#2e7d32">✅</button></div></div>
+    </div>
+    <button class="btn btn-blue">+ Thêm nhân viên mới</button>
+  </div>
+  <div class="bnav"><div class="bni" onclick="go(0)"><span class="ic">📋</span><span class="lb">Tổng quan</span></div><div class="bni on"><span class="ic">🧑‍💻</span><span class="lb">Tài khoản</span></div><div class="bni" onclick="go(2)"><span class="ic">🚨</span><span class="lb">Sự cố</span></div><div class="bni" onclick="go(4)"><span class="ic">📦</span><span class="lb">Đơn hàng</span></div><div class="bni" onclick="go(5)"><span class="ic">📊</span><span class="lb">Báo cáo</span></div></div>
+</div>
+
+<!-- S12: System Config -->
+<div class="screen" id="s12">
+  <div class="sbar"><span>10:45</span><div class="sbar-r">📶 🛜 🔋 92%</div></div>
+  <div class="nav"><span class="back" onclick="go(0)">‹</span><h1>Cấu hình Hệ thống</h1></div>
+  <div class="content">
+    <div class="alert a-orange"><div class="alert-ico">⚠️</div><div class="alert-body"><h3>Thay đổi cần được QA review</h3><p>Các giá trị này ảnh hưởng trực tiếp đến cảnh báo và logic hệ thống.</p></div></div>
+    <div class="card"><div class="card-title">📊 Ngưỡng Năng suất</div>
+      <div class="conf-row"><div><div class="cr-label">Ngưỡng cảnh báo đỏ</div><div class="cr-sub">SKU/h dưới mức này → cảnh báo ngay</div></div><input class="cr-input" value="50" type="number"/></div>
+      <div class="conf-row"><div><div class="cr-label">Ngưỡng cảnh báo vàng</div><div class="cr-sub">SKU/h dưới mức này → nhắc nhở</div></div><input class="cr-input" value="60" type="number"/></div>
+      <div class="conf-row"><div><div class="cr-label">Thời gian kiểm tra</div><div class="cr-sub">Xét năng suất sau bao nhiêu phút liên tục</div></div><input class="cr-input" value="60" type="number"/></div>
+    </div>
+    <div class="card"><div class="card-title">⏱️ Giờ làm việc</div>
+      <div class="conf-row"><div><div class="cr-label">Ca sáng bắt đầu</div></div><input class="cr-input" value="08:00" style="width:80px"/></div>
+      <div class="conf-row"><div><div class="cr-label">Ca chiều bắt đầu</div></div><input class="cr-input" value="16:00" style="width:80px"/></div>
+      <div class="conf-row"><div><div class="cr-label">Ca đêm bắt đầu</div></div><input class="cr-input" value="00:00" style="width:80px"/></div>
+    </div>
+    <div class="card"><div class="card-title">🔍 Audit ngẫu nhiên</div>
+      <div class="conf-row"><div><div class="cr-label">Tỷ lệ thùng được audit</div><div class="cr-sub">% số thùng được kiểm tra ngẫu nhiên/ca</div></div><input class="cr-input" value="5%" style="width:65px"/></div>
+    </div>
+    <button class="btn btn-blue">💾 Lưu cấu hình</button>
+  </div>
+  <div class="bnav"><div class="bni" onclick="go(0)"><span class="ic">📋</span><span class="lb">Tổng quan</span></div><div class="bni" onclick="go(1)"><span class="ic">👥</span><span class="lb">Nhân sự</span></div><div class="bni" onclick="go(2)"><span class="ic">🚨</span><span class="lb">Sự cố</span></div><div class="bni" onclick="go(4)"><span class="ic">📦</span><span class="lb">Đơn hàng</span></div><div class="bni on"><span class="ic">⚙️</span><span class="lb">Config</span></div></div>
+</div>
+
+<!-- S13: Store Management -->
+<div class="screen" id="s13">
+  <div class="sbar"><span>10:45</span><div class="sbar-r">📶 🛜 🔋 92%</div></div>
+  <div class="nav"><span class="back" onclick="go(0)">‹</span><h1>Quản lý Cửa hàng</h1><span class="badge bg-blue">144 stores</span></div>
+  <div class="content">
+    <div style="background:#fff;border-radius:14px;padding:11px 14px;display:flex;align-items:center;gap:10px;box-shadow:0 2px 10px rgba(0,0,0,.07);border:1.5px solid #e3f2fd"><span style="font-size:20px">🔍</span><input style="flex:1;border:none;outline:none;font-size:14px;font-family:Inter,sans-serif" placeholder="Tìm cửa hàng..." value="Q.7"/></div>
+    <div style="display:flex;gap:7px;flex-wrap:wrap">
+      <div class="sf-btn active">Tất cả (144)</div>
+      <div class="sf-btn">Có đơn hôm nay (28)</div>
+      <div class="sf-btn">Tồn đơn (3)</div>
+    </div>
+    <div class="card"><div class="card-title">🏪 Kết quả tìm kiếm "Q.7"</div>
+      <div class="store-item"><div class="store-ico">🏪</div><div class="store-info"><div class="store-name">Kingfood Nguyễn Văn Linh</div><div class="store-addr">215 Nguyễn Văn Linh, Q.7 · Mã: KFM-072</div></div><div class="store-stat"><div class="ss-orders">3 đơn</div><div class="ss-label">hôm nay</div></div></div>
+      <div class="store-item"><div class="store-ico">🏪</div><div class="store-info"><div class="store-name">Kingfood Lê Văn Lương</div><div class="store-addr">88 Lê Văn Lương, Q.7 · Mã: KFM-073</div></div><div class="store-stat"><div class="ss-orders">1 đơn</div><div class="ss-label">hôm nay</div></div></div>
+      <div class="store-item"><div class="store-ico">🏪</div><div class="store-info"><div class="store-name">Kingfood Phú Mỹ Hưng</div><div class="store-addr">Khu Phú Mỹ Hưng, Q.7 · Mã: KFM-074</div></div><div class="store-stat"><div class="ss-orders" style="color:#f44336">0 đơn</div><div class="ss-label">chưa có</div></div></div>
+    </div>
+    <div class="card"><div class="card-title">📊 Thống kê hôm nay</div>
+      <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #f5f5f5"><span style="font-size:13px;color:#333">Cửa hàng có đơn</span><span class="tag tb">28/144</span></div>
+      <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #f5f5f5"><span style="font-size:13px;color:#333">Tổng đơn hàng</span><span class="tag tb">52 đơn</span></div>
+      <div style="display:flex;justify-content:space-between;padding:6px 0"><span style="font-size:13px;color:#333">Đơn tồn đọng</span><span class="tag tr">3 đơn</span></div>
+    </div>
+  </div>
+  <div class="bnav"><div class="bni" onclick="go(0)"><span class="ic">📋</span><span class="lb">Tổng quan</span></div><div class="bni" onclick="go(1)"><span class="ic">👥</span><span class="lb">Nhân sự</span></div><div class="bni" onclick="go(2)"><span class="ic">🚨</span><span class="lb">Sự cố</span></div><div class="bni on"><span class="ic">🏪</span><span class="lb">Cửa hàng</span></div><div class="bni" onclick="go(5)"><span class="ic">📊</span><span class="lb">Báo cáo</span></div></div>
+</div>
+`);
+</script>
+
+<script>
+function go(idx){
+  document.querySelectorAll('.screen').forEach((s,i)=>s.classList.toggle('active',i===idx));
+  document.querySelectorAll('.sbtn').forEach((b,i)=>b.classList.toggle('active',i===idx));
+}
+// Fix: ensure all .screen elements are inside .phone (handles dynamically injected screens)
+(function fixScreenPlacement(){
+  const phone = document.querySelector('.phone');
+  document.querySelectorAll('.screen').forEach(s => {
+    if(s.parentElement !== phone) phone.appendChild(s);
+  });
+})();
+setInterval(()=>{
+  const n=new Date();
+  const t=n.getHours().toString().padStart(2,'0')+':'+n.getMinutes().toString().padStart(2,'0');
+  document.querySelectorAll('#clock').forEach(el=>el.textContent=t);
+},1000);
+
+</script>
+</body>
+</html>
+

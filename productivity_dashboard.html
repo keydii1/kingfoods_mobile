@@ -1,0 +1,592 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kingfood – Thống kê Năng suất</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: "Inter", sans-serif;
+        background: #e8edf0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding: 30px 16px;
+      }
+      /* Phone frame */
+      .phone {
+        width: 390px;
+        min-height: 844px;
+        background: #f5f7fa;
+        border-radius: 48px;
+        box-shadow:
+          0 40px 80px rgba(0, 0, 0, 0.28),
+          0 0 0 10px #1a1a1a,
+          0 0 0 12px #333;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+      }
+      /* Status bar */
+      .status-bar {
+        background: #1b5e3b;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 14px 26px 10px;
+        color: #fff;
+        font-size: 13px;
+        font-weight: 600;
+      }
+      .status-icons {
+        display: flex;
+        gap: 6px;
+        align-items: center;
+        font-size: 12px;
+      }
+
+      /* Top nav */
+      .nav-bar {
+        background: #1b5e3b;
+        padding: 10px 20px 18px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .nav-bar .back {
+        color: #fff;
+        font-size: 20px;
+        cursor: pointer;
+      }
+      .nav-bar h1 {
+        color: #fff;
+        font-size: 17px;
+        font-weight: 700;
+        flex: 1;
+      }
+      .nav-bar .live-badge {
+        background: #ff4d4d;
+        color: #fff;
+        font-size: 10px;
+        font-weight: 700;
+        padding: 3px 8px;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+      .live-dot {
+        width: 6px;
+        height: 6px;
+        background: #fff;
+        border-radius: 50%;
+        animation: blink 1s infinite;
+      }
+      @keyframes blink {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0;
+        }
+      }
+
+      /* Scroll content */
+      .content {
+        flex: 1;
+        overflow-y: auto;
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+      .content::-webkit-scrollbar {
+        display: none;
+      }
+
+      /* ── Cảnh báo ── */
+      .warning-banner {
+        background: linear-gradient(135deg, #ff4444, #cc0000);
+        border-radius: 16px;
+        padding: 14px 18px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        box-shadow: 0 4px 20px rgba(255, 68, 68, 0.4);
+        animation: pulse-border 2s infinite;
+      }
+      @keyframes pulse-border {
+        0%,
+        100% {
+          box-shadow: 0 4px 20px rgba(255, 68, 68, 0.4);
+        }
+        50% {
+          box-shadow: 0 4px 30px rgba(255, 68, 68, 0.7);
+        }
+      }
+      .warning-icon {
+        font-size: 28px;
+      }
+      .warning-text h3 {
+        color: #fff;
+        font-size: 14px;
+        font-weight: 800;
+      }
+      .warning-text p {
+        color: rgba(255, 255, 255, 0.85);
+        font-size: 12px;
+        margin-top: 2px;
+      }
+
+      /* ── Card cá nhân ── */
+      .card {
+        background: #fff;
+        border-radius: 20px;
+        padding: 20px;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+      }
+      .card-title {
+        font-size: 13px;
+        font-weight: 700;
+        color: #888;
+        letter-spacing: 0.8px;
+        text-transform: uppercase;
+        margin-bottom: 16px;
+      }
+
+      /* Gauge */
+      .gauge-wrap {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+      .gauge {
+        position: relative;
+        width: 120px;
+        height: 120px;
+      }
+      .gauge svg {
+        transform: rotate(-90deg);
+      }
+      .gauge-bg {
+        fill: none;
+        stroke: #f0f0f0;
+        stroke-width: 10;
+      }
+      .gauge-fill {
+        fill: none;
+        stroke-width: 10;
+        stroke-linecap: round;
+        stroke-dasharray: 314;
+        stroke-dashoffset: 94; /* 45/100 * 314 = offset */
+        stroke: #ff4444;
+        transition: stroke-dashoffset 1.2s ease;
+      }
+      .gauge-label {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+      .gauge-value {
+        font-size: 26px;
+        font-weight: 900;
+        color: #ff4444;
+        line-height: 1;
+      }
+      .gauge-unit {
+        font-size: 11px;
+        color: #999;
+        font-weight: 500;
+      }
+
+      .gauge-stats {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .stat-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .stat-label {
+        font-size: 12px;
+        color: #999;
+      }
+      .stat-value {
+        font-size: 14px;
+        font-weight: 700;
+        color: #333;
+      }
+      .stat-value.green {
+        color: #1b5e3b;
+      }
+      .stat-value.red {
+        color: #ff4444;
+      }
+
+      /* Progress bar */
+      .progress-wrap {
+        margin-top: 14px;
+      }
+      .progress-label {
+        display: flex;
+        justify-content: space-between;
+        font-size: 12px;
+        color: #999;
+        margin-bottom: 6px;
+      }
+      .progress-bar {
+        height: 8px;
+        background: #f0f0f0;
+        border-radius: 10px;
+        overflow: hidden;
+      }
+      .progress-fill {
+        height: 100%;
+        border-radius: 10px;
+        background: linear-gradient(90deg, #ff4444, #ff8800);
+        width: 72%;
+        transition: width 1s ease;
+      }
+      .target-line-wrap {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 4px;
+      }
+      .target-hint {
+        font-size: 11px;
+        color: #ff4444;
+        font-weight: 600;
+      }
+
+      /* ── Leaderboard ── */
+      .lb-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 14px;
+        border-radius: 14px;
+        margin-bottom: 8px;
+        background: #f9fafb;
+        transition: background 0.2s;
+      }
+      .lb-item.me {
+        background: #fff3f3;
+        border: 1.5px solid #ffcdd2;
+      }
+      .lb-item:last-child {
+        margin-bottom: 0;
+      }
+      .rank-badge {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 15px;
+        font-weight: 800;
+        flex-shrink: 0;
+      }
+      .rank-1 {
+        background: linear-gradient(135deg, #ffd700, #ff8800);
+        color: #fff;
+      }
+      .rank-2 {
+        background: linear-gradient(135deg, #c0c0c0, #888);
+        color: #fff;
+      }
+      .rank-3 {
+        background: linear-gradient(135deg, #cd7f32, #a0522d);
+        color: #fff;
+      }
+      .rank-n {
+        background: #fee2e2;
+        color: #cc0000;
+      }
+
+      .lb-info {
+        flex: 1;
+      }
+      .lb-name {
+        font-size: 14px;
+        font-weight: 700;
+        color: #222;
+      }
+      .lb-zone {
+        font-size: 11px;
+        color: #999;
+        margin-top: 1px;
+      }
+      .lb-me-tag {
+        font-size: 10px;
+        font-weight: 700;
+        background: #ff4444;
+        color: #fff;
+        padding: 1px 6px;
+        border-radius: 6px;
+        margin-left: 6px;
+      }
+
+      .lb-speed {
+        text-align: right;
+      }
+      .lb-speed-value {
+        font-size: 16px;
+        font-weight: 800;
+      }
+      .lb-speed-value.green {
+        color: #1b5e3b;
+      }
+      .lb-speed-value.red {
+        color: #ff4444;
+      }
+      .lb-speed-unit {
+        font-size: 10px;
+        color: #999;
+      }
+
+      /* ── Bottom nav ── */
+      .bottom-nav {
+        background: #fff;
+        display: flex;
+        justify-content: space-around;
+        padding: 10px 0 20px;
+        border-top: 1px solid #eee;
+      }
+      .nav-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        cursor: pointer;
+      }
+      .nav-item .icon {
+        font-size: 22px;
+      }
+      .nav-item .label {
+        font-size: 10px;
+        color: #aaa;
+      }
+      .nav-item.active .icon {
+        filter: invert(26%) sepia(60%) saturate(600%) hue-rotate(120deg);
+      }
+      .nav-item.active .label {
+        color: #1b5e3b;
+        font-weight: 700;
+      }
+      /* Divider */
+      .divider {
+        height: 1px;
+        background: #f0f0f0;
+        margin: 4px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="phone">
+      <!-- Status bar -->
+      <div class="status-bar">
+        <span>10:15</span>
+        <div class="status-icons">
+          <span>📶</span><span>🛜</span><span>🔋 88%</span>
+        </div>
+      </div>
+
+      <!-- Nav bar -->
+      <div class="nav-bar">
+        <span class="back">‹</span>
+        <h1>Năng suất Picking</h1>
+        <div class="live-badge">
+          <div class="live-dot"></div>
+          LIVE
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div class="content">
+        <!-- Cảnh báo -->
+        <div class="warning-banner">
+          <div class="warning-icon">⚠️</div>
+          <div class="warning-text">
+            <h3>CẢNH BÁO NĂNG SUẤT THẤP!</h3>
+            <p>
+              Hiệu suất của bạn đang dưới mức 50 SKU/h. Hãy tăng tốc để đạt mục
+              tiêu ca!
+            </p>
+          </div>
+        </div>
+
+        <!-- Card cá nhân -->
+        <div class="card">
+          <div class="card-title">📊 Năng suất của tôi</div>
+          <div class="gauge-wrap">
+            <!-- SVG Gauge -->
+            <div class="gauge">
+              <svg width="120" height="120" viewBox="0 0 120 120">
+                <circle class="gauge-bg" cx="60" cy="60" r="50" />
+                <circle class="gauge-fill" cx="60" cy="60" r="50" />
+              </svg>
+              <div class="gauge-label">
+                <span class="gauge-value">45</span>
+                <span class="gauge-unit">SKU/h</span>
+              </div>
+            </div>
+
+            <!-- Stats -->
+            <div class="gauge-stats">
+              <div class="stat-row">
+                <span class="stat-label">SKU đã pick</span>
+                <span class="stat-value green">180 mã</span>
+              </div>
+              <div class="divider"></div>
+              <div class="stat-row">
+                <span class="stat-label">Thời gian làm</span>
+                <span class="stat-value">4 giờ</span>
+              </div>
+              <div class="divider"></div>
+              <div class="stat-row">
+                <span class="stat-label">Mục tiêu</span>
+                <span class="stat-value green">50 SKU/h</span>
+              </div>
+              <div class="divider"></div>
+              <div class="stat-row">
+                <span class="stat-label">Trạng thái</span>
+                <span class="stat-value red">Dưới mức ⚠️</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Progress bar -->
+          <div class="progress-wrap">
+            <div class="progress-label">
+              <span>Tiến độ đạt mục tiêu</span>
+              <span style="color: #ff4444; font-weight: 700">72%</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill"></div>
+            </div>
+            <div class="target-line-wrap">
+              <span class="target-hint">Cần thêm 8 SKU/h để đạt mục tiêu</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Leaderboard -->
+        <div class="card">
+          <div class="card-title">🏆 Bảng xếp hạng – Ca sáng</div>
+
+          <div class="lb-item">
+            <div class="rank-badge rank-1">🥇</div>
+            <div class="lb-info">
+              <div class="lb-name">Trần Thị Lan</div>
+              <div class="lb-zone">Khu Bánh & Kẹo</div>
+            </div>
+            <div class="lb-speed">
+              <div class="lb-speed-value green">72</div>
+              <div class="lb-speed-unit">SKU/h</div>
+            </div>
+          </div>
+
+          <div class="lb-item">
+            <div class="rank-badge rank-2">🥈</div>
+            <div class="lb-info">
+              <div class="lb-name">Nguyễn Văn Sơn</div>
+              <div class="lb-zone">Khu Đồ Uống</div>
+            </div>
+            <div class="lb-speed">
+              <div class="lb-speed-value green">61</div>
+              <div class="lb-speed-unit">SKU/h</div>
+            </div>
+          </div>
+
+          <div class="lb-item">
+            <div class="rank-badge rank-3">🥉</div>
+            <div class="lb-info">
+              <div class="lb-name">Lê Minh Tùng</div>
+              <div class="lb-zone">Khu Hóa Phẩm</div>
+            </div>
+            <div class="lb-speed">
+              <div class="lb-speed-value green">55</div>
+              <div class="lb-speed-unit">SKU/h</div>
+            </div>
+          </div>
+
+          <!-- ME row -->
+          <div class="lb-item me">
+            <div class="rank-badge rank-n">4</div>
+            <div class="lb-info">
+              <div class="lb-name">
+                Phạm Thị Mai
+                <span class="lb-me-tag">BẠN</span>
+              </div>
+              <div class="lb-zone">Khu Bánh & Kẹo ⚠️ Dưới mức</div>
+            </div>
+            <div class="lb-speed">
+              <div class="lb-speed-value red">45</div>
+              <div class="lb-speed-unit">SKU/h</div>
+            </div>
+          </div>
+
+          <div class="lb-item">
+            <div
+              class="rank-badge rank-n"
+              style="background: #f0f0f0; color: #888"
+            >
+              5
+            </div>
+            <div class="lb-info">
+              <div class="lb-name">Hoàng Văn Đức</div>
+              <div class="lb-zone">Khu Khuyến Mãi</div>
+            </div>
+            <div class="lb-speed">
+              <div class="lb-speed-value" style="color: #ff8800">43</div>
+              <div class="lb-speed-unit">SKU/h</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom nav -->
+      <div class="bottom-nav">
+        <div class="nav-item">
+          <span class="icon">🏠</span>
+          <span class="label">Trang chủ</span>
+        </div>
+        <div class="nav-item">
+          <span class="icon">📦</span>
+          <span class="label">Đơn hàng</span>
+        </div>
+        <div class="nav-item">
+          <span class="icon">⬛</span>
+          <span class="label">Quét mã</span>
+        </div>
+        <div class="nav-item active">
+          <span class="icon">📊</span>
+          <span class="label">Năng suất</span>
+        </div>
+        <div class="nav-item">
+          <span class="icon">👤</span>
+          <span class="label">Tài khoản</span>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
