@@ -1,20 +1,28 @@
-import { Request, Response, NextFunction } from "express";
+import { Controller } from "@tsed/common";
+import { Get, Post, Put, Delete } from "@tsed/schema";
+import { BodyParams, PathParams, QueryParams } from "@tsed/platform-express";
 import Category from "../models/category.model";
 import { OK, CREATED } from "../core/success.response";
 import { BadRequestError } from "../core/error.response";
-import asyncHandler from "../helpers/asyncHandler.helper";
 
-class CategoryController {
-  create = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    new CREATED({
+@Controller("/categories")
+export class CategoryController {
+  @Post("/")
+  async create(@BodyParams() body: any) {
+    const category = await Category.create(body);
+    return new CREATED({
       message: "Category created successfully",
-      metadata: await Category.create(req.body),
-    }).send(res);
-  });
+      metadata: category,
+    });
+  }
 
-  getAll = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    const page = parseInt(req.query.page as string) || 1;
-    const limit = parseInt(req.query.limit as string) || 10;
+  @Get("/")
+  async getAll(
+    @QueryParams("page") pageQuery: string,
+    @QueryParams("limit") limitQuery: string
+  ) {
+    const page = parseInt(pageQuery) || 1;
+    const limit = parseInt(limitQuery) || 10;
     const skip = (page - 1) * limit;
 
     const categories = await Category.find({ isDeleted: false })
@@ -24,7 +32,7 @@ class CategoryController {
 
     const total = await Category.countDocuments({ isDeleted: false });
 
-    new OK({
+    return new OK({
       message: "Get all categories successfully",
       metadata: {
         categories,
@@ -35,35 +43,36 @@ class CategoryController {
           totalPages: Math.ceil(total / limit),
         },
       },
-    }).send(res);
-  });
+    });
+  }
 
-  getById = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    const category = await Category.findById(req.params.id);
+  @Get("/:id")
+  async getById(@PathParams("id") id: string) {
+    const category = await Category.findById(id);
     if (!category || category.isDeleted) throw new BadRequestError("Category not found");
-    new OK({
+    return new OK({
       message: "Get category successfully",
       metadata: category,
-    }).send(res);
-  });
+    });
+  }
 
-  update = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    const category = await Category.findByIdAndUpdate(req.params.id, req.body, { new: true });
+  @Put("/:id")
+  async update(@PathParams("id") id: string, @BodyParams() body: any) {
+    const category = await Category.findByIdAndUpdate(id, body, { new: true });
     if (!category) throw new BadRequestError("Category not found");
-    new OK({
+    return new OK({
       message: "Category updated successfully",
       metadata: category,
-    }).send(res);
-  });
+    });
+  }
 
-  delete = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    const category = await Category.findByIdAndUpdate(req.params.id, { isDeleted: true }, { new: true });
+  @Delete("/:id")
+  async delete(@PathParams("id") id: string) {
+    const category = await Category.findByIdAndUpdate(id, { isDeleted: true }, { new: true });
     if (!category) throw new BadRequestError("Category not found");
-    new OK({
+    return new OK({
       message: "Category deleted successfully",
       metadata: category,
-    }).send(res);
-  });
+    });
+  }
 }
-
-export default new CategoryController();
