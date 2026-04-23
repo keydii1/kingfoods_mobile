@@ -10,7 +10,10 @@ export const uploadImage = asyncHandler(
     if (!file) {
       return next();
     }
-    const result = await cloudinary.uploader.upload(file.path);
+    const result = await cloudinary.uploader.upload(file.path, {
+      folder: "products",
+      transformation: [{ width: 800, crop: "scale", quality: "auto" }],
+    });
     fs.unlinkSync(file.path);
     req.body.image = result.secure_url;
     return next();
