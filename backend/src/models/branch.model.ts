@@ -1,6 +1,7 @@
 import { Schema, model, Document } from "mongoose";
 
-export interface IBranch extends Document {
+export interface IBranch extends Document<number> {
+  _id: number;
   name: string;
   street: string;
   openHour: string;
@@ -11,6 +12,7 @@ export interface IBranch extends Document {
 
 const branchSchema = new Schema<IBranch>(
   {
+    _id: { type: Number, required: true },
     name: { type: String, required: true },
     street: { type: String, required: true },
     openHour: { type: String, required: true },

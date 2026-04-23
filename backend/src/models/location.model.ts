@@ -1,6 +1,7 @@
 import { Schema, model, Document } from "mongoose";
 
-export interface ILocation extends Document {
+export interface ILocation extends Document<number> {
+  _id: number;
   name: string;
   status: string;
   description: string;
@@ -10,6 +11,7 @@ export interface ILocation extends Document {
 
 const locationSchema = new Schema<ILocation>(
   {
+    _id: { type: Number, required: true },
     name: { type: String, required: true },
     status: { type: String, default: "active" },
     description: { type: String },

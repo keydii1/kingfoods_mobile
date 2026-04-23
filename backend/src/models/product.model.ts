@@ -1,10 +1,11 @@
 import { Schema, model, Document, Types } from "mongoose";
 
-export interface IProduct extends Document {
+export interface IProduct extends Document<number> {
+  _id: number;
   name: string;
-  category_id: Types.ObjectId;
+  category_id: number;
   status: string;
-  location_id: Types.ObjectId;
+  location_id: number;
   isDeleted: boolean;
   description: string;
   createdAt: Date;
@@ -13,10 +14,11 @@ export interface IProduct extends Document {
 
 const productSchema = new Schema<IProduct>(
   {
+    _id: { type: Number, required: true },
     name: { type: String, required: true },
-    category_id: { type: Schema.Types.ObjectId, ref: "Category", required: true },
+    category_id: { type: Number, ref: "Category", required: true },
     status: { type: String, default: "active" },
-    location_id: { type: Schema.Types.ObjectId, ref: "Location", required: true },
+    location_id: { type: Number, ref: "Location", required: true },
     isDeleted: { type: Boolean, default: false },
     description: { type: String },
   },

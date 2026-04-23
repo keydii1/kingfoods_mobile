@@ -1,8 +1,9 @@
 import { Schema, model, Document, Types } from "mongoose";
 
-export interface IOrderDetail extends Document {
-  order_id: Types.ObjectId;
-  product_id: Types.ObjectId;
+export interface IOrderDetail extends Document<number> {
+  _id: number;
+  order_id: number;
+  product_id: number;
   quantity: number;
   price: number;
   createdAt: Date;
@@ -11,8 +12,9 @@ export interface IOrderDetail extends Document {
 
 const orderDetailSchema = new Schema<IOrderDetail>(
   {
-    order_id: { type: Schema.Types.ObjectId, ref: "Order", required: true },
-    product_id: { type: Schema.Types.ObjectId, ref: "Product", required: true },
+    _id: { type: Number, required: true },
+    order_id: { type: Number, ref: "Order", required: true },
+    product_id: { type: Number, ref: "Product", required: true },
     quantity: { type: Number, required: true },
     price: { type: Number, required: true },
   },
