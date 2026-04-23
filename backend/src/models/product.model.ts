@@ -7,6 +7,8 @@ export interface IProduct extends Document {
   location_id: Types.ObjectId;
   isDeleted: boolean;
   description: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const productSchema = new Schema<IProduct>(

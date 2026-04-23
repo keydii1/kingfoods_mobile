@@ -5,6 +5,8 @@ export interface IOrder extends Document {
   user_id: Types.ObjectId;
   status: string;
   total_amount: number;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const orderSchema = new Schema<IOrder>(

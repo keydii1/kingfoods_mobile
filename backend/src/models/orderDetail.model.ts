@@ -5,6 +5,8 @@ export interface IOrderDetail extends Document {
   product_id: Types.ObjectId;
   quantity: number;
   price: number;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const orderDetailSchema = new Schema<IOrderDetail>(

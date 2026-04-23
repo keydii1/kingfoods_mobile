@@ -4,6 +4,8 @@ export interface ILocation extends Document {
   name: string;
   status: string;
   description: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const locationSchema = new Schema<ILocation>(

@@ -5,6 +5,8 @@ export interface IBranch extends Document {
   street: string;
   openHour: string;
   closeHour: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const branchSchema = new Schema<IBranch>(

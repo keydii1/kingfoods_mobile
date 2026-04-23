@@ -3,10 +3,12 @@ import { Schema, model, Document } from "mongoose";
 export interface IUser extends Document {
   name: string;
   gmail: string;
-  password: string;
+  password?: string;
   username: string;
   shift: string;
   isAdmin: boolean;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const userSchema = new Schema<IUser>(

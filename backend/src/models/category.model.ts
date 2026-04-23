@@ -5,6 +5,8 @@ export interface ICategory extends Document {
   status: string;
   isDeleted: boolean;
   description: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const categorySchema = new Schema<ICategory>(
