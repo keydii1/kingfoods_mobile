@@ -1,0 +1,37 @@
+[
+  {
+    "_id": 1,
+    "name": "Kingfood Quận 1",
+    "street": "123 Lê Lợi, Phường Bến Thành, Q1",
+    "openHour": "06:00",
+    "closeHour": "22:00"
+  },
+  {
+    "_id": 2,
+    "name": "Kingfood Quận 7",
+    "street": "456 Nguyễn Lương Bằng, Tân Phú, Q7",
+    "openHour": "06:00",
+    "closeHour": "22:00"
+  },
+  {
+    "_id": 3,
+    "name": "Kingfood Bình Thạnh",
+    "street": "789 Phan Xích Long, P.2, Bình Thạnh",
+    "openHour": "06:00",
+    "closeHour": "22:00"
+  },
+  {
+    "_id": 4,
+    "name": "Kingfood Thủ Đức",
+    "street": "12 Võ Văn Ngân, Linh Chiểu, Thủ Đức",
+    "openHour": "06:00",
+    "closeHour": "22:30"
+  },
+  {
+    "_id": 5,
+    "name": "Kingfood Gò Vấp",
+    "street": "102 Quang Trung, P.10, Gò Vấp",
+    "openHour": "06:00",
+    "closeHour": "22:00"
+  }
+]

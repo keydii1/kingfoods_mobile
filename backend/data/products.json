@@ -1,0 +1,2002 @@
+[
+  {
+    "_id": 101,
+    "name": "Táo Envy Mỹ - Loại 1",
+    "category_id": 7,
+    "location_id": 16,
+    "price": 140674,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Táo Envy Mỹ chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 102,
+    "name": "Táo Gala - Loại 1",
+    "category_id": 8,
+    "location_id": 19,
+    "price": 146970,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Táo Gala chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 103,
+    "name": "Cam Sành - Loại 1",
+    "category_id": 8,
+    "location_id": 20,
+    "price": 18653,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Cam Sành chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 104,
+    "name": "Cam Vàng Mỹ - Loại 1",
+    "category_id": 12,
+    "location_id": 20,
+    "price": 304072,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Cam Vàng Mỹ chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 105,
+    "name": "Nho Mẫu Đơn - Loại 1",
+    "category_id": 13,
+    "location_id": 16,
+    "price": 77604,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Nho Mẫu Đơn chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 106,
+    "name": "Nho Đen Không Hạt - Loại 1",
+    "category_id": 13,
+    "location_id": 16,
+    "price": 259649,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Nho Đen Không Hạt chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 107,
+    "name": "Thanh Long Bình Thuận - Loại 1",
+    "category_id": 6,
+    "location_id": 18,
+    "price": 336498,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Thanh Long Bình Thuận chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 108,
+    "name": "Dưa Hấu Long An - Loại 1",
+    "category_id": 13,
+    "location_id": 20,
+    "price": 320308,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Dưa Hấu Long An chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 109,
+    "name": "Xoài Cát Hòa Lộc - Loại 1",
+    "category_id": 15,
+    "location_id": 20,
+    "price": 169447,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Xoài Cát Hòa Lộc chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 110,
+    "name": "Bơ Sáp Đắk Lắk - Loại 1",
+    "category_id": 7,
+    "location_id": 18,
+    "price": 141701,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Bơ Sáp Đắk Lắk chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 111,
+    "name": "Thịt Thăn Lợn - Loại 1",
+    "category_id": 12,
+    "location_id": 20,
+    "price": 378268,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Thịt Thăn Lợn chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 112,
+    "name": "Ba Chỉ Bò Mỹ - Loại 1",
+    "category_id": 8,
+    "location_id": 17,
+    "price": 94737,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Ba Chỉ Bò Mỹ chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 113,
+    "name": "Đùi Gà Ta - Loại 1",
+    "category_id": 12,
+    "location_id": 18,
+    "price": 395968,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Đùi Gà Ta chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 114,
+    "name": "Sườn Non - Loại 1",
+    "category_id": 14,
+    "location_id": 20,
+    "price": 114590,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Sườn Non chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 115,
+    "name": "Cá Hồi Na Uy - Loại 1",
+    "category_id": 7,
+    "location_id": 16,
+    "price": 33743,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Cá Hồi Na Uy chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 116,
+    "name": "Tôm Thẻ - Loại 1",
+    "category_id": 13,
+    "location_id": 18,
+    "price": 480277,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Tôm Thẻ chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 117,
+    "name": "Mực Ống - Loại 1",
+    "category_id": 7,
+    "location_id": 20,
+    "price": 446183,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Mực Ống chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 118,
+    "name": "Cua Cà Mau - Loại 1",
+    "category_id": 14,
+    "location_id": 18,
+    "price": 492837,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Cua Cà Mau chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 119,
+    "name": "Sò Điệp - Loại 1",
+    "category_id": 13,
+    "location_id": 19,
+    "price": 381825,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Sò Điệp chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 120,
+    "name": "Nghêu Trắng - Loại 1",
+    "category_id": 11,
+    "location_id": 19,
+    "price": 78037,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Nghêu Trắng chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 121,
+    "name": "Rau Muống - Loại 1",
+    "category_id": 12,
+    "location_id": 19,
+    "price": 477426,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Rau Muống chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 122,
+    "name": "Cải Thìa - Loại 1",
+    "category_id": 13,
+    "location_id": 19,
+    "price": 227755,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Cải Thìa chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 123,
+    "name": "Xà Lách Mỡ - Loại 1",
+    "category_id": 12,
+    "location_id": 18,
+    "price": 345194,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Xà Lách Mỡ chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 124,
+    "name": "Cà Chua Bi - Loại 1",
+    "category_id": 10,
+    "location_id": 16,
+    "price": 388154,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Cà Chua Bi chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 125,
+    "name": "Dưa Leo Trắng - Loại 1",
+    "category_id": 14,
+    "location_id": 20,
+    "price": 258492,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Dưa Leo Trắng chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 126,
+    "name": "Bắp Cải Tím - Loại 1",
+    "category_id": 10,
+    "location_id": 16,
+    "price": 435222,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Bắp Cải Tím chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 127,
+    "name": "Khoai Tây Đà Lạt - Loại 1",
+    "category_id": 13,
+    "location_id": 17,
+    "price": 26866,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Khoai Tây Đà Lạt chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 128,
+    "name": "Cà Rốt - Loại 1",
+    "category_id": 10,
+    "location_id": 19,
+    "price": 33360,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Cà Rốt chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 129,
+    "name": "Hành Tây - Loại 1",
+    "category_id": 6,
+    "location_id": 18,
+    "price": 102302,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Hành Tây chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 130,
+    "name": "Súp Lơ Xanh - Loại 1",
+    "category_id": 10,
+    "location_id": 16,
+    "price": 11646,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Súp Lơ Xanh chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 131,
+    "name": "Sữa Tươi TH True Milk - Loại 1",
+    "category_id": 12,
+    "location_id": 17,
+    "price": 421968,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Sữa Tươi TH True Milk chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 132,
+    "name": "Sữa Chua Vinamilk - Loại 1",
+    "category_id": 9,
+    "location_id": 19,
+    "price": 16478,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Sữa Chua Vinamilk chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 133,
+    "name": "Phô Mai Con Bò Cười - Loại 1",
+    "category_id": 7,
+    "location_id": 20,
+    "price": 128536,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Phô Mai Con Bò Cười chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 134,
+    "name": "Gạo ST25 - Loại 1",
+    "category_id": 6,
+    "location_id": 19,
+    "price": 84853,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Gạo ST25 chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 135,
+    "name": "Nước Mắm Nam Ngư - Loại 1",
+    "category_id": 8,
+    "location_id": 20,
+    "price": 96584,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Nước Mắm Nam Ngư chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 136,
+    "name": "Dầu Ăn Tường An - Loại 1",
+    "category_id": 14,
+    "location_id": 18,
+    "price": 482617,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Dầu Ăn Tường An chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 137,
+    "name": "Mì Hảo Hảo - Loại 1",
+    "category_id": 6,
+    "location_id": 17,
+    "price": 290343,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Mì Hảo Hảo chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 138,
+    "name": "Snack Khoai Tây - Loại 1",
+    "category_id": 15,
+    "location_id": 19,
+    "price": 52523,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Snack Khoai Tây chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 139,
+    "name": "Coca Cola - Loại 1",
+    "category_id": 9,
+    "location_id": 16,
+    "price": 96073,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Coca Cola chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 140,
+    "name": "Bia Heineken - Loại 1",
+    "category_id": 13,
+    "location_id": 18,
+    "price": 488497,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Bia Heineken chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 141,
+    "name": "Táo Envy Mỹ - Loại 2",
+    "category_id": 13,
+    "location_id": 16,
+    "price": 135031,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Táo Envy Mỹ chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 142,
+    "name": "Táo Gala - Loại 2",
+    "category_id": 6,
+    "location_id": 16,
+    "price": 229829,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Táo Gala chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 143,
+    "name": "Cam Sành - Loại 2",
+    "category_id": 14,
+    "location_id": 19,
+    "price": 299831,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Cam Sành chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 144,
+    "name": "Cam Vàng Mỹ - Loại 2",
+    "category_id": 12,
+    "location_id": 20,
+    "price": 38231,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Cam Vàng Mỹ chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 145,
+    "name": "Nho Mẫu Đơn - Loại 2",
+    "category_id": 6,
+    "location_id": 20,
+    "price": 498282,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Nho Mẫu Đơn chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 146,
+    "name": "Nho Đen Không Hạt - Loại 2",
+    "category_id": 13,
+    "location_id": 19,
+    "price": 51869,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Nho Đen Không Hạt chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 147,
+    "name": "Thanh Long Bình Thuận - Loại 2",
+    "category_id": 13,
+    "location_id": 18,
+    "price": 459883,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Thanh Long Bình Thuận chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 148,
+    "name": "Dưa Hấu Long An - Loại 2",
+    "category_id": 6,
+    "location_id": 20,
+    "price": 468364,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Dưa Hấu Long An chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 149,
+    "name": "Xoài Cát Hòa Lộc - Loại 2",
+    "category_id": 6,
+    "location_id": 16,
+    "price": 496268,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Xoài Cát Hòa Lộc chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 150,
+    "name": "Bơ Sáp Đắk Lắk - Loại 2",
+    "category_id": 15,
+    "location_id": 17,
+    "price": 341871,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Bơ Sáp Đắk Lắk chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 151,
+    "name": "Thịt Thăn Lợn - Loại 2",
+    "category_id": 8,
+    "location_id": 16,
+    "price": 383167,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Thịt Thăn Lợn chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 152,
+    "name": "Ba Chỉ Bò Mỹ - Loại 2",
+    "category_id": 13,
+    "location_id": 17,
+    "price": 201239,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Ba Chỉ Bò Mỹ chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 153,
+    "name": "Đùi Gà Ta - Loại 2",
+    "category_id": 11,
+    "location_id": 17,
+    "price": 461548,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Đùi Gà Ta chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 154,
+    "name": "Sườn Non - Loại 2",
+    "category_id": 13,
+    "location_id": 18,
+    "price": 172708,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Sườn Non chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 155,
+    "name": "Cá Hồi Na Uy - Loại 2",
+    "category_id": 14,
+    "location_id": 16,
+    "price": 321847,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Cá Hồi Na Uy chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 156,
+    "name": "Tôm Thẻ - Loại 2",
+    "category_id": 6,
+    "location_id": 16,
+    "price": 113556,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Tôm Thẻ chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 157,
+    "name": "Mực Ống - Loại 2",
+    "category_id": 13,
+    "location_id": 19,
+    "price": 457494,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Mực Ống chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 158,
+    "name": "Cua Cà Mau - Loại 2",
+    "category_id": 10,
+    "location_id": 20,
+    "price": 45419,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Cua Cà Mau chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 159,
+    "name": "Sò Điệp - Loại 2",
+    "category_id": 8,
+    "location_id": 16,
+    "price": 36904,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Sò Điệp chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 160,
+    "name": "Nghêu Trắng - Loại 2",
+    "category_id": 7,
+    "location_id": 20,
+    "price": 107128,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Nghêu Trắng chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 161,
+    "name": "Rau Muống - Loại 2",
+    "category_id": 12,
+    "location_id": 17,
+    "price": 67994,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Rau Muống chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 162,
+    "name": "Cải Thìa - Loại 2",
+    "category_id": 13,
+    "location_id": 20,
+    "price": 375707,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Cải Thìa chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 163,
+    "name": "Xà Lách Mỡ - Loại 2",
+    "category_id": 15,
+    "location_id": 19,
+    "price": 263645,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Xà Lách Mỡ chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 164,
+    "name": "Cà Chua Bi - Loại 2",
+    "category_id": 12,
+    "location_id": 18,
+    "price": 506758,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Cà Chua Bi chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 165,
+    "name": "Dưa Leo Trắng - Loại 2",
+    "category_id": 6,
+    "location_id": 16,
+    "price": 139940,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Dưa Leo Trắng chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 166,
+    "name": "Bắp Cải Tím - Loại 2",
+    "category_id": 6,
+    "location_id": 18,
+    "price": 416675,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Bắp Cải Tím chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 167,
+    "name": "Khoai Tây Đà Lạt - Loại 2",
+    "category_id": 13,
+    "location_id": 18,
+    "price": 79754,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Khoai Tây Đà Lạt chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 168,
+    "name": "Cà Rốt - Loại 2",
+    "category_id": 8,
+    "location_id": 19,
+    "price": 113151,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Cà Rốt chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 169,
+    "name": "Hành Tây - Loại 2",
+    "category_id": 15,
+    "location_id": 16,
+    "price": 133287,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Hành Tây chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 170,
+    "name": "Súp Lơ Xanh - Loại 2",
+    "category_id": 9,
+    "location_id": 17,
+    "price": 480241,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Súp Lơ Xanh chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 171,
+    "name": "Sữa Tươi TH True Milk - Loại 2",
+    "category_id": 12,
+    "location_id": 16,
+    "price": 229499,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Sữa Tươi TH True Milk chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 172,
+    "name": "Sữa Chua Vinamilk - Loại 2",
+    "category_id": 14,
+    "location_id": 17,
+    "price": 261408,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Sữa Chua Vinamilk chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 173,
+    "name": "Phô Mai Con Bò Cười - Loại 2",
+    "category_id": 9,
+    "location_id": 16,
+    "price": 414879,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Phô Mai Con Bò Cười chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 174,
+    "name": "Gạo ST25 - Loại 2",
+    "category_id": 10,
+    "location_id": 20,
+    "price": 13384,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Gạo ST25 chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 175,
+    "name": "Nước Mắm Nam Ngư - Loại 2",
+    "category_id": 12,
+    "location_id": 17,
+    "price": 60114,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Nước Mắm Nam Ngư chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 176,
+    "name": "Dầu Ăn Tường An - Loại 2",
+    "category_id": 9,
+    "location_id": 18,
+    "price": 497372,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Dầu Ăn Tường An chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 177,
+    "name": "Mì Hảo Hảo - Loại 2",
+    "category_id": 13,
+    "location_id": 16,
+    "price": 67783,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Mì Hảo Hảo chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 178,
+    "name": "Snack Khoai Tây - Loại 2",
+    "category_id": 11,
+    "location_id": 18,
+    "price": 246892,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Snack Khoai Tây chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 179,
+    "name": "Coca Cola - Loại 2",
+    "category_id": 15,
+    "location_id": 17,
+    "price": 55741,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Coca Cola chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 180,
+    "name": "Bia Heineken - Loại 2",
+    "category_id": 7,
+    "location_id": 19,
+    "price": 479701,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Bia Heineken chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 181,
+    "name": "Táo Envy Mỹ - Loại 3",
+    "category_id": 15,
+    "location_id": 19,
+    "price": 407832,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Táo Envy Mỹ chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 182,
+    "name": "Táo Gala - Loại 3",
+    "category_id": 13,
+    "location_id": 18,
+    "price": 381189,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Táo Gala chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 183,
+    "name": "Cam Sành - Loại 3",
+    "category_id": 12,
+    "location_id": 16,
+    "price": 315597,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Cam Sành chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 184,
+    "name": "Cam Vàng Mỹ - Loại 3",
+    "category_id": 10,
+    "location_id": 19,
+    "price": 178547,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Cam Vàng Mỹ chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 185,
+    "name": "Nho Mẫu Đơn - Loại 3",
+    "category_id": 12,
+    "location_id": 17,
+    "price": 87242,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Nho Mẫu Đơn chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 186,
+    "name": "Nho Đen Không Hạt - Loại 3",
+    "category_id": 14,
+    "location_id": 17,
+    "price": 459822,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Nho Đen Không Hạt chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 187,
+    "name": "Thanh Long Bình Thuận - Loại 3",
+    "category_id": 11,
+    "location_id": 20,
+    "price": 154516,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Thanh Long Bình Thuận chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 188,
+    "name": "Dưa Hấu Long An - Loại 3",
+    "category_id": 6,
+    "location_id": 16,
+    "price": 95929,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Dưa Hấu Long An chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 189,
+    "name": "Xoài Cát Hòa Lộc - Loại 3",
+    "category_id": 13,
+    "location_id": 19,
+    "price": 126339,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Xoài Cát Hòa Lộc chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 190,
+    "name": "Bơ Sáp Đắk Lắk - Loại 3",
+    "category_id": 15,
+    "location_id": 20,
+    "price": 471998,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Bơ Sáp Đắk Lắk chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 191,
+    "name": "Thịt Thăn Lợn - Loại 3",
+    "category_id": 12,
+    "location_id": 19,
+    "price": 221049,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Thịt Thăn Lợn chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 192,
+    "name": "Ba Chỉ Bò Mỹ - Loại 3",
+    "category_id": 13,
+    "location_id": 16,
+    "price": 27868,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Ba Chỉ Bò Mỹ chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 193,
+    "name": "Đùi Gà Ta - Loại 3",
+    "category_id": 11,
+    "location_id": 16,
+    "price": 335939,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Đùi Gà Ta chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 194,
+    "name": "Sườn Non - Loại 3",
+    "category_id": 12,
+    "location_id": 17,
+    "price": 48588,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Sườn Non chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 195,
+    "name": "Cá Hồi Na Uy - Loại 3",
+    "category_id": 6,
+    "location_id": 20,
+    "price": 440030,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Cá Hồi Na Uy chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 196,
+    "name": "Tôm Thẻ - Loại 3",
+    "category_id": 15,
+    "location_id": 19,
+    "price": 245690,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Tôm Thẻ chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 197,
+    "name": "Mực Ống - Loại 3",
+    "category_id": 8,
+    "location_id": 20,
+    "price": 188617,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Mực Ống chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 198,
+    "name": "Cua Cà Mau - Loại 3",
+    "category_id": 8,
+    "location_id": 17,
+    "price": 58734,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Cua Cà Mau chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 199,
+    "name": "Sò Điệp - Loại 3",
+    "category_id": 8,
+    "location_id": 16,
+    "price": 413813,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Sò Điệp chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 200,
+    "name": "Nghêu Trắng - Loại 3",
+    "category_id": 9,
+    "location_id": 17,
+    "price": 194006,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Nghêu Trắng chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 201,
+    "name": "Rau Muống - Loại 3",
+    "category_id": 6,
+    "location_id": 18,
+    "price": 494869,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Rau Muống chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 202,
+    "name": "Cải Thìa - Loại 3",
+    "category_id": 11,
+    "location_id": 20,
+    "price": 178076,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Cải Thìa chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 203,
+    "name": "Xà Lách Mỡ - Loại 3",
+    "category_id": 14,
+    "location_id": 19,
+    "price": 108990,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Xà Lách Mỡ chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 204,
+    "name": "Cà Chua Bi - Loại 3",
+    "category_id": 8,
+    "location_id": 20,
+    "price": 246826,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Cà Chua Bi chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 205,
+    "name": "Dưa Leo Trắng - Loại 3",
+    "category_id": 11,
+    "location_id": 20,
+    "price": 18097,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Dưa Leo Trắng chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 206,
+    "name": "Bắp Cải Tím - Loại 3",
+    "category_id": 8,
+    "location_id": 20,
+    "price": 265052,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Bắp Cải Tím chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 207,
+    "name": "Khoai Tây Đà Lạt - Loại 3",
+    "category_id": 12,
+    "location_id": 18,
+    "price": 26567,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Khoai Tây Đà Lạt chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 208,
+    "name": "Cà Rốt - Loại 3",
+    "category_id": 9,
+    "location_id": 20,
+    "price": 116369,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Cà Rốt chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 209,
+    "name": "Hành Tây - Loại 3",
+    "category_id": 15,
+    "location_id": 17,
+    "price": 117154,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Hành Tây chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 210,
+    "name": "Súp Lơ Xanh - Loại 3",
+    "category_id": 13,
+    "location_id": 20,
+    "price": 108290,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Súp Lơ Xanh chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 211,
+    "name": "Sữa Tươi TH True Milk - Loại 3",
+    "category_id": 7,
+    "location_id": 17,
+    "price": 320044,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Sữa Tươi TH True Milk chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 212,
+    "name": "Sữa Chua Vinamilk - Loại 3",
+    "category_id": 10,
+    "location_id": 18,
+    "price": 323304,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Sữa Chua Vinamilk chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 213,
+    "name": "Phô Mai Con Bò Cười - Loại 3",
+    "category_id": 10,
+    "location_id": 20,
+    "price": 449428,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Phô Mai Con Bò Cười chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 214,
+    "name": "Gạo ST25 - Loại 3",
+    "category_id": 10,
+    "location_id": 17,
+    "price": 412805,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Gạo ST25 chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 215,
+    "name": "Nước Mắm Nam Ngư - Loại 3",
+    "category_id": 8,
+    "location_id": 19,
+    "price": 116728,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Nước Mắm Nam Ngư chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 216,
+    "name": "Dầu Ăn Tường An - Loại 3",
+    "category_id": 11,
+    "location_id": 18,
+    "price": 314480,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Dầu Ăn Tường An chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 217,
+    "name": "Mì Hảo Hảo - Loại 3",
+    "category_id": 12,
+    "location_id": 16,
+    "price": 373117,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Mì Hảo Hảo chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 218,
+    "name": "Snack Khoai Tây - Loại 3",
+    "category_id": 10,
+    "location_id": 16,
+    "price": 163448,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Snack Khoai Tây chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 219,
+    "name": "Coca Cola - Loại 3",
+    "category_id": 6,
+    "location_id": 17,
+    "price": 34889,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Coca Cola chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 220,
+    "name": "Bia Heineken - Loại 3",
+    "category_id": 11,
+    "location_id": 20,
+    "price": 207184,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Bia Heineken chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 221,
+    "name": "Táo Envy Mỹ - Loại 4",
+    "category_id": 9,
+    "location_id": 17,
+    "price": 24430,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Táo Envy Mỹ chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 222,
+    "name": "Táo Gala - Loại 4",
+    "category_id": 14,
+    "location_id": 20,
+    "price": 262565,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Táo Gala chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 223,
+    "name": "Cam Sành - Loại 4",
+    "category_id": 7,
+    "location_id": 16,
+    "price": 346596,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Cam Sành chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 224,
+    "name": "Cam Vàng Mỹ - Loại 4",
+    "category_id": 10,
+    "location_id": 19,
+    "price": 55001,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Cam Vàng Mỹ chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 225,
+    "name": "Nho Mẫu Đơn - Loại 4",
+    "category_id": 13,
+    "location_id": 17,
+    "price": 367867,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Nho Mẫu Đơn chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 226,
+    "name": "Nho Đen Không Hạt - Loại 4",
+    "category_id": 10,
+    "location_id": 16,
+    "price": 320962,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Nho Đen Không Hạt chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 227,
+    "name": "Thanh Long Bình Thuận - Loại 4",
+    "category_id": 11,
+    "location_id": 19,
+    "price": 209128,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Thanh Long Bình Thuận chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 228,
+    "name": "Dưa Hấu Long An - Loại 4",
+    "category_id": 15,
+    "location_id": 17,
+    "price": 389435,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Dưa Hấu Long An chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 229,
+    "name": "Xoài Cát Hòa Lộc - Loại 4",
+    "category_id": 15,
+    "location_id": 19,
+    "price": 226804,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Xoài Cát Hòa Lộc chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 230,
+    "name": "Bơ Sáp Đắk Lắk - Loại 4",
+    "category_id": 9,
+    "location_id": 16,
+    "price": 446247,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Bơ Sáp Đắk Lắk chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 231,
+    "name": "Thịt Thăn Lợn - Loại 4",
+    "category_id": 8,
+    "location_id": 16,
+    "price": 488945,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Thịt Thăn Lợn chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 232,
+    "name": "Ba Chỉ Bò Mỹ - Loại 4",
+    "category_id": 11,
+    "location_id": 19,
+    "price": 252571,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Ba Chỉ Bò Mỹ chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 233,
+    "name": "Đùi Gà Ta - Loại 4",
+    "category_id": 6,
+    "location_id": 19,
+    "price": 334169,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Đùi Gà Ta chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 234,
+    "name": "Sườn Non - Loại 4",
+    "category_id": 6,
+    "location_id": 16,
+    "price": 382082,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Sườn Non chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 235,
+    "name": "Cá Hồi Na Uy - Loại 4",
+    "category_id": 13,
+    "location_id": 16,
+    "price": 93193,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Cá Hồi Na Uy chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 236,
+    "name": "Tôm Thẻ - Loại 4",
+    "category_id": 13,
+    "location_id": 19,
+    "price": 53982,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Tôm Thẻ chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 237,
+    "name": "Mực Ống - Loại 4",
+    "category_id": 13,
+    "location_id": 19,
+    "price": 131917,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Mực Ống chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 238,
+    "name": "Cua Cà Mau - Loại 4",
+    "category_id": 14,
+    "location_id": 19,
+    "price": 138313,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Cua Cà Mau chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 239,
+    "name": "Sò Điệp - Loại 4",
+    "category_id": 12,
+    "location_id": 18,
+    "price": 271855,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Sò Điệp chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 240,
+    "name": "Nghêu Trắng - Loại 4",
+    "category_id": 7,
+    "location_id": 19,
+    "price": 383967,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Nghêu Trắng chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 241,
+    "name": "Rau Muống - Loại 4",
+    "category_id": 8,
+    "location_id": 17,
+    "price": 36556,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Rau Muống chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 242,
+    "name": "Cải Thìa - Loại 4",
+    "category_id": 11,
+    "location_id": 16,
+    "price": 424861,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Cải Thìa chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 243,
+    "name": "Xà Lách Mỡ - Loại 4",
+    "category_id": 13,
+    "location_id": 17,
+    "price": 283551,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Xà Lách Mỡ chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 244,
+    "name": "Cà Chua Bi - Loại 4",
+    "category_id": 15,
+    "location_id": 17,
+    "price": 260792,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Cà Chua Bi chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 245,
+    "name": "Dưa Leo Trắng - Loại 4",
+    "category_id": 6,
+    "location_id": 17,
+    "price": 259839,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Dưa Leo Trắng chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 246,
+    "name": "Bắp Cải Tím - Loại 4",
+    "category_id": 9,
+    "location_id": 17,
+    "price": 267994,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Bắp Cải Tím chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 247,
+    "name": "Khoai Tây Đà Lạt - Loại 4",
+    "category_id": 9,
+    "location_id": 17,
+    "price": 480244,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Khoai Tây Đà Lạt chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 248,
+    "name": "Cà Rốt - Loại 4",
+    "category_id": 6,
+    "location_id": 19,
+    "price": 360470,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Cà Rốt chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 249,
+    "name": "Hành Tây - Loại 4",
+    "category_id": 7,
+    "location_id": 19,
+    "price": 321536,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Hành Tây chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 250,
+    "name": "Súp Lơ Xanh - Loại 4",
+    "category_id": 6,
+    "location_id": 16,
+    "price": 117732,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Súp Lơ Xanh chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 251,
+    "name": "Sữa Tươi TH True Milk - Loại 4",
+    "category_id": 6,
+    "location_id": 16,
+    "price": 365406,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Sữa Tươi TH True Milk chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 252,
+    "name": "Sữa Chua Vinamilk - Loại 4",
+    "category_id": 15,
+    "location_id": 18,
+    "price": 469441,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Sữa Chua Vinamilk chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 253,
+    "name": "Phô Mai Con Bò Cười - Loại 4",
+    "category_id": 14,
+    "location_id": 19,
+    "price": 408380,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Phô Mai Con Bò Cười chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 254,
+    "name": "Gạo ST25 - Loại 4",
+    "category_id": 14,
+    "location_id": 19,
+    "price": 294959,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Gạo ST25 chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 255,
+    "name": "Nước Mắm Nam Ngư - Loại 4",
+    "category_id": 12,
+    "location_id": 20,
+    "price": 91698,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Nước Mắm Nam Ngư chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 256,
+    "name": "Dầu Ăn Tường An - Loại 4",
+    "category_id": 11,
+    "location_id": 17,
+    "price": 443693,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Dầu Ăn Tường An chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 257,
+    "name": "Mì Hảo Hảo - Loại 4",
+    "category_id": 15,
+    "location_id": 18,
+    "price": 487514,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Mì Hảo Hảo chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 258,
+    "name": "Snack Khoai Tây - Loại 4",
+    "category_id": 14,
+    "location_id": 20,
+    "price": 174694,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Snack Khoai Tây chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 259,
+    "name": "Coca Cola - Loại 4",
+    "category_id": 15,
+    "location_id": 19,
+    "price": 80850,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Coca Cola chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 260,
+    "name": "Bia Heineken - Loại 4",
+    "category_id": 13,
+    "location_id": 17,
+    "price": 255940,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Bia Heineken chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 261,
+    "name": "Táo Envy Mỹ - Loại 5",
+    "category_id": 8,
+    "location_id": 16,
+    "price": 60386,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Táo Envy Mỹ chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 262,
+    "name": "Táo Gala - Loại 5",
+    "category_id": 15,
+    "location_id": 19,
+    "price": 36383,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Táo Gala chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 263,
+    "name": "Cam Sành - Loại 5",
+    "category_id": 15,
+    "location_id": 17,
+    "price": 374218,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Cam Sành chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 264,
+    "name": "Cam Vàng Mỹ - Loại 5",
+    "category_id": 8,
+    "location_id": 20,
+    "price": 449431,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Cam Vàng Mỹ chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 265,
+    "name": "Nho Mẫu Đơn - Loại 5",
+    "category_id": 12,
+    "location_id": 17,
+    "price": 235476,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Nho Mẫu Đơn chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 266,
+    "name": "Nho Đen Không Hạt - Loại 5",
+    "category_id": 7,
+    "location_id": 20,
+    "price": 159973,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Nho Đen Không Hạt chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 267,
+    "name": "Thanh Long Bình Thuận - Loại 5",
+    "category_id": 6,
+    "location_id": 16,
+    "price": 409001,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Thanh Long Bình Thuận chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 268,
+    "name": "Dưa Hấu Long An - Loại 5",
+    "category_id": 6,
+    "location_id": 16,
+    "price": 423840,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Dưa Hấu Long An chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 269,
+    "name": "Xoài Cát Hòa Lộc - Loại 5",
+    "category_id": 6,
+    "location_id": 17,
+    "price": 310536,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Xoài Cát Hòa Lộc chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 270,
+    "name": "Bơ Sáp Đắk Lắk - Loại 5",
+    "category_id": 14,
+    "location_id": 18,
+    "price": 359710,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Bơ Sáp Đắk Lắk chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 271,
+    "name": "Thịt Thăn Lợn - Loại 5",
+    "category_id": 13,
+    "location_id": 19,
+    "price": 354727,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Thịt Thăn Lợn chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 272,
+    "name": "Ba Chỉ Bò Mỹ - Loại 5",
+    "category_id": 13,
+    "location_id": 17,
+    "price": 150830,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Ba Chỉ Bò Mỹ chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 273,
+    "name": "Đùi Gà Ta - Loại 5",
+    "category_id": 8,
+    "location_id": 20,
+    "price": 159782,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Đùi Gà Ta chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 274,
+    "name": "Sườn Non - Loại 5",
+    "category_id": 11,
+    "location_id": 20,
+    "price": 506688,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Sườn Non chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 275,
+    "name": "Cá Hồi Na Uy - Loại 5",
+    "category_id": 8,
+    "location_id": 16,
+    "price": 30746,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Cá Hồi Na Uy chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 276,
+    "name": "Tôm Thẻ - Loại 5",
+    "category_id": 13,
+    "location_id": 19,
+    "price": 435900,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Tôm Thẻ chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 277,
+    "name": "Mực Ống - Loại 5",
+    "category_id": 7,
+    "location_id": 16,
+    "price": 200872,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Mực Ống chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 278,
+    "name": "Cua Cà Mau - Loại 5",
+    "category_id": 8,
+    "location_id": 17,
+    "price": 336779,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Cua Cà Mau chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 279,
+    "name": "Sò Điệp - Loại 5",
+    "category_id": 15,
+    "location_id": 18,
+    "price": 213746,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Sò Điệp chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 280,
+    "name": "Nghêu Trắng - Loại 5",
+    "category_id": 6,
+    "location_id": 18,
+    "price": 345822,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Nghêu Trắng chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 281,
+    "name": "Rau Muống - Loại 5",
+    "category_id": 13,
+    "location_id": 18,
+    "price": 73902,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Rau Muống chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 282,
+    "name": "Cải Thìa - Loại 5",
+    "category_id": 15,
+    "location_id": 17,
+    "price": 330723,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Cải Thìa chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 283,
+    "name": "Xà Lách Mỡ - Loại 5",
+    "category_id": 12,
+    "location_id": 17,
+    "price": 191184,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Xà Lách Mỡ chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 284,
+    "name": "Cà Chua Bi - Loại 5",
+    "category_id": 6,
+    "location_id": 16,
+    "price": 153120,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Cà Chua Bi chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 285,
+    "name": "Dưa Leo Trắng - Loại 5",
+    "category_id": 9,
+    "location_id": 17,
+    "price": 473683,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Dưa Leo Trắng chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 286,
+    "name": "Bắp Cải Tím - Loại 5",
+    "category_id": 13,
+    "location_id": 17,
+    "price": 81562,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Bắp Cải Tím chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 287,
+    "name": "Khoai Tây Đà Lạt - Loại 5",
+    "category_id": 9,
+    "location_id": 20,
+    "price": 103793,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Khoai Tây Đà Lạt chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 288,
+    "name": "Cà Rốt - Loại 5",
+    "category_id": 9,
+    "location_id": 17,
+    "price": 12262,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Cà Rốt chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 289,
+    "name": "Hành Tây - Loại 5",
+    "category_id": 15,
+    "location_id": 20,
+    "price": 500355,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Hành Tây chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 290,
+    "name": "Súp Lơ Xanh - Loại 5",
+    "category_id": 13,
+    "location_id": 20,
+    "price": 317157,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Súp Lơ Xanh chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 291,
+    "name": "Sữa Tươi TH True Milk - Loại 5",
+    "category_id": 15,
+    "location_id": 20,
+    "price": 441416,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Sữa Tươi TH True Milk chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 292,
+    "name": "Sữa Chua Vinamilk - Loại 5",
+    "category_id": 8,
+    "location_id": 19,
+    "price": 366471,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Sữa Chua Vinamilk chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 293,
+    "name": "Phô Mai Con Bò Cười - Loại 5",
+    "category_id": 12,
+    "location_id": 16,
+    "price": 459949,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Phô Mai Con Bò Cười chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 294,
+    "name": "Gạo ST25 - Loại 5",
+    "category_id": 8,
+    "location_id": 16,
+    "price": 103109,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Gạo ST25 chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 295,
+    "name": "Nước Mắm Nam Ngư - Loại 5",
+    "category_id": 7,
+    "location_id": 17,
+    "price": 198795,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Nước Mắm Nam Ngư chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 296,
+    "name": "Dầu Ăn Tường An - Loại 5",
+    "category_id": 9,
+    "location_id": 17,
+    "price": 107783,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Dầu Ăn Tường An chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 297,
+    "name": "Mì Hảo Hảo - Loại 5",
+    "category_id": 12,
+    "location_id": 16,
+    "price": 453865,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Mì Hảo Hảo chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 298,
+    "name": "Snack Khoai Tây - Loại 5",
+    "category_id": 11,
+    "location_id": 17,
+    "price": 395132,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Snack Khoai Tây chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 299,
+    "name": "Coca Cola - Loại 5",
+    "category_id": 9,
+    "location_id": 18,
+    "price": 384712,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Coca Cola chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  },
+  {
+    "_id": 300,
+    "name": "Bia Heineken - Loại 5",
+    "category_id": 9,
+    "location_id": 19,
+    "price": 229716,
+    "status": "active",
+    "description": "Mô tả cho sản phẩm Bia Heineken chất lượng cao, tươi ngon mỗi ngày.",
+    "isDeleted": false
+  }
+]

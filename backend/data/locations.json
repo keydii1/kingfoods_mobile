@@ -1,0 +1,32 @@
+[
+  {
+    "_id": 16,
+    "name": "Kệ Trái Cây 1",
+    "status": "active",
+    "description": "Khu vực sảnh chính"
+  },
+  {
+    "_id": 17,
+    "name": "Tủ Mát A",
+    "status": "active",
+    "description": "Khu vực thực phẩm tươi"
+  },
+  {
+    "_id": 18,
+    "name": "Hàng Gia Vị B",
+    "status": "active",
+    "description": "Lối đi số 3"
+  },
+  {
+    "_id": 19,
+    "name": "Quầy Thu Ngân",
+    "status": "active",
+    "description": "Khu vực thanh toán"
+  },
+  {
+    "_id": 20,
+    "name": "Kho Lạnh",
+    "status": "active",
+    "description": "Hàng lưu trữ"
+  }
+]

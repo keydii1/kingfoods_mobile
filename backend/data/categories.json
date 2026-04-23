@@ -1,0 +1,62 @@
+[
+  {
+    "_id": 6,
+    "name": "Trái Cây Nội Địa",
+    "status": "active",
+    "description": "Trái cây mùa hè Việt Nam"
+  },
+  {
+    "_id": 7,
+    "name": "Trái Cây Nhập Khẩu",
+    "status": "active",
+    "description": "Nhập khẩu từ Mỹ, Úc, Nhật"
+  },
+  {
+    "_id": 8,
+    "name": "Rau Củ Tươi",
+    "status": "active",
+    "description": "Rau sạch Đà Lạt"
+  },
+  {
+    "_id": 9,
+    "name": "Thịt Tươi Sống",
+    "status": "active",
+    "description": "Thịt lợn, thịt bò, gia cầm"
+  },
+  {
+    "_id": 10,
+    "name": "Hải Sản Tươi",
+    "status": "active",
+    "description": "Đánh bắt trong ngày"
+  },
+  {
+    "_id": 11,
+    "name": "Đồ Khô & Gia Vị",
+    "status": "active",
+    "description": "Gạo, mắm, đường, muối"
+  },
+  {
+    "_id": 12,
+    "name": "Sữa & Sản Phẩm Từ Sữa",
+    "status": "active",
+    "description": "Sữa tươi, sữa chua, phô mai"
+  },
+  {
+    "_id": 13,
+    "name": "Bánh Kẹo",
+    "status": "active",
+    "description": "Snack, chocolate, bánh ngọt"
+  },
+  {
+    "_id": 14,
+    "name": "Đồ Uống",
+    "status": "active",
+    "description": "Nước ngọt, bia, rượu"
+  },
+  {
+    "_id": 15,
+    "name": "Đồ Dùng Gia Đình",
+    "status": "active",
+    "description": "Nước giặt, giấy vệ sinh"
+  }
+]

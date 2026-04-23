@@ -1,0 +1,29 @@
+[
+  {
+    "_id": 21,
+    "name": "Nguyễn Văn Admin",
+    "gmail": "admin@kingfood.com",
+    "username": "admin",
+    "shift": "Morning",
+    "isAdmin": true,
+    "password": "hashed_password"
+  },
+  {
+    "_id": 22,
+    "name": "Trần Thị Staff",
+    "gmail": "staff1@kingfood.com",
+    "username": "staff1",
+    "shift": "Afternoon",
+    "isAdmin": false,
+    "password": "hashed_password"
+  },
+  {
+    "_id": 23,
+    "name": "Lê Văn Nhân Viên",
+    "gmail": "staff2@kingfood.com",
+    "username": "staff2",
+    "shift": "Evening",
+    "isAdmin": false,
+    "password": "hashed_password"
+  }
+]
