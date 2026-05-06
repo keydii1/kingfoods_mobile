@@ -2,6 +2,7 @@ import { PlatformExpress } from "@tsed/platform-express";
 import { Server } from "./Server";
 import Logger from "./helpers/Logger";
 import { AppConfig } from "./config/AppConfig";
+import { AppDataSource } from "./config/DataSource";
 import mysql from "mysql2/promise";
 
 async function bootstrap() {
@@ -16,6 +17,10 @@ async function bootstrap() {
     await connection.query(`CREATE DATABASE IF NOT EXISTS \`${process.env.DB_NAME || "kingfood"}\`;`);
     await connection.end();
     Logger.info(`Database "${process.env.DB_NAME || "kingfood"}" checked/created successfully.`);
+
+    // Khởi tạo TypeORM DataSource
+    await AppDataSource.initialize();
+    Logger.info("TypeORM DataSource has been initialized successfully!");
 
     const platform = await PlatformExpress.bootstrap(Server);
     await platform.listen();

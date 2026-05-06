@@ -2,7 +2,6 @@ import { Configuration, Inject, PlatformApplication } from "@tsed/common";
 import "@tsed/platform-express";
 import "@tsed/ajv";
 import "@tsed/swagger";
-import "@tsed/typeorm";
 import { AppDataSource } from "./config/DataSource";
 import { ErrorHandlerMiddleware } from "./middleware/ErrorHandlerMiddleware";
 import { RequestIdMiddleware } from "./middleware/RequestIdMiddleware";
@@ -46,12 +45,6 @@ import { Request, Response } from "express";
         },
       },
     },
-  ],
-  typeorm: [
-    {
-      name: "default",
-      ...AppDataSource.options,
-    } as any,
   ],
   // nếu file @ middleware đó có code nhưng k khai báo trong này thì nó k chạy
   // còn nếu k import ở đây thì ở file controller thì bạn phải import vào, và sử dụng hàm use ở mỗi route rất cực

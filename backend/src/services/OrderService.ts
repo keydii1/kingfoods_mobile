@@ -3,13 +3,11 @@ import { Order, OrderStatus } from "../Entity/Order";
 import { OrderDetail } from "../Entity/OrderDetail";
 import { Product } from "../Entity/Product";
 import { NotFound, BadRequest } from "../core/ErrorResponse";
-import { TypeORMService } from "@tsed/typeorm";
+import { AppDataSource } from "../config/DataSource";
 import { In } from "typeorm";
 
 @Service()
 export class OrderService {
-  @Inject(TypeORMService)
-  private typeORMService: TypeORMService;
 
   async getOrdersByCustomer(customerId: number) {
     return await Order.find({
@@ -38,7 +36,7 @@ export class OrderService {
   async createOrder(data: { customerId: number; products: any[]; address: string }) {
     const { customerId, products, address } = data;
 
-    return await this.typeORMService.get().transaction(
+    return await AppDataSource.transaction(
       async (transactionalEntityManager) => {
         const productIds = products.map((p) => p.productId);
         const productsDb = await transactionalEntityManager.findBy(Product, {
