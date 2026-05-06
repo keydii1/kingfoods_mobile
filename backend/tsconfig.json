@@ -1,15 +1,14 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
+    "target": "ES6",
     "module": "commonjs",
-    "lib": ["ESNext"],
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
+    "removeComments": true,
     "esModuleInterop": true,
-    "outDir": "dist",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "skipLibCheck": true,
     "moduleResolution": "node",
-    "baseUrl": "."
+    "outDir": "dist"
   },
   "include": ["src"]
 }
