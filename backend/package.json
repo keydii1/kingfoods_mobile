@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "ts-node-dev --respawn src/index.ts",
-    "start:pm2": "pm2 start ecosystem.config.js"
+    "start": "ts-node-dev --respawn src/index.ts"
   },
   "author": "",
   "license": "ISC",
@@ -24,6 +23,7 @@
     "@tsed/platform-middlewares": "^8.27.0",
     "@tsed/platform-params": "^8.27.0",
     "@tsed/schema": "^8.27.0",
+    "@tsed/swagger": "^8.27.0",
     "@types/express": "^5.0.6",
     "@types/node": "^25.6.0",
     "bcrypt": "^6.0.0",
@@ -37,15 +37,20 @@
     "mongodb": "^7.2.0",
     "mongoose": "^9.5.0",
     "multer": "^2.1.1",
+    "mysql2": "^3.22.3",
     "nodemon": "^3.1.14",
-    "pm2": "^6.0.14",
+    "swagger-ui-express": "^5.0.1",
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
+    "typeorm": "^0.3.28",
     "typescript": "^6.0.3"
   },
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",
+    "@types/body-parser": "^1.19.6",
+    "@types/cors": "^2.8.19",
     "@types/jsonwebtoken": "^9.0.10",
-    "@types/lodash": "^4.17.24"
+    "@types/lodash": "^4.17.24",
+    "@types/multer": "^2.1.0"
   }
 }
