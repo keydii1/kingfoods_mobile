@@ -1,6 +1,7 @@
 import { Configuration, Inject } from "@tsed/common";
 import { PlatformExpress } from "@tsed/platform-express";
-import "@tsed/platform-express"; // /!\ IMPORT THIS
+import "@tsed/platform-express";
+import "@tsed/swagger";
 import bodyParser from "body-parser";
 import cors from "cors";
 import { connect } from "./configs/database.config";
@@ -14,6 +15,19 @@ export const rootDir = __dirname;
   mount: {
     "/v1": [`${rootDir}/controllers/**/*.ts`],
   },
+  swagger: [
+    {
+      path: "/docs",
+      specVersion: "3.0.1",
+      spec: {
+        info: {
+          title: "King Foods API Documentation",
+          version: "1.0.0",
+          description: "API Documentation for King Foods Mobile Application backend, built with Ts.ED, TypeORM, and MySQL.",
+        },
+      },
+    }
+  ],
   middlewares: [
     cors(),
     "cookie-parser",
@@ -27,7 +41,7 @@ export const rootDir = __dirname;
 })
 export class Server {
   @Inject()
-  protected app: PlatformExpress;
+  protected app!: PlatformExpress;
 
   $beforeInit() {
     connect();
