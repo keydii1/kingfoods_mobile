@@ -1,26 +1,29 @@
-import { Schema, model, Document } from "mongoose";
+import { Entity, PrimaryColumn, Column, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import { BaseMySQLModel } from "./baseMySQL.model";
 
-export interface IBranch extends Document<number> {
-  _id: number;
-  name: string;
-  street: string;
-  openHour: string;
-  closeHour: string;
-  createdAt: Date;
-  updatedAt: Date;
+@Entity({ name: "branches" })
+export class BranchEntity extends BaseMySQLModel {
+  @PrimaryColumn()
+  _id!: number;
+
+  @Column()
+  name!: string;
+
+  @Column()
+  street!: string;
+
+  @Column()
+  openHour!: string;
+
+  @Column()
+  closeHour!: string;
+
+  @CreateDateColumn()
+  createdAt!: Date;
+
+  @UpdateDateColumn()
+  updatedAt!: Date;
 }
 
-const branchSchema = new Schema<IBranch>(
-  {
-    _id: { type: Number, required: true },
-    name: { type: String, required: true },
-    street: { type: String, required: true },
-    openHour: { type: String, required: true },
-    closeHour: { type: String, required: true },
-  },
-  { timestamps: true },
-);
-
-const Branch = model<IBranch>("Branch", branchSchema);
-
-export default Branch;
+export default BranchEntity;
+export type IBranch = BranchEntity;

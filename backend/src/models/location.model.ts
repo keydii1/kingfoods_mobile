@@ -1,24 +1,26 @@
-import { Schema, model, Document } from "mongoose";
+import { Entity, PrimaryColumn, Column, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import { BaseMySQLModel } from "./baseMySQL.model";
 
-export interface ILocation extends Document<number> {
-  _id: number;
-  name: string;
-  status: string;
-  description: string;
-  createdAt: Date;
-  updatedAt: Date;
+@Entity({ name: "locations" })
+export class LocationEntity extends BaseMySQLModel {
+  @PrimaryColumn()
+  _id!: number;
+
+  @Column()
+  name!: string;
+
+  @Column({ default: "active" })
+  status!: string;
+
+  @Column({ nullable: true })
+  description!: string;
+
+  @CreateDateColumn()
+  createdAt!: Date;
+
+  @UpdateDateColumn()
+  updatedAt!: Date;
 }
 
-const locationSchema = new Schema<ILocation>(
-  {
-    _id: { type: Number, required: true },
-    name: { type: String, required: true },
-    status: { type: String, default: "active" },
-    description: { type: String },
-  },
-  { timestamps: true },
-);
-
-const Location = model<ILocation>("Location", locationSchema);
-
-export default Location;
+export default LocationEntity;
+export type ILocation = LocationEntity;

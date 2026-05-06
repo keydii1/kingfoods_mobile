@@ -1,26 +1,29 @@
-import { Schema, model, Document, Types } from "mongoose";
+import { Entity, PrimaryColumn, Column, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import { BaseMySQLModel } from "./baseMySQL.model";
 
-export interface IOrderDetail extends Document<number> {
-  _id: number;
-  order_id: number;
-  product_id: number;
-  quantity: number;
-  price: number;
-  createdAt: Date;
-  updatedAt: Date;
+@Entity({ name: "order_details" })
+export class OrderDetailEntity extends BaseMySQLModel {
+  @PrimaryColumn()
+  _id!: number;
+
+  @Column()
+  order_id!: number;
+
+  @Column()
+  product_id!: number;
+
+  @Column()
+  quantity!: number;
+
+  @Column({ type: "decimal", precision: 12, scale: 2 })
+  price!: number;
+
+  @CreateDateColumn()
+  createdAt!: Date;
+
+  @UpdateDateColumn()
+  updatedAt!: Date;
 }
 
-const orderDetailSchema = new Schema<IOrderDetail>(
-  {
-    _id: { type: Number, required: true },
-    order_id: { type: Number, ref: "Order", required: true },
-    product_id: { type: Number, ref: "Product", required: true },
-    quantity: { type: Number, required: true },
-    price: { type: Number, required: true },
-  },
-  { timestamps: true },
-);
-
-const OrderDetail = model<IOrderDetail>("OrderDetail", orderDetailSchema);
-
-export default OrderDetail;
+export default OrderDetailEntity;
+export type IOrderDetail = OrderDetailEntity;

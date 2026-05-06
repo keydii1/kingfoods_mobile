@@ -1,26 +1,29 @@
-import { Schema, model, Document } from "mongoose";
+import { Entity, PrimaryColumn, Column, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import { BaseMySQLModel } from "./baseMySQL.model";
 
-export interface ICategory extends Document<number> {
-  _id: number;
-  name: string;
-  status: string;
-  isDeleted: boolean;
-  description: string;
-  createdAt: Date;
-  updatedAt: Date;
+@Entity({ name: "categories" })
+export class CategoryEntity extends BaseMySQLModel {
+  @PrimaryColumn()
+  _id!: number;
+
+  @Column()
+  name!: string;
+
+  @Column({ default: "active" })
+  status!: string;
+
+  @Column({ default: false })
+  isDeleted!: boolean;
+
+  @Column({ nullable: true })
+  description!: string;
+
+  @CreateDateColumn()
+  createdAt!: Date;
+
+  @UpdateDateColumn()
+  updatedAt!: Date;
 }
 
-const categorySchema = new Schema<ICategory>(
-  {
-    _id: { type: Number, required: true },
-    name: { type: String, required: true },
-    status: { type: String, default: "active" },
-    isDeleted: { type: Boolean, default: false },
-    description: { type: String },
-  },
-  { timestamps: true },
-);
-
-const Category = model<ICategory>("Category", categorySchema);
-
-export default Category;
+export default CategoryEntity;
+export type ICategory = CategoryEntity;

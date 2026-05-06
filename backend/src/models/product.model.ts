@@ -1,30 +1,35 @@
-import { Schema, model, Document, Types } from "mongoose";
+import { Entity, PrimaryColumn, Column, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import { BaseMySQLModel } from "./baseMySQL.model";
 
-export interface IProduct extends Document<number> {
-  _id: number;
-  name: string;
-  category_id: number;
-  status: string;
-  location_id: number;
-  isDeleted: boolean;
-  description: string;
-  createdAt: Date;
-  updatedAt: Date;
+@Entity({ name: "products" })
+export class ProductEntity extends BaseMySQLModel {
+  @PrimaryColumn()
+  _id!: number;
+
+  @Column()
+  name!: string;
+
+  @Column()
+  category_id!: number;
+
+  @Column({ default: "active" })
+  status!: string;
+
+  @Column()
+  location_id!: number;
+
+  @Column({ default: false })
+  isDeleted!: boolean;
+
+  @Column({ nullable: true })
+  description!: string;
+
+  @CreateDateColumn()
+  createdAt!: Date;
+
+  @UpdateDateColumn()
+  updatedAt!: Date;
 }
 
-const productSchema = new Schema<IProduct>(
-  {
-    _id: { type: Number, required: true },
-    name: { type: String, required: true },
-    category_id: { type: Number, ref: "Category", required: true },
-    status: { type: String, default: "active" },
-    location_id: { type: Number, ref: "Location", required: true },
-    isDeleted: { type: Boolean, default: false },
-    description: { type: String },
-  },
-  { timestamps: true },
-);
-
-const Product = model<IProduct>("Product", productSchema);
-
-export default Product;
+export default ProductEntity;
+export type IProduct = ProductEntity;
