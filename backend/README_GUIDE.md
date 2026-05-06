@@ -78,15 +78,4 @@ export class ProductController {
 ### Cách Server vận hành trong Ts.ED:
 Toàn bộ cấu hình (Middleware, Routes, Database) sẽ được tập trung tại file `Server.ts`. Điều này giúp `index.ts` chỉ còn nhiệm vụ bootstrap (khởi chạy) ứng dụng.
 
----
 
-## 3. PM2 - Quản lý tiến trình (Ưu tiên sau)
-
-PM2 giúp đảm bảo ứng dụng luôn chạy ngầm và tự động khởi động lại nếu bị crash.
-
-### Các lệnh cơ bản:
-- `pm2 start dist/index.js --name "my-backend"`: Chạy ứng dụng.
-- `pm2 list`: Xem danh sách ứng dụng đang chạy.
-- `pm2 logs`: Xem log thời gian thực.
-- `pm2 restart all`: Khởi động lại tất cả.
-- `pm2 stop all`: Dừng tất cả.

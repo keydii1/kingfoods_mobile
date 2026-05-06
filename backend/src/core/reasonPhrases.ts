@@ -1,4 +1,4 @@
-export const reasonPhrases = {
+export const errorReason = {
   ACCEPTED: "Accepted",
   BAD_GATEWAY: "Bad Gateway",
   BAD_REQUEST: "Bad Request",
@@ -57,4 +57,4 @@ export const reasonPhrases = {
   MISDIRECTED_REQUEST: "Misdirected Request",
 } as const;
 
-export type ReasonPhrase = (typeof reasonPhrases)[keyof typeof reasonPhrases];
+export type ReasonPhrase = (typeof errorReason)[keyof typeof errorReason];
