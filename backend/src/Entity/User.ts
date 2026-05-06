@@ -7,6 +7,13 @@ export enum UserRole {
   STAFF = "staff",
 }
 
+export enum UserZone {
+  CANDY = "🍬 Bánh kẹo",
+  BEVERAGE = "🥤 Đồ uống",
+  CHEMICAL = "🧴 Hóa phẩm",
+  PROMOTION = "🎁 KM",
+}
+
 export enum UserStatus {
   ACTIVE = "active",
   INACTIVE = "inactive",
@@ -17,6 +24,7 @@ export interface UserPayload {
   name: string;
   email: string;
   role: string;
+  assignedZone?: string;
 }
 
 @Entity("users")
@@ -58,6 +66,10 @@ export class User extends BaseEntity {
   */
   @Enum(UserRole)
   role: UserRole;
+
+  @Column({ type: "enum", enum: UserZone, name: "assigned_zone", nullable: true })
+  @Enum(UserZone)
+  assignedZone: UserZone;
 
   /**
    * Hidden column — không trả về trong query mặc định

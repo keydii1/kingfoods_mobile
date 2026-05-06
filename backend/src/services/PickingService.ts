@@ -285,4 +285,104 @@ export class PickingService {
       },
     };
   }
+
+  /**
+   * 7. Di chuyển sản phẩm từ thùng cũ (Origin) sang thùng mới (Target)
+   */
+  async moveContainerItem(data: {
+    productId: number;
+    oldContainerCode: string;
+    newContainerCode: string;
+    quantity: number;
+    staffId: number;
+  }) {
+    const { productId, oldContainerCode, newContainerCode, quantity, staffId } = data;
+
+    return await this.typeORMService.get().transaction(
+      async (transactionalEntityManager) => {
+        // 1. Tìm container cũ
+        const oldContainer = await transactionalEntityManager.findOne(Container, {
+          where: { code: oldContainerCode },
+        });
+        if (!oldContainer) {
+          throw new NotFound(`Thùng hàng cũ #${oldContainerCode} không tồn tại`);
+        }
+
+        // 2. Tìm container item cũ khớp với sản phẩm
+        const oldItem = await transactionalEntityManager.findOne(ContainerItem, {
+          where: {
+            containerId: oldContainer.id,
+            productId,
+            pickedById: staffId,
+          },
+        });
+        if (!oldItem || oldItem.quantity < quantity) {
+          throw new BadRequest(`Không tìm thấy sản phẩm hoặc số lượng sản phẩm trong thùng cũ không đủ để chuyển`);
+        }
+
+        // 3. Tìm hoặc tạo container mới
+        let newContainer = await transactionalEntityManager.findOne(Container, {
+          where: { code: newContainerCode },
+        });
+        if (!newContainer) {
+          newContainer = transactionalEntityManager.create(Container, {
+            code: newContainerCode,
+            name: `Thùng hàng ${newContainerCode}`,
+            capacity: 50,
+            currentUsage: 0,
+            status: ContainerStatus.ACTIVE,
+          });
+          newContainer = await transactionalEntityManager.save(newContainer);
+        }
+
+        // Kiểm tra sức chứa mới
+        const remainingCapacity = newContainer.capacity - newContainer.currentUsage;
+        if (quantity > remainingCapacity) {
+          throw new BadRequest(`Thùng mới #${newContainerCode} không đủ sức chứa! Sức chứa còn lại: ${remainingCapacity}`);
+        }
+
+        // 4. Khấu trừ ở container cũ
+        oldItem.quantity -= quantity;
+        if (oldItem.quantity === 0) {
+          await transactionalEntityManager.remove(oldItem);
+        } else {
+          await transactionalEntityManager.save(oldItem);
+        }
+        oldContainer.currentUsage -= quantity;
+        await transactionalEntityManager.save(oldContainer);
+
+        // 5. Thêm vào container mới
+        let newItem = await transactionalEntityManager.findOne(ContainerItem, {
+          where: {
+            containerId: newContainer.id,
+            productId,
+            pickedById: staffId,
+          },
+        });
+        if (newItem) {
+          newItem.quantity += quantity;
+          await transactionalEntityManager.save(newItem);
+        } else {
+          newItem = transactionalEntityManager.create(ContainerItem, {
+            containerId: newContainer.id,
+            orderId: oldItem.orderId,
+            productId,
+            quantity,
+            pickedById: staffId,
+            status: ContainerItemStatus.GOOD,
+          });
+          await transactionalEntityManager.save(newItem);
+        }
+
+        newContainer.currentUsage += quantity;
+        await transactionalEntityManager.save(newContainer);
+
+        return {
+          message: `Di chuyển ${quantity} sản phẩm thành công sang thùng mới #${newContainerCode}`,
+          oldContainer,
+          newContainer,
+        };
+      }
+    );
+  }
 }

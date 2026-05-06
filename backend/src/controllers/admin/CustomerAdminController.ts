@@ -1,5 +1,13 @@
 import { Controller, Inject } from "@tsed/di";
-import { Get, Delete, Security, Summary, Tags, Property, Default } from "@tsed/schema";
+import {
+  Get,
+  Delete,
+  Security,
+  Summary,
+  Tags,
+  Property,
+  Default,
+} from "@tsed/schema";
 import { PathParams, Req, Res, QueryParams } from "@tsed/common";
 import { Response } from "express";
 import { Customer } from "../../Entity/Customer";
@@ -24,14 +32,22 @@ export class CustomerAdminController {
   @Get("/")
   @Validator(PaginationSchema)
   @Summary("Danh sách khách hàng")
-  async getAllCustomers(@Req() req: any, @Res() res: Response, @QueryParams() query: PaginationParams) {
+  async getAllCustomers(
+    @Req() req: any,
+    @Res() res: Response,
+    @QueryParams() query: PaginationParams,
+  ) {
     const result = await this.customerService.getAllCustomers(query);
     return res.OK("Customers fetched successfully", result);
   }
 
   @Delete("/:id")
   @Summary("Xóa khách hàng")
-  async deleteCustomer(@Req() req: any, @Res() res: Response, @PathParams("id") id: number) {
+  async deleteCustomer(
+    @Req() req: any,
+    @Res() res: Response,
+    @PathParams("id") id: number,
+  ) {
     await this.customerService.deleteCustomer(id);
     return res.OK("Customer deleted successfully");
   }

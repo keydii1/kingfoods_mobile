@@ -24,6 +24,9 @@ export const UserResetPasswordSchema = Joi.object({
 });
 
 export const UserUpdateSchema = Joi.object({
-  dateOfBirth: Joi.date().iso().allow(null),
-  phoneNumber: Joi.string().allow(null, "")
+  name: Joi.string().optional(),
+  email: Joi.string().email().optional(),
+  dateOfBirth: Joi.date().iso().allow(null).optional(),
+  phoneNumber: Joi.string().allow(null, "").optional(),
+  assignedZone: Joi.string().valid("🍬 Bánh kẹo", "🥤 Đồ uống", "🧴 Hóa phẩm", "🎁 KM").allow(null).optional()
 });

@@ -5,6 +5,7 @@ import { Category } from "../Entity/Category";
 import { Customer } from "../Entity/Customer";
 import { User, UserRole } from "../Entity/User";
 import { PickingTask, PickingTaskStatus } from "../Entity/PickingTask";
+import { IncidentReport, IncidentStatus } from "../Entity/IncidentReport";
 
 @Service()
 export class DashboardService {
@@ -13,6 +14,23 @@ export class DashboardService {
     const totalProducts = await Product.count();
     const totalCategories = await Category.count();
     const totalCustomers = await Customer.count();
+
+    // Thống kê thời gian thực (Real-time operational KPIs cho sườn App)
+    const pickedSumResult = await PickingTask.createQueryBuilder("task")
+      .select("SUM(task.quantity_picked)", "total")
+      .where("task.status = :status", { status: PickingTaskStatus.COMPLETED })
+      .getRawOne();
+    const totalItemsPickedToday = parseInt(pickedSumResult?.total || "0");
+
+    const totalMissingReports = await IncidentReport.count({
+      where: { reason: "Kệ trống" },
+    });
+    const totalPendingIncidents = await IncidentReport.count({
+      where: { status: IncidentStatus.PENDING },
+    });
+    const totalPendingOrders = await Order.count({
+      where: { status: OrderStatus.PROCESSING },
+    });
 
     // 1. Thống kê đơn hàng theo trạng thái
     const orderStatuses = Object.values(OrderStatus);
@@ -59,9 +77,10 @@ export class DashboardService {
       }
 
       // Giả sử nếu nhân viên có task nhưng chưa hoàn thành cái nào hoặc tổng giờ = 0, mặc định speed = 0
-      const pickingSpeed = totalHoursSpent > 0 
-        ? Math.round((totalItemsPicked / totalHoursSpent) * 10) / 10 
-        : 0;
+      const pickingSpeed =
+        totalHoursSpent > 0
+          ? Math.round((totalItemsPicked / totalHoursSpent) * 10) / 10
+          : 0;
 
       // Cảnh báo nếu hiệu suất dưới 60 sản phẩm / giờ
       const warning = pickingSpeed < 60;
@@ -74,6 +93,7 @@ export class DashboardService {
         name: staff.name,
         username: staff.username,
         phoneNumber: staff.phoneNumber,
+        assignedZone: staff.assignedZone,
         totalItemsPicked,
         totalHoursSpent: Math.round(totalHoursSpent * 100) / 100,
         pickingSpeed,
@@ -84,7 +104,7 @@ export class DashboardService {
 
     // 4. Thống kê năng suất theo khung giờ trong ngày (0h - 23h) để tìm giờ cao điểm
     const allCompletedTasks = await PickingTask.find({
-      where: { status: PickingTaskStatus.COMPLETED }
+      where: { status: PickingTaskStatus.COMPLETED },
     });
 
     const hourlyMap: Record<number, number> = {};
@@ -101,9 +121,9 @@ export class DashboardService {
       .map(([hour, total]) => ({
         hour: parseInt(hour),
         label: `${hour}h:00 - ${parseInt(hour) + 1}h:00`,
-        totalItemsPicked: total
+        totalItemsPicked: total,
       }))
-      .filter(item => item.totalItemsPicked > 0); // Chỉ trả về các giờ có hoạt động
+      .filter((item) => item.totalItemsPicked > 0); // Chỉ trả về các giờ có hoạt động
 
     let peakHour = 0;
     let maxPicked = 0;
@@ -114,11 +134,14 @@ export class DashboardService {
       }
     }
 
-    const peakPickingHour = maxPicked > 0 ? {
-      hour: peakHour,
-      totalItemsPicked: maxPicked,
-      label: `${peakHour}h:00 - ${peakHour + 1}h:00`
-    } : null;
+    const peakPickingHour =
+      maxPicked > 0
+        ? {
+            hour: peakHour,
+            totalItemsPicked: maxPicked,
+            label: `${peakHour}h:00 - ${peakHour + 1}h:00`,
+          }
+        : null;
 
     return {
       totals: {
@@ -126,6 +149,10 @@ export class DashboardService {
         products: totalProducts,
         categories: totalCategories,
         customers: totalCustomers,
+        itemsPicked: totalItemsPickedToday,
+        missingReports: totalMissingReports,
+        pendingIncidents: totalPendingIncidents,
+        pendingOrders: totalPendingOrders,
       },
       ordersByStatus,
       revenue,

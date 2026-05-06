@@ -4,6 +4,7 @@ import { BodyParams, PathParams, Req, Res, QueryParams } from "@tsed/common";
 import { Response } from "express";
 import { PickingService } from "../../services/PickingService";
 import { UserRole } from "../../Entity/User";
+import { IncidentReport, IncidentStatus } from "../../Entity/IncidentReport";
 import { Forbidden } from "../../core/ErrorResponse";
 import {
   AssignTasksDto,
@@ -108,5 +109,80 @@ export class PickingController {
     const { status } = body;
     const result = await this.pickingService.reportContainerItemIssue(itemId, status);
     return res.OK("Ghi nhận sự cố và truy quét nhân viên chịu trách nhiệm thành công", result);
+  }
+
+  @Post("/move")
+  @Summary("Nhân viên: Di chuyển sản phẩm từ thùng cũ sang thùng mới (Move Item)")
+  async moveContainerItem(
+    @Req() req: any,
+    @Res() res: Response,
+    @BodyParams() body: any
+  ) {
+    const { productId, oldContainerCode, newContainerCode, quantity } = body;
+    const staffId = req.decodeUser.id;
+
+    const result = await this.pickingService.moveContainerItem({
+      productId,
+      oldContainerCode,
+      newContainerCode,
+      quantity,
+      staffId,
+    });
+
+    return res.OK("Di chuyển hàng sang thùng mới thành công", result);
+  }
+
+  @Post("/incident")
+  @Summary("Nhân viên: Báo cáo sự cố thiếu hàng tại kệ (Shortage Report)")
+  async reportIncident(
+    @Req() req: any,
+    @Res() res: Response,
+    @BodyParams() body: { taskId: number; photoUrl?: string; reason: string }
+  ) {
+    const reporterId = req.decodeUser.id;
+    const { taskId, photoUrl, reason } = body;
+
+    const incident = await IncidentReport.createAndSave({
+      taskId,
+      reporterId,
+      photoUrl,
+      reason,
+      status: IncidentStatus.PENDING
+    });
+
+    return res.OK("Gửi báo cáo thiếu hàng thành công", incident);
+  }
+
+  @Get("/incidents")
+  @Summary("Quản lý: Xem danh sách sự cố thiếu hàng tại kệ (Incident Center)")
+  async getIncidents(@Req() req: any, @Res() res: Response) {
+    if (req.decodeUser.role !== UserRole.ADMIN) {
+      throw new Forbidden("Chỉ quản lý mới có quyền truy cập trung tâm sự cố");
+    }
+
+    const incidents = await IncidentReport.find({
+      relations: ["reporter", "task", "task.product"],
+      order: { createdAt: "DESC" }
+    });
+
+    return res.OK("Lấy danh sách sự cố thành công", incidents);
+  }
+
+  @Post("/incident/:id/resolve")
+  @Summary("Quản lý: Đánh dấu đã xử lý xong sự cố")
+  async resolveIncident(
+    @Req() req: any,
+    @Res() res: Response,
+    @PathParams("id") id: number
+  ) {
+    if (req.decodeUser.role !== UserRole.ADMIN) {
+      throw new Forbidden("Chỉ quản lý mới có quyền xử lý sự cố");
+    }
+
+    const incident = await IncidentReport.getByIdOrFail(id);
+    incident.status = IncidentStatus.RESOLVED;
+    await incident.save();
+
+    return res.OK("Xử lý sự cố thành công", incident);
   }
 }

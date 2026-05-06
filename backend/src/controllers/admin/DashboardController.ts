@@ -19,16 +19,16 @@ export class DashboardController {
   }
 
   @Get("/revenue")
-  @Summary("Doanh thu theo thời gian")
+  @Summary("Thống kê doanh thu")
   async getRevenue(
     @Req() req: any,
     @Res() res: Response,
     @QueryParams("startDate") startDate: string,
-    @QueryParams("endDate") endDate: string
+    @QueryParams("endDate") endDate: string,
   ) {
     const result = await this.dashboardService.getRevenueByDate(
       new Date(startDate),
-      new Date(endDate)
+      new Date(endDate),
     );
     return res.OK("Revenue fetched successfully", { revenue: result });
   }
