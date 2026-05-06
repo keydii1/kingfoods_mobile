@@ -10,3 +10,4 @@ export * from "./auth/UserAuthController";
 export * from "./auth/CustomerAuthController";
 export * from "./client/CustomerProfileController";
 export * from "./client/OrderClientController";
+export * from "./admin/PickingController";
