@@ -82,6 +82,44 @@ export class DashboardService {
       });
     }
 
+    // 4. Thống kê năng suất theo khung giờ trong ngày (0h - 23h) để tìm giờ cao điểm
+    const allCompletedTasks = await PickingTask.find({
+      where: { status: PickingTaskStatus.COMPLETED }
+    });
+
+    const hourlyMap: Record<number, number> = {};
+    for (let h = 0; h < 24; h++) {
+      hourlyMap[h] = 0;
+    }
+
+    for (const task of allCompletedTasks) {
+      const completionHour = task.updatedAt.getHours();
+      hourlyMap[completionHour] += task.quantityPicked;
+    }
+
+    const hourlyProductivity = Object.entries(hourlyMap)
+      .map(([hour, total]) => ({
+        hour: parseInt(hour),
+        label: `${hour}h:00 - ${parseInt(hour) + 1}h:00`,
+        totalItemsPicked: total
+      }))
+      .filter(item => item.totalItemsPicked > 0); // Chỉ trả về các giờ có hoạt động
+
+    let peakHour = 0;
+    let maxPicked = 0;
+    for (const [hour, total] of Object.entries(hourlyMap)) {
+      if (total > maxPicked) {
+        maxPicked = total;
+        peakHour = parseInt(hour);
+      }
+    }
+
+    const peakPickingHour = maxPicked > 0 ? {
+      hour: peakHour,
+      totalItemsPicked: maxPicked,
+      label: `${peakHour}h:00 - ${peakHour + 1}h:00`
+    } : null;
+
     return {
       totals: {
         orders: totalOrders,
@@ -92,6 +130,8 @@ export class DashboardService {
       ordersByStatus,
       revenue,
       staffPerformance,
+      hourlyProductivity,
+      peakPickingHour,
     };
   }
 
