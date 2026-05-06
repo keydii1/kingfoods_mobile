@@ -1,7 +1,8 @@
-import { Entity, Column, OneToMany, Index } from "typeorm";
+import { Entity, Column, OneToMany, Index, ManyToOne, JoinColumn } from "typeorm";
 import { Enum, Property } from "@tsed/schema";
 import { BaseEntity } from "./BaseEntity";
 import { Product } from "./Product";
+import { Location } from "./Location";
 
 /**
  * Trạng thái của danh mục sản phẩm
@@ -29,6 +30,14 @@ export class Category extends BaseEntity {
   @Column({ nullable: true, default: "" })
   @Property()
   description: string;
+
+  @Column({ name: "location_id", nullable: true })
+  @Property()
+  locationId: number | null;
+
+  @ManyToOne(() => Location, (location) => location.categories)
+  @JoinColumn({ name: "location_id" })
+  location: Location | null;
 
   @OneToMany(() => Product, (product) => product.category)
   products: Product[];
