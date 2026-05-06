@@ -8,9 +8,10 @@ import {
 } from "typeorm";
 import { Property } from "@tsed/schema";
 import { BaseEntity } from "./BaseEntity";
-import { Customer } from "./Customer";
+import { Branch } from "./Branch";
 import { OrderDetail } from "./OrderDetail";
 import { ColumnNumericTransformer } from "../helpers/ColumnTransformer";
+import { User } from "./User";
 
 export enum OrderStatus {
   PENDING = "pending",
@@ -25,9 +26,20 @@ export class Order extends BaseEntity {
   /**
    * FK lưu riêng để dễ query, quan hệ được định nghĩa qua @ManyToOne bên dưới
    */
-  @Column({ name: "customer_id", nullable: false })
+  @Column({ name: "branch_id", nullable: false })
   @Property()
   customerId: number;
+
+  get branchId(): number {
+    return this.customerId;
+  }
+  set branchId(value: number) {
+    this.customerId = value;
+  }
+
+  @Column({ name: "assigned_user_id", nullable: true })
+  @Property()
+  assignedUserId: number | null;
 
   @Column({ type: "enum", enum: OrderStatus, default: OrderStatus.PENDING })
   @Property()
@@ -49,12 +61,16 @@ export class Order extends BaseEntity {
   address: string;
 
   /**
-   * Quan hệ ManyToOne với Customer
-   * JoinColumn chỉ định tên cột FK trong database là "customer_id"
+   * Quan hệ ManyToOne với Branch
+   * JoinColumn chỉ định tên cột FK trong database là "branch_id"
    */
-  @ManyToOne(() => Customer, (customer) => customer.orders)
-  @JoinColumn({ name: "customer_id" })
-  customer: Customer;
+  @ManyToOne(() => Branch, (branch) => branch.orders)
+  @JoinColumn({ name: "branch_id" })
+  branch: Branch;
+
+  @ManyToOne(() => User)
+  @JoinColumn({ name: "assigned_user_id" })
+  assignedUser: User | null;
 
   @OneToMany(() => OrderDetail, (detail) => detail.order)
   orderDetails: OrderDetail[];

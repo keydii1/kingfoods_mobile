@@ -1,17 +1,11 @@
-import { Entity, Column, OneToMany, Index } from "typeorm";
-import { Nullable, Property } from "@tsed/schema";
+import { Entity, Column, ManyToOne, JoinColumn, Index } from "typeorm";
+import { Property, Enum } from "@tsed/schema";
 import { BaseEntity } from "./BaseEntity";
-import { Order } from "./Order";
+import { Branch } from "./Branch";
 
 export enum AccountStatus {
   ACTIVE = "active",
   INACTIVE = "inactive",
-}
-
-export enum Gender {
-  MALE = "male",
-  FEMALE = "female",
-  OTHER = "other",
 }
 
 export interface CustomerPayload {
@@ -19,47 +13,34 @@ export interface CustomerPayload {
   name: string;
   email: string;
   role: string;
+  branchId: number;
 }
 
 @Entity("customers")
 export class Customer extends BaseEntity {
+  @Column({ name: "branch_id", nullable: false })
+  @Property()
+  branchId: number; // ID chi nhánh mà tài khoản này trực thuộc
+
   @Column({ nullable: false })
   @Property()
-  name: string;
+  name: string; // Tên của người dùng quản lý chi nhánh (ví dụ: "Nguyễn Văn A")
 
   @Column({ unique: true, nullable: false })
   @Property()
-  email: string;
+  email: string; // Email dùng để đăng nhập đặt hàng cho chi nhánh
 
-  /**
-   * Hidden column — không trả về trong query mặc định
-   */
   @Column({ select: false, nullable: false })
   password: string;
 
-  @Column({ unique: true, name: "phone_number", nullable: false })
+  @Column({ name: "phone_number", nullable: true })
   @Property()
   phone: string;
 
-  @Column({ type: "date", name: "date_of_birth", nullable: true })
-  @Property()
-  dateOfBirth: Date;
-
-  @Column({ type: "enum", enum: Gender, nullable: true })
-  @Property()
-  gender: Gender;
-
-  @Column({ nullable: true, default: "" })
-  @Property()
-  avatar: string;
-
   @Column({ type: "enum", enum: AccountStatus, default: AccountStatus.ACTIVE })
-  @Property()
+  @Enum(AccountStatus)
   status: AccountStatus;
 
-  /**
-   * Hidden column — OTP cho reset password
-   */
   @Column({ nullable: true, select: false, default: "" })
   otp: string;
 
@@ -71,8 +52,9 @@ export class Customer extends BaseEntity {
   })
   otpExpire: Date;
 
-  @OneToMany(() => Order, (order) => order.customer)
-  orders: Order[];
+  @ManyToOne(() => Branch, (branch) => branch.accounts)
+  @JoinColumn({ name: "branch_id" })
+  branch: Branch;
 
   constructor(partial?: Partial<Customer>) {
     super(partial);
