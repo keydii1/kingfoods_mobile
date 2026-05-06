@@ -17,13 +17,10 @@ import { Request, Response } from "express";
   rootDir: __dirname,
   acceptMimes: ["application/json"],
   httpPort: AppConfig.PORT,
-  // Cách chuẩn chỉnh nhất của Ts.ED v8+: Nạp toàn bộ các controller được export trong src/controllers/index.ts
   mount: {
     "/api/v1": [...Object.values(controllers)],
   },
-  // Vẫn cần scan Service và Middleware để Dependency Injection hoạt động
-  // import ở đây là bắt buộc load lên các sercvice và middleware vào Application
-  imports: [`${__dirname}/services/**/*.ts`, `${__dirname}/middleware/**/*.ts`],
+  imports: [`${__dirname}/services/**/*.{ts,js}`, `${__dirname}/middleware/**/*.{ts,js}`],
   //
   swagger: [
     {
@@ -31,8 +28,8 @@ import { Request, Response } from "express";
       spec: {
         openapi: "3.0.1",
         info: {
-          title: "BMD Training API",
-          description: "Tài liệu API hệ thống BMD Training",
+          title: "Food Booking API",
+          description: "Tài liệu API hệ thống Food Booking",
           version: "1.0.0",
         },
         components: {

@@ -8,7 +8,8 @@ export class AppConfig {
   static readonly JWT_REFRESH_EXPIRES = "7d";
   static readonly JWT_RESET_EXPIRES = "3m";
   static readonly SALT_ROUNDS = 10;
-  static readonly TABLE_PREFIX = "bmd_";
+  static readonly TABLE_PREFIX = "KingFood_";
   static readonly OTP_EXPIRE_MINUTES = 10;
-  static readonly ADMIN_SECRET_KEY = process.env.ADMIN_SECRET_KEY || "bmd_secret_2026";
+  static readonly ADMIN_SECRET_KEY =
+    process.env.ADMIN_SECRET_KEY || "KingFood_secret_2026";
 }
