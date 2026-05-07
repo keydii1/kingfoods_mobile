@@ -1,0 +1,812 @@
+2026-05-06 19:14:34:1434 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:14:34:1434 [31merror[39m: [31mAccess denied for user 'root'@'localhost' (using password: YES)[39m
+2026-05-06 19:15:06:156 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:15:06:156 [31merror[39m: [31mAccess denied for user 'root'@'localhost' (using password: NO)[39m
+2026-05-06 19:15:44:1544 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:15:44:1544 [31merror[39m: [31mAccess denied for user 'root'@'localhost' (using password: NO)[39m
+2026-05-06 19:15:59:1559 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:15:59:1559 [31merror[39m: [31mAccess denied for user 'root'@'localhost' (using password: NO)[39m
+2026-05-06 19:17:25:1725 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:17:25:1725 [31merror[39m: [31mAccess denied for user 'root'@'localhost' (using password: YES)[39m
+2026-05-06 19:18:21:1821 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:18:21:1821 [31merror[39m: [31mAccess denied for user 'root'@'localhost' (using password: YES)[39m
+2026-05-06 19:18:39:1839 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:18:39:1839 [31merror[39m: [31mAccess denied for user 'root'@'localhost' (using password: YES)[39m
+2026-05-06 19:18:49:1849 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:18:49:1849 [31merror[39m: [31mAccess denied for user 'root'@'localhost' (using password: YES)[39m
+2026-05-06 19:18:55:1855 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:18:55:1855 [31merror[39m: [31mAccess denied for user 'root'@'localhost' (using password: YES)[39m
+2026-05-06 19:19:17:1917 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:19:17:1917 [31merror[39m: [31mAccess denied for user 'root'@'localhost' (using password: YES)[39m
+2026-05-06 19:19:44:1944 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:19:44:1944 [31merror[39m: [31mAccess denied for user 'root'@'localhost' (using password: YES)[39m
+2026-05-06 19:20:34:2034 [33mwarn[39m: [33mAccess denied with password. Retrying with empty password...[39m
+2026-05-06 19:20:34:2034 [33mwarn[39m: [33mAccess denied with password. Retrying with empty password...[39m
+2026-05-06 19:20:34:2034 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:20:34:2034 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:20:34:2034 [31merror[39m: [31mAccess denied for user 'root'@'localhost' (using password: NO)[39m
+2026-05-06 19:20:34:2034 [31merror[39m: [31mAccess denied for user 'root'@'localhost' (using password: NO)[39m
+2026-05-06 19:20:46:2046 [33mwarn[39m: [33mAccess denied with password. Retrying with empty password...[39m
+2026-05-06 19:20:46:2046 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:20:46:2046 [31merror[39m: [31mAccess denied for user 'root'@'localhost' (using password: NO)[39m
+2026-05-06 19:21:19:2119 [33mwarn[39m: [33mAccess denied with password. Retrying with empty password...[39m
+2026-05-06 19:21:19:2119 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:21:19:2119 [31merror[39m: [31mAccess denied for user 'root'@'localhost' (using password: NO)[39m
+2026-05-06 19:22:33:2233 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:22:33:2233 [31merror[39m: [31mAccess denied for user 'root'@'localhost' (using password: YES)[39m
+2026-05-06 19:22:33:2233 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:22:33:2233 [31merror[39m: [31mAccess denied for user 'root'@'localhost' (using password: YES)[39m
+2026-05-06 19:22:33:2233 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:22:33:2233 [31merror[39m: [31mAccess denied for user 'root'@'localhost' (using password: YES)[39m
+2026-05-06 19:33:36:3336 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:33:36:3336 [31merror[39m: [31mCannot read properties of undefined (reading 'use')[39m
+2026-05-06 19:34:11:3411 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:34:11:3411 [31merror[39m: [31mCannot read properties of undefined (reading 'use')[39m
+2026-05-06 19:34:11:3411 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:34:11:3411 [31merror[39m: [31mCannot read properties of undefined (reading 'use')[39m
+2026-05-06 19:34:11:3411 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:34:11:3411 [31merror[39m: [31mCannot read properties of undefined (reading 'use')[39m
+2026-05-06 19:35:10:3510 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:35:10:3510 [31merror[39m: [31mCannot read properties of undefined (reading 'use')[39m
+2026-05-06 19:35:10:3510 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:35:10:3510 [31merror[39m: [31mCannot read properties of undefined (reading 'use')[39m
+2026-05-06 19:35:10:3510 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:35:10:3510 [31merror[39m: [31mCannot read properties of undefined (reading 'use')[39m
+2026-05-06 19:35:55:3555 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:35:55:3555 [31merror[39m: [31mCannot read properties of undefined (reading 'use')[39m
+2026-05-06 19:36:10:3610 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:36:10:3610 [31merror[39m: [31mCannot read properties of undefined (reading 'use')[39m
+2026-05-06 19:36:11:3611 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:36:11:3611 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:36:11:3611 [31merror[39m: [31mCannot read properties of undefined (reading 'use')[39m
+2026-05-06 19:36:11:3611 [31merror[39m: [31mCannot read properties of undefined (reading 'use')[39m
+2026-05-06 19:36:27:3627 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:36:27:3627 [31merror[39m: [31mCannot read properties of undefined (reading 'use')[39m
+2026-05-06 19:37:09:379 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:37:09:379 [31merror[39m: [31mCannot read properties of undefined (reading 'use')[39m
+2026-05-06 19:37:09:379 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:37:09:379 [31merror[39m: [31mCannot read properties of undefined (reading 'use')[39m
+2026-05-06 19:37:09:379 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:37:09:379 [31merror[39m: [31mCannot read properties of undefined (reading 'use')[39m
+2026-05-06 19:37:15:3715 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:37:15:3715 [31merror[39m: [31mCannot read properties of undefined (reading 'use')[39m
+2026-05-06 19:37:36:3736 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:37:36:3736 [31merror[39m: [31mlisten EADDRINUSE: address already in use 0.0.0.0:3000[39m
+2026-05-06 19:37:36:3736 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:37:36:3736 [31merror[39m: [31mlisten EADDRINUSE: address already in use 0.0.0.0:3000[39m
+2026-05-06 19:37:36:3736 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:37:36:3736 [31merror[39m: [31mlisten EADDRINUSE: address already in use 0.0.0.0:3000[39m
+2026-05-06 19:37:47:3747 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:37:47:3747 [31merror[39m: [31mlisten EADDRINUSE: address already in use 0.0.0.0:3000[39m
+2026-05-06 19:37:47:3747 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:37:47:3747 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:37:47:3747 [31merror[39m: [31mlisten EADDRINUSE: address already in use 0.0.0.0:3000[39m
+2026-05-06 19:37:47:3747 [31merror[39m: [31mlisten EADDRINUSE: address already in use 0.0.0.0:3000[39m
+2026-05-06 19:37:56:3756 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:37:56:3756 [31merror[39m: [31mlisten EADDRINUSE: address already in use 0.0.0.0:3000[39m
+2026-05-06 19:39:24:3924 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 19:39:24 6/5/2026[39m
+[32m      * Port: 3000[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-06 19:39:27:3927 [32minfo[39m: [32mGET /api-docs/ 404 - 28ms[39m
+2026-05-06 19:39:27:3927 [32minfo[39m: [32mGET /api-docs/swagger.css 404 - 5ms[39m
+2026-05-06 19:39:27:3927 [32minfo[39m: [32mGET /api-docs/swagger-ui.css 200 - 71ms[39m
+2026-05-06 19:39:27:3927 [32minfo[39m: [32mGET /api-docs/swagger-ui-standalone-preset.js 200 - 58ms[39m
+2026-05-06 19:39:27:3927 [32minfo[39m: [32mGET /api-docs/swagger-ui-bundle.js 200 - 174ms[39m
+2026-05-06 19:39:28:3928 [32minfo[39m: [32mGET /api-docs/swagger.json 404 - 50ms[39m
+2026-05-06 19:40:07:407 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 19:40:07 6/5/2026[39m
+[32m      * Port: 3000[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-06 19:40:07:407 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:40:07:407 [31merror[39m: [31mlisten EADDRINUSE: address already in use 0.0.0.0:3000[39m
+2026-05-06 19:40:07:407 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:40:07:407 [31merror[39m: [31mlisten EADDRINUSE: address already in use 0.0.0.0:3000[39m
+2026-05-06 19:40:28:4028 [32minfo[39m: [32mGET /api-docs/ 404 - 68ms[39m
+2026-05-06 19:40:51:4051 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 19:40:51 6/5/2026[39m
+[32m      * Port: 3000[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-06 19:42:05:425 [32minfo[39m: [32mGET /api-docs/ 404 - 46ms[39m
+2026-05-06 19:42:05:425 [32minfo[39m: [32mGET /api-docs/swagger.css 404 - 11ms[39m
+2026-05-06 19:42:05:425 [32minfo[39m: [32mGET /api-docs/swagger-ui-bundle.js 304 - 67ms[39m
+2026-05-06 19:42:05:425 [32minfo[39m: [32mGET /api-docs/swagger-ui.css 304 - 32ms[39m
+2026-05-06 19:42:05:425 [32minfo[39m: [32mGET /api-docs/swagger-ui-standalone-preset.js 304 - 3ms[39m
+2026-05-06 19:42:06:426 [32minfo[39m: [32mGET /api-docs/swagger.json 404 - 72ms[39m
+2026-05-06 19:42:06:426 [32minfo[39m: [32mGET /api-docs/favicon-32x32.png 200 - 5ms[39m
+2026-05-06 19:45:05:455 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 19:45:05 6/5/2026[39m
+[32m      * Port: 3000[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-06 19:46:15:4615 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 19:46:15 6/5/2026[39m
+[32m      * Port: 3000[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-06 19:48:09:489 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 19:48:09 6/5/2026[39m
+[32m      * Port: 3000[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-06 19:51:42:5142 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 19:51:42 6/5/2026[39m
+[32m      * Port: 3000[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-06 19:52:05:525 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 19:52:05 6/5/2026[39m
+[32m      * Port: 3000[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-06 19:56:15:5615 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:56:15:5615 [31merror[39m: [31m⨯ Unable to compile TypeScript:[39m
+[31m[96msrc/Entity/Container.ts[0m:[93m4[0m:[93m31[0m - [91merror[0m[90m TS2307: [0mCannot find module './ContainerItem' or its corresponding type declarations.[39m
+
+[31m[7m4[0m import { ContainerItem } from "./ContainerItem";[39m
+[31m[7m [0m [91m                              ~~~~~~~~~~~~~~~~~[0m[39m
+[31m[96msrc/Entity/Container.ts[0m:[93m36[0m:[93m50[0m - [91merror[0m[90m TS2339: [0mProperty 'container' does not exist on type 'unknown'.[39m
+
+[31m[7m36[0m   @OneToMany(() => ContainerItem, (item) => item.container)[39m
+[31m[7m  [0m [91m                                                 ~~~~~~~~~[0m[39m
+[31m[39m
+2026-05-06 19:56:22:5622 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 19:56:22 6/5/2026[39m
+[32m      * Port: 3000[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-06 19:56:28:5628 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 19:56:28 6/5/2026[39m
+[32m      * Port: 3000[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-06 19:56:40:5640 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 19:56:40 6/5/2026[39m
+[32m      * Port: 3000[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-06 19:57:03:573 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 19:57:03 6/5/2026[39m
+[32m      * Port: 3000[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-06 19:57:40:5740 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 19:57:40 6/5/2026[39m
+[32m      * Port: 3000[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-06 19:58:16:5816 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 19:58:16 6/5/2026[39m
+[32m      * Port: 3000[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-06 19:58:46:5846 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:58:46:5846 [31merror[39m: [31m⨯ Unable to compile TypeScript:[39m
+[31m[96msrc/Entity/Branch.ts[0m:[93m54[0m:[93m44[0m - [91merror[0m[90m TS2339: [0mProperty 'branch' does not exist on type 'Order'.[39m
+
+[31m[7m54[0m   @OneToMany(() => Order, (order) => order.branch)[39m
+[31m[7m  [0m [91m                                           ~~~~~~[0m[39m
+[31m[39m
+2026-05-06 20:00:00:00 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 20:00:00 6/5/2026[39m
+[32m      * Port: 3000[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-06 20:00:52:052 [32minfo[39m: [32mGET /api-docs/ 404 - 61ms[39m
+2026-05-06 20:00:52:052 [32minfo[39m: [32mGET /api-docs/swagger-ui.css 304 - 7ms[39m
+2026-05-06 20:00:52:052 [32minfo[39m: [32mGET /api-docs/swagger.css 404 - 4ms[39m
+2026-05-06 20:00:52:052 [32minfo[39m: [32mGET /api-docs/swagger-ui-bundle.js 304 - 2ms[39m
+2026-05-06 20:00:52:052 [32minfo[39m: [32mGET /api-docs/swagger-ui-standalone-preset.js 304 - 2ms[39m
+2026-05-06 20:00:52:052 [32minfo[39m: [32mGET /api-docs/swagger.json 404 - 64ms[39m
+2026-05-06 20:01:47:147 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 20:01:47 6/5/2026[39m
+[32m      * Port: 3000[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-06 20:01:57:157 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 20:01:57 6/5/2026[39m
+[32m      * Port: 3000[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-06 20:04:04:44 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 20:04:04 6/5/2026[39m
+[32m      * Port: 3000[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-06 20:13:17:1317 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 20:13:17 6/5/2026[39m
+[32m      * Port: 3000[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-06 20:14:12:1412 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 20:14:12 6/5/2026[39m
+[32m      * Port: 3000[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-06 20:16:25:1625 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 20:16:25:1625 [31merror[39m: [31m⨯ Unable to compile TypeScript:[39m
+[31m[96msrc/Entity/Location.ts[0m:[93m20[0m:[93m53[0m - [91merror[0m[90m TS2339: [0mProperty 'location' does not exist on type 'Category'.[39m
+
+[31m[7m20[0m   @OneToMany(() => Category, (category) => category.location)[39m
+[31m[7m  [0m [91m                                                    ~~~~~~~~[0m[39m
+[31m[39m
+2026-05-06 20:16:41:1641 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 20:16:41:1641 [31merror[39m: [31m⨯ Unable to compile TypeScript:[39m
+[31m[96msrc/Entity/Location.ts[0m:[93m20[0m:[93m53[0m - [91merror[0m[90m TS2339: [0mProperty 'location' does not exist on type 'Category'.[39m
+
+[31m[7m20[0m   @OneToMany(() => Category, (category) => category.location)[39m
+[31m[7m  [0m [91m                                                    ~~~~~~~~[0m[39m
+[31m[39m
+2026-05-06 20:16:58:1658 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 20:16:58 6/5/2026[39m
+[32m      * Port: 3000[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-06 20:17:10:1710 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 20:17:10 6/5/2026[39m
+[32m      * Port: 3000[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-06 20:17:22:1722 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 20:17:22 6/5/2026[39m
+[32m      * Port: 3000[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-06 20:26:29:2629 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 20:26:29 6/5/2026[39m
+[32m      * Port: 3000[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-06 20:26:55:2655 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 20:26:55 6/5/2026[39m
+[32m      * Port: 3000[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-06 20:27:13:2713 [32minfo[39m: [32mGET /api-docs/ 404 - 57ms[39m
+2026-05-06 20:27:13:2713 [32minfo[39m: [32mGET /api-docs/swagger-ui.css 304 - 10ms[39m
+2026-05-06 20:27:13:2713 [32minfo[39m: [32mGET /api-docs/swagger.css 404 - 3ms[39m
+2026-05-06 20:27:13:2713 [32minfo[39m: [32mGET /api-docs/swagger-ui-bundle.js 304 - 4ms[39m
+2026-05-06 20:27:13:2713 [32minfo[39m: [32mGET /api-docs/swagger-ui-standalone-preset.js 304 - 3ms[39m
+2026-05-06 20:27:14:2714 [32minfo[39m: [32mGET /api-docs/swagger.json 404 - 70ms[39m
+2026-05-06 20:28:37:2837 [32minfo[39m: [32mGET /api-docs 404 - 6ms[39m
+2026-05-06 20:28:37:2837 [32minfo[39m: [32mGET /api-docs/ 404 - 17ms[39m
+2026-05-06 20:28:38:2838 [32minfo[39m: [32mGET /api-docs/swagger.css 404 - 2ms[39m
+2026-05-06 20:28:38:2838 [32minfo[39m: [32mGET /api-docs/swagger-ui.css 200 - 19ms[39m
+2026-05-06 20:28:38:2838 [32minfo[39m: [32mGET /api-docs/swagger-ui-standalone-preset.js 200 - 17ms[39m
+2026-05-06 20:28:38:2838 [32minfo[39m: [32mGET /api-docs/swagger-ui-bundle.js 200 - 38ms[39m
+2026-05-06 20:28:38:2838 [32minfo[39m: [32mGET /api-docs/swagger.json 404 - 3ms[39m
+2026-05-06 20:28:38:2838 [32minfo[39m: [32mGET /api-docs/favicon-32x32.png 200 - 3ms[39m
+2026-05-06 20:28:39:2839 [32minfo[39m: [32mGET /api-docs/ 404 - 6ms[39m
+2026-05-06 20:28:39:2839 [32minfo[39m: [32mGET /api-docs/swagger.json 404 - 2ms[39m
+2026-05-06 20:28:41:2841 [32minfo[39m: [32mGET /api-docs 404 - 1ms[39m
+2026-05-06 20:28:41:2841 [32minfo[39m: [32mGET /api-docs/ 404 - 3ms[39m
+2026-05-06 20:28:42:2842 [32minfo[39m: [32mGET /api-docs/swagger-ui.css 200 - 10ms[39m
+2026-05-06 20:28:42:2842 [32minfo[39m: [32mGET /api-docs/swagger-ui-standalone-preset.js 200 - 17ms[39m
+2026-05-06 20:28:42:2842 [32minfo[39m: [32mGET /api-docs/swagger-ui-bundle.js 200 - 33ms[39m
+2026-05-06 20:28:42:2842 [32minfo[39m: [32mGET /api-docs/swagger.css 404 - 1ms[39m
+2026-05-06 20:28:48:2848 [32minfo[39m: [32mGET /api-docs/swagger.json 404 - 3ms[39m
+2026-05-06 20:28:48:2848 [32minfo[39m: [32mGET /api-docs/favicon-32x32.png 200 - 2ms[39m
+2026-05-06 20:28:49:2849 [32minfo[39m: [32mGET /api-docs/swagger.json 404 - 2ms[39m
+2026-05-06 20:28:49:2849 [32minfo[39m: [32mGET /api-docs/ 404 - 5ms[39m
+2026-05-06 20:33:00:330 [32minfo[39m: [32mGET /api-docs/ 404 - 8ms[39m
+2026-05-06 20:33:00:330 [32minfo[39m: [32mGET /api-docs/swagger-ui.css 304 - 2ms[39m
+2026-05-06 20:33:00:330 [32minfo[39m: [32mGET /api-docs/swagger.css 404 - 2ms[39m
+2026-05-06 20:33:00:330 [32minfo[39m: [32mGET /api-docs/swagger-ui-bundle.js 304 - 16ms[39m
+2026-05-06 20:33:00:330 [32minfo[39m: [32mGET /api-docs/swagger-ui-standalone-preset.js 304 - 4ms[39m
+2026-05-06 20:33:00:330 [32minfo[39m: [32mGET /api-docs/swagger.json 404 - 11ms[39m
+2026-05-06 20:36:41:3641 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 20:36:41 6/5/2026[39m
+[32m      * Port: 3000[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-06 20:42:05:425 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 20:42:05 6/5/2026[39m
+[32m      * Port: 3000[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-06 20:45:15:4515 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 20:45:15 6/5/2026[39m
+[32m      * Port: 3000[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-06 20:45:43:4543 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 20:45:43 6/5/2026[39m
+[32m      * Port: 3000[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-06 20:46:10:4610 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 20:46:10 6/5/2026[39m
+[32m      * Port: 3000[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-06 20:47:18:4718 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 20:47:18 6/5/2026[39m
+[32m      * Port: 3000[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-06 20:47:38:4738 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 20:47:38 6/5/2026[39m
+[32m      * Port: 3000[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-06 20:48:12:4812 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 20:48:12 6/5/2026[39m
+[32m      * Port: 3000[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-06 20:48:36:4836 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 20:48:36 6/5/2026[39m
+[32m      * Port: 3000[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-06 20:49:17:4917 [32minfo[39m: [32mGET /api-docs/ 404 - 53ms[39m
+2026-05-06 20:49:17:4917 [32minfo[39m: [32mGET /api-docs/swagger-ui.css 304 - 3ms[39m
+2026-05-06 20:49:17:4917 [32minfo[39m: [32mGET /api-docs/swagger.css 404 - 2ms[39m
+2026-05-06 20:49:17:4917 [32minfo[39m: [32mGET /api-docs/swagger-ui-bundle.js 304 - 1ms[39m
+2026-05-06 20:49:17:4917 [32minfo[39m: [32mGET /api-docs/swagger-ui-standalone-preset.js 304 - 1ms[39m
+2026-05-06 20:49:18:4918 [32minfo[39m: [32mGET /api-docs/swagger.json 404 - 83ms[39m
+2026-05-06 20:49:18:4918 [32minfo[39m: [32mGET /api-docs/favicon-32x32.png 304 - 1ms[39m
+2026-05-06 20:52:03:523 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 20:52:03 6/5/2026[39m
+[32m      * Port: 3000[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-06 20:52:19:5219 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 20:52:19 6/5/2026[39m
+[32m      * Port: 3000[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-06 20:57:21:5721 [32minfo[39m: [32mGET /api-docs/ 404 - 43ms[39m
+2026-05-06 20:57:21:5721 [32minfo[39m: [32mGET /api-docs/swagger.css 404 - 3ms[39m
+2026-05-06 20:57:21:5721 [32minfo[39m: [32mGET /api-docs/swagger-ui.css 304 - 4ms[39m
+2026-05-06 20:57:21:5721 [32minfo[39m: [32mGET /api-docs/swagger-ui-bundle.js 304 - 6ms[39m
+2026-05-06 20:57:21:5721 [32minfo[39m: [32mGET /api-docs/swagger-ui-standalone-preset.js 304 - 3ms[39m
+2026-05-06 20:57:22:5722 [32minfo[39m: [32mGET /api-docs/swagger.json 404 - 55ms[39m
+2026-05-06 20:57:22:5722 [32minfo[39m: [32mGET /api-docs/favicon-32x32.png 304 - 1ms[39m
+2026-05-06 20:57:42:5742 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 116ms[39m
+2026-05-06 22:08:38:838 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 22:08:38 6/5/2026[39m
+[32m      * Port: 3000[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-06 22:08:40:840 [32minfo[39m: [32mGET /api-docs/ 404 - 48ms[39m
+2026-05-06 22:08:40:840 [32minfo[39m: [32mGET /api-docs/swagger-ui.css 304 - 5ms[39m
+2026-05-06 22:08:40:840 [32minfo[39m: [32mGET /api-docs/swagger.css 404 - 1ms[39m
+2026-05-06 22:08:40:840 [32minfo[39m: [32mGET /api-docs/swagger-ui-bundle.js 304 - 3ms[39m
+2026-05-06 22:08:40:840 [32minfo[39m: [32mGET /api-docs/swagger-ui-standalone-preset.js 304 - 3ms[39m
+2026-05-06 22:08:41:841 [32minfo[39m: [32mGET /api-docs/swagger.json 404 - 70ms[39m
+2026-05-06 22:09:06:96 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 242ms[39m
+2026-05-06 22:09:26:926 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 200 - 2474ms[39m
+2026-05-06 22:10:00:100 [32minfo[39m: [32mGET /api/v1/admin/dashboard/revenue?startDate=12&endDate=21 200 - 132ms[39m
+2026-05-06 22:24:28:2428 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 22:24:28 6/5/2026[39m
+[32m      * Port: 3000[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-06 22:24:31:2431 [32minfo[39m: [32mGET /api-docs/ 404 - 17ms[39m
+2026-05-06 22:24:31:2431 [32minfo[39m: [32mGET /api-docs/swagger-ui.css 304 - 8ms[39m
+2026-05-06 22:24:31:2431 [32minfo[39m: [32mGET /api-docs/swagger.css 404 - 11ms[39m
+2026-05-06 22:24:31:2431 [32minfo[39m: [32mGET /api-docs/swagger-ui-bundle.js 304 - 2ms[39m
+2026-05-06 22:24:31:2431 [32minfo[39m: [32mGET /api-docs/swagger-ui-standalone-preset.js 304 - 22ms[39m
+2026-05-06 22:24:32:2432 [32minfo[39m: [32mGET /api-docs/swagger.json 404 - 31ms[39m
+2026-05-07 08:09:45:945 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 08:09:45 7/5/2026[39m
+[32m      * Port: 3000[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-07 08:09:48:948 [32minfo[39m: [32mGET /api-docs/ 404 - 30ms[39m
+2026-05-07 08:09:48:948 [32minfo[39m: [32mGET /api-docs/swagger-ui.css 304 - 11ms[39m
+2026-05-07 08:09:48:948 [32minfo[39m: [32mGET /api-docs/swagger.css 404 - 4ms[39m
+2026-05-07 08:09:48:948 [32minfo[39m: [32mGET /api-docs/swagger-ui-bundle.js 304 - 20ms[39m
+2026-05-07 08:09:48:948 [32minfo[39m: [32mGET /api-docs/swagger-ui-standalone-preset.js 304 - 3ms[39m
+2026-05-07 08:09:48:948 [32minfo[39m: [32mGET /api-docs/swagger.json 404 - 42ms[39m
+2026-05-07 08:11:21:1121 [32minfo[39m: [32mPOST /api/v1/auth/customer/login 200 - 247ms[39m
+2026-05-07 08:12:51:1251 [32minfo[39m: [32mPOST /api/v1/client/orders 201 - 1696ms[39m
+2026-05-07 08:13:37:1337 [32minfo[39m: [32mGET /api/v1/client/orders/history/pending 200 - 150ms[39m
+2026-05-07 08:14:22:1422 [32minfo[39m: [32mGET /api/v1/client/orders/detail/2 200 - 291ms[39m
+2026-05-07 08:16:03:163 [32minfo[39m: [32mGET /api-docs/ 404 - 3ms[39m
+2026-05-07 08:16:03:163 [32minfo[39m: [32mGET /api-docs/swagger-ui.css 304 - 2ms[39m
+2026-05-07 08:16:03:163 [32minfo[39m: [32mGET /api-docs/swagger.css 404 - 4ms[39m
+2026-05-07 08:16:03:163 [32minfo[39m: [32mGET /api-docs/swagger-ui-bundle.js 304 - 2ms[39m
+2026-05-07 08:16:03:163 [32minfo[39m: [32mGET /api-docs/swagger-ui-standalone-preset.js 304 - 2ms[39m
+2026-05-07 08:16:03:163 [32minfo[39m: [32mGET /api-docs/swagger.json 404 - 3ms[39m
+2026-05-07 08:16:03:163 [32minfo[39m: [32mGET /api-docs/favicon-32x32.png 304 - 3ms[39m
+2026-05-07 08:16:26:1626 [32minfo[39m: [32mGET /api-docs/ 404 - 3ms[39m
+2026-05-07 08:16:26:1626 [32minfo[39m: [32mGET /api-docs/swagger-ui.css 304 - 1ms[39m
+2026-05-07 08:16:26:1626 [32minfo[39m: [32mGET /api-docs/swagger.css 404 - 1ms[39m
+2026-05-07 08:16:26:1626 [32minfo[39m: [32mGET /api-docs/swagger-ui-bundle.js 304 - 1ms[39m
+2026-05-07 08:16:26:1626 [32minfo[39m: [32mGET /api-docs/swagger-ui-standalone-preset.js 304 - 2ms[39m
+2026-05-07 08:16:27:1627 [32minfo[39m: [32mGET /api-docs/swagger.json 404 - 3ms[39m
+2026-05-07 08:18:56:1856 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 08:18:56 7/5/2026[39m
+[32m      * Port: 3000[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-07 08:18:57:1857 [32minfo[39m: [32mGET /api-docs/ 404 - 27ms[39m
+2026-05-07 08:18:57:1857 [32minfo[39m: [32mGET /api-docs/swagger-ui.css 304 - 5ms[39m
+2026-05-07 08:18:57:1857 [32minfo[39m: [32mGET /api-docs/swagger.css 404 - 4ms[39m
+2026-05-07 08:18:57:1857 [32minfo[39m: [32mGET /api-docs/swagger-ui-bundle.js 304 - 2ms[39m
+2026-05-07 08:18:57:1857 [32minfo[39m: [32mGET /api-docs/swagger-ui-standalone-preset.js 304 - 4ms[39m
+2026-05-07 08:18:58:1858 [32minfo[39m: [32mGET /api-docs/swagger.json 404 - 43ms[39m
+2026-05-07 08:19:43:1943 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-07 08:19:43:1943 [31merror[39m: [31mlisten EADDRINUSE: address already in use 0.0.0.0:3000[39m
+2026-05-07 08:20:44:2044 [32minfo[39m: [32mGET /api-docs/ 404 - 5ms[39m
+2026-05-07 08:20:44:2044 [32minfo[39m: [32mGET /api-docs/swagger.css 404 - 1ms[39m
+2026-05-07 08:20:44:2044 [32minfo[39m: [32mGET /api-docs/swagger-ui.css 304 - 3ms[39m
+2026-05-07 08:20:44:2044 [32minfo[39m: [32mGET /api-docs/swagger-ui-standalone-preset.js 304 - 4ms[39m
+2026-05-07 08:20:44:2044 [32minfo[39m: [32mGET /api-docs/swagger-ui-bundle.js 304 - 2ms[39m
+2026-05-07 08:20:45:2045 [32minfo[39m: [32mGET /api-docs/swagger.json 404 - 4ms[39m
+2026-05-07 08:22:28:2228 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 08:22:28 7/5/2026[39m
+[32m      * Port: 3000[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-07 08:22:30:2230 [32minfo[39m: [32mGET /api-docs/ 404 - 24ms[39m
+2026-05-07 08:22:30:2230 [32minfo[39m: [32mGET /api-docs/swagger.css 404 - 3ms[39m
+2026-05-07 08:22:30:2230 [32minfo[39m: [32mGET /api-docs/swagger-ui.css 304 - 4ms[39m
+2026-05-07 08:22:30:2230 [32minfo[39m: [32mGET /api-docs/swagger-ui-bundle.js 304 - 3ms[39m
+2026-05-07 08:22:30:2230 [32minfo[39m: [32mGET /api-docs/swagger-ui-standalone-preset.js 304 - 2ms[39m
+2026-05-07 08:22:31:2231 [32minfo[39m: [32mGET /api-docs/swagger.json 404 - 42ms[39m
+2026-05-07 08:24:10:2410 [32minfo[39m: [32mPOST /api/v1/auth/customer/login 200 - 226ms[39m
+2026-05-07 08:24:51:2451 [32minfo[39m: [32mPATCH /api/v1/client/orders/2 200 - 578ms[39m
+2026-05-07 08:25:28:2528 [32minfo[39m: [32mPATCH /api/v1/client/orders/2 200 - 607ms[39m
+2026-05-07 08:25:35:2535 [32minfo[39m: [32mGET /api/v1/client/orders 200 - 102ms[39m
+2026-05-07 08:26:18:2618 [32minfo[39m: [32mPATCH /api/v1/client/orders/2 200 - 181ms[39m
+2026-05-07 08:26:29:2629 [32minfo[39m: [32mPATCH /api/v1/client/orders/2 200 - 201ms[39m
+2026-05-07 08:27:34:2734 [32minfo[39m: [32mPOST /api/v1/client/orders 201 - 1185ms[39m
+2026-05-07 08:29:12:2912 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 189ms[39m
+2026-05-07 08:31:24:3124 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 08:31:24 7/5/2026[39m
+[32m      * Port: 3000[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-07 08:31:31:3131 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 08:31:31 7/5/2026[39m
+[32m      * Port: 3000[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-07 08:32:46:3246 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 08:32:46 7/5/2026[39m
+[32m      * Port: 3000[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-07 08:32:52:3252 [32minfo[39m: [32mGET /api-docs/ 404 - 24ms[39m
+2026-05-07 08:32:52:3252 [32minfo[39m: [32mGET /api-docs/swagger-ui.css 304 - 3ms[39m
+2026-05-07 08:32:52:3252 [32minfo[39m: [32mGET /api-docs/swagger.css 404 - 3ms[39m
+2026-05-07 08:32:52:3252 [32minfo[39m: [32mGET /api-docs/swagger-ui-bundle.js 304 - 5ms[39m
+2026-05-07 08:32:52:3252 [32minfo[39m: [32mGET /api-docs/swagger-ui-standalone-preset.js 304 - 17ms[39m
+2026-05-07 08:32:53:3253 [32minfo[39m: [32mGET /api-docs/swagger.json 404 - 36ms[39m
+2026-05-07 08:33:11:3311 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 300ms[39m
+2026-05-07 08:33:35:3335 [32minfo[39m: [32mGET /api/v1/admin/orders?status=pending 200 - 284ms[39m
+2026-05-07 08:37:31:3731 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 08:37:31 7/5/2026[39m
+[32m      * Port: 3000[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-07 08:37:38:3738 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 08:37:38 7/5/2026[39m
+[32m      * Port: 3000[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-07 08:38:18:3818 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 08:38:18 7/5/2026[39m
+[32m      * Port: 3000[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-07 08:38:22:3822 [32minfo[39m: [32mGET /api-docs/ 404 - 22ms[39m
+2026-05-07 08:38:22:3822 [32minfo[39m: [32mGET /api-docs/swagger-ui.css 304 - 5ms[39m
+2026-05-07 08:38:22:3822 [32minfo[39m: [32mGET /api-docs/swagger.css 404 - 2ms[39m
+2026-05-07 08:38:22:3822 [32minfo[39m: [32mGET /api-docs/swagger-ui-bundle.js 304 - 1ms[39m
+2026-05-07 08:38:22:3822 [32minfo[39m: [32mGET /api-docs/swagger-ui-standalone-preset.js 304 - 1ms[39m
+2026-05-07 08:38:22:3822 [32minfo[39m: [32mGET /api-docs/swagger.json 404 - 32ms[39m
+2026-05-07 08:39:57:3957 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 08:39:57 7/5/2026[39m
+[32m      * Port: 3000[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-07 08:40:00:400 [32minfo[39m: [32mGET /api-docs/ 404 - 28ms[39m
+2026-05-07 08:40:00:400 [32minfo[39m: [32mGET /api-docs/swagger-ui.css 304 - 4ms[39m
+2026-05-07 08:40:00:400 [32minfo[39m: [32mGET /api-docs/swagger.css 404 - 2ms[39m
+2026-05-07 08:40:00:400 [32minfo[39m: [32mGET /api-docs/swagger-ui-bundle.js 304 - 1ms[39m
+2026-05-07 08:40:00:400 [32minfo[39m: [32mGET /api-docs/swagger-ui-standalone-preset.js 304 - 2ms[39m
+2026-05-07 08:40:00:400 [32minfo[39m: [32mGET /api-docs/swagger.json 404 - 25ms[39m
+2026-05-07 08:40:00:400 [32minfo[39m: [32mGET /api-docs/favicon-32x32.png 304 - 1ms[39m
+2026-05-07 08:40:50:4050 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 08:40:50 7/5/2026[39m
+[32m      * Port: 3000[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-07 08:40:57:4057 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 08:40:57 7/5/2026[39m
+[32m      * Port: 3000[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-07 08:41:20:4120 [32minfo[39m: [32mGET /api-docs/ 404 - 29ms[39m
+2026-05-07 08:41:20:4120 [32minfo[39m: [32mGET /api-docs/swagger-ui.css 304 - 4ms[39m
+2026-05-07 08:41:20:4120 [32minfo[39m: [32mGET /api-docs/swagger.css 404 - 2ms[39m
+2026-05-07 08:41:20:4120 [32minfo[39m: [32mGET /api-docs/swagger-ui-bundle.js 304 - 2ms[39m
+2026-05-07 08:41:20:4120 [32minfo[39m: [32mGET /api-docs/swagger-ui-standalone-preset.js 304 - 2ms[39m
+2026-05-07 08:41:20:4120 [32minfo[39m: [32mGET /api-docs/favicon-32x32.png 304 - 1ms[39m
+2026-05-07 08:41:20:4120 [32minfo[39m: [32mGET /api-docs/swagger.json 404 - 45ms[39m
+2026-05-07 08:41:50:4150 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 289ms[39m
+2026-05-07 08:42:22:4222 [32minfo[39m: [32mPATCH /api/v1/admin/orders/3 200 - 622ms[39m
+2026-05-07 08:43:36:4336 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 08:43:36 7/5/2026[39m
+[32m      * Port: 3000[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-07 08:43:43:4343 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 08:43:43 7/5/2026[39m
+[32m      * Port: 3000[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-07 08:44:14:4414 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 08:44:14 7/5/2026[39m
+[32m      * Port: 3000[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-07 08:44:27:4427 [32minfo[39m: [32mGET /api-docs/ 404 - 23ms[39m
+2026-05-07 08:44:27:4427 [32minfo[39m: [32mGET /api-docs/swagger-ui.css 304 - 16ms[39m
+2026-05-07 08:44:27:4427 [32minfo[39m: [32mGET /api-docs/swagger.css 404 - 2ms[39m
+2026-05-07 08:44:27:4427 [32minfo[39m: [32mGET /api-docs/swagger-ui-bundle.js 304 - 2ms[39m
+2026-05-07 08:44:27:4427 [32minfo[39m: [32mGET /api-docs/swagger-ui-standalone-preset.js 304 - 7ms[39m
+2026-05-07 08:44:28:4428 [32minfo[39m: [32mGET /api-docs/favicon-32x32.png 304 - 1ms[39m
+2026-05-07 08:44:28:4428 [32minfo[39m: [32mGET /api-docs/swagger.json 404 - 40ms[39m
+2026-05-07 08:45:09:459 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 08:45:09 7/5/2026[39m
+[32m      * Port: 3000[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-07 08:47:08:478 [32minfo[39m: [32mPOST /api/v1/auth/customer/login 200 - 262ms[39m
+2026-05-07 08:47:34:4734 [32minfo[39m: [32mGET /api/v1/client/orders 200 - 135ms[39m
+2026-05-07 15:08:56:856 [32minfo[39m: [32mGET /api-docs/swagger.json 404 - 181ms[39m
+2026-05-07 15:10:08:108 [32minfo[39m: [32mGET /api-docs/ 404 - 80ms[39m
+2026-05-07 15:10:08:108 [32minfo[39m: [32mGET /api-docs/swagger-ui.css 304 - 8ms[39m
+2026-05-07 15:10:08:108 [32minfo[39m: [32mGET /api-docs/swagger.css 404 - 3ms[39m
+2026-05-07 15:10:08:108 [32minfo[39m: [32mGET /api-docs/swagger-ui-bundle.js 304 - 1ms[39m
+2026-05-07 15:10:08:108 [32minfo[39m: [32mGET /api-docs/swagger-ui-standalone-preset.js 304 - 1ms[39m
+2026-05-07 15:10:09:109 [32minfo[39m: [32mGET /api-docs/swagger.json 404 - 3ms[39m
+2026-05-07 15:10:09:109 [32minfo[39m: [32mGET /api-docs/favicon-32x32.png 304 - 3ms[39m
+2026-05-07 15:10:23:1023 [32minfo[39m: [32mGET /api-docs/ 404 - 4ms[39m
+2026-05-07 15:10:23:1023 [32minfo[39m: [32mGET /api-docs/swagger-ui.css 304 - 3ms[39m
+2026-05-07 15:10:23:1023 [32minfo[39m: [32mGET /api-docs/swagger.css 404 - 2ms[39m
+2026-05-07 15:10:23:1023 [32minfo[39m: [32mGET /api-docs/swagger-ui-bundle.js 304 - 6ms[39m
+2026-05-07 15:10:23:1023 [32minfo[39m: [32mGET /api-docs/swagger-ui-standalone-preset.js 304 - 4ms[39m
+2026-05-07 15:10:24:1024 [32minfo[39m: [32mGET /api-docs/swagger.json 404 - 7ms[39m
+2026-05-07 15:12:57:1257 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 950ms[39m
+2026-05-07 15:13:19:1319 [32minfo[39m: [32mGET /api/v1/admin/orders 200 - 208ms[39m
+2026-05-07 15:14:57:1457 [32minfo[39m: [32mGET /api/v1/admin/users 200 - 195ms[39m
+2026-05-07 15:20:17:2017 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 15:20:17 7/5/2026[39m
+[32m      * Port: 3000[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-07 15:20:24:2024 [32minfo[39m: [32mGET /api/v1/public/products?page=1&limit=10&sortKey=id&sortValue=ASC 200 - 644ms[39m
+2026-05-07 15:20:32:2032 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 15:20:32 7/5/2026[39m
+[32m      * Port: 3000[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-07 15:20:52:2052 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 15:20:52 7/5/2026[39m
+[32m      * Port: 3000[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-07 15:20:52:2052 [32minfo[39m: [32mGET /api-docs/ 404 - 16ms[39m
+2026-05-07 15:20:52:2052 [32minfo[39m: [32mGET /api-docs/swagger-ui.css 304 - 3ms[39m
+2026-05-07 15:20:52:2052 [32minfo[39m: [32mGET /api-docs/swagger.css 404 - 2ms[39m
+2026-05-07 15:20:52:2052 [32minfo[39m: [32mGET /api-docs/swagger-ui-bundle.js 304 - 1ms[39m
+2026-05-07 15:20:52:2052 [32minfo[39m: [32mGET /api-docs/swagger-ui-standalone-preset.js 304 - 2ms[39m
+2026-05-07 15:20:52:2052 [32minfo[39m: [32mGET /api-docs/favicon-32x32.png 304 - 3ms[39m
+2026-05-07 15:20:52:2052 [32minfo[39m: [32mGET /api-docs/swagger.json 404 - 35ms[39m
+2026-05-07 15:21:14:2114 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 297ms[39m
+2026-05-07 15:22:27:2227 [32minfo[39m: [32mPOST /api/v1/admin/picking/assign 200 - 2136ms[39m
+2026-05-07 15:24:14:2414 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned?staffId=3 200 - 201ms[39m
+2026-05-07 15:27:50:2750 [31merror[39m: [31m[POST /api/v1/auth/user/login] [401] Invalid username or password[39m
+2026-05-07 15:27:50:2750 [32minfo[39m: [32mPOST /api/v1/auth/user/login 401 - 215ms[39m
+2026-05-07 15:28:02:282 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 307ms[39m
+2026-05-07 15:32:56:3256 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 305ms[39m
+2026-05-07 15:34:32:3432 [32minfo[39m: [32mPOST /api/v1/admin/picking/pack 200 - 3223ms[39m
+2026-05-07 15:36:14:3614 [31merror[39m: [31m[GET /api/v1/admin/picking/trace/CONT-KINGFOOD-01] [403] Chỉ quản lý mới có quyền truy xuất nguồn gốc container[39m
+2026-05-07 15:36:14:3614 [32minfo[39m: [32mGET /api/v1/admin/picking/trace/CONT-KINGFOOD-01 403 - 6ms[39m
+2026-05-07 15:36:29:3629 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 301ms[39m
+2026-05-07 15:36:54:3654 [32minfo[39m: [32mGET /api/v1/admin/picking/trace/CONT-KINGFOOD-01 200 - 424ms[39m
+2026-05-07 15:45:29:4529 [32minfo[39m: [32mPOST /api/v1/admin/picking/issue/1 200 - 1465ms[39m
+2026-05-07 15:52:41:5241 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 15:52:41 7/5/2026[39m
+[32m      * Port: 3000[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-07 15:53:12:5312 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 15:53:12 7/5/2026[39m
+[32m      * Port: 3000[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-07 15:55:06:556 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 15:55:06 7/5/2026[39m
+[32m      * Port: 3000[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m

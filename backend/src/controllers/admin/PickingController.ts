@@ -10,7 +10,9 @@ import {
   AssignTasksDto,
   PackItemDto,
   HandoverTaskDto,
-  ReportIssueDto
+  ReportIssueDto,
+  MoveContainerItemDto,
+  ReportIncidentDto
 } from "../../schemas/PickingSchema";
 
 @Controller("/admin/picking")
@@ -116,7 +118,7 @@ export class PickingController {
   async moveContainerItem(
     @Req() req: any,
     @Res() res: Response,
-    @BodyParams() body: any
+    @BodyParams() body: MoveContainerItemDto
   ) {
     const { productId, oldContainerCode, newContainerCode, quantity } = body;
     const staffId = req.decodeUser.id;
@@ -137,7 +139,7 @@ export class PickingController {
   async reportIncident(
     @Req() req: any,
     @Res() res: Response,
-    @BodyParams() body: { taskId: number; photoUrl?: string; reason: string }
+    @BodyParams() body: ReportIncidentDto
   ) {
     const reporterId = req.decodeUser.id;
     const { taskId, photoUrl, reason } = body;

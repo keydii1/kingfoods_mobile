@@ -21,7 +21,7 @@ export class PickingService {
    */
   async assignAndSplitTasks(
     orderId: number,
-    tasks: { productId: number; staffId: number; quantity: number; location?: string }[]
+    tasks: { productId: number; staffId: number; quantity: number }[]
   ) {
     const order = await Order.getByIdOrFail(orderId);
 
@@ -30,7 +30,7 @@ export class PickingService {
         const createdTasks: PickingTask[] = [];
 
         for (const taskData of tasks) {
-          const { productId, staffId, quantity, location } = taskData;
+          const { productId, staffId, quantity } = taskData;
 
           const staff = await transactionalEntityManager.findOne(User, { where: { id: staffId } });
           if (!staff || staff.role !== UserRole.STAFF) {
@@ -53,7 +53,7 @@ export class PickingService {
             quantityToPick: quantity,
             quantityPicked: 0,
             status: PickingTaskStatus.PENDING,
-            location: location || product?.category?.location?.name || "Khu A-Mặc định",
+            location: product?.category?.location?.name || "Khu A-Mặc định",
           });
 
           const savedTask = await transactionalEntityManager.save(pickingTask);

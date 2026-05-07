@@ -6,7 +6,7 @@ import {
   Index,
   OneToMany,
 } from "typeorm";
-import { Property } from "@tsed/schema";
+import { Enum, Property } from "@tsed/schema";
 import { BaseEntity } from "./BaseEntity";
 import { Branch } from "./Branch";
 import { OrderDetail } from "./OrderDetail";
@@ -42,7 +42,7 @@ export class Order extends BaseEntity {
   assignedUserId: number | null;
 
   @Column({ type: "enum", enum: OrderStatus, default: OrderStatus.PENDING })
-  @Property()
+  @Enum(OrderStatus)
   status: OrderStatus;
 
   @Column({

@@ -1,5 +1,14 @@
 import { Controller, Inject } from "@tsed/di";
-import { Get, Post, Patch, Security, Summary, Tags, Property } from "@tsed/schema";
+import {
+  Get,
+  Post,
+  Patch,
+  Security,
+  Summary,
+  Tags,
+  Property,
+  Enum,
+} from "@tsed/schema";
 import { BodyParams, PathParams, Req, Res } from "@tsed/common";
 import { Response } from "express";
 import { OrderService } from "../../services/OrderService";
@@ -8,13 +17,24 @@ import { CreateOrderSchema } from "../../schemas/OrderSchema";
 import { Validator } from "../../decorators/Validator";
 
 class OrderProductParams {
-  @Property() productId: number;
-  @Property() quantity: number;
+  @Property()
+  productId: number;
+  @Property()
+  quantity: number;
 }
 
 class CreateOrderParams {
   @Property({ type: OrderProductParams }) products: OrderProductParams[];
   @Property() address: string;
+}
+
+class UpdateOrderParams {
+  @Property()
+  address?: string;
+
+  @Property()
+  @Enum(OrderStatus)
+  status?: OrderStatus;
 }
 
 @Controller("/client/orders")
@@ -27,20 +47,33 @@ export class OrderClientController {
   @Get("/")
   @Summary("Danh sách đơn hàng của tôi")
   async getMyOrders(@Req() req: any, @Res() res: Response) {
-    const orders = await this.orderService.getOrdersByCustomer(req.decodeUser.id);
+    const orders = await this.orderService.getOrdersByCustomer(
+      req.decodeUser.id,
+    );
     return res.OK("Orders fetched successfully", orders);
   }
 
   @Get("/history/:status")
   @Summary("Lịch sử đơn hàng")
-  async getOrderHistory(@Req() req: any, @Res() res: Response, @PathParams("status") status: OrderStatus) {
-    const orders = await this.orderService.getHistory(req.decodeUser.id, status);
+  async getOrderHistory(
+    @Req() req: any,
+    @Res() res: Response,
+    @PathParams("status") status: OrderStatus,
+  ) {
+    const orders = await this.orderService.getHistory(
+      req.decodeUser.id,
+      status,
+    );
     return res.OK("Orders history fetched successfully", orders);
   }
 
   @Get("/detail/:orderId")
   @Summary("Chi tiết đơn hàng")
-  async getOrderDetail(@Req() req: any, @Res() res: Response, @PathParams("orderId") orderId: number) {
+  async getOrderDetail(
+    @Req() req: any,
+    @Res() res: Response,
+    @PathParams("orderId") orderId: number,
+  ) {
     const result = await this.orderService.getOrderDetail(orderId);
     return res.OK("Order detail fetched successfully", {
       OrderDetail: result.detail,
@@ -51,7 +84,11 @@ export class OrderClientController {
   @Post("/")
   @Validator(CreateOrderSchema)
   @Summary("Tạo đơn hàng")
-  async createOrder(@Req() req: any, @Res() res: Response, @BodyParams() body: CreateOrderParams) {
+  async createOrder(
+    @Req() req: any,
+    @Res() res: Response,
+    @BodyParams() body: CreateOrderParams,
+  ) {
     const result = await this.orderService.createOrder({
       customerId: req.decodeUser.id,
       products: body.products,
@@ -62,7 +99,12 @@ export class OrderClientController {
 
   @Patch("/:id")
   @Summary("Cập nhật địa chỉ hoặc hủy đơn")
-  async updateOrderByClient(@Req() req: any, @Res() res: Response, @PathParams("id") id: number, @BodyParams() body: any) {
+  async updateOrderByClient(
+    @Req() req: any,
+    @Res() res: Response,
+    @PathParams("id") id: number,
+    @BodyParams() body: UpdateOrderParams,
+  ) {
     const order = await this.orderService.updateOrderByClient(id, body);
     return res.OK("Order updated successfully", order);
   }

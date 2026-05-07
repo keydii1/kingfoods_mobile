@@ -1,0 +1,122 @@
+2026-05-06 19:14:34:1434 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:14:34:1434 [31merror[39m: [31mAccess denied for user 'root'@'localhost' (using password: YES)[39m
+2026-05-06 19:15:06:156 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:15:06:156 [31merror[39m: [31mAccess denied for user 'root'@'localhost' (using password: NO)[39m
+2026-05-06 19:15:44:1544 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:15:44:1544 [31merror[39m: [31mAccess denied for user 'root'@'localhost' (using password: NO)[39m
+2026-05-06 19:15:59:1559 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:15:59:1559 [31merror[39m: [31mAccess denied for user 'root'@'localhost' (using password: NO)[39m
+2026-05-06 19:17:25:1725 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:17:25:1725 [31merror[39m: [31mAccess denied for user 'root'@'localhost' (using password: YES)[39m
+2026-05-06 19:18:21:1821 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:18:21:1821 [31merror[39m: [31mAccess denied for user 'root'@'localhost' (using password: YES)[39m
+2026-05-06 19:18:39:1839 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:18:39:1839 [31merror[39m: [31mAccess denied for user 'root'@'localhost' (using password: YES)[39m
+2026-05-06 19:18:49:1849 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:18:49:1849 [31merror[39m: [31mAccess denied for user 'root'@'localhost' (using password: YES)[39m
+2026-05-06 19:18:55:1855 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:18:55:1855 [31merror[39m: [31mAccess denied for user 'root'@'localhost' (using password: YES)[39m
+2026-05-06 19:19:17:1917 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:19:17:1917 [31merror[39m: [31mAccess denied for user 'root'@'localhost' (using password: YES)[39m
+2026-05-06 19:19:44:1944 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:19:44:1944 [31merror[39m: [31mAccess denied for user 'root'@'localhost' (using password: YES)[39m
+2026-05-06 19:20:34:2034 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:20:34:2034 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:20:34:2034 [31merror[39m: [31mAccess denied for user 'root'@'localhost' (using password: NO)[39m
+2026-05-06 19:20:34:2034 [31merror[39m: [31mAccess denied for user 'root'@'localhost' (using password: NO)[39m
+2026-05-06 19:20:46:2046 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:20:46:2046 [31merror[39m: [31mAccess denied for user 'root'@'localhost' (using password: NO)[39m
+2026-05-06 19:21:19:2119 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:21:19:2119 [31merror[39m: [31mAccess denied for user 'root'@'localhost' (using password: NO)[39m
+2026-05-06 19:22:33:2233 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:22:33:2233 [31merror[39m: [31mAccess denied for user 'root'@'localhost' (using password: YES)[39m
+2026-05-06 19:22:33:2233 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:22:33:2233 [31merror[39m: [31mAccess denied for user 'root'@'localhost' (using password: YES)[39m
+2026-05-06 19:22:33:2233 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:22:33:2233 [31merror[39m: [31mAccess denied for user 'root'@'localhost' (using password: YES)[39m
+2026-05-06 19:33:36:3336 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:33:36:3336 [31merror[39m: [31mCannot read properties of undefined (reading 'use')[39m
+2026-05-06 19:34:11:3411 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:34:11:3411 [31merror[39m: [31mCannot read properties of undefined (reading 'use')[39m
+2026-05-06 19:34:11:3411 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:34:11:3411 [31merror[39m: [31mCannot read properties of undefined (reading 'use')[39m
+2026-05-06 19:34:11:3411 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:34:11:3411 [31merror[39m: [31mCannot read properties of undefined (reading 'use')[39m
+2026-05-06 19:35:10:3510 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:35:10:3510 [31merror[39m: [31mCannot read properties of undefined (reading 'use')[39m
+2026-05-06 19:35:10:3510 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:35:10:3510 [31merror[39m: [31mCannot read properties of undefined (reading 'use')[39m
+2026-05-06 19:35:10:3510 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:35:10:3510 [31merror[39m: [31mCannot read properties of undefined (reading 'use')[39m
+2026-05-06 19:35:55:3555 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:35:55:3555 [31merror[39m: [31mCannot read properties of undefined (reading 'use')[39m
+2026-05-06 19:36:10:3610 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:36:10:3610 [31merror[39m: [31mCannot read properties of undefined (reading 'use')[39m
+2026-05-06 19:36:11:3611 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:36:11:3611 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:36:11:3611 [31merror[39m: [31mCannot read properties of undefined (reading 'use')[39m
+2026-05-06 19:36:11:3611 [31merror[39m: [31mCannot read properties of undefined (reading 'use')[39m
+2026-05-06 19:36:27:3627 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:36:27:3627 [31merror[39m: [31mCannot read properties of undefined (reading 'use')[39m
+2026-05-06 19:37:09:379 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:37:09:379 [31merror[39m: [31mCannot read properties of undefined (reading 'use')[39m
+2026-05-06 19:37:09:379 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:37:09:379 [31merror[39m: [31mCannot read properties of undefined (reading 'use')[39m
+2026-05-06 19:37:09:379 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:37:09:379 [31merror[39m: [31mCannot read properties of undefined (reading 'use')[39m
+2026-05-06 19:37:15:3715 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:37:15:3715 [31merror[39m: [31mCannot read properties of undefined (reading 'use')[39m
+2026-05-06 19:37:36:3736 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:37:36:3736 [31merror[39m: [31mlisten EADDRINUSE: address already in use 0.0.0.0:3000[39m
+2026-05-06 19:37:36:3736 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:37:36:3736 [31merror[39m: [31mlisten EADDRINUSE: address already in use 0.0.0.0:3000[39m
+2026-05-06 19:37:36:3736 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:37:36:3736 [31merror[39m: [31mlisten EADDRINUSE: address already in use 0.0.0.0:3000[39m
+2026-05-06 19:37:47:3747 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:37:47:3747 [31merror[39m: [31mlisten EADDRINUSE: address already in use 0.0.0.0:3000[39m
+2026-05-06 19:37:47:3747 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:37:47:3747 [31merror[39m: [31mlisten EADDRINUSE: address already in use 0.0.0.0:3000[39m
+2026-05-06 19:37:47:3747 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:37:47:3747 [31merror[39m: [31mlisten EADDRINUSE: address already in use 0.0.0.0:3000[39m
+2026-05-06 19:37:56:3756 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:37:56:3756 [31merror[39m: [31mlisten EADDRINUSE: address already in use 0.0.0.0:3000[39m
+2026-05-06 19:40:07:407 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:40:07:407 [31merror[39m: [31mlisten EADDRINUSE: address already in use 0.0.0.0:3000[39m
+2026-05-06 19:40:07:407 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:40:07:407 [31merror[39m: [31mlisten EADDRINUSE: address already in use 0.0.0.0:3000[39m
+2026-05-06 19:56:15:5615 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:56:15:5615 [31merror[39m: [31m⨯ Unable to compile TypeScript:[39m
+[31m[96msrc/Entity/Container.ts[0m:[93m4[0m:[93m31[0m - [91merror[0m[90m TS2307: [0mCannot find module './ContainerItem' or its corresponding type declarations.[39m
+
+[31m[7m4[0m import { ContainerItem } from "./ContainerItem";[39m
+[31m[7m [0m [91m                              ~~~~~~~~~~~~~~~~~[0m[39m
+[31m[96msrc/Entity/Container.ts[0m:[93m36[0m:[93m50[0m - [91merror[0m[90m TS2339: [0mProperty 'container' does not exist on type 'unknown'.[39m
+
+[31m[7m36[0m   @OneToMany(() => ContainerItem, (item) => item.container)[39m
+[31m[7m  [0m [91m                                                 ~~~~~~~~~[0m[39m
+[31m[39m
+2026-05-06 19:58:46:5846 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 19:58:46:5846 [31merror[39m: [31m⨯ Unable to compile TypeScript:[39m
+[31m[96msrc/Entity/Branch.ts[0m:[93m54[0m:[93m44[0m - [91merror[0m[90m TS2339: [0mProperty 'branch' does not exist on type 'Order'.[39m
+
+[31m[7m54[0m   @OneToMany(() => Order, (order) => order.branch)[39m
+[31m[7m  [0m [91m                                           ~~~~~~[0m[39m
+[31m[39m
+2026-05-06 20:16:25:1625 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 20:16:25:1625 [31merror[39m: [31m⨯ Unable to compile TypeScript:[39m
+[31m[96msrc/Entity/Location.ts[0m:[93m20[0m:[93m53[0m - [91merror[0m[90m TS2339: [0mProperty 'location' does not exist on type 'Category'.[39m
+
+[31m[7m20[0m   @OneToMany(() => Category, (category) => category.location)[39m
+[31m[7m  [0m [91m                                                    ~~~~~~~~[0m[39m
+[31m[39m
+2026-05-06 20:16:41:1641 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-06 20:16:41:1641 [31merror[39m: [31m⨯ Unable to compile TypeScript:[39m
+[31m[96msrc/Entity/Location.ts[0m:[93m20[0m:[93m53[0m - [91merror[0m[90m TS2339: [0mProperty 'location' does not exist on type 'Category'.[39m
+
+[31m[7m20[0m   @OneToMany(() => Category, (category) => category.location)[39m
+[31m[7m  [0m [91m                                                    ~~~~~~~~[0m[39m
+[31m[39m
+2026-05-07 08:19:43:1943 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-07 08:19:43:1943 [31merror[39m: [31mlisten EADDRINUSE: address already in use 0.0.0.0:3000[39m
+2026-05-07 15:27:50:2750 [31merror[39m: [31m[POST /api/v1/auth/user/login] [401] Invalid username or password[39m
+2026-05-07 15:36:14:3614 [31merror[39m: [31m[GET /api/v1/admin/picking/trace/CONT-KINGFOOD-01] [403] Chỉ quản lý mới có quyền truy xuất nguồn gốc container[39m

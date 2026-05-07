@@ -35,11 +35,16 @@ export class OrderService {
     };
   }
 
-  async createOrder(data: { customerId: number; products: any[]; address: string }) {
+  async createOrder(data: {
+    customerId: number;
+    products: any[];
+    address: string;
+  }) {
     const { customerId, products, address } = data;
 
-    return await this.typeORMService.get().transaction(
-      async (transactionalEntityManager) => {
+    return await this.typeORMService
+      .get()
+      .transaction(async (transactionalEntityManager) => {
         const productIds = products.map((p) => p.productId);
         const productsDb = await transactionalEntityManager.findBy(Product, {
           id: In(productIds),
@@ -56,8 +61,9 @@ export class OrderService {
 
         const orderDetailData = products.map((item) => {
           const product = productsDb.find((p) => p.id === item.productId);
-          if (!product) throw new BadRequest(`Product ${item.productId} not found`);
-          
+          if (!product)
+            throw new BadRequest(`Product ${item.productId} not found`);
+
           return transactionalEntityManager.create(OrderDetail, {
             orderId: savedOrder.id,
             productId: product.id,
@@ -66,19 +72,19 @@ export class OrderService {
           });
         });
 
-        const savedOrderDetails = await transactionalEntityManager.save(orderDetailData);
+        const savedOrderDetails =
+          await transactionalEntityManager.save(orderDetailData);
 
         const totalPrice = savedOrderDetails.reduce(
           (acc, item) => acc + item.price * item.quantity,
-          0
+          0,
         );
 
         savedOrder.totalPrice = totalPrice;
         await transactionalEntityManager.save(savedOrder);
 
         return { order: savedOrder, orderDetail: savedOrderDetails };
-      }
-    );
+      });
   }
 
   async updateOrderByClient(id: number, data: any) {
@@ -87,7 +93,9 @@ export class OrderService {
 
     if (status === "cancelled") {
       if (order.status !== OrderStatus.PENDING)
-        throw new BadRequest("Order is not in pending status, customer can't cancel order");
+        throw new BadRequest(
+          "Order is not in pending status, customer can't cancel order",
+        );
       order.status = OrderStatus.CANCELLED;
     }
     if (address) {
@@ -96,9 +104,18 @@ export class OrderService {
     return await order.save();
   }
 
-  async updateByAdmin(id: number, data: any) {
+  async getAllOrders(status?: OrderStatus) {
+    const where = status ? { status } : {};
+    return await Order.find({
+      where,
+      relations: ["branch", "orderDetails", "orderDetails.product"],
+      order: { createdAt: "DESC" },
+    });
+  }
+
+  async updateByAdmin(id: number, status: OrderStatus) {
     const order = await Order.getByIdOrFail(id);
-    Object.assign(order, data);
+    order.status = status;
     return await order.save();
   }
 

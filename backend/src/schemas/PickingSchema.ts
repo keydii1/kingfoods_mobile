@@ -1,4 +1,10 @@
-import { Property, Required, Description, CollectionOf, Enum } from "@tsed/schema";
+import {
+  Property,
+  Required,
+  Description,
+  CollectionOf,
+  Enum,
+} from "@tsed/schema";
 
 export class PickingTaskItemDto {
   @Property()
@@ -15,10 +21,6 @@ export class PickingTaskItemDto {
   @Required()
   @Description("Số lượng sản phẩm cần pick")
   quantity: number;
-
-  @Property()
-  @Description("Vị trí kệ hàng (Tự động lấy theo Location của Category nếu để trống)")
-  location?: string;
 }
 
 export class AssignTasksDto {
@@ -69,4 +71,43 @@ export class ReportIssueDto {
   @Enum("damaged", "lost")
   status: "damaged" | "lost";
 }
+
+export class MoveContainerItemDto {
+  @Property()
+  @Required()
+  @Description("ID của sản phẩm cần chuyển")
+  productId: number;
+
+  @Property()
+  @Required()
+  @Description("Mã thùng hàng cũ (Origin)")
+  oldContainerCode: string;
+
+  @Property()
+  @Required()
+  @Description("Mã thùng hàng mới (Target)")
+  newContainerCode: string;
+
+  @Property()
+  @Required()
+  @Description("Số lượng sản phẩm cần di chuyển")
+  quantity: number;
+}
+
+export class ReportIncidentDto {
+  @Property()
+  @Required()
+  @Description("ID của nhiệm vụ nhặt hàng gặp sự cố")
+  taskId: number;
+
+  @Property()
+  @Description("Đường dẫn ảnh chụp sự cố (không bắt buộc)")
+  photoUrl?: string;
+
+  @Property()
+  @Required()
+  @Description("Mô tả chi tiết nguyên nhân sự cố (ví dụ: Kệ trống)")
+  reason: string;
+}
+
 export default AssignTasksDto;
