@@ -13,7 +13,7 @@ Tài liệu này được viết chi tiết từ đầu đến cuối nhằm h�
 
 ```mermaid
 erDiagram
-    USER ||--o{ ORDER : places
+    CUSTOMER ||--o{ ORDER : places
     USER ||--o{ PICKING-TASK : assigned_to
     ORDER ||--|{ ORDER-DETAIL : contains
     PRODUCT ||--o{ ORDER-DETAIL : ordered_in
@@ -27,9 +27,10 @@ erDiagram
 ```
 
 ### 🔗 Giải thích liên kết dữ liệu:
-1. **User (Người dùng):** Có 3 vai trò chính: `client` (Chi nhánh đặt hàng), `staff` (Nhân viên kho nhặt hàng), và `admin` (Quản lý kho).
-2. **Order (Đơn hàng) & OrderDetail:** 
-   * Khi cửa hàng (`client`) đặt hàng, hệ thống tạo bản ghi `Order` chứa `customerId` liên kết tới `User` (bảng `branches`).
+1. **User (Nhân viên & Quản lý kho):** Được lưu trữ trong bảng `users`, có 2 vai trò (`role`) chính: `staff` (Nhân viên kho thực hiện nhặt hàng) và `admin` (Quản lý kho).
+2. **Customer (Khách hàng đại diện Chi nhánh):** Được lưu trữ trong bảng `customers`, thuộc một Chi nhánh (`Branch`) cụ thể. Đây là các tài khoản đăng nhập đặt hàng sỉ cho chi nhánh của mình.
+3. **Order (Đơn hàng) & OrderDetail:** 
+   * Khi khách hàng (`customer`) đặt hàng, hệ thống tạo bản ghi `Order` chứa `customerId` liên kết trực tiếp tới bảng `customers`.
    * Các mặt hàng nằm trong đơn hàng được lưu chi tiết trong bảng `OrderDetail` (`order_id`, `product_id`, `quantity`, `price`).
 3. **Product $\rightarrow$ Category $\rightarrow$ Location:** 
    * Sản phẩm nằm trong một danh mục (`Category`). Danh mục đó thuộc về một vị trí kho hàng (`Location`) cụ thể (Ví dụ: `SHELF-A1`).
@@ -82,7 +83,7 @@ sequenceDiagram
 
 #### A1. Cửa hàng đặt hàng mới
 * **Endpoint:** `POST /api/v1/client/orders`
-* **Quyền truy cập:** `client` (Cửa hàng)
+* **Quyền truy cập:** `customer` (Cửa hàng / Khách hàng chi nhánh)
 * **Ý nghĩa:** Cửa hàng gửi danh sách sản phẩm và địa chỉ nhận hàng để tạo đơn hàng mới.
 * **Request Body (JSON):**
   ```json
@@ -124,7 +125,7 @@ sequenceDiagram
 
 #### A2. Cửa hàng xem danh sách đơn đã đặt
 * **Endpoint:** `GET /api/v1/client/orders`
-* **Quyền truy cập:** `client`
+* **Quyền truy cập:** `customer`
 * **Ý nghĩa:** Trả về tất cả các đơn hàng thuộc về chi nhánh đang đăng nhập.
 * **Response thành công (200 OK):**
   ```json
@@ -346,7 +347,7 @@ sequenceDiagram
 
 1. **Quản lý Token thông minh:** Nên có một lớp `axios interceptors` để tự động đính kèm `Authorization: Bearer <token>` vào mọi Request gửi đi và bắt lỗi `401 Unauthorized` để tự động đẩy người dùng về trang Login khi hết hạn phiên làm việc.
 2. **Ẩn/Hiện nút bấm theo Role (Phân quyền giao diện):** 
-   * Người dùng `client` chỉ thấy cụm màn hình Đặt hàng & Lịch sử đặt hàng.
+   * Người dùng `customer` chỉ thấy cụm màn hình Đặt hàng & Lịch sử đặt hàng.
    * Người dùng `staff` chỉ thấy màn hình Nhiệm vụ được giao & nút quét mã thùng hàng (Pack/Move).
    * Người dùng `admin` thấy toàn bộ Dashboard thống kê, Danh sách Đơn hàng, quản lý Sự cố kệ trống, và chức năng Truy vết thùng hàng (Traceability).
 3. **Quét mã vạch (Scanner UI):** Với tính năng đóng thùng (`Pack`) và di chuyển thùng (`Move`), Frontend nên tích hợp thư viện quét mã vạch bằng Camera (như `html5-qrcode` trên Web hoặc SDK của Mobile) để quét mã `containerCode` giúp nhân viên kho không phải nhập bằng tay, tăng tốc vận hành lên 300%!
