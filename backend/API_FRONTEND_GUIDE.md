@@ -1,9 +1,9 @@
 # 📘 CẨM NANG TÍCH HỢP API CHO NHÀ PHÁT TRIỂN FRONTEND
 > **Dự án:** Hệ thống Quản lý Đơn hàng & Kho vận KingFoods (KingFoods Order & Picking WMS)  
-> **Phiên bản:** 1.0.0 (Bản hoàn thiện)  
-> **Cập nhật mới nhất:** 2026-05-07
+> **Phiên bản:** 1.1.0 (Bản hoàn thiện theo Role)  
+> **Cập nhật mới nhất:** Hôm nay
 
-Tài liệu này được viết chi tiết từ đầu đến cuối nhằm hỗ trợ đội ngũ Frontend dễ dàng nắm bắt kiến trúc hệ thống, các mối liên kết dữ liệu giữa các bảng và cách tích hợp tất cả các API một cách trực quan, chính xác nhất.
+Tài liệu này được phân chia rõ ràng theo từng Vai trò (Role) nhằm hỗ trợ đội ngũ Frontend dễ dàng nắm bắt kiến trúc hệ thống, quyền hạn và cách tích hợp các API một cách trực quan, chính xác nhất.
 
 ---
 
@@ -26,221 +26,74 @@ erDiagram
     INCIDENT-REPORT }|--|| PICKING-TASK : references
 ```
 
-### 🔗 Giải thích liên kết dữ liệu:
-1. **User (Nhân viên & Quản lý kho):** Được lưu trữ trong bảng `users`, có 2 vai trò (`role`) chính: `staff` (Nhân viên kho thực hiện nhặt hàng) và `admin` (Quản lý kho).
-2. **Customer (Khách hàng đại diện Chi nhánh):** Được lưu trữ trong bảng `customers`, thuộc một Chi nhánh (`Branch`) cụ thể. Đây là các tài khoản đăng nhập đặt hàng sỉ cho chi nhánh của mình.
-3. **Order (Đơn hàng) & OrderDetail:** 
-   * Khi khách hàng (`customer`) đặt hàng, hệ thống tạo bản ghi `Order` chứa `customerId` liên kết trực tiếp tới bảng `customers`.
-   * Các mặt hàng nằm trong đơn hàng được lưu chi tiết trong bảng `OrderDetail` (`order_id`, `product_id`, `quantity`, `price`).
-3. **Product $\rightarrow$ Category $\rightarrow$ Location:** 
-   * Sản phẩm nằm trong một danh mục (`Category`). Danh mục đó thuộc về một vị trí kho hàng (`Location`) cụ thể (Ví dụ: `SHELF-A1`).
-   * **Cực kỳ quan trọng cho Frontend:** Khi tạo nhiệm vụ nhặt hàng, Frontend **không cần** tự truyền vị trí, Server sẽ tự tra cứu quan hệ này để điền tên kệ hàng tự động.
-4. **PickingTask (Nhiệm vụ lấy hàng):** Được Admin phân chia từ `Order`. Mỗi nhiệm vụ liên kết chéo tới `Order`, `Product` và `User` (Nhân viên kho chịu trách nhiệm).
-5. **Container & ContainerItem (Đóng thùng):** Khi nhân viên kho nhặt hàng, họ quét mã thùng để lưu hàng vào bảng `ContainerItem` (`container_id`, `product_id`, `quantity`, `assigned_user_id`).
-6. **IncidentReport (Báo cáo sự cố kệ trống):** Khi nhân viên kho đi nhặt hàng nhưng kệ trống, họ tạo báo cáo sự cố liên kết tới `PickingTask` và lưu người báo cáo `reporterId`.
+### 🔗 Giải thích liên kết dữ liệu & Vai trò:
+1. **User (Staff / Admin):** Bảng `users`, có 2 vai trò chính: `staff` (Nhân viên kho) và `admin` (Quản lý kho tổng).
+2. **Customer (Khách hàng đại diện Chi nhánh):** Bảng `customers`, thuộc một `Branch` (Chi nhánh). Đây là các tài khoản đăng nhập đặt hàng sỉ.
+3. **Product $\rightarrow$ Category $\rightarrow$ Location:** Sản phẩm thuộc danh mục, danh mục thuộc vị trí. Khi tạo task, Server tự dò vị trí.
+4. **PickingTask:** Nhiệm vụ nhặt hàng liên kết chéo tới `Order`, `Product` và `User`.
+5. **Container & ContainerItem:** Thùng hàng và các sản phẩm bên trong do nhân viên đóng gói.
 
 ---
 
 ## 🔐 2. CƠ CHẾ XÁC THỰC (AUTHENTICATION FLOW)
 
 Tất cả các API được bảo mật bằng cơ chế **Bearer Token JWT**.
-
-### 🔄 Luồng xử lý phía Frontend:
-1. Gửi thông tin đăng nhập đến API Login để nhận chuỗi `token`.
-2. Lưu `token` này vào `localStorage` hoặc `cookie` an toàn.
-3. Trong **mọi yêu cầu tiếp theo** lên Server, Frontend phải đính kèm Token này vào trường Header:
-   ```http
-   Authorization: Bearer <MÃ_TOKEN_CỦA_BẠN>
-   ```
+- Frontend đính kèm Token vào Header: `Authorization: Bearer <Mã_Token>`
 
 ---
 
-## 🔄 3. LUỒNG NGHIỆP VỤ LIÊN HOÀN (END-TO-END WORKFLOW)
+## 👨‍💼 PHẦN 1: DÀNH CHO CUSTOMER (QUẢN LÝ CHI NHÁNH / KHÁCH HÀNG SỈ)
 
-Frontend cần thiết kế luồng đi của màn hình theo đúng trình tự vận hành thực tế dưới đây:
+**Vai trò:** Đặt hàng từ hệ thống kho tổng, theo dõi tình trạng đơn hàng của chi nhánh mình.
 
-```mermaid
-sequenceDiagram
-    autonumber
-    actor Client as Cửa hàng (Client)
-    actor Admin as Quản lý (Admin)
-    actor Staff as Nhân viên (Staff)
-    
-    Client->>Server: 1. Tạo đơn hàng (POST /client/orders)
-    Admin->>Server: 2. Xem các đơn hàng mới (GET /admin/orders?status=pending)
-    Admin->>Server: 3. Phân công việc nhặt hàng (POST /admin/picking/assign)
-    Staff->>Server: 4. Lấy danh sách việc được giao (GET /admin/picking/assigned)
-    Staff->>Server: 5. Nhặt hàng & Đóng thùng (POST /admin/picking/pack)
-    Admin->>Server: 6. Truy xuất kiểm tra đóng thùng (GET /admin/picking/trace/:containerCode)
-    Admin->>Server: 7. Xuất kho & Giao hàng (PATCH /admin/orders/:id)
-```
-
----
-
-## 📖 4. DANH SÁCH CHI TIẾT CÁC API & HƯỚNG DẪN TÍCH HỢP
-
-### 🏷️ PHẦN A: ĐƠN HÀNG (ORDERS)
-
-#### A1. Cửa hàng đặt hàng mới
+#### 1.1. Tạo đơn đặt hàng mới
 * **Endpoint:** `POST /api/v1/client/orders`
-* **Quyền truy cập:** `customer` (Cửa hàng / Khách hàng chi nhánh)
-* **Ý nghĩa:** Cửa hàng gửi danh sách sản phẩm và địa chỉ nhận hàng để tạo đơn hàng mới.
-* **Request Body (JSON):**
+* **Request Body:**
   ```json
   {
     "products": [
-      {
-        "productId": 1,
-        "quantity": 5
-      },
-      {
-        "productId": 2,
-        "quantity": 10
-      }
+      { "productId": 1, "quantity": 5 },
+      { "productId": 2, "quantity": 10 }
     ],
     "address": "123 Đường Song Hành, Quận 2, TP.HCM"
   }
   ```
-* **Response thành công (200 OK):**
-  ```json
-  {
-    "status": 200,
-    "message": "Order created successfully",
-    "data": {
-      "order": {
-        "id": 14,
-        "customerId": 3,
-        "status": "pending",
-        "totalPrice": 1500000,
-        "address": "123 Đường Song Hành, Quận 2, TP.HCM",
-        "createdAt": "2026-05-07T08:00:00.000Z"
-      },
-      "orderDetail": [
-        { "id": 45, "productId": 1, "quantity": 5, "price": 100000 },
-        { "id": 46, "productId": 2, "quantity": 10, "price": 100000 }
-      ]
-    }
-  }
-  ```
 
-#### A2. Cửa hàng xem danh sách đơn đã đặt
+#### 1.2. Xem danh sách toàn bộ đơn đã đặt
 * **Endpoint:** `GET /api/v1/client/orders`
-* **Quyền truy cập:** `customer`
 * **Ý nghĩa:** Trả về tất cả các đơn hàng thuộc về chi nhánh đang đăng nhập.
-* **Response thành công (200 OK):**
-  ```json
-  {
-    "status": 200,
-    "data": [
-      {
-        "id": 14,
-        "status": "pending",
-        "totalPrice": 1500000,
-        "address": "123 Đường Song Hành",
-        "createdAt": "2026-05-07T08:00:00.000Z"
-      }
-    ]
-  }
-  ```
 
-#### A3. Cửa hàng xem lịch sử đơn hàng theo trạng thái
+#### 1.3. Lọc danh sách đơn hàng theo trạng thái
 * **Endpoint:** `GET /api/v1/client/orders/history/:status`
-* **Path Parameter:** `:status` (Nhận các giá trị: `pending`, `processing`, `shipped`, `delivered`, `cancelled`)
-* **Ví dụ gọi:** `/api/v1/client/orders/history/pending`
-* **Response thành công (200 OK):** Trả về danh sách đơn hàng đã lọc đúng trạng thái yêu cầu của cửa hàng đó.
+* **Path Parameter:** `:status` (`pending`, `processing`, `shipped`, `delivered`, `cancelled`)
+* **Ví dụ:** `/api/v1/client/orders/history/pending`
 
-#### A4. Cửa hàng cập nhật hoặc hủy đơn hàng
+#### 1.4. Cập nhật địa chỉ hoặc tự hủy đơn hàng
 * **Endpoint:** `PATCH /api/v1/client/orders/:id`
-* **Path Parameter:** `:id` (ID của đơn hàng cần cập nhật/hủy)
-* **Ý nghĩa:** Cửa hàng cập nhật địa chỉ giao hàng hoặc tự hủy đơn hàng (chỉ hủy được khi đơn hàng đang ở trạng thái `pending`).
-* **Request Body (JSON):**
+* **Path Parameter:** `:id` (ID của đơn hàng)
+* **Request Body:**
   ```json
   {
     "address": "Địa chỉ giao hàng mới (nếu muốn đổi)",
     "status": "cancelled" 
   }
   ```
-  *(Frontend lưu ý: Chỉ truyền `"status": "cancelled"` khi người dùng bấm nút Hủy đơn hàng).*
-
-#### A5. Admin xem danh sách toàn bộ đơn hàng (Mới bổ sung)
-* **Endpoint:** `GET /api/v1/admin/orders`
-* **Quyền truy cập:** `admin` (Quản lý)
-* **Query Parameter (Tùy chọn):** `?status=pending` (Để lọc ra các đơn hàng mới cần phân công ngay).
-* **Ý nghĩa:** Giúp màn hình Dashboard của Admin lấy danh sách toàn bộ đơn hàng của tất cả các chi nhánh cùng với các món hàng bên trong.
-
-#### A6. Admin cập nhật trạng thái đơn hàng
-* **Endpoint:** `PATCH /api/v1/admin/orders/:id`
-* **Quyền truy cập:** `admin`
-* **Request Body (JSON):**
-  ```json
-  {
-    "status": "shipped" 
-  }
-  ```
-  *(Các trạng thái hợp lệ: `processing`, `shipped`, `delivered`, `cancelled`).*
+  *(Lưu ý: Chỉ được hủy khi đơn hàng ở trạng thái `pending`).*
 
 ---
 
-### 📦 PHẦN B: QUY TRÌNH NHẶT HÀNG & KHO VẬN (PICKING & WMS)
+## 👷 PHẦN 2: DÀNH CHO STAFF (NHÂN VIÊN KHO)
 
-#### B1. Admin phân chia đơn hàng thành các nhiệm vụ lấy hàng
-* **Endpoint:** `POST /api/v1/admin/picking/assign`
-* **Quyền truy cập:** `admin`
-* **Ý nghĩa:** Chia nhỏ danh sách mặt hàng cần nhặt trong đơn giao cho từng nhân viên kho đi nhặt ở kệ hàng.
-* **Request Body (JSON - Đã tối giản hóa):**
-  ```json
-  {
-    "orderId": 14,
-    "tasks": [
-      {
-        "productId": 1,
-        "staffId": 5,
-        "quantity": 5
-      },
-      {
-        "productId": 2,
-        "staffId": 6,
-        "quantity": 10
-      }
-    ]
-  }
-  ```
-  > [!TIP]
-  > **Mẹo Frontend:** Bạn không cần phải truyền trường `location` lên nữa! Server sẽ tự động truy vết sản phẩm thuộc khu vực kệ hàng nào trong DB và tự động điền thông tin vị trí kệ hàng vào nhiệm vụ cho bạn.
+**Vai trò:** Nhận nhiệm vụ từ Admin, đi nhặt hàng theo kệ, đóng thùng, báo cáo nếu kệ trống.
 
-#### B2. Nhân viên kho lấy danh sách việc được giao trong ca
+#### 2.1. Xem danh sách việc được giao trong ca
 * **Endpoint:** `GET /api/v1/admin/picking/assigned`
-* **Quyền truy cập:** `staff` (Hoặc `admin` truyền thêm query `?staffId=5`).
-* **Ý nghĩa:** Trả về danh sách nhiệm vụ nhặt hàng của nhân viên đang đăng nhập.
-* **Response thành công (200 OK):**
-  ```json
-  {
-    "status": 200,
-    "data": [
-      {
-        "id": 101, 
-        "orderId": 14,
-        "productId": 1,
-        "quantityToPick": 5,
-        "quantityPicked": 0,
-        "status": "pending",
-        "location": "Khu A - Kệ đông lạnh",
-        "product": {
-          "name": "Sữa chua nếp cẩm",
-          "price": 20000
-        }
-      }
-    ]
-  }
-  ```
-  > [!IMPORTANT]
-  > **Frontend lưu ý:** Hãy lưu lại trường `"id"` của nhiệm vụ (ví dụ `101` ở trên) để làm biến `taskId` cho bước đóng thùng tiếp theo.
+* **Ý nghĩa:** Server tự nhận diện nhân viên qua Token và trả về danh sách task.
+* **Ví dụ Data trả về:** Task ID, Order ID, Product Name, Số lượng cần nhặt, Vị trí Kệ hàng.
 
-#### B3. Nhân viên nhặt hàng bỏ vào thùng hàng (Pack)
+#### 2.2. Nhặt hàng & Đóng thùng (Pack)
 * **Endpoint:** `POST /api/v1/admin/picking/pack`
-* **Quyền truy cập:** `staff` (Bắt buộc phải là người được giao nhiệm vụ này).
-* **Ý nghĩa:** Nhân viên cập nhật số lượng nhặt thực tế và quét mã thùng (Container) để cất hàng vào.
-* **Request Body (JSON):**
+* **Request Body:**
   ```json
   {
     "taskId": 101,
@@ -248,13 +101,10 @@ sequenceDiagram
     "containerCode": "CONT-KINGFOOD-01"
   }
   ```
-* **Kỳ vọng thành công:** Trả về thông tin cập nhật, nhiệm vụ nhặt chuyển sang trạng thái `completed`.
 
-#### B4. Bàn giao nhiệm vụ dở dang cho ca sau (Handover)
+#### 2.3. Bàn giao nhiệm vụ dở dang cho ca sau (Handover)
 * **Endpoint:** `POST /api/v1/admin/picking/handover`
-* **Quyền truy cập:** `staff`
-* **Ý nghĩa:** Khi hết ca làm việc mà nhân viên chưa nhặt xong, họ có thể bàn giao lại số lượng còn thiếu của nhiệm vụ này cho nhân viên ca sau thực hiện tiếp.
-* **Request Body (JSON):**
+* **Request Body:**
   ```json
   {
     "taskId": 101,
@@ -262,11 +112,9 @@ sequenceDiagram
   }
   ```
 
-#### B5. Di chuyển sản phẩm giữa các thùng (Move)
+#### 2.4. Di chuyển sản phẩm giữa các thùng (Move)
 * **Endpoint:** `POST /api/v1/admin/picking/move`
-* **Quyền truy cập:** `staff`
-* **Ý nghĩa:** Chuyển sản phẩm từ thùng cũ sang thùng mới để gộp hàng hoặc phân loại lại thùng hàng.
-* **Request Body (JSON):**
+* **Request Body:**
   ```json
   {
     "productId": 1,
@@ -276,81 +124,89 @@ sequenceDiagram
   }
   ```
 
-#### B6. Nhân viên báo cáo kệ hàng bị trống (Shortage/Incident Report)
+#### 2.5. Báo cáo kệ hàng bị trống (Incident Report)
 * **Endpoint:** `POST /api/v1/admin/picking/incident`
-* **Quyền truy cập:** `staff`
-* **Ý nghĩa:** Nhân viên đi nhặt hàng nhưng đến kệ thấy trống rỗng, họ chụp ảnh gửi báo cáo sự cố để quản lý cho người đi châm đầy kệ.
-* **Request Body (JSON):**
+* **Request Body:**
   ```json
   {
     "taskId": 101,
     "photoUrl": "https://storage.kingfoods.com/incidents/kecu-trong.jpg",
-    "reason": "Kệ hết sạch sữa chua chua kịp châm hàng"
+    "reason": "Kệ hết sạch hàng chưa kịp châm"
   }
   ```
 
-#### B7. Admin truy xuất nguồn gốc thùng hàng (Traceability)
-* **Endpoint:** `GET /api/v1/admin/picking/trace/:containerCode`
-* **Path Parameter:** `:containerCode` (Ví dụ: `CONT-KINGFOOD-01`)
-* **Quyền truy cập:** `admin`
-* **Ý nghĩa:** Kiểm tra xem thùng hàng này đang chứa những sản phẩm gì của đơn hàng nào, và **chính xác ai (nhân viên nào) đã nhặt và đóng gói sản phẩm đó**.
-* **Response thành công (200 OK):**
+---
+
+## 👑 PHẦN 3: DÀNH CHO ADMIN (QUẢN LÝ KHO TỔNG)
+
+**Vai trò:** Điều phối toàn bộ hoạt động kho, quản lý danh mục, hàng hóa, phân chia công việc, và truy vết lỗi.
+
+### 📊 BẢNG PHÂN QUYỀN CRUD THỰC THỂ CHO ADMIN
+Admin (Quản lý kho) có quyền thao tác trên hầu hết các dữ liệu cốt lõi, **ngoại trừ** các thông tin liên quan đến vận hành Chi nhánh và Quản lý Chi nhánh.
+
+| Tên Thực thể (Entity) | Quyền hạn của Admin | Chi tiết các chức năng |
+| :--- | :---: | :--- |
+| **Product (Sản phẩm)** | 🟢 Toàn quyền | Xem, Thêm mới, Cập nhật thông tin, Xóa sản phẩm. |
+| **Category (Danh mục)** | 🟢 Toàn quyền | Xem, Thêm mới, Cập nhật danh mục, Xóa danh mục. |
+| **Location (Vị trí kho)** | 🟢 Toàn quyền | Xem, Cấu hình mới, Cập nhật, Xóa vị trí kệ kho. |
+| **Order (Đơn hàng sỉ)** | 🟡 Xem & Cập nhật | Xem toàn bộ đơn hàng, Cập nhật trạng thái duyệt đơn. (Không tự xóa hay tự tạo đơn khách hàng). |
+| **PickingTask (Nhiệm vụ)** | 🟢 Toàn quyền | Sinh task từ đơn hàng, Gán việc, Xóa/Hủy task, Sửa task. |
+| **Container (Thùng hàng)** | 🟢 Toàn quyền | Tạo mã thùng mới, Kiểm tra, Xóa thùng. |
+| **Incident (Sự cố)** | 🟢 Toàn quyền | Xem báo cáo trống kệ, Cập nhật trạng thái đã giải quyết. |
+| 🚫 **Customer (Quản lý cửa hàng)**| 🔴 Không có quyền | Thuộc phân hệ kinh doanh/nhân sự, Admin kho không thao tác. |
+| 🚫 **Branch (Chi nhánh)** | 🔴 Không có quyền | Thuộc phân hệ kinh doanh hệ thống, Admin kho không thao tác. |
+
+### 🛠️ DANH SÁCH API CỦA ADMIN
+
+#### 3.1. Xem danh sách toàn bộ đơn hàng
+* **Endpoint:** `GET /api/v1/admin/orders`
+* **Query Parameter:** `?status=pending` (Để lọc các đơn chờ duyệt).
+
+#### 3.2. Cập nhật trạng thái đơn hàng (Duyệt đơn, Xuất kho)
+* **Endpoint:** `PATCH /api/v1/admin/orders/:id`
+* **Request Body:**
   ```json
   {
-    "status": 200,
-    "data": {
-      "containerCode": "CONT-KINGFOOD-01",
-      "items": [
-        {
-          "id": 12,
-          "productId": 1,
-          "quantity": 5,
-          "assignedUser": {
-            "id": 5,
-            "username": "nhanvien01",
-            "fullName": "Nguyễn Văn A"
-          }
-        }
-      ]
-    }
+    "status": "processing" 
   }
   ```
 
-#### B8. Ghi nhận hàng lỗi/hỏng và truy quét phạt nhân viên (Issue Report)
+#### 3.3. Phân chia đơn hàng thành các nhiệm vụ nhặt (Assign Tasks)
+* **Endpoint:** `POST /api/v1/admin/picking/assign`
+* **Ý nghĩa:** Cắt nhỏ đơn hàng giao cho nhiều nhân viên. Không cần truyền vị trí kệ, Server tự dò.
+* **Request Body:**
+  ```json
+  {
+    "orderId": 14,
+    "tasks": [
+      { "productId": 1, "staffId": 5, "quantity": 5 },
+      { "productId": 2, "staffId": 6, "quantity": 10 }
+    ]
+  }
+  ```
+
+#### 3.4. Truy xuất nguồn gốc thùng hàng (Traceability)
+* **Endpoint:** `GET /api/v1/admin/picking/trace/:containerCode`
+* **Ý nghĩa:** Kiểm tra bên trong thùng có gì, thuộc đơn nào và **ai là người đóng gói sản phẩm đó**. Trả về định danh đầy đủ của Staff đã pack hàng.
+
+#### 3.5. Ghi nhận hàng lỗi & Truy quét người chịu phạt (Issue Report)
 * **Endpoint:** `POST /api/v1/admin/picking/issue/:itemId`
-* **Path Parameter:** `:itemId` (ID của món hàng lỗi nằm trong Container - lấy từ API Traceability ở trên).
-* **Quyền truy cập:** `admin`
-* **Ý nghĩa:** Khi hàng đến cửa hàng bị móp méo hỏng hóc, Admin báo cáo lỗi hệ thống sẽ tự động chỉ điểm ai là người đóng thùng này để phạt hành chính.
-* **Request Body (JSON):**
+* **Path Parameter:** `:itemId` (ID của dòng hàng lỗi lấy từ API Traceability ở trên).
+* **Request Body:**
   ```json
   {
     "status": "damaged" 
   }
   ```
-  *(Trạng thái lỗi hợp lệ: `"damaged"` là móp méo/hỏng hóc, `"lost"` là thiếu số lượng).*
-* **Response thành công (200 OK):** Trả về thông tin sản phẩm bị lỗi kèm theo **chi tiết thông tin định danh và số điện thoại của nhân viên kho phải chịu phạt (culprit)**.
+* **Phản hồi:** Cập nhật trạng thái sản phẩm là hỏng/mất và trả về ngay số điện thoại, tên nhân viên chịu trách nhiệm để phạt hành chính.
 
-#### B9. Admin xem danh sách sự cố kệ trống
-* **Endpoint:** `GET /api/v1/admin/picking/incidents`
-* **Quyền truy cập:** `admin`
-* **Ý nghĩa:** Giúp Admin nắm bắt nhanh những kệ hàng nào trong kho đang bị trống hàng để chỉ đạo bổ sung hàng hóa.
-
-#### B10. Admin đánh dấu đã châm đầy kệ (Resolve Incident)
-* **Endpoint:** `POST /api/v1/admin/picking/incident/:id/resolve`
-* **Path Parameter:** `:id` (ID của bản ghi sự cố)
-* **Quyền truy cập:** `admin`
-* **Ý nghĩa:** Đánh dấu hoàn tất xử lý sự cố để nhân viên tiếp tục công việc nhặt hàng bình thường.
+#### 3.6. Quản lý sự cố kệ trống (Incidents)
+* **Xem danh sách:** `GET /api/v1/admin/picking/incidents` (Lấy các kệ đang báo trống).
+* **Đánh dấu đã xử lý/Châm kệ xong:** `POST /api/v1/admin/picking/incident/:id/resolve` (Để nhân viên nhặt hàng tiếp).
 
 ---
 
-## 💡 5. MỘT SỐ LƯU Ý KHI LÀM FRONTEND (UX/UI RECOMMENDATIONS)
-
-1. **Quản lý Token thông minh:** Nên có một lớp `axios interceptors` để tự động đính kèm `Authorization: Bearer <token>` vào mọi Request gửi đi và bắt lỗi `401 Unauthorized` để tự động đẩy người dùng về trang Login khi hết hạn phiên làm việc.
-2. **Ẩn/Hiện nút bấm theo Role (Phân quyền giao diện):** 
-   * Người dùng `customer` chỉ thấy cụm màn hình Đặt hàng & Lịch sử đặt hàng.
-   * Người dùng `staff` chỉ thấy màn hình Nhiệm vụ được giao & nút quét mã thùng hàng (Pack/Move).
-   * Người dùng `admin` thấy toàn bộ Dashboard thống kê, Danh sách Đơn hàng, quản lý Sự cố kệ trống, và chức năng Truy vết thùng hàng (Traceability).
-3. **Quét mã vạch (Scanner UI):** Với tính năng đóng thùng (`Pack`) và di chuyển thùng (`Move`), Frontend nên tích hợp thư viện quét mã vạch bằng Camera (như `html5-qrcode` trên Web hoặc SDK của Mobile) để quét mã `containerCode` giúp nhân viên kho không phải nhập bằng tay, tăng tốc vận hành lên 300%!
-
----
-*Chúc đội ngũ phát triển Frontend tích hợp thành công tốt đẹp! Nếu có bất kỳ câu hỏi nào, xin vui lòng liên hệ với đội ngũ Backend.*
+## 💡 MỘT SỐ LƯU Ý KHI LÀM FRONTEND (UX/UI)
+1. **Interceptor:** Tự động bắt lỗi `401 Unauthorized` để đẩy về trang Đăng nhập.
+2. **Phân quyền Route:** Khóa các trang dựa trên `role` (`admin`, `staff`, `customer`).
+3. **Quét Mã vạch (Scanner):** Khuyến khích tích hợp Camera Scanner cho `staff` quét `containerCode` để tốc độ làm việc nhanh hơn 300%.
