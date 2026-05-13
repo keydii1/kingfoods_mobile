@@ -1,6 +1,7 @@
 import { Controller, Inject } from "@tsed/di";
 import { Get, Post, Security, Summary, Tags } from "@tsed/schema";
 import { BodyParams, PathParams, Req, Res, QueryParams } from "@tsed/common";
+import { Docs } from "@tsed/swagger";
 import { Response } from "express";
 import { PickingService } from "../../services/PickingService";
 import { UserRole } from "../../Entity/User";
@@ -15,8 +16,9 @@ import {
   ReportIncidentDto
 } from "../../schemas/PickingSchema";
 
+@Docs("admin", "staff")
 @Controller("/admin/picking")
-@Tags("Admin - Warehouse Picking & Traceability")
+@Tags("Warehouse Picking & Traceability")
 @Security("bearer")
 export class PickingController {
   @Inject()

@@ -1,8 +1,8 @@
 import { Controller, Inject } from "@tsed/di";
 import { Get, Summary, Tags, Property, Default } from "@tsed/schema";
 import { PathParams, Req, Res, QueryParams } from "@tsed/common";
+import { Docs } from "@tsed/swagger";
 import { Response } from "express";
-import { Product } from "../../Entity/Product";
 import { ProductService } from "../../services/ProductService";
 import { PaginationSchema } from "../../schemas/PaginationSchema";
 import { Validator } from "../../decorators/Validator";
@@ -14,6 +14,7 @@ class PaginationParams {
   @Property() @Default("ASC") sortValue?: string;
 }
 
+@Docs("customer")
 @Controller("/public/products")
 @Tags("Public - Products")
 export class ProductPublicController {

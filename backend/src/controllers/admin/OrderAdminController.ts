@@ -1,3 +1,4 @@
+import { Docs } from "@tsed/swagger";
 import { Controller, Inject } from "@tsed/di";
 import {
   Get,
@@ -13,6 +14,7 @@ import { Response } from "express";
 import { OrderService } from "../../services/OrderService";
 import { OrderStatus } from "../../Entity/Order";
 
+@Docs("admin")
 @Controller("/admin/orders")
 @Tags("Admin - Orders")
 @Security("bearer")

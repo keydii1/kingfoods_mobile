@@ -1,3 +1,4 @@
+import { Docs } from "@tsed/swagger";
 import { Controller, Inject } from "@tsed/di";
 import {
   Get,
@@ -37,6 +38,7 @@ class UpdateOrderParams {
   status?: OrderStatus;
 }
 
+@Docs("customer")
 @Controller("/client/orders")
 @Tags("Client - Orders")
 @Security("bearer")

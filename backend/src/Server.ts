@@ -24,25 +24,65 @@ import { Request, Response } from "express";
   //
   swagger: [
     {
-      path: "/api-docs",
+      path: "/api-docs/admin",
+      doc: "admin",
       spec: {
         openapi: "3.0.1",
         info: {
-          title: "Food Booking API",
-          description: "Tài liệu API hệ thống Food Booking",
-          version: "1.0.0",
+          title: "KingFoods Admin API",
+          description: "Tài liệu API dành cho Quản lý kho tổng",
+          version: "1.1.0",
         },
         components: {
-          securitySchemes: {
-            bearer: {
-              type: "http",
-              scheme: "bearer",
-              bearerFormat: "JWT",
-            },
-          },
+          securitySchemes: { bearer: { type: "http", scheme: "bearer", bearerFormat: "JWT" } },
         },
       },
     },
+    {
+      path: "/api-docs/staff",
+      doc: "staff",
+      spec: {
+        openapi: "3.0.1",
+        info: {
+          title: "KingFoods Staff API",
+          description: "Tài liệu API dành cho Nhân viên kho",
+          version: "1.1.0",
+        },
+        components: {
+          securitySchemes: { bearer: { type: "http", scheme: "bearer", bearerFormat: "JWT" } },
+        },
+      },
+    },
+    {
+      path: "/api-docs/customer",
+      doc: "customer",
+      spec: {
+        openapi: "3.0.1",
+        info: {
+          title: "KingFoods Customer API",
+          description: "Tài liệu API dành cho Quản lý chi nhánh / Cửa hàng",
+          version: "1.1.0",
+        },
+        components: {
+          securitySchemes: { bearer: { type: "http", scheme: "bearer", bearerFormat: "JWT" } },
+        },
+      },
+    },
+    {
+      path: "/api-docs/auth",
+      doc: "auth",
+      spec: {
+        openapi: "3.0.1",
+        info: {
+          title: "KingFoods Auth API",
+          description: "Tài liệu API Xác thực (Đăng nhập) cho tất cả các Role",
+          version: "1.1.0",
+        },
+        components: {
+          securitySchemes: { bearer: { type: "http", scheme: "bearer", bearerFormat: "JWT" } },
+        },
+      },
+    }
   ],
   typeorm: [
     {

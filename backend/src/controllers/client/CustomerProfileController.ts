@@ -1,3 +1,4 @@
+import { Docs } from "@tsed/swagger";
 import { Controller, Inject } from "@tsed/di";
 import { Get, Patch, Security, Summary, Tags, Property } from "@tsed/schema";
 import { BodyParams, Req, Res } from "@tsed/common";
@@ -14,6 +15,7 @@ class ChangePasswordParams {
   @Property() newPassword: string;
 }
 
+@Docs("customer")
 @Controller("/client/profile")
 @Tags("Client - Profile")
 @Security("bearer")

@@ -1,3 +1,4 @@
+import { Docs } from "@tsed/swagger";
 import { Controller, Inject } from "@tsed/di";
 import { Post, Patch, Summary, Tags, Property, Returns } from "@tsed/schema";
 import { BodyParams, Req, Res, HeaderParams } from "@tsed/common";
@@ -16,6 +17,7 @@ class ResetPasswordParams {
   @Property() password: string;
 }
 
+@Docs("auth")
 @Controller("/auth/user")
 @Tags("Auth - User/Staff")
 export class UserAuthController {

@@ -1,3 +1,4 @@
+import { Docs } from "@tsed/swagger";
 import { Controller, Inject } from "@tsed/di";
 import { Post, Summary, Tags, Property } from "@tsed/schema";
 import { BodyParams, Req, Res } from "@tsed/common";
@@ -15,6 +16,7 @@ class CustomerLoginParams {
   @Property() password: string;
 }
 
+@Docs("auth")
 @Controller("/auth/customer")
 @Tags("Auth - Customer")
 export class CustomerAuthController {

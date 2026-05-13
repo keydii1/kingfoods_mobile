@@ -1,9 +1,11 @@
+import { Docs } from "@tsed/swagger";
 import { Controller, Inject } from "@tsed/di";
 import { Get, Security, Summary, Tags } from "@tsed/schema";
 import { Req, Res, QueryParams } from "@tsed/common";
 import { Response } from "express";
 import { DashboardService } from "../../services/DashboardService";
 
+@Docs("admin")
 @Controller("/admin/dashboard")
 @Tags("Admin - Dashboard")
 @Security("bearer")
