@@ -120,37 +120,60 @@ async function seed() {
 
     console.log(`✅ Đã tạo thành công ${categoryCount} Categories và ${productCount} Products với ảnh online chất lượng cao!`);
 
-    // 5. Tạo Branches (Chi nhánh Kingfood)
-    console.log("🏢 Đang tạo danh sách chi nhánh (Branches)...");
-    const branchQ7 = new Branch({
-      name: "Kingfood Nguyễn Thị Thập",
-      address: "123 Nguyễn Thị Thập, Tân Phú, Quận 7, TP.HCM",
-      phone: "02873006001",
-    });
-    const branchQ3 = new Branch({
-      name: "Kingfood Lê Văn Sỹ",
-      address: "456 Lê Văn Sỹ, Phường 14, Quận 3, TP.HCM",
-      phone: "02873006002",
-    });
-    await AppDataSource.manager.save([branchQ7, branchQ3]);
+    // 5. Tạo Branches (144 Chi nhánh Kingfood)
+    console.log("🏢 Đang tạo danh sách 144 chi nhánh (Branches)...");
+    const districts = [
+      "Quận 1", "Quận 3", "Quận 4", "Quận 5", "Quận 6", "Quận 7", "Quận 8", "Quận 10", "Quận 11", "Quận 12",
+      "Bình Thạnh", "Gò Vấp", "Phú Nhuận", "Tân Bình", "Tân Phú", "Thủ Đức", "Bình Tân",
+      "Bình Chánh", "Hóc Môn", "Nhà Bè", "Thủ Dầu Một", "Dĩ An", "Thuận An", "Biên Hòa"
+    ];
+    const streets = [
+      "Nguyễn Thị Thập", "Lê Văn Sỹ", "Nguyễn Đình Chiểu", "Hai Bà Trưng", "Nguyễn Huệ", 
+      "Cách Mạng Tháng Tám", "Võ Văn Tần", "Võ Thị Sáu", "Nguyễn Kiệm", "Nguyễn Trãi", 
+      "Phạm Văn Đồng", "Lê Quang Định", "Phan Văn Trị", "Quang Trung", "Điện Biên Phủ", 
+      "Xô Viết Nghệ Tĩnh", "Hoàng Văn Thụ", "Trường Chinh", "Âu Cơ", "Lạc Long Quân", 
+      "Lý Thường Kiệt", "Tô Hiến Thành", "Ba Tháng Hai", "Cao Thắng", "Phan Đình Phùng", 
+      "Trần Hưng Đạo", "Nguyễn Tất Thành", "Huỳnh Tấn Phát", "Nguyễn Văn Linh"
+    ];
 
-    // 6. Tạo Customers (Tài khoản Quản lý đăng nhập đặt hàng của Chi nhánh)
-    console.log("👤 Đang tạo tài khoản Quản lý Chi nhánh (Customers)...");
-    const managerQ7 = new Customer({
-      branchId: branchQ7.id,
-      name: "Quản lý Nguyễn Văn A (Quận 7)",
-      email: "manager.q7@kingfood.com",
-      password: hashedPassword,
-      phone: "0901234567",
-    });
-    const managerQ3 = new Customer({
-      branchId: branchQ3.id,
-      name: "Quản lý Trần Thị B (Quận 3)",
-      email: "manager.q3@kingfood.com",
-      password: hashedPassword,
-      phone: "0907654321",
-    });
-    await AppDataSource.manager.save([managerQ7, managerQ3]);
+    const branchesToSave: Branch[] = [];
+    for (let i = 1; i <= 144; i++) {
+      const street = streets[i % streets.length];
+      const district = districts[i % districts.length];
+      const address = `${100 + i} ${street}, ${district}, TP.HCM`;
+      const branchName = `Kingfood ${street} (${district})`;
+      
+      branchesToSave.push(new Branch({
+        name: branchName,
+        address: address,
+        phone: `02873${String(100000 + i).substring(1)}`,
+      }));
+    }
+    const savedBranches = await AppDataSource.manager.save(branchesToSave);
+    console.log(`✅ Đã lưu thành công ${savedBranches.length} chi nhánh!`);
+
+    // 6. Tạo 144 Customers (Tài khoản Quản lý tương ứng cho từng chi nhánh)
+    console.log("👤 Đang tạo 144 tài khoản Quản lý Chi nhánh (Customers)...");
+    const customersToSave: Customer[] = [];
+    const managersNames = ["Nguyễn Văn", "Trần Thị", "Lê Quang", "Phạm Minh", "Hoàng Kim", "Vũ Đức", "Đặng Ngọc", "Bùi Hữu"];
+    const subNames = ["Anh", "Bình", "Cường", "Dũng", "Em", "Phương", "Giang", "Hải", "Khanh", "Linh", "Minh", "Nam", "Oanh", "Phúc", "Quốc", "Sơn", "Tuấn", "Vân", "Vy"];
+
+    for (let i = 0; i < savedBranches.length; i++) {
+      const branch = savedBranches[i];
+      const firstName = managersNames[i % managersNames.length];
+      const lastName = subNames[i % subNames.length];
+      const name = `Quản lý ${firstName} ${lastName}`;
+      
+      customersToSave.push(new Customer({
+        branchId: branch.id,
+        name: name,
+        email: `manager.kf${i + 1}@kingfood.com`,
+        password: hashedPassword,
+        phone: `090${String(10000000 + i).substring(1)}`,
+      }));
+    }
+    const savedCustomers = await AppDataSource.manager.save(customersToSave);
+    console.log(`✅ Đã lưu thành công ${savedCustomers.length} tài khoản Quản lý!`);
 
     // 7. Tạo Users (Tài khoản Nhân viên & Quản lý của Nhà cung cấp sỉ)
     console.log("👷 Đang tạo tài khoản Nhân viên kho & Quản lý (Users)...");
@@ -183,11 +206,11 @@ async function seed() {
     // 8. Tạo Order & OrderDetails mẫu (Đơn sỉ từ Kingfood Q7)
     console.log("🛒 Đang tạo Đơn hàng mẫu (Orders)...");
     const sampleOrder = new Order({
-      branchId: branchQ7.id,
-      customerId: managerQ7.id,
+      branchId: savedBranches[0].id,
+      customerId: savedCustomers[0].id,
       status: OrderStatus.PROCESSING,
       totalPrice: 2000000, 
-      address: branchQ7.address,
+      address: savedBranches[0].address,
     });
     await AppDataSource.manager.save(sampleOrder);
 
@@ -245,8 +268,8 @@ async function seed() {
     console.log("\n🎉 ĐÃ TẠO TOÀN BỘ DATA MẪU THÀNH CÔNG VÀ AN TOÀN!");
     console.log("--------------------------------------------------");
     console.log("📋 THÔNG TIN TÀI KHOẢN ĐỂ BẠN ĐĂNG NHẬP THỬ:");
-    console.log("1. Tài khoản Quản lý Kingfood Q7 (Đặt hàng sỉ):");
-    console.log("   - Email: manager.q7@kingfood.com");
+    console.log("1. Tài khoản Quản lý Chi nhánh (Ví dụ tài khoản 1):");
+    console.log("   - Email: manager.kf1@kingfood.com");
     console.log("   - Password: Abc@123");
     console.log("2. Tài khoản Quản lý Tổng nhà cung cấp (Phân ca/Truy vết):");
     console.log("   - Username: admin");
