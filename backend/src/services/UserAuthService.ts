@@ -63,7 +63,12 @@ export class UserAuthService {
   }
 
   async verifyOtp(email: string, otp: string) {
-    const user = await User.findOneBy({ email, otp });
+    const user = await User.createQueryBuilder("user")
+      .addSelect(["user.otp", "user.otpExpire"])
+      .where("user.email = :email", { email })
+      .andWhere("user.otp = :otp", { otp })
+      .getOne();
+
     if (!user) throw new BadRequest("Invalid OTP");
 
     if (user.otpExpire && user.otpExpire < new Date()) {

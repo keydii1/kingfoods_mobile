@@ -9,10 +9,12 @@ async function bootstrap() {
     await platform.listen();
 
     const now = new Date().toLocaleString("vi-VN", { timeZone: "Asia/Ho_Chi_Minh" });
+    const serverUrl = process.env.RENDER_EXTERNAL_URL || `http://localhost:${AppConfig.PORT}`;
     Logger.info(`
       **************************************************
       * SERVER STARTED SUCCESSFULLY
       * Time: ${now}
+      * URL: ${serverUrl}
       * Port: ${AppConfig.PORT}
       * Env: ${process.env.NODE_ENV || "development"}
       **************************************************

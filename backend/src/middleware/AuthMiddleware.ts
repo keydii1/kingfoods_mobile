@@ -11,8 +11,10 @@ export class AuthMiddleware implements MiddlewareMethods {
     const path = req.originalUrl;
 
     // 1. Bỏ qua các route công khai (Public / Auth / Swagger)
-    const publicPaths = ["/auth/", "/public/", "/api-docs"];
-    if (publicPaths.some((p) => path.includes(p))) {
+    const publicPaths = ["/auth/", "/public/", "/api-docs", "/"];
+    
+    // Nếu là root "/" chính xác thì cũng bỏ qua
+    if (path === "/" || publicPaths.some((p) => p !== "/" && path.includes(p))) {
       return;
     }
 
