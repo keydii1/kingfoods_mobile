@@ -1,18 +1,34 @@
+import { Docs } from "@tsed/swagger";
 import { Controller, Inject } from "@tsed/di";
-import { Post, Delete, Patch, Security, Summary, Tags } from "@tsed/schema";
-import { BodyParams, PathParams, Req, Res } from "@tsed/common";
+import { Post, Delete, Patch, Get, Security, Summary, Tags } from "@tsed/schema";
+import { BodyParams, PathParams, Req, Res, QueryParams } from "@tsed/common";
 import { Response } from "express";
 import { Product } from "../../Entity/Product";
 import { ProductService } from "../../services/ProductService";
 import { CreateProductSchema, UpdateProductSchema } from "../../schemas/ProductSchema";
 import { Validator } from "../../decorators/Validator";
 
+@Docs("admin")
 @Controller("/admin/products")
 @Tags("Admin - Products")
 @Security("bearer")
 export class ProductAdminController {
   @Inject()
   productService: ProductService;
+
+  @Get("/")
+  @Summary("Xem danh sách sản phẩm (có phân trang)")
+  async getAllProducts(@Req() req: any, @Res() res: Response, @QueryParams() query: any) {
+    const result = await this.productService.getAllProducts(query);
+    return res.OK("Products fetched successfully", result);
+  }
+
+  @Get("/:id")
+  @Summary("Xem chi tiết sản phẩm")
+  async getProductById(@Req() req: any, @Res() res: Response, @PathParams("id") id: number) {
+    const result = await this.productService.getProduct(id);
+    return res.OK("Product fetched successfully", result);
+  }
 
   @Post("/")
   @Validator(CreateProductSchema)
