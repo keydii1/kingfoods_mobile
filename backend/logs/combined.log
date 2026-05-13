@@ -810,3 +810,33 @@
 [32m      * Env: development[39m
 [32m      **************************************************[39m
 [32m    [39m
+2026-05-13 23:06:57:657 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 23:06:57 13/5/2026[39m
+[32m      * URL: http://localhost:3000[39m
+[32m      * Port: 3000[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-13 23:07:14:714 [32minfo[39m: [32mGET /api-docs/ 404 - 40ms[39m
+2026-05-13 23:07:14:714 [32minfo[39m: [32mGET /api-docs/swagger.css 404 - 1ms[39m
+2026-05-13 23:07:14:714 [32minfo[39m: [32mGET /api-docs/swagger-ui.css 200 - 35ms[39m
+2026-05-13 23:07:14:714 [32minfo[39m: [32mGET /api-docs/swagger-ui-standalone-preset.js 200 - 37ms[39m
+2026-05-13 23:07:14:714 [32minfo[39m: [32mGET /api-docs/swagger-ui-bundle.js 200 - 91ms[39m
+2026-05-13 23:07:15:715 [32minfo[39m: [32mGET /api-docs/swagger.json 404 - 37ms[39m
+2026-05-13 23:07:15:715 [32minfo[39m: [32mGET /api-docs/favicon-32x32.png 200 - 3ms[39m
+2026-05-13 23:07:46:746 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 348ms[39m
+2026-05-13 23:11:45:1145 [31merror[39m: [31m[POST /api/v1/auth/user/login] [400] Bad control character in string literal in JSON at position 40 (line 2 column 39)[39m
+2026-05-13 23:12:13:1213 [31merror[39m: [31m[POST /api/v1/auth/customer/login] [401] Invalid email or password[39m
+2026-05-13 23:12:13:1213 [32minfo[39m: [32mPOST /api/v1/auth/customer/login 401 - 238ms[39m
+2026-05-13 23:13:57:1357 [32minfo[39m: [32mPOST /api/v1/auth/customer/login 200 - 334ms[39m
+2026-05-13 23:17:19:1719 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 23:17:19 13/5/2026[39m
+[32m      * URL: http://localhost:3000[39m
+[32m      * Port: 3000[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m

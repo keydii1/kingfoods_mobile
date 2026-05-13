@@ -42,7 +42,6 @@ async function seed() {
     await AppDataSource.manager.createQueryBuilder()
       .delete()
       .from(User)
-      .where("username IN (:...usernames)", { usernames: ["admin", "staff01", "staff02"] })
       .execute();
     console.log("✅ Dọn dẹp dữ liệu cũ hoàn tất!");
 
@@ -177,31 +176,37 @@ async function seed() {
 
     // 7. Tạo Users (Tài khoản Nhân viên & Quản lý của Nhà cung cấp sỉ)
     console.log("👷 Đang tạo tài khoản Nhân viên kho & Quản lý (Users)...");
-    const adminUser = new User({
-      name: "Quản lý kho tổng (Nhà cung cấp sỉ)",
-      email: "admin.warehouse@supplier.com",
-      phoneNumber: "0988888888",
-      username: "admin",
-      password: hashedPassword,
-      role: UserRole.ADMIN,
-    });
-    const staff01 = new User({
-      name: "Nhân viên Pick hàng Ca Sáng",
-      email: "staff01@supplier.com",
-      phoneNumber: "0911111111",
-      username: "staff01",
-      password: hashedPassword,
-      role: UserRole.STAFF,
-    });
-    const staff02 = new User({
-      name: "Nhân viên Pick hàng Ca Chiều",
-      email: "staff02@supplier.com",
-      phoneNumber: "0922222222",
-      username: "staff02",
-      password: hashedPassword,
-      role: UserRole.STAFF,
-    });
-    await AppDataSource.manager.save([adminUser, staff01, staff02]);
+    const usersToSave: User[] = [];
+    
+    // Tạo 3 Admins (ID 1, 2, 3)
+    for (let i = 1; i <= 3; i++) {
+      usersToSave.push(new User({
+        id: i,
+        name: `Quản lý kho tổng #${i}`,
+        email: `admin${i}@supplier.com`,
+        phoneNumber: `098888888${i}`,
+        username: i === 1 ? "admin" : `admin0${i}`,
+        password: hashedPassword,
+        role: UserRole.ADMIN,
+      }));
+    }
+
+    // Tạo Staffs (ID 4 đến 54)
+    for (let i = 4; i <= 54; i++) {
+      const staffNum = String(i - 3).padStart(2, '0');
+      usersToSave.push(new User({
+        id: i,
+        name: `Nhân viên Pick hàng Ca ${i % 2 === 0 ? 'Sáng' : 'Chiều'} #${staffNum}`,
+        email: `staff${staffNum}@supplier.com`,
+        phoneNumber: `091${String(1000000 + i).substring(1)}`,
+        username: `staff${staffNum}`,
+        password: hashedPassword,
+        role: UserRole.STAFF,
+      }));
+    }
+
+    const savedUsers = await AppDataSource.manager.save(usersToSave);
+    console.log(`✅ Đã lưu thành công ${savedUsers.length} tài khoản User (Admins & Staff)!`);
 
     // 8. Tạo Order & OrderDetails mẫu (Đơn sỉ từ Kingfood Q7)
     console.log("🛒 Đang tạo Đơn hàng mẫu (Orders)...");
@@ -227,7 +232,7 @@ async function seed() {
     const task1 = new PickingTask({
       orderId: sampleOrder.id,
       productId: sampleProductForOrder!.id,
-      assignedUserId: staff01.id,
+      assignedUserId: savedUsers[3].id,
       quantityToPick: 50,
       quantityPicked: 50, // Đã hoàn thành pick
       status: PickingTaskStatus.COMPLETED,
@@ -236,7 +241,7 @@ async function seed() {
     const task2 = new PickingTask({
       orderId: sampleOrder.id,
       productId: sampleProductForOrder!.id,
-      assignedUserId: staff02.id,
+      assignedUserId: savedUsers[4].id,
       quantityToPick: 50,
       quantityPicked: 0, // Đang chờ pick
       status: PickingTaskStatus.PENDING,
@@ -260,7 +265,7 @@ async function seed() {
       orderId: sampleOrder.id,
       productId: sampleProductForOrder!.id,
       quantity: 50,
-      pickedById: staff01.id,
+      pickedById: savedUsers[3].id,
       status: ContainerItemStatus.GOOD,
     });
     await AppDataSource.manager.save(containerItem1);
