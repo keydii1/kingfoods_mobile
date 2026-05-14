@@ -10,5 +10,4 @@ export const CreateOrderSchema = Joi.object({
     )
     .min(1)
     .required(),
-  address: Joi.string().min(5).required(),
 });

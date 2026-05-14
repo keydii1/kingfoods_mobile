@@ -19,10 +19,6 @@ export class Branch extends BaseEntity {
   @Property()
   address: string; // Địa chỉ chi nhánh
 
-  @Column({ name: "phone_number", nullable: true })
-  @Property()
-  phone: string; // Số điện thoại chi nhánh
-
   @Column({ type: "enum", enum: BranchStatus, default: BranchStatus.ACTIVE })
   @Enum(BranchStatus)
   status: BranchStatus;

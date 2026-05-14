@@ -37,10 +37,6 @@ export class Order extends BaseEntity {
     this.customerId = value;
   }
 
-  @Column({ name: "assigned_user_id", nullable: true })
-  @Property()
-  assignedUserId: number | null;
-
   @Column({ type: "enum", enum: OrderStatus, default: OrderStatus.PENDING })
   @Enum(OrderStatus)
   status: OrderStatus;
@@ -56,9 +52,6 @@ export class Order extends BaseEntity {
   @Property()
   totalPrice: number;
 
-  @Column({ type: "text", nullable: false })
-  @Property()
-  address: string;
 
   /**
    * Quan hệ ManyToOne với Branch
@@ -68,9 +61,6 @@ export class Order extends BaseEntity {
   @JoinColumn({ name: "branch_id" })
   branch: Branch;
 
-  @ManyToOne(() => User)
-  @JoinColumn({ name: "assigned_user_id" })
-  assignedUser: User | null;
 
   @OneToMany(() => OrderDetail, (detail) => detail.order)
   orderDetails: OrderDetail[];

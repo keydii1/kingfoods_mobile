@@ -1,9 +1,9 @@
 import { Entity, Column, ManyToOne, JoinColumn } from "typeorm";
 import { Property, Enum } from "@tsed/schema";
 import { BaseEntity } from "./BaseEntity";
-import { Order } from "./Order";
-import { Product } from "./Product";
+import { OrderDetail } from "./OrderDetail";
 import { User } from "./User";
+import { Location } from "./Location";
 
 export enum PickingTaskStatus {
   PENDING = "pending",
@@ -13,13 +13,9 @@ export enum PickingTaskStatus {
 
 @Entity("picking_tasks")
 export class PickingTask extends BaseEntity {
-  @Column({ name: "order_id", nullable: false })
+  @Column({ name: "order_detail_id", nullable: false })
   @Property()
-  orderId: number;
-
-  @Column({ name: "product_id", nullable: false })
-  @Property()
-  productId: number;
+  orderDetailId: number;
 
   @Column({ name: "assigned_user_id", nullable: false })
   @Property()
@@ -37,17 +33,17 @@ export class PickingTask extends BaseEntity {
   @Enum(PickingTaskStatus)
   status: PickingTaskStatus;
 
-  @Column({ nullable: true })
+  @Column({ name: "location_id", nullable: true })
   @Property()
-  location: string; // Vị trí kệ hàng, ví dụ: "Kệ A-12"
+  locationId: number; // ID của Vị trí kệ hàng
 
-  @ManyToOne(() => Order)
-  @JoinColumn({ name: "order_id" })
-  order: Order;
+  @ManyToOne(() => Location)
+  @JoinColumn({ name: "location_id" })
+  location: Location;
 
-  @ManyToOne(() => Product)
-  @JoinColumn({ name: "product_id" })
-  product: Product;
+  @ManyToOne(() => OrderDetail)
+  @JoinColumn({ name: "order_detail_id" })
+  orderDetail: OrderDetail;
 
   @ManyToOne(() => User)
   @JoinColumn({ name: "assigned_user_id" })

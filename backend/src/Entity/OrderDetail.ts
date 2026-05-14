@@ -3,6 +3,7 @@ import { Property } from "@tsed/schema";
 import { BaseEntity } from "./BaseEntity";
 import { Order } from "./Order";
 import { Product } from "./Product";
+import { User } from "./User";
 import { ColumnNumericTransformer } from "../helpers/ColumnTransformer";
 
 @Entity("order_details")

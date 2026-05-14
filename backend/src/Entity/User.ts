@@ -24,7 +24,7 @@ export interface UserPayload {
   name: string;
   email: string;
   role: string;
-  assignedZone?: string;
+  assignedLocationId?: number;
 }
 
 @Entity("users")
@@ -67,9 +67,9 @@ export class User extends BaseEntity {
   @Enum(UserRole)
   role: UserRole;
 
-  @Column({ type: "enum", enum: UserZone, name: "assigned_zone", nullable: true })
-  @Enum(UserZone)
-  assignedZone: UserZone;
+  @Column({ name: "assigned_location_id", nullable: true })
+  @Property()
+  assignedLocationId: number | null;
 
   /**
    * Hidden column — không trả về trong query mặc định

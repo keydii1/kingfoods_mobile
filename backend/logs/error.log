@@ -122,3 +122,4 @@
 2026-05-07 15:36:14:3614 [31merror[39m: [31m[GET /api/v1/admin/picking/trace/CONT-KINGFOOD-01] [403] Chỉ quản lý mới có quyền truy xuất nguồn gốc container[39m
 2026-05-13 23:11:45:1145 [31merror[39m: [31m[POST /api/v1/auth/user/login] [400] Bad control character in string literal in JSON at position 40 (line 2 column 39)[39m
 2026-05-13 23:12:13:1213 [31merror[39m: [31m[POST /api/v1/auth/customer/login] [401] Invalid email or password[39m
+2026-05-14 00:47:37:4737 [31merror[39m: [31m[GET /favicon.ico] [401] No token provided[39m

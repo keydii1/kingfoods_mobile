@@ -38,9 +38,8 @@ export class OrderService {
   async createOrder(data: {
     customerId: number;
     products: any[];
-    address: string;
   }) {
-    const { customerId, products, address } = data;
+    const { customerId, products } = data;
 
     return await this.typeORMService
       .get()
@@ -52,7 +51,6 @@ export class OrderService {
 
         const newOrder = transactionalEntityManager.create(Order, {
           customerId,
-          address,
           status: OrderStatus.PENDING,
           totalPrice: 0,
         });
@@ -88,7 +86,7 @@ export class OrderService {
   }
 
   async updateOrderByClient(id: number, data: any) {
-    const { status, address } = data;
+    const { status } = data;
     const order = await Order.getByIdOrFail(id);
 
     if (status === "cancelled") {
@@ -97,9 +95,6 @@ export class OrderService {
           "Order is not in pending status, customer can't cancel order",
         );
       order.status = OrderStatus.CANCELLED;
-    }
-    if (address) {
-      order.address = address;
     }
     return await order.save();
   }

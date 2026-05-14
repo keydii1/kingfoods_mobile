@@ -1,5 +1,6 @@
 import { Service, Inject } from "@tsed/di";
 import { Order, OrderStatus } from "../Entity/Order";
+import { OrderDetail } from "../Entity/OrderDetail";
 import { Container, ContainerStatus } from "../Entity/Container";
 import { ContainerItem, ContainerItemStatus } from "../Entity/ContainerItem";
 import { User, UserRole } from "../Entity/User";
@@ -45,15 +46,21 @@ export class PickingService {
             throw new NotFound(`Sản phẩm với ID ${productId} không tồn tại`);
           }
 
+          const orderDetail = await transactionalEntityManager.findOne(OrderDetail, {
+            where: { orderId: order.id, productId }
+          });
+          if (!orderDetail) {
+            throw new NotFound(`Sản phẩm với ID ${productId} không nằm trong đơn hàng này`);
+          }
+
           // Tạo nhiệm vụ pick hàng chi tiết
           const pickingTask = transactionalEntityManager.create(PickingTask, {
-            orderId: order.id,
-            productId,
+            orderDetailId: orderDetail.id,
             assignedUserId: staffId,
             quantityToPick: quantity,
             quantityPicked: 0,
             status: PickingTaskStatus.PENDING,
-            location: product?.category?.location?.name || "Khu A-Mặc định",
+            locationId: product?.category?.location?.id || 1,
           });
 
           const savedTask = await transactionalEntityManager.save(pickingTask);
@@ -78,7 +85,7 @@ export class PickingService {
   async getAssignedTasks(staffId: number) {
     return await PickingTask.find({
       where: { assignedUserId: staffId },
-      relations: ["product", "product.category", "product.category.location", "order", "order.branch"],
+      relations: ["orderDetail", "orderDetail.product", "orderDetail.product.category", "orderDetail.product.category.location", "orderDetail.order", "orderDetail.order.branch", "location"],
       order: { createdAt: "DESC" },
     });
   }
@@ -98,7 +105,7 @@ export class PickingService {
       async (transactionalEntityManager) => {
         const task = await transactionalEntityManager.findOne(PickingTask, {
           where: { id: taskId },
-          relations: ["order"],
+          relations: ["orderDetail"],
         });
 
         if (!task) {
@@ -146,13 +153,11 @@ export class PickingService {
           );
         }
 
-        // Tạo ContainerItem lưu vết: ai bỏ món hàng nào vào container nào, số lượng bao nhiêu
+        // Tạo ContainerItem lưu vết: task nào đã được bỏ vào
         const containerItem = transactionalEntityManager.create(ContainerItem, {
           containerId: container.id,
-          orderId: task.orderId,
-          productId: task.productId,
+          taskId: task.id,
           quantity,
-          pickedById: staffId,
           status: ContainerItemStatus.GOOD,
         });
         await transactionalEntityManager.save(containerItem);
@@ -180,7 +185,6 @@ export class PickingService {
 
   /**
    * 4. Bàn giao nhiệm vụ giữa các ca (Handover)
-   * Nếu hết ca mà nhân viên vẫn chưa pick xong đơn hàng, họ bàn giao nhiệm vụ còn dang dở này cho nhân viên ca sau
    */
   async handoverTask(taskId: number, nextStaffId: number, staffId: number) {
     const task = await PickingTask.getByIdOrFail(taskId);
@@ -224,7 +228,7 @@ export class PickingService {
 
     const items = await ContainerItem.find({
       where: { containerId: container.id },
-      relations: ["product", "pickedBy", "order", "order.branch"],
+      relations: ["task", "task.orderDetail", "task.orderDetail.product", "task.assignedUser", "task.orderDetail.order", "task.orderDetail.order.branch"],
     });
 
     return {
@@ -238,20 +242,20 @@ export class PickingService {
       },
       pickedItems: items.map((item) => ({
         itemId: item.id,
-        orderId: item.orderId,
-        branchName: item.order?.branch?.name || "N/A",
+        orderId: item.task?.orderDetail?.orderId,
+        branchName: item.task?.orderDetail?.order?.branch?.name || "N/A",
         product: {
-          id: item.product?.id,
-          name: item.product?.name,
-          price: item.product?.price,
+          id: item.task?.orderDetail?.product?.id,
+          name: item.task?.orderDetail?.product?.name,
+          price: item.task?.orderDetail?.product?.price,
         },
         quantity: item.quantity,
         status: item.status,
         pickedBy: {
-          id: item.pickedBy?.id,
-          name: item.pickedBy?.name,
-          username: item.pickedBy?.username,
-          phoneNumber: item.pickedBy?.phoneNumber,
+          id: item.task?.assignedUser?.id,
+          name: item.task?.assignedUser?.name,
+          username: item.task?.assignedUser?.username,
+          phoneNumber: item.task?.assignedUser?.phoneNumber,
         },
         pickedAt: item.createdAt,
       })),
@@ -263,7 +267,7 @@ export class PickingService {
    */
   async reportContainerItemIssue(itemId: number, status: "damaged" | "lost") {
     const item = await ContainerItem.getByIdOrFail(itemId, {
-      relations: ["pickedBy", "product"],
+      relations: ["task", "task.assignedUser", "task.orderDetail", "task.orderDetail.product"],
     });
 
     item.status = status === "damaged" ? ContainerItemStatus.DAMAGED : ContainerItemStatus.LOST;
@@ -272,14 +276,14 @@ export class PickingService {
     return {
       message: "Ghi nhận lỗi hỏng/thiếu số lượng thành công. Đã định danh nhân viên chịu trách nhiệm.",
       culprit: {
-        id: item.pickedBy?.id,
-        name: item.pickedBy?.name,
-        username: item.pickedBy?.username,
-        phoneNumber: item.pickedBy?.phoneNumber,
+        id: item.task?.assignedUser?.id,
+        name: item.task?.assignedUser?.name,
+        username: item.task?.assignedUser?.username,
+        phoneNumber: item.task?.assignedUser?.phoneNumber,
       },
       itemDetails: {
-        productId: item.productId,
-        productName: item.product?.name,
+        productId: item.task?.orderDetail?.productId,
+        productName: item.task?.orderDetail?.product?.name,
         quantity: item.quantity,
         issue: item.status,
       },
@@ -309,13 +313,14 @@ export class PickingService {
         }
 
         // 2. Tìm container item cũ khớp với sản phẩm
-        const oldItem = await transactionalEntityManager.findOne(ContainerItem, {
-          where: {
-            containerId: oldContainer.id,
-            productId,
-            pickedById: staffId,
-          },
-        });
+        const oldItem = await transactionalEntityManager.createQueryBuilder(ContainerItem, "item")
+          .innerJoinAndSelect("item.task", "task")
+          .innerJoinAndSelect("task.orderDetail", "detail")
+          .where("item.containerId = :containerId", { containerId: oldContainer.id })
+          .andWhere("detail.productId = :productId", { productId })
+          .andWhere("task.assignedUserId = :staffId", { staffId })
+          .getOne();
+
         if (!oldItem || oldItem.quantity < quantity) {
           throw new BadRequest(`Không tìm thấy sản phẩm hoặc số lượng sản phẩm trong thùng cũ không đủ để chuyển`);
         }
@@ -352,23 +357,22 @@ export class PickingService {
         await transactionalEntityManager.save(oldContainer);
 
         // 5. Thêm vào container mới
-        let newItem = await transactionalEntityManager.findOne(ContainerItem, {
-          where: {
-            containerId: newContainer.id,
-            productId,
-            pickedById: staffId,
-          },
-        });
+        let newItem = await transactionalEntityManager.createQueryBuilder(ContainerItem, "item")
+          .innerJoinAndSelect("item.task", "task")
+          .innerJoinAndSelect("task.orderDetail", "detail")
+          .where("item.containerId = :containerId", { containerId: newContainer.id })
+          .andWhere("detail.productId = :productId", { productId })
+          .andWhere("task.assignedUserId = :staffId", { staffId })
+          .getOne();
+
         if (newItem) {
           newItem.quantity += quantity;
           await transactionalEntityManager.save(newItem);
         } else {
           newItem = transactionalEntityManager.create(ContainerItem, {
             containerId: newContainer.id,
-            orderId: oldItem.orderId,
-            productId,
+            taskId: oldItem.taskId,
             quantity,
-            pickedById: staffId,
             status: ContainerItemStatus.GOOD,
           });
           await transactionalEntityManager.save(newItem);

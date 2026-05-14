@@ -93,7 +93,7 @@ export class DashboardService {
         name: staff.name,
         username: staff.username,
         phoneNumber: staff.phoneNumber,
-        assignedZone: staff.assignedZone,
+        assignedLocationId: staff.assignedLocationId,
         totalItemsPicked,
         totalHoursSpent: Math.round(totalHoursSpent * 100) / 100,
         pickingSpeed,

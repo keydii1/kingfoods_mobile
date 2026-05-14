@@ -26,12 +26,9 @@ class OrderProductParams {
 
 class CreateOrderParams {
   @Property({ type: OrderProductParams }) products: OrderProductParams[];
-  @Property() address: string;
 }
 
 class UpdateOrderParams {
-  @Property()
-  address?: string;
 
   @Property()
   @Enum(OrderStatus)
@@ -94,13 +91,12 @@ export class OrderClientController {
     const result = await this.orderService.createOrder({
       customerId: req.decodeUser.id,
       products: body.products,
-      address: body.address,
     });
     return res.CREATED("Order created successfully", result);
   }
 
   @Patch("/:id")
-  @Summary("Cập nhật địa chỉ hoặc hủy đơn")
+  @Summary("Hủy đơn")
   async updateOrderByClient(
     @Req() req: any,
     @Res() res: Response,
