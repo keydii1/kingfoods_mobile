@@ -40,25 +40,34 @@ async function run() {
   // 2. Khôi phục Branches & Customers
   const branchCount = await AppDataSource.manager.count(Branch);
   if (branchCount === 0) {
-    console.log("🏢 Tạo lại 144 chi nhánh & khách hàng...");
+    console.log("🏢 Tạo lại 144 chi nhánh & khách hàng với địa chỉ chi tiết...");
     const branches: any[] = [];
     const customers: any[] = [];
     const hashedPassword = await bcrypt.hash("123456", 10);
 
+    const streets = ["Lê Lợi", "Nguyễn Huệ", "Cách Mạng Tháng 8", "Võ Văn Kiệt", "Trần Hưng Đạo", "Lý Tự Trọng", "Hai Bà Trưng", "Phan Xích Long", "Nguyễn Đình Chiểu", "Nam Kỳ Khởi Nghĩa"];
+    const districts = ["Quận 1", "Quận 3", "Quận 5", "Quận 7", "Quận 10", "Quận Phú Nhuận", "Quận Bình Thạnh", "Quận Tân Bình"];
+
     for (let i = 1; i <= 144; i++) {
+      const streetNum = Math.floor(Math.random() * 500) + 1;
+      const streetName = streets[i % streets.length];
+      const district = districts[i % districts.length];
+      const branchName = `KingFood ${streetNum} ${streetName}`;
+      const fullAddress = `${streetNum} Đường ${streetName}, Phường ${Math.floor(Math.random() * 15) + 1}, ${district}, TP. Hồ Chí Minh`;
+
       branches.push({
         id: i,
-        name: `KingFood Mart - Chi nhánh #${i}`,
-        code: `KF-BR-${String(i).padStart(3, "0")}`,
-        phoneNumber: `090${String(i).padStart(7, "0")}`,
+        name: branchName,
+        address: fullAddress,
         status: "active"
       });
       customers.push({
         id: i,
-        name: `Quản lý CN #${i}`,
+        name: `Quản lý ${branchName}`,
         email: `branch_manager${i}@kingfoods.com`,
         username: `manager_cn${i}`,
         password: hashedPassword,
+        phoneNumber: `090${String(i).padStart(7, "0")}`,
         branchId: i
       });
     }
@@ -67,7 +76,7 @@ async function run() {
     console.log("✅ Đã tạo 144 Branches & 144 Customers.");
   }
 
-  console.log("🎉 Hoàn tất khôi phục Master Data! Bây giờ sẽ chạy Seed chính...");
+  console.log("🎉 Hoàn tất khôi phục Master Data!");
   await AppDataSource.destroy();
 }
 

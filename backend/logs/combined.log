@@ -1038,3 +1038,144 @@
 [32m      * Env: development[39m
 [32m      **************************************************[39m
 [32m    [39m
+2026-05-15 16:13:05:135 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-15 16:13:05:135 [31merror[39m: [31mCannot add or update a child row: a foreign key constraint fails ("defaultdb"."#sql-b7_24f72", CONSTRAINT "FK_e63414ec8f8f8588b6696263815" FOREIGN KEY ("order_id") REFERENCES "KingFood_orders" ("id"))[39m
+2026-05-15 16:15:45:1545 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-15 16:15:45:1545 [31merror[39m: [31mCannot add or update a child row: a foreign key constraint fails ("defaultdb"."#sql-b7_24fad", CONSTRAINT "FK_e63414ec8f8f8588b6696263815" FOREIGN KEY ("order_id") REFERENCES "KingFood_orders" ("id"))[39m
+2026-05-15 16:17:06:176 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-15 16:17:06:176 [31merror[39m: [31mCannot add or update a child row: a foreign key constraint fails ("defaultdb"."#sql-b7_24fc7", CONSTRAINT "FK_e63414ec8f8f8588b6696263815" FOREIGN KEY ("order_id") REFERENCES "KingFood_orders" ("id"))[39m
+2026-05-15 16:32:02:322 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-15 16:32:02:322 [31merror[39m: [31mCannot add or update a child row: a foreign key constraint fails ("defaultdb"."#sql-b7_250fc", CONSTRAINT "FK_e63414ec8f8f8588b6696263815" FOREIGN KEY ("order_id") REFERENCES "KingFood_orders" ("id"))[39m
+2026-05-15 16:38:13:3813 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-15 16:38:13:3813 [31merror[39m: [31mCannot add or update a child row: a foreign key constraint fails ("defaultdb"."#sql-b7_25180", CONSTRAINT "FK_e63414ec8f8f8588b6696263815" FOREIGN KEY ("order_id") REFERENCES "KingFood_orders" ("id"))[39m
+2026-05-15 16:43:24:4324 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 16:43:24 15/5/2026[39m
+[32m      * URL: http://localhost:3000[39m
+[32m      * Port: 3000[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-15 16:43:54:4354 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-15 16:43:54:4354 [31merror[39m: [31mlisten EADDRINUSE: address already in use 0.0.0.0:3000[39m
+2026-05-15 16:44:54:4454 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 16:44:54 15/5/2026[39m
+[32m      * URL: http://localhost:3000[39m
+[32m      * Port: 3000[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-15 16:45:01:451 [32minfo[39m: [32mGET /api-docs/auth/ 404 - 40ms[39m
+2026-05-15 16:45:01:451 [32minfo[39m: [32mGET /api-docs/auth/swagger-ui.css 304 - 5ms[39m
+2026-05-15 16:45:01:451 [32minfo[39m: [32mGET /api-docs/auth/swagger.css 404 - 2ms[39m
+2026-05-15 16:45:01:451 [32minfo[39m: [32mGET /api-docs/auth/swagger-ui-standalone-preset.js 200 - 40ms[39m
+2026-05-15 16:45:01:451 [32minfo[39m: [32mGET /api-docs/auth/swagger-ui-bundle.js 200 - 80ms[39m
+2026-05-15 16:45:02:452 [32minfo[39m: [32mGET /api-docs/auth/swagger.json 404 - 35ms[39m
+2026-05-15 16:45:20:4520 [31merror[39m: [31m[POST /api/v1/auth/user/login] [401] Invalid username or password[39m
+2026-05-15 16:45:20:4520 [32minfo[39m: [32mPOST /api/v1/auth/user/login 401 - 326ms[39m
+2026-05-15 16:47:23:4723 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 321ms[39m
+2026-05-16 11:44:08:448 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-16 11:44:08:448 [31merror[39m: [31mCannot add or update a child row: a foreign key constraint fails ("defaultdb"."#sql-b7_2ac0a", CONSTRAINT "FK_e63414ec8f8f8588b6696263815" FOREIGN KEY ("order_id") REFERENCES "KingFood_orders" ("id"))[39m
+2026-05-16 11:45:54:4554 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-16 11:45:54:4554 [31merror[39m: [31mCannot add or update a child row: a foreign key constraint fails ("defaultdb"."#sql-b7_2ac31", CONSTRAINT "FK_e63414ec8f8f8588b6696263815" FOREIGN KEY ("order_id") REFERENCES "KingFood_orders" ("id"))[39m
+2026-05-16 11:51:34:5134 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 11:51:34 16/5/2026[39m
+[32m      * URL: http://localhost:3000[39m
+[32m      * Port: 3000[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-16 11:54:36:5436 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-16 11:54:36:5436 [31merror[39m: [31mCannot add or update a child row: a foreign key constraint fails ("defaultdb"."#sql-b7_2ace8", CONSTRAINT "FK_e63414ec8f8f8588b6696263815" FOREIGN KEY ("order_id") REFERENCES "KingFood_orders" ("id"))[39m
+2026-05-16 11:55:15:5515 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-16 11:55:15:5515 [31merror[39m: [31mCannot add or update a child row: a foreign key constraint fails ("defaultdb"."#sql-b7_2acfc", CONSTRAINT "FK_e63414ec8f8f8588b6696263815" FOREIGN KEY ("order_id") REFERENCES "KingFood_orders" ("id"))[39m
+2026-05-16 11:55:26:5526 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 11:55:26 16/5/2026[39m
+[32m      * URL: http://localhost:3000[39m
+[32m      * Port: 3000[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-16 11:55:42:5542 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 11:55:42 16/5/2026[39m
+[32m      * URL: http://localhost:3000[39m
+[32m      * Port: 3000[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-16 11:55:49:5549 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 11:55:49 16/5/2026[39m
+[32m      * URL: http://localhost:3000[39m
+[32m      * Port: 3000[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-16 11:58:30:5830 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-16 11:58:30:5830 [31merror[39m: [31mlisten EADDRINUSE: address already in use 0.0.0.0:3000[39m
+2026-05-16 11:58:57:5857 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 11:58:57 16/5/2026[39m
+[32m      * URL: http://localhost:9999[39m
+[32m      * Port: 9999[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-16 11:59:00:590 [32minfo[39m: [32mGET /api-docs/auth/ 404 - 35ms[39m
+2026-05-16 11:59:00:590 [32minfo[39m: [32mGET /api-docs/auth/swagger.css 404 - 6ms[39m
+2026-05-16 11:59:00:590 [32minfo[39m: [32mGET /api-docs/auth/swagger-ui.css 200 - 77ms[39m
+2026-05-16 11:59:00:590 [32minfo[39m: [32mGET /api-docs/auth/swagger-ui-standalone-preset.js 200 - 36ms[39m
+2026-05-16 11:59:00:590 [32minfo[39m: [32mGET /api-docs/auth/swagger-ui-bundle.js 200 - 154ms[39m
+2026-05-16 11:59:01:591 [32minfo[39m: [32mGET /api-docs/auth/swagger.json 404 - 61ms[39m
+2026-05-16 11:59:01:591 [32minfo[39m: [32mGET /api-docs/auth/favicon-32x32.png 200 - 70ms[39m
+2026-05-16 11:59:05:595 [32minfo[39m: [32mGET /api-docs/admin/swagger.json 404 - 19ms[39m
+2026-05-16 11:59:05:595 [31merror[39m: [31m[GET /favicon.ico] [401] No token provided[39m
+2026-05-16 11:59:10:5910 [32minfo[39m: [32mGET /api-docs/admin/ 404 - 9ms[39m
+2026-05-16 11:59:10:5910 [32minfo[39m: [32mGET /api-docs/admin/swagger.css 404 - 2ms[39m
+2026-05-16 11:59:10:5910 [32minfo[39m: [32mGET /api-docs/admin/swagger-ui.css 200 - 21ms[39m
+2026-05-16 11:59:10:5910 [32minfo[39m: [32mGET /api-docs/admin/swagger-ui-standalone-preset.js 200 - 21ms[39m
+2026-05-16 11:59:10:5910 [32minfo[39m: [32mGET /api-docs/admin/swagger-ui-bundle.js 200 - 70ms[39m
+2026-05-16 11:59:11:5911 [32minfo[39m: [32mGET /api-docs/admin/swagger.json 404 - 8ms[39m
+2026-05-16 11:59:11:5911 [32minfo[39m: [32mGET /api-docs/admin/favicon-32x32.png 200 - 2ms[39m
+2026-05-16 12:12:09:129 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-16 12:12:09:129 [31merror[39m: [31mlisten EADDRINUSE: address already in use 0.0.0.0:9999[39m
+2026-05-16 12:12:21:1221 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 12:12:21 16/5/2026[39m
+[32m      * URL: http://localhost:9999[39m
+[32m      * Port: 9999[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-16 13:08:01:81 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 13:08:01 16/5/2026[39m
+[32m      * URL: http://localhost:9999[39m
+[32m      * Port: 9999[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-16 13:31:57:3157 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-16 13:31:57:3157 [31merror[39m: [31mlisten EADDRINUSE: address already in use 0.0.0.0:9999[39m
+2026-05-16 13:32:19:3219 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 13:32:19 16/5/2026[39m
+[32m      * URL: http://localhost:9999[39m
+[32m      * Port: 9999[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m

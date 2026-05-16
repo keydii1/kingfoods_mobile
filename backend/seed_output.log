@@ -1,0 +1,1623 @@
+◇ injected env (12) from .env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (0) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌘ enable debugging { debug: true }
+🚀 Khởi động trình tạo dữ liệu KingFoods Hyper-Seed...
+✅ Kết nối cơ sở dữ liệu thành công!
+🧹 Đang làm sạch dữ liệu các bảng giao dịch...
+✅ Làm sạch dữ liệu và reset ID hoàn tất!
+📍 Đang tạo khu vực kho (Locations)...
+✅ Đã insert 4 Locations thành công!
+🖼️ Đang tạo ảnh cho sản phẩm: Bánh kẹo Bánh quy sỉ - Hạng Sỉ #1...
+📜 Đang thử nạp font hệ thống một lần duy nhất (timeout 5s)...
+⚠️ Không thể nạp font nhanh. Chuyển sang chế độ vẽ đồ họa tốc độ cao.
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/banh_keo_banh_quy_si_hang_si_1.png
+❌ Lỗi xử lý ảnh cho Bánh kẹo Bánh quy sỉ - Hạng Sỉ #1: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Bánh kẹo Bánh quy sỉ - Hạng Sỉ #2...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/banh_keo_banh_quy_si_hang_si_2.png
+❌ Lỗi xử lý ảnh cho Bánh kẹo Bánh quy sỉ - Hạng Sỉ #2: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Bánh kẹo Bánh quy sỉ - Hạng Sỉ #3...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/banh_keo_banh_quy_si_hang_si_3.png
+❌ Lỗi xử lý ảnh cho Bánh kẹo Bánh quy sỉ - Hạng Sỉ #3: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Bánh kẹo Bánh quy sỉ - Hạng Sỉ #4...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/banh_keo_banh_quy_si_hang_si_4.png
+❌ Lỗi xử lý ảnh cho Bánh kẹo Bánh quy sỉ - Hạng Sỉ #4: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Bánh kẹo Bánh quy sỉ - Hạng Sỉ #5...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/banh_keo_banh_quy_si_hang_si_5.png
+❌ Lỗi xử lý ảnh cho Bánh kẹo Bánh quy sỉ - Hạng Sỉ #5: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Bánh kẹo Bánh quy sỉ - Hạng Sỉ #6...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/banh_keo_banh_quy_si_hang_si_6.png
+❌ Lỗi xử lý ảnh cho Bánh kẹo Bánh quy sỉ - Hạng Sỉ #6: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Bánh kẹo Bánh quy sỉ - Hạng Sỉ #7...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/banh_keo_banh_quy_si_hang_si_7.png
+❌ Lỗi xử lý ảnh cho Bánh kẹo Bánh quy sỉ - Hạng Sỉ #7: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Bánh kẹo Kẹo mềm hoa quả - Hạng Sỉ #1...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/banh_keo_keo_mem_hoa_qua_hang_si_1.png
+❌ Lỗi xử lý ảnh cho Bánh kẹo Kẹo mềm hoa quả - Hạng Sỉ #1: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Bánh kẹo Kẹo mềm hoa quả - Hạng Sỉ #2...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/banh_keo_keo_mem_hoa_qua_hang_si_2.png
+❌ Lỗi xử lý ảnh cho Bánh kẹo Kẹo mềm hoa quả - Hạng Sỉ #2: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Bánh kẹo Kẹo mềm hoa quả - Hạng Sỉ #3...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/banh_keo_keo_mem_hoa_qua_hang_si_3.png
+❌ Lỗi xử lý ảnh cho Bánh kẹo Kẹo mềm hoa quả - Hạng Sỉ #3: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Bánh kẹo Kẹo mềm hoa quả - Hạng Sỉ #4...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/banh_keo_keo_mem_hoa_qua_hang_si_4.png
+❌ Lỗi xử lý ảnh cho Bánh kẹo Kẹo mềm hoa quả - Hạng Sỉ #4: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Bánh kẹo Kẹo mềm hoa quả - Hạng Sỉ #5...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/banh_keo_keo_mem_hoa_qua_hang_si_5.png
+❌ Lỗi xử lý ảnh cho Bánh kẹo Kẹo mềm hoa quả - Hạng Sỉ #5: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Bánh kẹo Kẹo mềm hoa quả - Hạng Sỉ #6...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/banh_keo_keo_mem_hoa_qua_hang_si_6.png
+❌ Lỗi xử lý ảnh cho Bánh kẹo Kẹo mềm hoa quả - Hạng Sỉ #6: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Bánh kẹo Kẹo mềm hoa quả - Hạng Sỉ #7...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/banh_keo_keo_mem_hoa_qua_hang_si_7.png
+❌ Lỗi xử lý ảnh cho Bánh kẹo Kẹo mềm hoa quả - Hạng Sỉ #7: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Bánh kẹo Sô-cô-la ngoại - Hạng Sỉ #1...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/banh_keo_so_co_la_ngoai_hang_si_1.png
+❌ Lỗi xử lý ảnh cho Bánh kẹo Sô-cô-la ngoại - Hạng Sỉ #1: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Bánh kẹo Sô-cô-la ngoại - Hạng Sỉ #2...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/banh_keo_so_co_la_ngoai_hang_si_2.png
+❌ Lỗi xử lý ảnh cho Bánh kẹo Sô-cô-la ngoại - Hạng Sỉ #2: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Bánh kẹo Sô-cô-la ngoại - Hạng Sỉ #3...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/banh_keo_so_co_la_ngoai_hang_si_3.png
+❌ Lỗi xử lý ảnh cho Bánh kẹo Sô-cô-la ngoại - Hạng Sỉ #3: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Bánh kẹo Sô-cô-la ngoại - Hạng Sỉ #4...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/banh_keo_so_co_la_ngoai_hang_si_4.png
+❌ Lỗi xử lý ảnh cho Bánh kẹo Sô-cô-la ngoại - Hạng Sỉ #4: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Bánh kẹo Sô-cô-la ngoại - Hạng Sỉ #5...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/banh_keo_so_co_la_ngoai_hang_si_5.png
+❌ Lỗi xử lý ảnh cho Bánh kẹo Sô-cô-la ngoại - Hạng Sỉ #5: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Bánh kẹo Sô-cô-la ngoại - Hạng Sỉ #6...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/banh_keo_so_co_la_ngoai_hang_si_6.png
+❌ Lỗi xử lý ảnh cho Bánh kẹo Sô-cô-la ngoại - Hạng Sỉ #6: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Bánh kẹo Sô-cô-la ngoại - Hạng Sỉ #7...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/banh_keo_so_co_la_ngoai_hang_si_7.png
+❌ Lỗi xử lý ảnh cho Bánh kẹo Sô-cô-la ngoại - Hạng Sỉ #7: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Bánh kẹo Snack & ngũ cốc - Hạng Sỉ #1...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/banh_keo_snack_ngu_coc_hang_si_1.png
+❌ Lỗi xử lý ảnh cho Bánh kẹo Snack & ngũ cốc - Hạng Sỉ #1: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Bánh kẹo Snack & ngũ cốc - Hạng Sỉ #2...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/banh_keo_snack_ngu_coc_hang_si_2.png
+❌ Lỗi xử lý ảnh cho Bánh kẹo Snack & ngũ cốc - Hạng Sỉ #2: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Bánh kẹo Snack & ngũ cốc - Hạng Sỉ #3...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/banh_keo_snack_ngu_coc_hang_si_3.png
+❌ Lỗi xử lý ảnh cho Bánh kẹo Snack & ngũ cốc - Hạng Sỉ #3: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Bánh kẹo Snack & ngũ cốc - Hạng Sỉ #4...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/banh_keo_snack_ngu_coc_hang_si_4.png
+❌ Lỗi xử lý ảnh cho Bánh kẹo Snack & ngũ cốc - Hạng Sỉ #4: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Bánh kẹo Snack & ngũ cốc - Hạng Sỉ #5...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/banh_keo_snack_ngu_coc_hang_si_5.png
+❌ Lỗi xử lý ảnh cho Bánh kẹo Snack & ngũ cốc - Hạng Sỉ #5: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Bánh kẹo Snack & ngũ cốc - Hạng Sỉ #6...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/banh_keo_snack_ngu_coc_hang_si_6.png
+❌ Lỗi xử lý ảnh cho Bánh kẹo Snack & ngũ cốc - Hạng Sỉ #6: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Bánh kẹo Snack & ngũ cốc - Hạng Sỉ #7...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/banh_keo_snack_ngu_coc_hang_si_7.png
+❌ Lỗi xử lý ảnh cho Bánh kẹo Snack & ngũ cốc - Hạng Sỉ #7: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Đồ uống Bia thùng nhập - Hạng Sỉ #1...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/do_uong_bia_thung_nhap_hang_si_1.png
+❌ Lỗi xử lý ảnh cho Đồ uống Bia thùng nhập - Hạng Sỉ #1: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Đồ uống Bia thùng nhập - Hạng Sỉ #2...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/do_uong_bia_thung_nhap_hang_si_2.png
+❌ Lỗi xử lý ảnh cho Đồ uống Bia thùng nhập - Hạng Sỉ #2: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Đồ uống Bia thùng nhập - Hạng Sỉ #3...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/do_uong_bia_thung_nhap_hang_si_3.png
+❌ Lỗi xử lý ảnh cho Đồ uống Bia thùng nhập - Hạng Sỉ #3: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Đồ uống Bia thùng nhập - Hạng Sỉ #4...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/do_uong_bia_thung_nhap_hang_si_4.png
+❌ Lỗi xử lý ảnh cho Đồ uống Bia thùng nhập - Hạng Sỉ #4: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Đồ uống Bia thùng nhập - Hạng Sỉ #5...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/do_uong_bia_thung_nhap_hang_si_5.png
+❌ Lỗi xử lý ảnh cho Đồ uống Bia thùng nhập - Hạng Sỉ #5: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Đồ uống Bia thùng nhập - Hạng Sỉ #6...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/do_uong_bia_thung_nhap_hang_si_6.png
+❌ Lỗi xử lý ảnh cho Đồ uống Bia thùng nhập - Hạng Sỉ #6: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Đồ uống Bia thùng nhập - Hạng Sỉ #7...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/do_uong_bia_thung_nhap_hang_si_7.png
+❌ Lỗi xử lý ảnh cho Đồ uống Bia thùng nhập - Hạng Sỉ #7: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Đồ uống Nước giải khát - Hạng Sỉ #1...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/do_uong_nuoc_giai_khat_hang_si_1.png
+❌ Lỗi xử lý ảnh cho Đồ uống Nước giải khát - Hạng Sỉ #1: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Đồ uống Nước giải khát - Hạng Sỉ #2...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/do_uong_nuoc_giai_khat_hang_si_2.png
+❌ Lỗi xử lý ảnh cho Đồ uống Nước giải khát - Hạng Sỉ #2: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Đồ uống Nước giải khát - Hạng Sỉ #3...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/do_uong_nuoc_giai_khat_hang_si_3.png
+❌ Lỗi xử lý ảnh cho Đồ uống Nước giải khát - Hạng Sỉ #3: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Đồ uống Nước giải khát - Hạng Sỉ #4...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/do_uong_nuoc_giai_khat_hang_si_4.png
+❌ Lỗi xử lý ảnh cho Đồ uống Nước giải khát - Hạng Sỉ #4: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Đồ uống Nước giải khát - Hạng Sỉ #5...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/do_uong_nuoc_giai_khat_hang_si_5.png
+❌ Lỗi xử lý ảnh cho Đồ uống Nước giải khát - Hạng Sỉ #5: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Đồ uống Nước giải khát - Hạng Sỉ #6...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/do_uong_nuoc_giai_khat_hang_si_6.png
+❌ Lỗi xử lý ảnh cho Đồ uống Nước giải khát - Hạng Sỉ #6: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Đồ uống Nước giải khát - Hạng Sỉ #7...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/do_uong_nuoc_giai_khat_hang_si_7.png
+❌ Lỗi xử lý ảnh cho Đồ uống Nước giải khát - Hạng Sỉ #7: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Đồ uống Nước ép đóng hộp - Hạng Sỉ #1...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/do_uong_nuoc_ep_dong_hop_hang_si_1.png
+❌ Lỗi xử lý ảnh cho Đồ uống Nước ép đóng hộp - Hạng Sỉ #1: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Đồ uống Nước ép đóng hộp - Hạng Sỉ #2...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/do_uong_nuoc_ep_dong_hop_hang_si_2.png
+❌ Lỗi xử lý ảnh cho Đồ uống Nước ép đóng hộp - Hạng Sỉ #2: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Đồ uống Nước ép đóng hộp - Hạng Sỉ #3...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/do_uong_nuoc_ep_dong_hop_hang_si_3.png
+❌ Lỗi xử lý ảnh cho Đồ uống Nước ép đóng hộp - Hạng Sỉ #3: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Đồ uống Nước ép đóng hộp - Hạng Sỉ #4...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/do_uong_nuoc_ep_dong_hop_hang_si_4.png
+❌ Lỗi xử lý ảnh cho Đồ uống Nước ép đóng hộp - Hạng Sỉ #4: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Đồ uống Nước ép đóng hộp - Hạng Sỉ #5...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/do_uong_nuoc_ep_dong_hop_hang_si_5.png
+❌ Lỗi xử lý ảnh cho Đồ uống Nước ép đóng hộp - Hạng Sỉ #5: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Đồ uống Nước ép đóng hộp - Hạng Sỉ #6...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/do_uong_nuoc_ep_dong_hop_hang_si_6.png
+❌ Lỗi xử lý ảnh cho Đồ uống Nước ép đóng hộp - Hạng Sỉ #6: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Đồ uống Nước ép đóng hộp - Hạng Sỉ #7...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/do_uong_nuoc_ep_dong_hop_hang_si_7.png
+❌ Lỗi xử lý ảnh cho Đồ uống Nước ép đóng hộp - Hạng Sỉ #7: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Đồ uống Trà sữa sỉ - Hạng Sỉ #1...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/do_uong_tra_sua_si_hang_si_1.png
+❌ Lỗi xử lý ảnh cho Đồ uống Trà sữa sỉ - Hạng Sỉ #1: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Đồ uống Trà sữa sỉ - Hạng Sỉ #2...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/do_uong_tra_sua_si_hang_si_2.png
+❌ Lỗi xử lý ảnh cho Đồ uống Trà sữa sỉ - Hạng Sỉ #2: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Đồ uống Trà sữa sỉ - Hạng Sỉ #3...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/do_uong_tra_sua_si_hang_si_3.png
+❌ Lỗi xử lý ảnh cho Đồ uống Trà sữa sỉ - Hạng Sỉ #3: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Đồ uống Trà sữa sỉ - Hạng Sỉ #4...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/do_uong_tra_sua_si_hang_si_4.png
+❌ Lỗi xử lý ảnh cho Đồ uống Trà sữa sỉ - Hạng Sỉ #4: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Đồ uống Trà sữa sỉ - Hạng Sỉ #5...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/do_uong_tra_sua_si_hang_si_5.png
+❌ Lỗi xử lý ảnh cho Đồ uống Trà sữa sỉ - Hạng Sỉ #5: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Đồ uống Trà sữa sỉ - Hạng Sỉ #6...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/do_uong_tra_sua_si_hang_si_6.png
+❌ Lỗi xử lý ảnh cho Đồ uống Trà sữa sỉ - Hạng Sỉ #6: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Đồ uống Trà sữa sỉ - Hạng Sỉ #7...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/do_uong_tra_sua_si_hang_si_7.png
+❌ Lỗi xử lý ảnh cho Đồ uống Trà sữa sỉ - Hạng Sỉ #7: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Hóa mỹ phẩm Dầu gội xả sỉ - Hạng Sỉ #1...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/hoa_my_pham_dau_goi_xa_si_hang_si_1.png
+❌ Lỗi xử lý ảnh cho Hóa mỹ phẩm Dầu gội xả sỉ - Hạng Sỉ #1: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Hóa mỹ phẩm Dầu gội xả sỉ - Hạng Sỉ #2...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/hoa_my_pham_dau_goi_xa_si_hang_si_2.png
+❌ Lỗi xử lý ảnh cho Hóa mỹ phẩm Dầu gội xả sỉ - Hạng Sỉ #2: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Hóa mỹ phẩm Dầu gội xả sỉ - Hạng Sỉ #3...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/hoa_my_pham_dau_goi_xa_si_hang_si_3.png
+❌ Lỗi xử lý ảnh cho Hóa mỹ phẩm Dầu gội xả sỉ - Hạng Sỉ #3: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Hóa mỹ phẩm Dầu gội xả sỉ - Hạng Sỉ #4...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/hoa_my_pham_dau_goi_xa_si_hang_si_4.png
+❌ Lỗi xử lý ảnh cho Hóa mỹ phẩm Dầu gội xả sỉ - Hạng Sỉ #4: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Hóa mỹ phẩm Dầu gội xả sỉ - Hạng Sỉ #5...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/hoa_my_pham_dau_goi_xa_si_hang_si_5.png
+❌ Lỗi xử lý ảnh cho Hóa mỹ phẩm Dầu gội xả sỉ - Hạng Sỉ #5: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Hóa mỹ phẩm Dầu gội xả sỉ - Hạng Sỉ #6...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/hoa_my_pham_dau_goi_xa_si_hang_si_6.png
+❌ Lỗi xử lý ảnh cho Hóa mỹ phẩm Dầu gội xả sỉ - Hạng Sỉ #6: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Hóa mỹ phẩm Dầu gội xả sỉ - Hạng Sỉ #7...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/hoa_my_pham_dau_goi_xa_si_hang_si_7.png
+❌ Lỗi xử lý ảnh cho Hóa mỹ phẩm Dầu gội xả sỉ - Hạng Sỉ #7: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Hóa mỹ phẩm Nước giặt xả - Hạng Sỉ #1...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/hoa_my_pham_nuoc_giat_xa_hang_si_1.png
+❌ Lỗi xử lý ảnh cho Hóa mỹ phẩm Nước giặt xả - Hạng Sỉ #1: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Hóa mỹ phẩm Nước giặt xả - Hạng Sỉ #2...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/hoa_my_pham_nuoc_giat_xa_hang_si_2.png
+❌ Lỗi xử lý ảnh cho Hóa mỹ phẩm Nước giặt xả - Hạng Sỉ #2: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Hóa mỹ phẩm Nước giặt xả - Hạng Sỉ #3...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/hoa_my_pham_nuoc_giat_xa_hang_si_3.png
+❌ Lỗi xử lý ảnh cho Hóa mỹ phẩm Nước giặt xả - Hạng Sỉ #3: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Hóa mỹ phẩm Nước giặt xả - Hạng Sỉ #4...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/hoa_my_pham_nuoc_giat_xa_hang_si_4.png
+❌ Lỗi xử lý ảnh cho Hóa mỹ phẩm Nước giặt xả - Hạng Sỉ #4: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Hóa mỹ phẩm Nước giặt xả - Hạng Sỉ #5...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/hoa_my_pham_nuoc_giat_xa_hang_si_5.png
+❌ Lỗi xử lý ảnh cho Hóa mỹ phẩm Nước giặt xả - Hạng Sỉ #5: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Hóa mỹ phẩm Nước giặt xả - Hạng Sỉ #6...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/hoa_my_pham_nuoc_giat_xa_hang_si_6.png
+❌ Lỗi xử lý ảnh cho Hóa mỹ phẩm Nước giặt xả - Hạng Sỉ #6: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Hóa mỹ phẩm Nước giặt xả - Hạng Sỉ #7...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/hoa_my_pham_nuoc_giat_xa_hang_si_7.png
+❌ Lỗi xử lý ảnh cho Hóa mỹ phẩm Nước giặt xả - Hạng Sỉ #7: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Hóa mỹ phẩm Tẩy rửa gia dụng - Hạng Sỉ #1...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/hoa_my_pham_tay_rua_gia_dung_hang_si_1.png
+❌ Lỗi xử lý ảnh cho Hóa mỹ phẩm Tẩy rửa gia dụng - Hạng Sỉ #1: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Hóa mỹ phẩm Tẩy rửa gia dụng - Hạng Sỉ #2...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/hoa_my_pham_tay_rua_gia_dung_hang_si_2.png
+❌ Lỗi xử lý ảnh cho Hóa mỹ phẩm Tẩy rửa gia dụng - Hạng Sỉ #2: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Hóa mỹ phẩm Tẩy rửa gia dụng - Hạng Sỉ #3...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/hoa_my_pham_tay_rua_gia_dung_hang_si_3.png
+❌ Lỗi xử lý ảnh cho Hóa mỹ phẩm Tẩy rửa gia dụng - Hạng Sỉ #3: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Hóa mỹ phẩm Tẩy rửa gia dụng - Hạng Sỉ #4...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/hoa_my_pham_tay_rua_gia_dung_hang_si_4.png
+❌ Lỗi xử lý ảnh cho Hóa mỹ phẩm Tẩy rửa gia dụng - Hạng Sỉ #4: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Hóa mỹ phẩm Tẩy rửa gia dụng - Hạng Sỉ #5...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/hoa_my_pham_tay_rua_gia_dung_hang_si_5.png
+❌ Lỗi xử lý ảnh cho Hóa mỹ phẩm Tẩy rửa gia dụng - Hạng Sỉ #5: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Hóa mỹ phẩm Tẩy rửa gia dụng - Hạng Sỉ #6...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/hoa_my_pham_tay_rua_gia_dung_hang_si_6.png
+❌ Lỗi xử lý ảnh cho Hóa mỹ phẩm Tẩy rửa gia dụng - Hạng Sỉ #6: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Hóa mỹ phẩm Tẩy rửa gia dụng - Hạng Sỉ #7...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/hoa_my_pham_tay_rua_gia_dung_hang_si_7.png
+❌ Lỗi xử lý ảnh cho Hóa mỹ phẩm Tẩy rửa gia dụng - Hạng Sỉ #7: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Hóa mỹ phẩm Xà phòng tắm - Hạng Sỉ #1...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/hoa_my_pham_xa_phong_tam_hang_si_1.png
+❌ Lỗi xử lý ảnh cho Hóa mỹ phẩm Xà phòng tắm - Hạng Sỉ #1: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Hóa mỹ phẩm Xà phòng tắm - Hạng Sỉ #2...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/hoa_my_pham_xa_phong_tam_hang_si_2.png
+❌ Lỗi xử lý ảnh cho Hóa mỹ phẩm Xà phòng tắm - Hạng Sỉ #2: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Hóa mỹ phẩm Xà phòng tắm - Hạng Sỉ #3...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/hoa_my_pham_xa_phong_tam_hang_si_3.png
+❌ Lỗi xử lý ảnh cho Hóa mỹ phẩm Xà phòng tắm - Hạng Sỉ #3: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Hóa mỹ phẩm Xà phòng tắm - Hạng Sỉ #4...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/hoa_my_pham_xa_phong_tam_hang_si_4.png
+❌ Lỗi xử lý ảnh cho Hóa mỹ phẩm Xà phòng tắm - Hạng Sỉ #4: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Hóa mỹ phẩm Xà phòng tắm - Hạng Sỉ #5...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/hoa_my_pham_xa_phong_tam_hang_si_5.png
+❌ Lỗi xử lý ảnh cho Hóa mỹ phẩm Xà phòng tắm - Hạng Sỉ #5: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Hóa mỹ phẩm Xà phòng tắm - Hạng Sỉ #6...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/hoa_my_pham_xa_phong_tam_hang_si_6.png
+❌ Lỗi xử lý ảnh cho Hóa mỹ phẩm Xà phòng tắm - Hạng Sỉ #6: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Hóa mỹ phẩm Xà phòng tắm - Hạng Sỉ #7...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/hoa_my_pham_xa_phong_tam_hang_si_7.png
+❌ Lỗi xử lý ảnh cho Hóa mỹ phẩm Xà phòng tắm - Hạng Sỉ #7: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Khuyến mãi Combo Giftbox - Hạng Sỉ #1...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/khuyen_mai_combo_giftbox_hang_si_1.png
+❌ Lỗi xử lý ảnh cho Khuyến mãi Combo Giftbox - Hạng Sỉ #1: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Khuyến mãi Combo Giftbox - Hạng Sỉ #2...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/khuyen_mai_combo_giftbox_hang_si_2.png
+❌ Lỗi xử lý ảnh cho Khuyến mãi Combo Giftbox - Hạng Sỉ #2: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Khuyến mãi Combo Giftbox - Hạng Sỉ #3...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/khuyen_mai_combo_giftbox_hang_si_3.png
+❌ Lỗi xử lý ảnh cho Khuyến mãi Combo Giftbox - Hạng Sỉ #3: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Khuyến mãi Combo Giftbox - Hạng Sỉ #4...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/khuyen_mai_combo_giftbox_hang_si_4.png
+❌ Lỗi xử lý ảnh cho Khuyến mãi Combo Giftbox - Hạng Sỉ #4: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Khuyến mãi Combo Giftbox - Hạng Sỉ #5...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/khuyen_mai_combo_giftbox_hang_si_5.png
+❌ Lỗi xử lý ảnh cho Khuyến mãi Combo Giftbox - Hạng Sỉ #5: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Khuyến mãi Combo Giftbox - Hạng Sỉ #6...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/khuyen_mai_combo_giftbox_hang_si_6.png
+❌ Lỗi xử lý ảnh cho Khuyến mãi Combo Giftbox - Hạng Sỉ #6: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Khuyến mãi Combo Giftbox - Hạng Sỉ #7...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/khuyen_mai_combo_giftbox_hang_si_7.png
+❌ Lỗi xử lý ảnh cho Khuyến mãi Combo Giftbox - Hạng Sỉ #7: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Khuyến mãi Hàng tặng kèm - Hạng Sỉ #1...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/khuyen_mai_hang_tang_kem_hang_si_1.png
+❌ Lỗi xử lý ảnh cho Khuyến mãi Hàng tặng kèm - Hạng Sỉ #1: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Khuyến mãi Hàng tặng kèm - Hạng Sỉ #2...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/khuyen_mai_hang_tang_kem_hang_si_2.png
+❌ Lỗi xử lý ảnh cho Khuyến mãi Hàng tặng kèm - Hạng Sỉ #2: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Khuyến mãi Hàng tặng kèm - Hạng Sỉ #3...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/khuyen_mai_hang_tang_kem_hang_si_3.png
+❌ Lỗi xử lý ảnh cho Khuyến mãi Hàng tặng kèm - Hạng Sỉ #3: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Khuyến mãi Hàng tặng kèm - Hạng Sỉ #4...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/khuyen_mai_hang_tang_kem_hang_si_4.png
+❌ Lỗi xử lý ảnh cho Khuyến mãi Hàng tặng kèm - Hạng Sỉ #4: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Khuyến mãi Hàng tặng kèm - Hạng Sỉ #5...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/khuyen_mai_hang_tang_kem_hang_si_5.png
+❌ Lỗi xử lý ảnh cho Khuyến mãi Hàng tặng kèm - Hạng Sỉ #5: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Khuyến mãi Hàng tặng kèm - Hạng Sỉ #6...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/khuyen_mai_hang_tang_kem_hang_si_6.png
+❌ Lỗi xử lý ảnh cho Khuyến mãi Hàng tặng kèm - Hạng Sỉ #6: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Khuyến mãi Hàng tặng kèm - Hạng Sỉ #7...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/khuyen_mai_hang_tang_kem_hang_si_7.png
+❌ Lỗi xử lý ảnh cho Khuyến mãi Hàng tặng kèm - Hạng Sỉ #7: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Khuyến mãi Mẫu thử VIP - Hạng Sỉ #1...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/khuyen_mai_mau_thu_vip_hang_si_1.png
+❌ Lỗi xử lý ảnh cho Khuyến mãi Mẫu thử VIP - Hạng Sỉ #1: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Khuyến mãi Mẫu thử VIP - Hạng Sỉ #2...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/khuyen_mai_mau_thu_vip_hang_si_2.png
+❌ Lỗi xử lý ảnh cho Khuyến mãi Mẫu thử VIP - Hạng Sỉ #2: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Khuyến mãi Mẫu thử VIP - Hạng Sỉ #3...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/khuyen_mai_mau_thu_vip_hang_si_3.png
+❌ Lỗi xử lý ảnh cho Khuyến mãi Mẫu thử VIP - Hạng Sỉ #3: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Khuyến mãi Mẫu thử VIP - Hạng Sỉ #4...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/khuyen_mai_mau_thu_vip_hang_si_4.png
+❌ Lỗi xử lý ảnh cho Khuyến mãi Mẫu thử VIP - Hạng Sỉ #4: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Khuyến mãi Mẫu thử VIP - Hạng Sỉ #5...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/khuyen_mai_mau_thu_vip_hang_si_5.png
+❌ Lỗi xử lý ảnh cho Khuyến mãi Mẫu thử VIP - Hạng Sỉ #5: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Khuyến mãi Mẫu thử VIP - Hạng Sỉ #6...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/khuyen_mai_mau_thu_vip_hang_si_6.png
+❌ Lỗi xử lý ảnh cho Khuyến mãi Mẫu thử VIP - Hạng Sỉ #6: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Khuyến mãi Mẫu thử VIP - Hạng Sỉ #7...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/khuyen_mai_mau_thu_vip_hang_si_7.png
+❌ Lỗi xử lý ảnh cho Khuyến mãi Mẫu thử VIP - Hạng Sỉ #7: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Khuyến mãi Đồ lưu niệm - Hạng Sỉ #1...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/khuyen_mai_do_luu_niem_hang_si_1.png
+❌ Lỗi xử lý ảnh cho Khuyến mãi Đồ lưu niệm - Hạng Sỉ #1: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Khuyến mãi Đồ lưu niệm - Hạng Sỉ #2...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/khuyen_mai_do_luu_niem_hang_si_2.png
+❌ Lỗi xử lý ảnh cho Khuyến mãi Đồ lưu niệm - Hạng Sỉ #2: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Khuyến mãi Đồ lưu niệm - Hạng Sỉ #3...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/khuyen_mai_do_luu_niem_hang_si_3.png
+❌ Lỗi xử lý ảnh cho Khuyến mãi Đồ lưu niệm - Hạng Sỉ #3: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Khuyến mãi Đồ lưu niệm - Hạng Sỉ #4...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/khuyen_mai_do_luu_niem_hang_si_4.png
+❌ Lỗi xử lý ảnh cho Khuyến mãi Đồ lưu niệm - Hạng Sỉ #4: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Khuyến mãi Đồ lưu niệm - Hạng Sỉ #5...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/khuyen_mai_do_luu_niem_hang_si_5.png
+❌ Lỗi xử lý ảnh cho Khuyến mãi Đồ lưu niệm - Hạng Sỉ #5: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Khuyến mãi Đồ lưu niệm - Hạng Sỉ #6...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/khuyen_mai_do_luu_niem_hang_si_6.png
+❌ Lỗi xử lý ảnh cho Khuyến mãi Đồ lưu niệm - Hạng Sỉ #6: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Khuyến mãi Đồ lưu niệm - Hạng Sỉ #7...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/khuyen_mai_do_luu_niem_hang_si_7.png
+❌ Lỗi xử lý ảnh cho Khuyến mãi Đồ lưu niệm - Hạng Sỉ #7: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Ăn vặt sỉ Hạt sấy khô - Hạng Sỉ #1...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/an_vat_si_hat_say_kho_hang_si_1.png
+❌ Lỗi xử lý ảnh cho Ăn vặt sỉ Hạt sấy khô - Hạng Sỉ #1: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Ăn vặt sỉ Hạt sấy khô - Hạng Sỉ #2...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/an_vat_si_hat_say_kho_hang_si_2.png
+❌ Lỗi xử lý ảnh cho Ăn vặt sỉ Hạt sấy khô - Hạng Sỉ #2: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Ăn vặt sỉ Hạt sấy khô - Hạng Sỉ #3...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/an_vat_si_hat_say_kho_hang_si_3.png
+❌ Lỗi xử lý ảnh cho Ăn vặt sỉ Hạt sấy khô - Hạng Sỉ #3: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Ăn vặt sỉ Hạt sấy khô - Hạng Sỉ #4...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/an_vat_si_hat_say_kho_hang_si_4.png
+❌ Lỗi xử lý ảnh cho Ăn vặt sỉ Hạt sấy khô - Hạng Sỉ #4: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Ăn vặt sỉ Hạt sấy khô - Hạng Sỉ #5...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/an_vat_si_hat_say_kho_hang_si_5.png
+❌ Lỗi xử lý ảnh cho Ăn vặt sỉ Hạt sấy khô - Hạng Sỉ #5: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Ăn vặt sỉ Hạt sấy khô - Hạng Sỉ #6...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/an_vat_si_hat_say_kho_hang_si_6.png
+❌ Lỗi xử lý ảnh cho Ăn vặt sỉ Hạt sấy khô - Hạng Sỉ #6: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Ăn vặt sỉ Hạt sấy khô - Hạng Sỉ #7...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/an_vat_si_hat_say_kho_hang_si_7.png
+❌ Lỗi xử lý ảnh cho Ăn vặt sỉ Hạt sấy khô - Hạng Sỉ #7: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Ăn vặt sỉ Trái cây dẻo - Hạng Sỉ #1...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/an_vat_si_trai_cay_deo_hang_si_1.png
+❌ Lỗi xử lý ảnh cho Ăn vặt sỉ Trái cây dẻo - Hạng Sỉ #1: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Ăn vặt sỉ Trái cây dẻo - Hạng Sỉ #2...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/an_vat_si_trai_cay_deo_hang_si_2.png
+❌ Lỗi xử lý ảnh cho Ăn vặt sỉ Trái cây dẻo - Hạng Sỉ #2: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Ăn vặt sỉ Trái cây dẻo - Hạng Sỉ #3...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/an_vat_si_trai_cay_deo_hang_si_3.png
+❌ Lỗi xử lý ảnh cho Ăn vặt sỉ Trái cây dẻo - Hạng Sỉ #3: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Ăn vặt sỉ Trái cây dẻo - Hạng Sỉ #4...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/an_vat_si_trai_cay_deo_hang_si_4.png
+❌ Lỗi xử lý ảnh cho Ăn vặt sỉ Trái cây dẻo - Hạng Sỉ #4: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Ăn vặt sỉ Trái cây dẻo - Hạng Sỉ #5...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/an_vat_si_trai_cay_deo_hang_si_5.png
+❌ Lỗi xử lý ảnh cho Ăn vặt sỉ Trái cây dẻo - Hạng Sỉ #5: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Ăn vặt sỉ Trái cây dẻo - Hạng Sỉ #6...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/an_vat_si_trai_cay_deo_hang_si_6.png
+❌ Lỗi xử lý ảnh cho Ăn vặt sỉ Trái cây dẻo - Hạng Sỉ #6: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Ăn vặt sỉ Trái cây dẻo - Hạng Sỉ #7...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/an_vat_si_trai_cay_deo_hang_si_7.png
+❌ Lỗi xử lý ảnh cho Ăn vặt sỉ Trái cây dẻo - Hạng Sỉ #7: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Ăn vặt sỉ Mực tẩm gia vị - Hạng Sỉ #1...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/an_vat_si_muc_tam_gia_vi_hang_si_1.png
+❌ Lỗi xử lý ảnh cho Ăn vặt sỉ Mực tẩm gia vị - Hạng Sỉ #1: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Ăn vặt sỉ Mực tẩm gia vị - Hạng Sỉ #2...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/an_vat_si_muc_tam_gia_vi_hang_si_2.png
+❌ Lỗi xử lý ảnh cho Ăn vặt sỉ Mực tẩm gia vị - Hạng Sỉ #2: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Ăn vặt sỉ Mực tẩm gia vị - Hạng Sỉ #3...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/an_vat_si_muc_tam_gia_vi_hang_si_3.png
+❌ Lỗi xử lý ảnh cho Ăn vặt sỉ Mực tẩm gia vị - Hạng Sỉ #3: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Ăn vặt sỉ Mực tẩm gia vị - Hạng Sỉ #4...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/an_vat_si_muc_tam_gia_vi_hang_si_4.png
+❌ Lỗi xử lý ảnh cho Ăn vặt sỉ Mực tẩm gia vị - Hạng Sỉ #4: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Ăn vặt sỉ Mực tẩm gia vị - Hạng Sỉ #5...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/an_vat_si_muc_tam_gia_vi_hang_si_5.png
+❌ Lỗi xử lý ảnh cho Ăn vặt sỉ Mực tẩm gia vị - Hạng Sỉ #5: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Ăn vặt sỉ Mực tẩm gia vị - Hạng Sỉ #6...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/an_vat_si_muc_tam_gia_vi_hang_si_6.png
+❌ Lỗi xử lý ảnh cho Ăn vặt sỉ Mực tẩm gia vị - Hạng Sỉ #6: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Ăn vặt sỉ Mực tẩm gia vị - Hạng Sỉ #7...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/an_vat_si_muc_tam_gia_vi_hang_si_7.png
+❌ Lỗi xử lý ảnh cho Ăn vặt sỉ Mực tẩm gia vị - Hạng Sỉ #7: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Ăn vặt sỉ Rong biển ăn liền - Hạng Sỉ #1...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/an_vat_si_rong_bien_an_lien_hang_si_1.png
+❌ Lỗi xử lý ảnh cho Ăn vặt sỉ Rong biển ăn liền - Hạng Sỉ #1: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Ăn vặt sỉ Rong biển ăn liền - Hạng Sỉ #2...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/an_vat_si_rong_bien_an_lien_hang_si_2.png
+❌ Lỗi xử lý ảnh cho Ăn vặt sỉ Rong biển ăn liền - Hạng Sỉ #2: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Ăn vặt sỉ Rong biển ăn liền - Hạng Sỉ #3...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/an_vat_si_rong_bien_an_lien_hang_si_3.png
+❌ Lỗi xử lý ảnh cho Ăn vặt sỉ Rong biển ăn liền - Hạng Sỉ #3: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Ăn vặt sỉ Rong biển ăn liền - Hạng Sỉ #4...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/an_vat_si_rong_bien_an_lien_hang_si_4.png
+❌ Lỗi xử lý ảnh cho Ăn vặt sỉ Rong biển ăn liền - Hạng Sỉ #4: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Ăn vặt sỉ Rong biển ăn liền - Hạng Sỉ #5...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/an_vat_si_rong_bien_an_lien_hang_si_5.png
+❌ Lỗi xử lý ảnh cho Ăn vặt sỉ Rong biển ăn liền - Hạng Sỉ #5: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Ăn vặt sỉ Rong biển ăn liền - Hạng Sỉ #6...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/an_vat_si_rong_bien_an_lien_hang_si_6.png
+❌ Lỗi xử lý ảnh cho Ăn vặt sỉ Rong biển ăn liền - Hạng Sỉ #6: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Ăn vặt sỉ Rong biển ăn liền - Hạng Sỉ #7...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/an_vat_si_rong_bien_an_lien_hang_si_7.png
+❌ Lỗi xử lý ảnh cho Ăn vặt sỉ Rong biển ăn liền - Hạng Sỉ #7: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Đồ giải khát Nước khoáng chai - Hạng Sỉ #1...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/do_giai_khat_nuoc_khoang_chai_hang_si_1.png
+❌ Lỗi xử lý ảnh cho Đồ giải khát Nước khoáng chai - Hạng Sỉ #1: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Đồ giải khát Nước khoáng chai - Hạng Sỉ #2...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/do_giai_khat_nuoc_khoang_chai_hang_si_2.png
+❌ Lỗi xử lý ảnh cho Đồ giải khát Nước khoáng chai - Hạng Sỉ #2: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Đồ giải khát Nước khoáng chai - Hạng Sỉ #3...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/do_giai_khat_nuoc_khoang_chai_hang_si_3.png
+❌ Lỗi xử lý ảnh cho Đồ giải khát Nước khoáng chai - Hạng Sỉ #3: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Đồ giải khát Nước khoáng chai - Hạng Sỉ #4...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/do_giai_khat_nuoc_khoang_chai_hang_si_4.png
+❌ Lỗi xử lý ảnh cho Đồ giải khát Nước khoáng chai - Hạng Sỉ #4: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Đồ giải khát Nước khoáng chai - Hạng Sỉ #5...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/do_giai_khat_nuoc_khoang_chai_hang_si_5.png
+❌ Lỗi xử lý ảnh cho Đồ giải khát Nước khoáng chai - Hạng Sỉ #5: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Đồ giải khát Nước khoáng chai - Hạng Sỉ #6...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/do_giai_khat_nuoc_khoang_chai_hang_si_6.png
+❌ Lỗi xử lý ảnh cho Đồ giải khát Nước khoáng chai - Hạng Sỉ #6: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Đồ giải khát Nước khoáng chai - Hạng Sỉ #7...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/do_giai_khat_nuoc_khoang_chai_hang_si_7.png
+❌ Lỗi xử lý ảnh cho Đồ giải khát Nước khoáng chai - Hạng Sỉ #7: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Đồ giải khát Nước tăng lực - Hạng Sỉ #1...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/do_giai_khat_nuoc_tang_luc_hang_si_1.png
+❌ Lỗi xử lý ảnh cho Đồ giải khát Nước tăng lực - Hạng Sỉ #1: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Đồ giải khát Nước tăng lực - Hạng Sỉ #2...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/do_giai_khat_nuoc_tang_luc_hang_si_2.png
+❌ Lỗi xử lý ảnh cho Đồ giải khát Nước tăng lực - Hạng Sỉ #2: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Đồ giải khát Nước tăng lực - Hạng Sỉ #3...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/do_giai_khat_nuoc_tang_luc_hang_si_3.png
+❌ Lỗi xử lý ảnh cho Đồ giải khát Nước tăng lực - Hạng Sỉ #3: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Đồ giải khát Nước tăng lực - Hạng Sỉ #4...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/do_giai_khat_nuoc_tang_luc_hang_si_4.png
+❌ Lỗi xử lý ảnh cho Đồ giải khát Nước tăng lực - Hạng Sỉ #4: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Đồ giải khát Nước tăng lực - Hạng Sỉ #5...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/do_giai_khat_nuoc_tang_luc_hang_si_5.png
+❌ Lỗi xử lý ảnh cho Đồ giải khát Nước tăng lực - Hạng Sỉ #5: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Đồ giải khát Nước tăng lực - Hạng Sỉ #6...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/do_giai_khat_nuoc_tang_luc_hang_si_6.png
+❌ Lỗi xử lý ảnh cho Đồ giải khát Nước tăng lực - Hạng Sỉ #6: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Đồ giải khát Nước tăng lực - Hạng Sỉ #7...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/do_giai_khat_nuoc_tang_luc_hang_si_7.png
+❌ Lỗi xử lý ảnh cho Đồ giải khát Nước tăng lực - Hạng Sỉ #7: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Đồ giải khát Bia lon nội địa - Hạng Sỉ #1...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/do_giai_khat_bia_lon_noi_dia_hang_si_1.png
+❌ Lỗi xử lý ảnh cho Đồ giải khát Bia lon nội địa - Hạng Sỉ #1: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Đồ giải khát Bia lon nội địa - Hạng Sỉ #2...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/do_giai_khat_bia_lon_noi_dia_hang_si_2.png
+❌ Lỗi xử lý ảnh cho Đồ giải khát Bia lon nội địa - Hạng Sỉ #2: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Đồ giải khát Bia lon nội địa - Hạng Sỉ #3...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/do_giai_khat_bia_lon_noi_dia_hang_si_3.png
+❌ Lỗi xử lý ảnh cho Đồ giải khát Bia lon nội địa - Hạng Sỉ #3: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Đồ giải khát Bia lon nội địa - Hạng Sỉ #4...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/do_giai_khat_bia_lon_noi_dia_hang_si_4.png
+❌ Lỗi xử lý ảnh cho Đồ giải khát Bia lon nội địa - Hạng Sỉ #4: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Đồ giải khát Bia lon nội địa - Hạng Sỉ #5...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/do_giai_khat_bia_lon_noi_dia_hang_si_5.png
+❌ Lỗi xử lý ảnh cho Đồ giải khát Bia lon nội địa - Hạng Sỉ #5: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Đồ giải khát Bia lon nội địa - Hạng Sỉ #6...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/do_giai_khat_bia_lon_noi_dia_hang_si_6.png
+❌ Lỗi xử lý ảnh cho Đồ giải khát Bia lon nội địa - Hạng Sỉ #6: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Đồ giải khát Bia lon nội địa - Hạng Sỉ #7...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/do_giai_khat_bia_lon_noi_dia_hang_si_7.png
+❌ Lỗi xử lý ảnh cho Đồ giải khát Bia lon nội địa - Hạng Sỉ #7: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Đồ giải khát Rượu vang tiệc - Hạng Sỉ #1...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/do_giai_khat_ruou_vang_tiec_hang_si_1.png
+❌ Lỗi xử lý ảnh cho Đồ giải khát Rượu vang tiệc - Hạng Sỉ #1: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Đồ giải khát Rượu vang tiệc - Hạng Sỉ #2...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/do_giai_khat_ruou_vang_tiec_hang_si_2.png
+❌ Lỗi xử lý ảnh cho Đồ giải khát Rượu vang tiệc - Hạng Sỉ #2: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Đồ giải khát Rượu vang tiệc - Hạng Sỉ #3...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/do_giai_khat_ruou_vang_tiec_hang_si_3.png
+❌ Lỗi xử lý ảnh cho Đồ giải khát Rượu vang tiệc - Hạng Sỉ #3: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Đồ giải khát Rượu vang tiệc - Hạng Sỉ #4...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/do_giai_khat_ruou_vang_tiec_hang_si_4.png
+❌ Lỗi xử lý ảnh cho Đồ giải khát Rượu vang tiệc - Hạng Sỉ #4: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Đồ giải khát Rượu vang tiệc - Hạng Sỉ #5...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/do_giai_khat_ruou_vang_tiec_hang_si_5.png
+❌ Lỗi xử lý ảnh cho Đồ giải khát Rượu vang tiệc - Hạng Sỉ #5: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Đồ giải khát Rượu vang tiệc - Hạng Sỉ #6...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/do_giai_khat_ruou_vang_tiec_hang_si_6.png
+❌ Lỗi xử lý ảnh cho Đồ giải khát Rượu vang tiệc - Hạng Sỉ #6: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Đồ giải khát Rượu vang tiệc - Hạng Sỉ #7...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/do_giai_khat_ruou_vang_tiec_hang_si_7.png
+❌ Lỗi xử lý ảnh cho Đồ giải khát Rượu vang tiệc - Hạng Sỉ #7: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Hóa phẩm phụ Khăn giấy sỉ - Hạng Sỉ #1...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/hoa_pham_phu_khan_giay_si_hang_si_1.png
+❌ Lỗi xử lý ảnh cho Hóa phẩm phụ Khăn giấy sỉ - Hạng Sỉ #1: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Hóa phẩm phụ Khăn giấy sỉ - Hạng Sỉ #2...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/hoa_pham_phu_khan_giay_si_hang_si_2.png
+❌ Lỗi xử lý ảnh cho Hóa phẩm phụ Khăn giấy sỉ - Hạng Sỉ #2: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Hóa phẩm phụ Khăn giấy sỉ - Hạng Sỉ #3...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/hoa_pham_phu_khan_giay_si_hang_si_3.png
+❌ Lỗi xử lý ảnh cho Hóa phẩm phụ Khăn giấy sỉ - Hạng Sỉ #3: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Hóa phẩm phụ Khăn giấy sỉ - Hạng Sỉ #4...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/hoa_pham_phu_khan_giay_si_hang_si_4.png
+❌ Lỗi xử lý ảnh cho Hóa phẩm phụ Khăn giấy sỉ - Hạng Sỉ #4: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Hóa phẩm phụ Khăn giấy sỉ - Hạng Sỉ #5...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/hoa_pham_phu_khan_giay_si_hang_si_5.png
+❌ Lỗi xử lý ảnh cho Hóa phẩm phụ Khăn giấy sỉ - Hạng Sỉ #5: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Hóa phẩm phụ Khăn giấy sỉ - Hạng Sỉ #6...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/hoa_pham_phu_khan_giay_si_hang_si_6.png
+❌ Lỗi xử lý ảnh cho Hóa phẩm phụ Khăn giấy sỉ - Hạng Sỉ #6: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Hóa phẩm phụ Khăn giấy sỉ - Hạng Sỉ #7...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/hoa_pham_phu_khan_giay_si_hang_si_7.png
+❌ Lỗi xử lý ảnh cho Hóa phẩm phụ Khăn giấy sỉ - Hạng Sỉ #7: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Hóa phẩm phụ Nước lau sàn - Hạng Sỉ #1...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/hoa_pham_phu_nuoc_lau_san_hang_si_1.png
+❌ Lỗi xử lý ảnh cho Hóa phẩm phụ Nước lau sàn - Hạng Sỉ #1: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Hóa phẩm phụ Nước lau sàn - Hạng Sỉ #2...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/hoa_pham_phu_nuoc_lau_san_hang_si_2.png
+❌ Lỗi xử lý ảnh cho Hóa phẩm phụ Nước lau sàn - Hạng Sỉ #2: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Hóa phẩm phụ Nước lau sàn - Hạng Sỉ #3...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/hoa_pham_phu_nuoc_lau_san_hang_si_3.png
+❌ Lỗi xử lý ảnh cho Hóa phẩm phụ Nước lau sàn - Hạng Sỉ #3: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Hóa phẩm phụ Nước lau sàn - Hạng Sỉ #4...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/hoa_pham_phu_nuoc_lau_san_hang_si_4.png
+❌ Lỗi xử lý ảnh cho Hóa phẩm phụ Nước lau sàn - Hạng Sỉ #4: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Hóa phẩm phụ Nước lau sàn - Hạng Sỉ #5...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/hoa_pham_phu_nuoc_lau_san_hang_si_5.png
+❌ Lỗi xử lý ảnh cho Hóa phẩm phụ Nước lau sàn - Hạng Sỉ #5: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Hóa phẩm phụ Nước lau sàn - Hạng Sỉ #6...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/hoa_pham_phu_nuoc_lau_san_hang_si_6.png
+❌ Lỗi xử lý ảnh cho Hóa phẩm phụ Nước lau sàn - Hạng Sỉ #6: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Hóa phẩm phụ Nước lau sàn - Hạng Sỉ #7...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/hoa_pham_phu_nuoc_lau_san_hang_si_7.png
+❌ Lỗi xử lý ảnh cho Hóa phẩm phụ Nước lau sàn - Hạng Sỉ #7: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Hóa phẩm phụ Xịt thơm phòng - Hạng Sỉ #1...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/hoa_pham_phu_xit_thom_phong_hang_si_1.png
+❌ Lỗi xử lý ảnh cho Hóa phẩm phụ Xịt thơm phòng - Hạng Sỉ #1: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Hóa phẩm phụ Xịt thơm phòng - Hạng Sỉ #2...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/hoa_pham_phu_xit_thom_phong_hang_si_2.png
+❌ Lỗi xử lý ảnh cho Hóa phẩm phụ Xịt thơm phòng - Hạng Sỉ #2: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Hóa phẩm phụ Xịt thơm phòng - Hạng Sỉ #3...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/hoa_pham_phu_xit_thom_phong_hang_si_3.png
+❌ Lỗi xử lý ảnh cho Hóa phẩm phụ Xịt thơm phòng - Hạng Sỉ #3: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Hóa phẩm phụ Xịt thơm phòng - Hạng Sỉ #4...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/hoa_pham_phu_xit_thom_phong_hang_si_4.png
+❌ Lỗi xử lý ảnh cho Hóa phẩm phụ Xịt thơm phòng - Hạng Sỉ #4: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Hóa phẩm phụ Xịt thơm phòng - Hạng Sỉ #5...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/hoa_pham_phu_xit_thom_phong_hang_si_5.png
+❌ Lỗi xử lý ảnh cho Hóa phẩm phụ Xịt thơm phòng - Hạng Sỉ #5: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Hóa phẩm phụ Xịt thơm phòng - Hạng Sỉ #6...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/hoa_pham_phu_xit_thom_phong_hang_si_6.png
+❌ Lỗi xử lý ảnh cho Hóa phẩm phụ Xịt thơm phòng - Hạng Sỉ #6: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Hóa phẩm phụ Xịt thơm phòng - Hạng Sỉ #7...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/hoa_pham_phu_xit_thom_phong_hang_si_7.png
+❌ Lỗi xử lý ảnh cho Hóa phẩm phụ Xịt thơm phòng - Hạng Sỉ #7: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Hóa phẩm phụ Bột giặt gói - Hạng Sỉ #1...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/hoa_pham_phu_bot_giat_goi_hang_si_1.png
+❌ Lỗi xử lý ảnh cho Hóa phẩm phụ Bột giặt gói - Hạng Sỉ #1: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Hóa phẩm phụ Bột giặt gói - Hạng Sỉ #2...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/hoa_pham_phu_bot_giat_goi_hang_si_2.png
+❌ Lỗi xử lý ảnh cho Hóa phẩm phụ Bột giặt gói - Hạng Sỉ #2: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Hóa phẩm phụ Bột giặt gói - Hạng Sỉ #3...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/hoa_pham_phu_bot_giat_goi_hang_si_3.png
+❌ Lỗi xử lý ảnh cho Hóa phẩm phụ Bột giặt gói - Hạng Sỉ #3: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Hóa phẩm phụ Bột giặt gói - Hạng Sỉ #4...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/hoa_pham_phu_bot_giat_goi_hang_si_4.png
+❌ Lỗi xử lý ảnh cho Hóa phẩm phụ Bột giặt gói - Hạng Sỉ #4: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Hóa phẩm phụ Bột giặt gói - Hạng Sỉ #5...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/hoa_pham_phu_bot_giat_goi_hang_si_5.png
+❌ Lỗi xử lý ảnh cho Hóa phẩm phụ Bột giặt gói - Hạng Sỉ #5: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Hóa phẩm phụ Bột giặt gói - Hạng Sỉ #6...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/hoa_pham_phu_bot_giat_goi_hang_si_6.png
+❌ Lỗi xử lý ảnh cho Hóa phẩm phụ Bột giặt gói - Hạng Sỉ #6: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Hóa phẩm phụ Bột giặt gói - Hạng Sỉ #7...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/hoa_pham_phu_bot_giat_goi_hang_si_7.png
+❌ Lỗi xử lý ảnh cho Hóa phẩm phụ Bột giặt gói - Hạng Sỉ #7: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Quà tặng KM Ly cốc in logo - Hạng Sỉ #1...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/qua_tang_km_ly_coc_in_logo_hang_si_1.png
+❌ Lỗi xử lý ảnh cho Quà tặng KM Ly cốc in logo - Hạng Sỉ #1: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Quà tặng KM Ly cốc in logo - Hạng Sỉ #2...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/qua_tang_km_ly_coc_in_logo_hang_si_2.png
+❌ Lỗi xử lý ảnh cho Quà tặng KM Ly cốc in logo - Hạng Sỉ #2: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Quà tặng KM Ly cốc in logo - Hạng Sỉ #3...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/qua_tang_km_ly_coc_in_logo_hang_si_3.png
+❌ Lỗi xử lý ảnh cho Quà tặng KM Ly cốc in logo - Hạng Sỉ #3: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Quà tặng KM Ly cốc in logo - Hạng Sỉ #4...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/qua_tang_km_ly_coc_in_logo_hang_si_4.png
+❌ Lỗi xử lý ảnh cho Quà tặng KM Ly cốc in logo - Hạng Sỉ #4: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Quà tặng KM Ly cốc in logo - Hạng Sỉ #5...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/qua_tang_km_ly_coc_in_logo_hang_si_5.png
+❌ Lỗi xử lý ảnh cho Quà tặng KM Ly cốc in logo - Hạng Sỉ #5: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Quà tặng KM Ly cốc in logo - Hạng Sỉ #6...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/qua_tang_km_ly_coc_in_logo_hang_si_6.png
+❌ Lỗi xử lý ảnh cho Quà tặng KM Ly cốc in logo - Hạng Sỉ #6: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Quà tặng KM Ly cốc in logo - Hạng Sỉ #7...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/qua_tang_km_ly_coc_in_logo_hang_si_7.png
+❌ Lỗi xử lý ảnh cho Quà tặng KM Ly cốc in logo - Hạng Sỉ #7: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Quà tặng KM Túi vải Eco - Hạng Sỉ #1...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/qua_tang_km_tui_vai_eco_hang_si_1.png
+❌ Lỗi xử lý ảnh cho Quà tặng KM Túi vải Eco - Hạng Sỉ #1: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Quà tặng KM Túi vải Eco - Hạng Sỉ #2...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/qua_tang_km_tui_vai_eco_hang_si_2.png
+❌ Lỗi xử lý ảnh cho Quà tặng KM Túi vải Eco - Hạng Sỉ #2: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Quà tặng KM Túi vải Eco - Hạng Sỉ #3...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/qua_tang_km_tui_vai_eco_hang_si_3.png
+❌ Lỗi xử lý ảnh cho Quà tặng KM Túi vải Eco - Hạng Sỉ #3: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Quà tặng KM Túi vải Eco - Hạng Sỉ #4...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/qua_tang_km_tui_vai_eco_hang_si_4.png
+❌ Lỗi xử lý ảnh cho Quà tặng KM Túi vải Eco - Hạng Sỉ #4: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Quà tặng KM Túi vải Eco - Hạng Sỉ #5...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/qua_tang_km_tui_vai_eco_hang_si_5.png
+❌ Lỗi xử lý ảnh cho Quà tặng KM Túi vải Eco - Hạng Sỉ #5: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Quà tặng KM Túi vải Eco - Hạng Sỉ #6...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/qua_tang_km_tui_vai_eco_hang_si_6.png
+❌ Lỗi xử lý ảnh cho Quà tặng KM Túi vải Eco - Hạng Sỉ #6: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+🖼️ Đang tạo ảnh cho sản phẩm: Quà tặng KM Túi vải Eco - Hạng Sỉ #7...
+💾 Đã lưu local: /Users/hohoangson/Documents/my_study/Application_v1/backend/uploads/products/qua_tang_km_tui_vai_eco_hang_si_7.png
+❌ Lỗi xử lý ảnh cho Quà tặng KM Túi vải Eco - Hạng Sỉ #7: {
+  message: 'Invalid cloud_name kingfoods',
+  name: 'Error',
+  http_code: 401
+}
+📤 Đang Bulk Insert 30 Categories...
+📤 Đang Bulk Insert 210 Products...
+❌ Lỗi nghiêm trọng trong quá trình Hyper-Seed:
+QueryFailedError: Field 'category_id' doesn't have a default value
+    at Query.onResult (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/typeorm/src/driver/mysql/MysqlQueryRunner.ts:248:33)
+    at Query.execute (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/commands/command.js:36:14)
+    at PoolConnection.handlePacket (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/base/connection.js:552:34)
+    at PacketParser.onPacket (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/base/connection.js:102:12)
+    at PacketParser.executeStart (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/packet_parser.js:75:16)
+    at Socket.<anonymous> (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/base/connection.js:109:25)
+    at Socket.emit (node:events:519:28)
+    at Socket.emit (node:domain:489:12)
+    at addChunk (node:internal/streams/readable:561:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:512:3) {
+  query: 'INSERT INTO `KingFood_products`(`id`, `created_at`, `updated_at`, `deleted_at`, `category_id`, `name`, `price`, `discount`, `image`, `description`, `status`) VALUES (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?), (?, ?, ?, DE'... 33 more characters,
+  parameters: [
+    1,
+    2026-05-15T09:54:05.321Z,
+    2026-05-15T09:54:05.321Z,
+    'Bánh kẹo Bánh quy sỉ - Hạng Sỉ #1',
+    45000,
+    5,
+    'https://placehold.co/640x480?text=B%C3%A1nh%20k%E1%BA%B9o%20B%C3%A1nh%20quy%20s%E1%BB%89%20-%20H%E1%BA%A1ng%20S%E1%BB%89%20%231',
+    'Sản phẩm đóng gói sỉ Bánh kẹo Bánh quy sỉ chuyên cung cấp cho chuỗi 144 siêu thị Kingfood.',
+    'active',
+    2,
+    2026-05-15T09:54:06.082Z,
+    2026-05-15T09:54:06.082Z,
+    'Bánh kẹo Bánh quy sỉ - Hạng Sỉ #2',
+    65000,
+    10,
+    'https://placehold.co/640x480?text=B%C3%A1nh%20k%E1%BA%B9o%20B%C3%A1nh%20quy%20s%E1%BB%89%20-%20H%E1%BA%A1ng%20S%E1%BB%89%20%232',
+    'Sản phẩm đóng gói sỉ Bánh kẹo Bánh quy sỉ chuyên cung cấp cho chuỗi 144 siêu thị Kingfood.',
+    'active',
+    3,
+    2026-05-15T09:54:06.902Z,
+    2026-05-15T09:54:06.902Z,
+    'Bánh kẹo Bánh quy sỉ - Hạng Sỉ #3',
+    85000,
+    15,
+    'https://placehold.co/640x480?text=B%C3%A1nh%20k%E1%BA%B9o%20B%C3%A1nh%20quy%20s%E1%BB%89%20-%20H%E1%BA%A1ng%20S%E1%BB%89%20%233',
+    'Sản phẩm đóng gói sỉ Bánh kẹo Bánh quy sỉ chuyên cung cấp cho chuỗi 144 siêu thị Kingfood.',
+    'active',
+    4,
+    2026-05-15T09:54:07.719Z,
+    2026-05-15T09:54:07.719Z,
+    'Bánh kẹo Bánh quy sỉ - Hạng Sỉ #4',
+    120000,
+    0,
+    'https://placehold.co/640x480?text=B%C3%A1nh%20k%E1%BA%B9o%20B%C3%A1nh%20quy%20s%E1%BB%89%20-%20H%E1%BA%A1ng%20S%E1%BB%89%20%234',
+    'Sản phẩm đóng gói sỉ Bánh kẹo Bánh quy sỉ chuyên cung cấp cho chuỗi 144 siêu thị Kingfood.',
+    'active',
+    5,
+    2026-05-15T09:54:08.937Z,
+    2026-05-15T09:54:08.937Z,
+    'Bánh kẹo Bánh quy sỉ - Hạng Sỉ #5',
+    150000,
+    5,
+    'https://placehold.co/640x480?text=B%C3%A1nh%20k%E1%BA%B9o%20B%C3%A1nh%20quy%20s%E1%BB%89%20-%20H%E1%BA%A1ng%20S%E1%BB%89%20%235',
+    'Sản phẩm đóng gói sỉ Bánh kẹo Bánh quy sỉ chuyên cung cấp cho chuỗi 144 siêu thị Kingfood.',
+    'active',
+    6,
+    2026-05-15T09:54:09.361Z,
+    2026-05-15T09:54:09.361Z,
+    'Bánh kẹo Bánh quy sỉ - Hạng Sỉ #6',
+    240000,
+    10,
+    'https://placehold.co/640x480?text=B%C3%A1nh%20k%E1%BA%B9o%20B%C3%A1nh%20quy%20s%E1%BB%89%20-%20H%E1%BA%A1ng%20S%E1%BB%89%20%236',
+    'Sản phẩm đóng gói sỉ Bánh kẹo Bánh quy sỉ chuyên cung cấp cho chuỗi 144 siêu thị Kingfood.',
+    'active',
+    7,
+    2026-05-15T09:54:10.075Z,
+    2026-05-15T09:54:10.075Z,
+    'Bánh kẹo Bánh quy sỉ - Hạng Sỉ #7',
+    320000,
+    15,
+    'https://placehold.co/640x480?text=B%C3%A1nh%20k%E1%BA%B9o%20B%C3%A1nh%20quy%20s%E1%BB%89%20-%20H%E1%BA%A1ng%20S%E1%BB%89%20%237',
+    'Sản phẩm đóng gói sỉ Bánh kẹo Bánh quy sỉ chuyên cung cấp cho chuỗi 144 siêu thị Kingfood.',
+    'active',
+    8,
+    2026-05-15T09:54:11.355Z,
+    2026-05-15T09:54:11.355Z,
+    'Bánh kẹo Kẹo mềm hoa quả - Hạng Sỉ #1',
+    45000,
+    5,
+    'https://placehold.co/640x480?text=B%C3%A1nh%20k%E1%BA%B9o%20K%E1%BA%B9o%20m%E1%BB%81m%20hoa%20qu%E1%BA%A3%20-%20H%E1%BA%A1ng%20S%E1%BB%89%20%231',
+    'Sản phẩm đóng gói sỉ Bánh kẹo Kẹo mềm hoa quả chuyên cung cấp cho chuỗi 144 siêu thị Kingfood.',
+    'active',
+    9,
+    2026-05-15T09:54:11.996Z,
+    2026-05-15T09:54:11.996Z,
+    'Bánh kẹo Kẹo mềm hoa quả - Hạng Sỉ #2',
+    65000,
+    10,
+    'https://placehold.co/640x480?text=B%C3%A1nh%20k%E1%BA%B9o%20K%E1%BA%B9o%20m%E1%BB%81m%20hoa%20qu%E1%BA%A3%20-%20H%E1%BA%A1ng%20S%E1%BB%89%20%232',
+    'Sản phẩm đóng gói sỉ Bánh kẹo Kẹo mềm hoa quả chuyên cung cấp cho chuỗi 144 siêu thị Kingfood.',
+    'active',
+    10,
+    2026-05-15T09:54:12.642Z,
+    2026-05-15T09:54:12.642Z,
+    'Bánh kẹo Kẹo mềm hoa quả - Hạng Sỉ #3',
+    85000,
+    15,
+    'https://placehold.co/640x480?text=B%C3%A1nh%20k%E1%BA%B9o%20K%E1%BA%B9o%20m%E1%BB%81m%20hoa%20qu%E1%BA%A3%20-%20H%E1%BA%A1ng%20S%E1%BB%89%20%233',
+    'Sản phẩm đóng gói sỉ Bánh kẹo Kẹo mềm hoa quả chuyên cung cấp cho chuỗi 144 siêu thị Kingfood.',
+    'active',
+    11,
+    2026-05-15T09:54:13.443Z,
+    2026-05-15T09:54:13.443Z,
+    'Bánh kẹo Kẹo mềm hoa quả - Hạng Sỉ #4',
+    120000,
+    0,
+    'https://placehold.co/640x480?text=B%C3%A1nh%20k%E1%BA%B9o%20K%E1%BA%B9o%20m%E1%BB%81m%20hoa%20qu%E1%BA%A3%20-%20H%E1%BA%A1ng%20S%E1%BB%89%20%234',
+    'Sản phẩm đóng gói sỉ Bánh kẹo Kẹo mềm hoa quả chuyên cung cấp cho chuỗi 144 siêu thị Kingfood.',
+    'active',
+    12,
+    ... 1790 more items
+  ],
+  driverError: Error: Field 'category_id' doesn't have a default value
+      at Packet.asError (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/packets/packet.js:788:17)
+      at Query.execute (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/commands/command.js:29:26)
+      at PoolConnection.handlePacket (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/base/connection.js:552:34)
+      at PacketParser.onPacket (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/base/connection.js:102:12)
+      at PacketParser.executeStart (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/packet_parser.js:75:16)
+      at Socket.<anonymous> (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/base/connection.js:109:25)
+      at Socket.emit (node:events:519:28)
+      at Socket.emit (node:domain:489:12)
+      at addChunk (node:internal/streams/readable:561:12)
+      at readableAddChunkPushByteMode (node:internal/streams/readable:512:3) {
+    code: 'ER_NO_DEFAULT_FOR_FIELD',
+    errno: 1364,
+    sqlState: 'HY000',
+    sqlMessage: "Field 'category_id' doesn't have a default value",
+    sql: "INSERT INTO `KingFood_products`(`id`, `created_at`, `updated_at`, `deleted_at`, `category_id`, `name`, `price`, `discount`, `image`, `description`, `status`) VALUES (1, '2026-05-15 16:54:05.321', '2026-05-15 16:54:05.321', DEFAULT, DEFAULT, 'Bánh kẹo Bánh quy sỉ - Hạng Sỉ #1', 45000, 5, 'https://placehold.co/640x480?text=B%C3%A1nh%20k%E1%BA%B9o%20B%C3%A1nh%20quy%20s%E1%BB%89%20-%20H%E1%BA%A1ng%20S%E1%BB%89%20%231', 'Sản phẩm đóng gói sỉ Bánh kẹo Bánh quy sỉ chuyên cung cấp cho chuỗi 144 siêu thị Kingfood.', 'active'), (2, '2026-05-15 16:54:06.082', '2026-05-15 16:54:06.082', DEFAULT, DEFAULT, 'Bánh kẹo Bánh quy sỉ - Hạng Sỉ #2', 65000, 10, 'https://placehold.co/640x480?text=B%C3%A1nh%20k%E1%BA%B9o%20B%C3%A1nh%20quy%20s%E1%BB%89%20-%20H%E1%BA%A1ng%20S%E1%BB%89%20%232', 'Sản phẩm đóng gói sỉ Bánh kẹo Bánh quy sỉ chuyên cung cấp cho chuỗi 144 siêu thị Kingfood.', 'active'), (3, '2026-05-15 16:54:06.902', '2026-05-15 16:54:06.902', DEFAULT, DEFAULT, 'Bánh kẹo Bánh quy sỉ - Hạng Sỉ #3', 85000, 15, 'https://placehold.co/640x480?text=B%C3%A1nh%20k%E1%BA%B9o%20B%C3%A1nh%20quy%20s%E1%BB%89%20-%20H%E1%BA%A1ng%20S%E1%BB%89%20%233', 'Sản phẩm đóng gói sỉ Bánh kẹo Bánh quy sỉ chuyên cung cấp cho chuỗi 144 siêu thị Kingfood.', 'active'), (4, '2026-05-15 16:54:07.719', '2026-05-15 16:54:07.719', DEFAULT, DEFAULT, 'Bánh kẹo Bánh quy sỉ - Hạng Sỉ #4', 120000, 0, 'https://placehold.co/640x480?text=B%C3%A1nh%20k%E1%BA%B9o%20B%C3%A1nh%20quy%20s%E1%BB%89%20-%20H%E1%BA%A1ng%20S%E1%BB%89%20%234', 'Sản phẩm đóng gói sỉ Bánh kẹo Bánh quy sỉ chuyên cung cấp cho chuỗi 144 siêu thị Kingfood.', 'active'), (5, '2026-05-15 16:54:08.937', '2026-05-15 16:54:08.937', DEFAULT, DEFAULT, 'Bánh kẹo Bánh quy sỉ - Hạng Sỉ #5', 150000, 5, 'https://placehold.co/640x480?text=B%C3%A1nh%20k%E1%BA%B9o%20B%C3%A1nh%20quy%20s%E1%BB%89%20-%20H%E1%BA%A1ng%20S%E1%BB%89%20%235', 'Sản phẩm đóng gói sỉ Bánh kẹo Bánh quy sỉ chuyên cung cấp cho chuỗi 144 siêu thị Kingfood.', 'active'), (6, '2026-05-15 16:54:09.361', '2026-05-15 16:54:09.361', DEFAULT, DEFAULT, 'Bánh kẹo Bánh quy sỉ - Hạng Sỉ #6', 240000, 10, 'https://placehold.co/640x480?text=B%C3%A1nh%20k%E1%BA%B9o%20B%C3%A1nh%20quy%20s%E1%BB%89%20-%20H%E1%BA%A1ng%20S%E1%BB%89%20%236', 'Sản phẩm đóng gói sỉ Bánh kẹo Bánh quy sỉ chuyên cung cấp cho chuỗi 144 siêu thị Kingfood.', 'active'), (7, '2026-05-15 16:54:10.075', '2026-05-15 16:54:10.075', DEFAULT, DEFAULT, 'Bánh kẹo Bánh quy sỉ - Hạng Sỉ #7', 320000, 15, 'https://placehold.co/640x480?text=B%C3%A1nh%20k%E1%BA%B9o%20B%C3%A1nh%20quy%20s%E1%BB%89%20-%20H%E1%BA%A1ng%20S%E1%BB%89%20%237', 'Sản phẩm đóng gói sỉ Bánh kẹo Bánh quy sỉ chuyên cung cấp cho chuỗi 144 siêu thị Kingfood.', 'active'), (8, '2026-05-15 16:54:11.355', '2026-05-15 16:54:11.355', DEFAULT, DEFAULT, 'Bánh kẹo Kẹo mềm hoa quả - Hạng Sỉ #1', 45000, 5, 'https://placehold.co/640x480?text=B%C3%A1nh%20k%E1%BA%B9o%20K%E1%BA%B9o%20m%E1%BB%81m%20hoa%20qu%E1%BA%A3%20-%20H%E1%BA%A1ng%20S%E1%BB%89%20%231', 'Sản phẩm đóng gói sỉ Bánh kẹo Kẹo mềm hoa quả chuyên cung cấp cho chuỗi 144 siêu thị Kingfood.', 'active'), (9, '2026-05-15 16:54:11.996', '2026-05-15 16:54:11.996', DEFAULT, DEFAULT, 'Bánh kẹo Kẹo mềm hoa quả - Hạng Sỉ #2', 65000, 10, 'https://placehold.co/640x480?text=B%C3%A1nh%20k%E1%BA%B9o%20K%E1%BA%B9o%20m%E1%BB%81m%20hoa%20qu%E1%BA%A3%20-%20H%E1%BA%A1ng%20S%E1%BB%89%20%232', 'Sản phẩm đóng gói sỉ Bánh kẹo Kẹo mềm hoa quả chuyên cung cấp cho chuỗi 144 siêu thị Kingfood.', 'active'), (10, '2026-05-15 16:54:12.642', '2026-05-15 16:54:12.642', DEFAULT, DEFAULT, 'Bánh kẹo Kẹo mềm hoa quả - Hạng Sỉ #3', 85000, 15, 'https://placehold.co/640x480?text=B%C3%A1nh%20k%E1%BA%B9o%20K%E1%BA%B9o%20m%E1%BB%81m%20hoa%20qu%E1%BA%A3%20-%20H%E1%BA%A1ng%20S%E1%BB%89%20%233', 'Sản phẩm đóng gói sỉ Bánh kẹo Kẹo mềm hoa quả chuyên cung cấp cho chuỗi 144 siêu thị Kingfood.', 'active'), (11, '2026-05-15 16:54:13.443', '2026-05-15 16:54:13.443', DEFAULT, DEFAULT, 'Bánh kẹo Kẹo mềm hoa quả - Hạng Sỉ #4', 120000, 0, 'https://placehold.co/640x480?text=B%C3%A1nh%20k%E1%BA%B9o%20K%E1%BA%B9o%20m%E1%BB%81m%20hoa%20qu%E1%BA%A3%20-%20H%E1%BA%A1ng%20S%E1%BB%89%20%234', 'Sản phẩm đóng gói sỉ Bánh kẹo Kẹo mềm hoa quả chuyên cung cấp cho chuỗi 144 siêu thị Kingfood.', 'active'), (12, '2026-05-15 16:54:14.071', '2026-05-15 16:54:14.071', DEFAULT, DEFAULT, 'Bánh kẹo Kẹo mềm hoa quả - Hạng Sỉ #5', 150000, 5, 'https://placehold.co/640x480?text=B%C3%A1nh%20k%E1%BA%B9o%20K%E1%BA%B9o%20m%E1%BB%81m%20hoa%20qu%E1%BA%A3%20-%20H%E1%BA%A1ng%20S%E1%BB%89%20%235', 'Sản phẩm đóng gói sỉ Bánh kẹo Kẹo mềm hoa quả chuyên cung cấp cho chuỗi 144 siêu thị Kingfood.', 'active'), (13, '2026-05-15 16:54:15.185', '2026-05-15 16:54:15.185', DEFAULT, DEFAULT, 'Bánh kẹo Kẹo mềm hoa quả - Hạng Sỉ #6', 240000, 10, 'https://placehold.co/640x480?text=B%C3%A1nh%20k%E1%BA%B9o%20K%E1%BA%B9o%20m%E1%BB%81m%20hoa%20qu%E1%BA%A3%20-%20H%E1%BA%A1ng%20S%E1%BB%89%20%236', 'Sản phẩm đóng gói sỉ Bánh kẹo Kẹo mềm hoa quả chuyên cung cấp cho chuỗi 144 siêu thị Kingfood.', 'active'), (14, '2026-05-15 16:54:15.813', '2026-05-15 16:54:15.813', DEFAULT, DEFAULT, 'Bánh kẹo Kẹo mềm hoa quả - Hạng Sỉ #7', 320000, 15, 'https://placehold.co/640x480?text=B%C3%A1nh%20k%E1%BA%B9o%20K%E1%BA%B9o%20m%E1%BB%81m%20hoa%20qu%E1%BA%A3%20-%20H%E1%BA%A1ng%20S%E1%BB%89%20%237', 'Sản phẩm đóng gói sỉ Bánh kẹo Kẹo mềm hoa quả chuyên cung cấp cho chuỗi 144 siêu thị Kingfood.', 'active'), (15, '2026-05-15 16:54:16.760', '2026-05-15 16:54:16.760', DEFAULT, DEFAULT, 'Bánh kẹo Sô-cô-la ngoại - Hạng Sỉ #1', 45000, 5, 'https://placehold.co/640x480?text=B%C3%A1nh%20k%E1%BA%B9o%20S%C3%B4-c%C3%B4-la%20ngo%E1%BA%A1i%20-%20H%E1%BA%A1ng%20S%E1%BB%89%20%231', 'Sản phẩm đóng gói sỉ Bánh kẹo Sô-cô-la ngoại chuyên cung cấp cho chuỗi 144 siêu thị Kingfood.', 'active'), (16, '2026-05-15 16:54:17.740', '2026-05-15 16:54:17.740', DEFAULT, DEFAULT, 'Bánh kẹo Sô-cô-la ngoại - Hạng Sỉ #2', 65000, 10, 'https://placehold.co/640x480?text=B%C3%A1nh%20k%E1%BA%B9o%20S%C3%B4-c%C3%B4-la%20ngo%E1%BA%A1i%20-%20H%E1%BA%A1ng%20S%E1%BB%89%20%232', 'Sản phẩm đóng gói sỉ Bánh kẹo Sô-cô-la ngoại chuyên cung cấp cho chuỗi 144 siêu thị Kingfood.', 'active'), (17, '2026-05-15 16:54:18.486', '2026-05-15 16:54:18.486', DEFAULT, DEFAULT, 'Bánh kẹo Sô-cô-la ngoại - Hạng Sỉ #3', 85000, 15, 'https://placehold.co/640x480?text=B%C3%A1nh%20k%E1%BA%B9o%20S%C3%B4-c%C3%B4-la%20ngo%E1%BA%A1i%20-%20H%E1%BA%A1ng%20S%E1%BB%89%20%233', 'Sản phẩm đóng gói sỉ Bánh kẹo Sô-cô-la ngoại chuyên cung cấp cho chuỗi 144 siêu thị Kingfood.', 'active'), (18, '2026-05-15 16:54:19.190', '2026-05-15 16:54:19.190', DEFAULT, DEFAULT, 'Bánh kẹo Sô-cô-la ngoại - Hạng Sỉ #4', 120000, 0, 'https://placehold.co/640x480?text=B%C3%A1nh%20k%E1%BA%B9o%20S%C3%B4-c%C3%B4-la%20ngo%E1%BA%A1i%20-%20H%E1%BA%A1ng%20S%E1%BB%89%20%234', 'Sản phẩm đóng gói sỉ Bánh kẹo Sô-cô-la ngoại chuyên cung cấp cho chuỗi 144 siêu thị Kingfood.', 'active'), (19, '2026-05-15 16:54:20.108', '2026-05-15 16:54:20.108', DEFAULT, DEFAULT, 'Bánh kẹo Sô-cô-la ngoại - Hạng Sỉ #5', 150000, 5, 'https://placehold.co/640x480?text=B%C3%A1nh%20k%E1%BA%B9o%20S%C3%B4-c%C3%B4-la%20ngo%E1%BA%A1i%20-%20H%E1%BA%A1ng%20S%E1%BB%89%20%235', 'Sản phẩm đóng gói sỉ Bánh kẹo Sô-cô-la ngoại chuyên cung cấp cho chuỗi 144 siêu thị Kingfood.', 'active'), (20, '2026-05-15 16:54:20.931', '2026-05-15 16:54:20.931', DEFAULT, DEFAULT, 'Bánh kẹo Sô-cô-la ngoại - Hạng Sỉ #6', 240000, 10, 'https://placehold.co/640x480?text=B%C3%A1nh%20k%E1%BA%B9o%20S%C3%B4-c%C3%B4-la%20ngo%E1%BA%A1i%20-%20H%E1%BA%A1ng%20S%E1%BB%89%20%236', 'Sản phẩm đóng gói sỉ Bánh kẹo Sô-cô-la ngoại chuyên cung cấp cho chuỗi 144 siêu thị Kingfood.', 'active'), (21, '2026-05-15 16:54:21.767', '2026-05-15 16:54:21.767', DEFAULT, DEFAULT, 'Bánh kẹo Sô-cô-la ngoại - Hạng Sỉ #7', 320000, 15, 'https://placehold.co/640x480?text=B%C3%A1nh%20k%E1%BA%B9o%20S%C3%B4-c%C3%B4-la%20ngo%E1%BA%A1i%20-%20H%E1%BA%A1ng%20S%E1%BB%89%20%237', 'Sản phẩm đóng gói sỉ Bánh kẹo Sô-cô-la ngoại chuyên cung cấp cho chuỗi 144 siêu thị Kingfood.', 'active'), (22, '2026-05-15 16:54:22.438', '2026-05-15 16:54:22.438', DEFAULT, DEFAULT, 'Bánh kẹo Snack & ngũ cốc - Hạng Sỉ #1', 45000, 5, 'https://placehold.co/640x480?text=B%C3%A1nh%20k%E1%BA%B9o%20Snack%20%26%20ng%C5%A9%20c%E1%BB%91c%20-%20H%E1%BA%A1ng%20S%E1%BB%89%20%231', 'Sản phẩm đóng gói sỉ Bánh kẹo Snack & ngũ cốc chuyên cung cấp cho chuỗi 144 siêu thị Kingfood.', 'active'), (23, '2026-05-15 16:54:23.182', '2026-05-15 16:54:23.182', DEFAULT, DEFAULT, 'Bánh kẹo Snack & ngũ cốc - Hạng Sỉ #2', 65000, 10, 'https://placehold.co/640x480?text=B%C3%A1nh%20k%E1%BA%B9o%20Snack%20%26%20ng%C5%A9%20c%E1%BB%91c%20-%20H%E1%BA%A1ng%20S%E1%BB%89%20%232', 'Sản phẩm đóng gói sỉ Bánh kẹo Snack & ngũ cốc chuyên cung cấp cho chuỗi 144 siêu thị Kingfood.', 'active'), (24, '2026-05-15 16:54:24.158', '2026-05-15 16:54:24.158', DEFAULT, DEFAULT, 'Bánh kẹo Snack & ngũ cốc - Hạng Sỉ #3', 85000, 15, 'https://placehold.co/640x480?text=B%C3%A1nh%20k%E1%BA%B9o%20Snack%20%26%20ng%C5%A9%20c%E1%BB%91c%20-%20H%E1%BA%A1ng%20S%E1%BB%89%20%233', 'Sản phẩm đóng gói sỉ Bánh kẹo Snack & ngũ cốc chuyên cung cấp cho chuỗi 144 siêu thị Kingfood.', 'active'), (25, '2026-05-15 16:54:25.229', '2026-05-15 16:54:25.229', DEFAULT, DEFAULT, 'Bánh kẹo Snack & ngũ cốc - Hạng Sỉ #4', 120000, 0, 'https://placehold.co/640x480?text=B%C3%A1nh%20k%E1%BA%B9o%20Snack%20%26%20ng%C5%A9%20c%E1%BB%91c%20-%20H%E1%BA%A1ng%20S%E1%BB%89%20%234', 'Sản phẩm đóng gói sỉ Bánh kẹo Snack & ngũ cốc chuyên cung cấp cho chuỗi 144 siêu thị Kingfood.', 'active'), (26, '2026-05-15 16:54:25.946', '2026-05-15 16:54:25.946', DEFAULT, DEFAULT, 'Bánh kẹo Snack & ngũ cốc - Hạng Sỉ #5', 150000, 5, 'https://placehold.co/640x480?text=B%C3%A1nh%20k%E1%BA%B9o%20Snack%20%26%20ng%C5%A9%20c%E1%BB%91c%20-%20H%E1%BA%A1ng%20S%E1%BB%89%20%235', 'Sản phẩm đóng gói sỉ Bánh kẹo Snack & ngũ cốc chuyên cung cấp cho chuỗi 144 siêu thị Kingfood.', 'active'), (27, '2026-05-15 16:54:26.562', '2026-05-15 16:54:26.562', DEFAULT, DEFAULT, 'Bánh kẹo Snack & ngũ cốc - Hạng Sỉ #6',"... 71796 more characters
+  },
+  code: 'ER_NO_DEFAULT_FOR_FIELD',
+  errno: 1364,
+  sqlState: 'HY000',
+  sqlMessage: "Field 'category_id' doesn't have a default value",
+  sql: "INSERT INTO `KingFood_products`(`id`, `created_at`, `updated_at`, `deleted_at`, `category_id`, `name`, `price`, `discount`, `image`, `description`, `status`) VALUES (1, '2026-05-15 16:54:05.321', '2026-05-15 16:54:05.321', DEFAULT, DEFAULT, 'Bánh kẹo Bánh quy sỉ - Hạng Sỉ #1', 45000, 5, 'https://placehold.co/640x480?text=B%C3%A1nh%20k%E1%BA%B9o%20B%C3%A1nh%20quy%20s%E1%BB%89%20-%20H%E1%BA%A1ng%20S%E1%BB%89%20%231', 'Sản phẩm đóng gói sỉ Bánh kẹo Bánh quy sỉ chuyên cung cấp cho chuỗi 144 siêu thị Kingfood.', 'active'), (2, '2026-05-15 16:54:06.082', '2026-05-15 16:54:06.082', DEFAULT, DEFAULT, 'Bánh kẹo Bánh quy sỉ - Hạng Sỉ #2', 65000, 10, 'https://placehold.co/640x480?text=B%C3%A1nh%20k%E1%BA%B9o%20B%C3%A1nh%20quy%20s%E1%BB%89%20-%20H%E1%BA%A1ng%20S%E1%BB%89%20%232', 'Sản phẩm đóng gói sỉ Bánh kẹo Bánh quy sỉ chuyên cung cấp cho chuỗi 144 siêu thị Kingfood.', 'active'), (3, '2026-05-15 16:54:06.902', '2026-05-15 16:54:06.902', DEFAULT, DEFAULT, 'Bánh kẹo Bánh quy sỉ - Hạng Sỉ #3', 85000, 15, 'https://placehold.co/640x480?text=B%C3%A1nh%20k%E1%BA%B9o%20B%C3%A1nh%20quy%20s%E1%BB%89%20-%20H%E1%BA%A1ng%20S%E1%BB%89%20%233', 'Sản phẩm đóng gói sỉ Bánh kẹo Bánh quy sỉ chuyên cung cấp cho chuỗi 144 siêu thị Kingfood.', 'active'), (4, '2026-05-15 16:54:07.719', '2026-05-15 16:54:07.719', DEFAULT, DEFAULT, 'Bánh kẹo Bánh quy sỉ - Hạng Sỉ #4', 120000, 0, 'https://placehold.co/640x480?text=B%C3%A1nh%20k%E1%BA%B9o%20B%C3%A1nh%20quy%20s%E1%BB%89%20-%20H%E1%BA%A1ng%20S%E1%BB%89%20%234', 'Sản phẩm đóng gói sỉ Bánh kẹo Bánh quy sỉ chuyên cung cấp cho chuỗi 144 siêu thị Kingfood.', 'active'), (5, '2026-05-15 16:54:08.937', '2026-05-15 16:54:08.937', DEFAULT, DEFAULT, 'Bánh kẹo Bánh quy sỉ - Hạng Sỉ #5', 150000, 5, 'https://placehold.co/640x480?text=B%C3%A1nh%20k%E1%BA%B9o%20B%C3%A1nh%20quy%20s%E1%BB%89%20-%20H%E1%BA%A1ng%20S%E1%BB%89%20%235', 'Sản phẩm đóng gói sỉ Bánh kẹo Bánh quy sỉ chuyên cung cấp cho chuỗi 144 siêu thị Kingfood.', 'active'), (6, '2026-05-15 16:54:09.361', '2026-05-15 16:54:09.361', DEFAULT, DEFAULT, 'Bánh kẹo Bánh quy sỉ - Hạng Sỉ #6', 240000, 10, 'https://placehold.co/640x480?text=B%C3%A1nh%20k%E1%BA%B9o%20B%C3%A1nh%20quy%20s%E1%BB%89%20-%20H%E1%BA%A1ng%20S%E1%BB%89%20%236', 'Sản phẩm đóng gói sỉ Bánh kẹo Bánh quy sỉ chuyên cung cấp cho chuỗi 144 siêu thị Kingfood.', 'active'), (7, '2026-05-15 16:54:10.075', '2026-05-15 16:54:10.075', DEFAULT, DEFAULT, 'Bánh kẹo Bánh quy sỉ - Hạng Sỉ #7', 320000, 15, 'https://placehold.co/640x480?text=B%C3%A1nh%20k%E1%BA%B9o%20B%C3%A1nh%20quy%20s%E1%BB%89%20-%20H%E1%BA%A1ng%20S%E1%BB%89%20%237', 'Sản phẩm đóng gói sỉ Bánh kẹo Bánh quy sỉ chuyên cung cấp cho chuỗi 144 siêu thị Kingfood.', 'active'), (8, '2026-05-15 16:54:11.355', '2026-05-15 16:54:11.355', DEFAULT, DEFAULT, 'Bánh kẹo Kẹo mềm hoa quả - Hạng Sỉ #1', 45000, 5, 'https://placehold.co/640x480?text=B%C3%A1nh%20k%E1%BA%B9o%20K%E1%BA%B9o%20m%E1%BB%81m%20hoa%20qu%E1%BA%A3%20-%20H%E1%BA%A1ng%20S%E1%BB%89%20%231', 'Sản phẩm đóng gói sỉ Bánh kẹo Kẹo mềm hoa quả chuyên cung cấp cho chuỗi 144 siêu thị Kingfood.', 'active'), (9, '2026-05-15 16:54:11.996', '2026-05-15 16:54:11.996', DEFAULT, DEFAULT, 'Bánh kẹo Kẹo mềm hoa quả - Hạng Sỉ #2', 65000, 10, 'https://placehold.co/640x480?text=B%C3%A1nh%20k%E1%BA%B9o%20K%E1%BA%B9o%20m%E1%BB%81m%20hoa%20qu%E1%BA%A3%20-%20H%E1%BA%A1ng%20S%E1%BB%89%20%232', 'Sản phẩm đóng gói sỉ Bánh kẹo Kẹo mềm hoa quả chuyên cung cấp cho chuỗi 144 siêu thị Kingfood.', 'active'), (10, '2026-05-15 16:54:12.642', '2026-05-15 16:54:12.642', DEFAULT, DEFAULT, 'Bánh kẹo Kẹo mềm hoa quả - Hạng Sỉ #3', 85000, 15, 'https://placehold.co/640x480?text=B%C3%A1nh%20k%E1%BA%B9o%20K%E1%BA%B9o%20m%E1%BB%81m%20hoa%20qu%E1%BA%A3%20-%20H%E1%BA%A1ng%20S%E1%BB%89%20%233', 'Sản phẩm đóng gói sỉ Bánh kẹo Kẹo mềm hoa quả chuyên cung cấp cho chuỗi 144 siêu thị Kingfood.', 'active'), (11, '2026-05-15 16:54:13.443', '2026-05-15 16:54:13.443', DEFAULT, DEFAULT, 'Bánh kẹo Kẹo mềm hoa quả - Hạng Sỉ #4', 120000, 0, 'https://placehold.co/640x480?text=B%C3%A1nh%20k%E1%BA%B9o%20K%E1%BA%B9o%20m%E1%BB%81m%20hoa%20qu%E1%BA%A3%20-%20H%E1%BA%A1ng%20S%E1%BB%89%20%234', 'Sản phẩm đóng gói sỉ Bánh kẹo Kẹo mềm hoa quả chuyên cung cấp cho chuỗi 144 siêu thị Kingfood.', 'active'), (12, '2026-05-15 16:54:14.071', '2026-05-15 16:54:14.071', DEFAULT, DEFAULT, 'Bánh kẹo Kẹo mềm hoa quả - Hạng Sỉ #5', 150000, 5, 'https://placehold.co/640x480?text=B%C3%A1nh%20k%E1%BA%B9o%20K%E1%BA%B9o%20m%E1%BB%81m%20hoa%20qu%E1%BA%A3%20-%20H%E1%BA%A1ng%20S%E1%BB%89%20%235', 'Sản phẩm đóng gói sỉ Bánh kẹo Kẹo mềm hoa quả chuyên cung cấp cho chuỗi 144 siêu thị Kingfood.', 'active'), (13, '2026-05-15 16:54:15.185', '2026-05-15 16:54:15.185', DEFAULT, DEFAULT, 'Bánh kẹo Kẹo mềm hoa quả - Hạng Sỉ #6', 240000, 10, 'https://placehold.co/640x480?text=B%C3%A1nh%20k%E1%BA%B9o%20K%E1%BA%B9o%20m%E1%BB%81m%20hoa%20qu%E1%BA%A3%20-%20H%E1%BA%A1ng%20S%E1%BB%89%20%236', 'Sản phẩm đóng gói sỉ Bánh kẹo Kẹo mềm hoa quả chuyên cung cấp cho chuỗi 144 siêu thị Kingfood.', 'active'), (14, '2026-05-15 16:54:15.813', '2026-05-15 16:54:15.813', DEFAULT, DEFAULT, 'Bánh kẹo Kẹo mềm hoa quả - Hạng Sỉ #7', 320000, 15, 'https://placehold.co/640x480?text=B%C3%A1nh%20k%E1%BA%B9o%20K%E1%BA%B9o%20m%E1%BB%81m%20hoa%20qu%E1%BA%A3%20-%20H%E1%BA%A1ng%20S%E1%BB%89%20%237', 'Sản phẩm đóng gói sỉ Bánh kẹo Kẹo mềm hoa quả chuyên cung cấp cho chuỗi 144 siêu thị Kingfood.', 'active'), (15, '2026-05-15 16:54:16.760', '2026-05-15 16:54:16.760', DEFAULT, DEFAULT, 'Bánh kẹo Sô-cô-la ngoại - Hạng Sỉ #1', 45000, 5, 'https://placehold.co/640x480?text=B%C3%A1nh%20k%E1%BA%B9o%20S%C3%B4-c%C3%B4-la%20ngo%E1%BA%A1i%20-%20H%E1%BA%A1ng%20S%E1%BB%89%20%231', 'Sản phẩm đóng gói sỉ Bánh kẹo Sô-cô-la ngoại chuyên cung cấp cho chuỗi 144 siêu thị Kingfood.', 'active'), (16, '2026-05-15 16:54:17.740', '2026-05-15 16:54:17.740', DEFAULT, DEFAULT, 'Bánh kẹo Sô-cô-la ngoại - Hạng Sỉ #2', 65000, 10, 'https://placehold.co/640x480?text=B%C3%A1nh%20k%E1%BA%B9o%20S%C3%B4-c%C3%B4-la%20ngo%E1%BA%A1i%20-%20H%E1%BA%A1ng%20S%E1%BB%89%20%232', 'Sản phẩm đóng gói sỉ Bánh kẹo Sô-cô-la ngoại chuyên cung cấp cho chuỗi 144 siêu thị Kingfood.', 'active'), (17, '2026-05-15 16:54:18.486', '2026-05-15 16:54:18.486', DEFAULT, DEFAULT, 'Bánh kẹo Sô-cô-la ngoại - Hạng Sỉ #3', 85000, 15, 'https://placehold.co/640x480?text=B%C3%A1nh%20k%E1%BA%B9o%20S%C3%B4-c%C3%B4-la%20ngo%E1%BA%A1i%20-%20H%E1%BA%A1ng%20S%E1%BB%89%20%233', 'Sản phẩm đóng gói sỉ Bánh kẹo Sô-cô-la ngoại chuyên cung cấp cho chuỗi 144 siêu thị Kingfood.', 'active'), (18, '2026-05-15 16:54:19.190', '2026-05-15 16:54:19.190', DEFAULT, DEFAULT, 'Bánh kẹo Sô-cô-la ngoại - Hạng Sỉ #4', 120000, 0, 'https://placehold.co/640x480?text=B%C3%A1nh%20k%E1%BA%B9o%20S%C3%B4-c%C3%B4-la%20ngo%E1%BA%A1i%20-%20H%E1%BA%A1ng%20S%E1%BB%89%20%234', 'Sản phẩm đóng gói sỉ Bánh kẹo Sô-cô-la ngoại chuyên cung cấp cho chuỗi 144 siêu thị Kingfood.', 'active'), (19, '2026-05-15 16:54:20.108', '2026-05-15 16:54:20.108', DEFAULT, DEFAULT, 'Bánh kẹo Sô-cô-la ngoại - Hạng Sỉ #5', 150000, 5, 'https://placehold.co/640x480?text=B%C3%A1nh%20k%E1%BA%B9o%20S%C3%B4-c%C3%B4-la%20ngo%E1%BA%A1i%20-%20H%E1%BA%A1ng%20S%E1%BB%89%20%235', 'Sản phẩm đóng gói sỉ Bánh kẹo Sô-cô-la ngoại chuyên cung cấp cho chuỗi 144 siêu thị Kingfood.', 'active'), (20, '2026-05-15 16:54:20.931', '2026-05-15 16:54:20.931', DEFAULT, DEFAULT, 'Bánh kẹo Sô-cô-la ngoại - Hạng Sỉ #6', 240000, 10, 'https://placehold.co/640x480?text=B%C3%A1nh%20k%E1%BA%B9o%20S%C3%B4-c%C3%B4-la%20ngo%E1%BA%A1i%20-%20H%E1%BA%A1ng%20S%E1%BB%89%20%236', 'Sản phẩm đóng gói sỉ Bánh kẹo Sô-cô-la ngoại chuyên cung cấp cho chuỗi 144 siêu thị Kingfood.', 'active'), (21, '2026-05-15 16:54:21.767', '2026-05-15 16:54:21.767', DEFAULT, DEFAULT, 'Bánh kẹo Sô-cô-la ngoại - Hạng Sỉ #7', 320000, 15, 'https://placehold.co/640x480?text=B%C3%A1nh%20k%E1%BA%B9o%20S%C3%B4-c%C3%B4-la%20ngo%E1%BA%A1i%20-%20H%E1%BA%A1ng%20S%E1%BB%89%20%237', 'Sản phẩm đóng gói sỉ Bánh kẹo Sô-cô-la ngoại chuyên cung cấp cho chuỗi 144 siêu thị Kingfood.', 'active'), (22, '2026-05-15 16:54:22.438', '2026-05-15 16:54:22.438', DEFAULT, DEFAULT, 'Bánh kẹo Snack & ngũ cốc - Hạng Sỉ #1', 45000, 5, 'https://placehold.co/640x480?text=B%C3%A1nh%20k%E1%BA%B9o%20Snack%20%26%20ng%C5%A9%20c%E1%BB%91c%20-%20H%E1%BA%A1ng%20S%E1%BB%89%20%231', 'Sản phẩm đóng gói sỉ Bánh kẹo Snack & ngũ cốc chuyên cung cấp cho chuỗi 144 siêu thị Kingfood.', 'active'), (23, '2026-05-15 16:54:23.182', '2026-05-15 16:54:23.182', DEFAULT, DEFAULT, 'Bánh kẹo Snack & ngũ cốc - Hạng Sỉ #2', 65000, 10, 'https://placehold.co/640x480?text=B%C3%A1nh%20k%E1%BA%B9o%20Snack%20%26%20ng%C5%A9%20c%E1%BB%91c%20-%20H%E1%BA%A1ng%20S%E1%BB%89%20%232', 'Sản phẩm đóng gói sỉ Bánh kẹo Snack & ngũ cốc chuyên cung cấp cho chuỗi 144 siêu thị Kingfood.', 'active'), (24, '2026-05-15 16:54:24.158', '2026-05-15 16:54:24.158', DEFAULT, DEFAULT, 'Bánh kẹo Snack & ngũ cốc - Hạng Sỉ #3', 85000, 15, 'https://placehold.co/640x480?text=B%C3%A1nh%20k%E1%BA%B9o%20Snack%20%26%20ng%C5%A9%20c%E1%BB%91c%20-%20H%E1%BA%A1ng%20S%E1%BB%89%20%233', 'Sản phẩm đóng gói sỉ Bánh kẹo Snack & ngũ cốc chuyên cung cấp cho chuỗi 144 siêu thị Kingfood.', 'active'), (25, '2026-05-15 16:54:25.229', '2026-05-15 16:54:25.229', DEFAULT, DEFAULT, 'Bánh kẹo Snack & ngũ cốc - Hạng Sỉ #4', 120000, 0, 'https://placehold.co/640x480?text=B%C3%A1nh%20k%E1%BA%B9o%20Snack%20%26%20ng%C5%A9%20c%E1%BB%91c%20-%20H%E1%BA%A1ng%20S%E1%BB%89%20%234', 'Sản phẩm đóng gói sỉ Bánh kẹo Snack & ngũ cốc chuyên cung cấp cho chuỗi 144 siêu thị Kingfood.', 'active'), (26, '2026-05-15 16:54:25.946', '2026-05-15 16:54:25.946', DEFAULT, DEFAULT, 'Bánh kẹo Snack & ngũ cốc - Hạng Sỉ #5', 150000, 5, 'https://placehold.co/640x480?text=B%C3%A1nh%20k%E1%BA%B9o%20Snack%20%26%20ng%C5%A9%20c%E1%BB%91c%20-%20H%E1%BA%A1ng%20S%E1%BB%89%20%235', 'Sản phẩm đóng gói sỉ Bánh kẹo Snack & ngũ cốc chuyên cung cấp cho chuỗi 144 siêu thị Kingfood.', 'active'), (27, '2026-05-15 16:54:26.562', '2026-05-15 16:54:26.562', DEFAULT, DEFAULT, 'Bánh kẹo Snack & ngũ cốc - Hạng Sỉ #6',"... 71796 more characters
+}
+🔌 Đã ngắt kết nối an toàn với database.

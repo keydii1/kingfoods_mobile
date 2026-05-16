@@ -12,7 +12,7 @@ export const AppDataSource = new DataSource({
   username: process.env.DB_USER || "root",
   password: process.env.DB_PASSWORD ?? "123456",
   database: process.env.DB_NAME || "mydb",
-  synchronize: true,
+  synchronize: false,
   logging: false,
   entities: [__dirname + "/../Entity/*.{js,ts}"],
   entityPrefix: AppConfig.TABLE_PREFIX,

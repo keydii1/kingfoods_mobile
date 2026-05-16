@@ -123,3 +123,31 @@
 2026-05-13 23:11:45:1145 [31merror[39m: [31m[POST /api/v1/auth/user/login] [400] Bad control character in string literal in JSON at position 40 (line 2 column 39)[39m
 2026-05-13 23:12:13:1213 [31merror[39m: [31m[POST /api/v1/auth/customer/login] [401] Invalid email or password[39m
 2026-05-14 00:47:37:4737 [31merror[39m: [31m[GET /favicon.ico] [401] No token provided[39m
+2026-05-15 16:13:05:135 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-15 16:13:05:135 [31merror[39m: [31mCannot add or update a child row: a foreign key constraint fails ("defaultdb"."#sql-b7_24f72", CONSTRAINT "FK_e63414ec8f8f8588b6696263815" FOREIGN KEY ("order_id") REFERENCES "KingFood_orders" ("id"))[39m
+2026-05-15 16:15:45:1545 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-15 16:15:45:1545 [31merror[39m: [31mCannot add or update a child row: a foreign key constraint fails ("defaultdb"."#sql-b7_24fad", CONSTRAINT "FK_e63414ec8f8f8588b6696263815" FOREIGN KEY ("order_id") REFERENCES "KingFood_orders" ("id"))[39m
+2026-05-15 16:17:06:176 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-15 16:17:06:176 [31merror[39m: [31mCannot add or update a child row: a foreign key constraint fails ("defaultdb"."#sql-b7_24fc7", CONSTRAINT "FK_e63414ec8f8f8588b6696263815" FOREIGN KEY ("order_id") REFERENCES "KingFood_orders" ("id"))[39m
+2026-05-15 16:32:02:322 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-15 16:32:02:322 [31merror[39m: [31mCannot add or update a child row: a foreign key constraint fails ("defaultdb"."#sql-b7_250fc", CONSTRAINT "FK_e63414ec8f8f8588b6696263815" FOREIGN KEY ("order_id") REFERENCES "KingFood_orders" ("id"))[39m
+2026-05-15 16:38:13:3813 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-15 16:38:13:3813 [31merror[39m: [31mCannot add or update a child row: a foreign key constraint fails ("defaultdb"."#sql-b7_25180", CONSTRAINT "FK_e63414ec8f8f8588b6696263815" FOREIGN KEY ("order_id") REFERENCES "KingFood_orders" ("id"))[39m
+2026-05-15 16:43:54:4354 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-15 16:43:54:4354 [31merror[39m: [31mlisten EADDRINUSE: address already in use 0.0.0.0:3000[39m
+2026-05-15 16:45:20:4520 [31merror[39m: [31m[POST /api/v1/auth/user/login] [401] Invalid username or password[39m
+2026-05-16 11:44:08:448 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-16 11:44:08:448 [31merror[39m: [31mCannot add or update a child row: a foreign key constraint fails ("defaultdb"."#sql-b7_2ac0a", CONSTRAINT "FK_e63414ec8f8f8588b6696263815" FOREIGN KEY ("order_id") REFERENCES "KingFood_orders" ("id"))[39m
+2026-05-16 11:45:54:4554 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-16 11:45:54:4554 [31merror[39m: [31mCannot add or update a child row: a foreign key constraint fails ("defaultdb"."#sql-b7_2ac31", CONSTRAINT "FK_e63414ec8f8f8588b6696263815" FOREIGN KEY ("order_id") REFERENCES "KingFood_orders" ("id"))[39m
+2026-05-16 11:54:36:5436 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-16 11:54:36:5436 [31merror[39m: [31mCannot add or update a child row: a foreign key constraint fails ("defaultdb"."#sql-b7_2ace8", CONSTRAINT "FK_e63414ec8f8f8588b6696263815" FOREIGN KEY ("order_id") REFERENCES "KingFood_orders" ("id"))[39m
+2026-05-16 11:55:15:5515 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-16 11:55:15:5515 [31merror[39m: [31mCannot add or update a child row: a foreign key constraint fails ("defaultdb"."#sql-b7_2acfc", CONSTRAINT "FK_e63414ec8f8f8588b6696263815" FOREIGN KEY ("order_id") REFERENCES "KingFood_orders" ("id"))[39m
+2026-05-16 11:58:30:5830 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-16 11:58:30:5830 [31merror[39m: [31mlisten EADDRINUSE: address already in use 0.0.0.0:3000[39m
+2026-05-16 11:59:05:595 [31merror[39m: [31m[GET /favicon.ico] [401] No token provided[39m
+2026-05-16 12:12:09:129 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-16 12:12:09:129 [31merror[39m: [31mlisten EADDRINUSE: address already in use 0.0.0.0:9999[39m
+2026-05-16 13:31:57:3157 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-16 13:31:57:3157 [31merror[39m: [31mlisten EADDRINUSE: address already in use 0.0.0.0:9999[39m

@@ -20,15 +20,6 @@ export class OrderDetail extends BaseEntity {
   @Property()
   quantity: number;
 
-  @Column({
-    type: "decimal",
-    precision: 10,
-    scale: 2,
-    transformer: new ColumnNumericTransformer(),
-    nullable: false,
-  })
-  @Property()
-  price: number;
 
   @ManyToOne(() => Order, (order) => order.orderDetails)
   @JoinColumn({ name: "order_id" })

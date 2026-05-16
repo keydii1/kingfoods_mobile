@@ -35,7 +35,7 @@ export class Customer extends BaseEntity {
 
   @Column({ name: "phone_number", nullable: true })
   @Property()
-  phone: string;
+  phoneNumber: string;
 
   @Column({ type: "enum", enum: AccountStatus, default: AccountStatus.ACTIVE })
   @Enum(AccountStatus)

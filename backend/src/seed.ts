@@ -1,8 +1,8 @@
 import "reflect-metadata";
 import { AppDataSource } from "./config/DataSource";
 import { Location } from "./Entity/Location";
-import { Category } from "./Entity/Category";
-import { Product } from "./Entity/Product";
+import { Category, Status as CategoryStatus } from "./Entity/Category";
+import { Product, ProductStatus } from "./Entity/Product";
 import { Branch } from "./Entity/Branch";
 import { Customer } from "./Entity/Customer";
 import { User, UserRole } from "./Entity/User";
@@ -11,602 +11,240 @@ import { OrderDetail } from "./Entity/OrderDetail";
 import { PickingTask, PickingTaskStatus } from "./Entity/PickingTask";
 import { Container, ContainerStatus } from "./Entity/Container";
 import { ContainerItem, ContainerItemStatus } from "./Entity/ContainerItem";
-import { IncidentReport, IncidentStatus } from "./Entity/IncidentReport";
-
-// Helper to safely chunk array for Cloud DB packet size limits
-const chunkArray = (array: any[], chunkSize: number) => {
-  const chunks = [];
-  for (let i = 0; i < array.length; i += chunkSize) {
-    chunks.push(array.slice(i, i + chunkSize));
-  }
-  return chunks;
-};
 
 async function seed() {
   try {
-    console.log("🚀 Khởi động trình tạo dữ liệu KingFoods Hyper-Seed...");
+    console.log("🚀 MEGA SEED V2 - REAL PRODUCTS & SYNCED SCHEMA...");
     await AppDataSource.initialize();
     await AppDataSource.query("SET FOREIGN_KEY_CHECKS = 0;");
-    console.log("✅ Kết nối cơ sở dữ liệu thành công!");
-
-    // 1. Dọn dẹp dữ liệu cũ trước khi chạy Bulk Insert sạch
-    console.log("🧹 Đang làm sạch dữ liệu các bảng giao dịch...");
-    await AppDataSource.manager
-      .createQueryBuilder()
-      .delete()
-      .from(ContainerItem)
-      .execute();
-    await AppDataSource.manager
-      .createQueryBuilder()
-      .delete()
-      .from(Container)
-      .execute();
-    await AppDataSource.manager
-      .createQueryBuilder()
-      .delete()
-      .from(IncidentReport)
-      .execute();
-    await AppDataSource.manager
-      .createQueryBuilder()
-      .delete()
-      .from(PickingTask)
-      .execute();
-    await AppDataSource.manager
-      .createQueryBuilder()
-      .delete()
-      .from(OrderDetail)
-      .execute();
-    await AppDataSource.manager
-      .createQueryBuilder()
-      .delete()
-      .from(Order)
-      .execute();
-    await AppDataSource.manager
-      .createQueryBuilder()
-      .delete()
-      .from(Product)
-      .execute();
-    await AppDataSource.manager
-      .createQueryBuilder()
-      .delete()
-      .from(Category)
-      .execute();
-    await AppDataSource.manager
-      .createQueryBuilder()
-      .delete()
-      .from(Location)
-      .execute();
     
-    // Reset AUTO_INCREMENT counters to 1
     const tables = [
-      "KingFood_container_items",
-      "KingFood_containers",
-      "KingFood_incident_reports",
-      "KingFood_picking_tasks",
-      "KingFood_order_details",
-      "KingFood_orders",
-      "KingFood_products",
-      "KingFood_categories",
-      "KingFood_locations"
+      "KingFood_container_items", "KingFood_containers", "KingFood_incident_reports",
+      "KingFood_picking_tasks", "KingFood_order_details", "KingFood_orders",
+      "KingFood_products", "KingFood_categories", "KingFood_locations"
     ];
     for (const table of tables) {
+      await AppDataSource.query(`DELETE FROM ${table}`);
       await AppDataSource.query(`ALTER TABLE ${table} AUTO_INCREMENT = 1`);
     }
 
-    console.log("✅ Làm sạch dữ liệu và reset ID hoàn tất!");
+    // 1. Locations
+    await AppDataSource.manager.save(Location, [
+      { id: 1, code: "FRESH", name: "🥦 Thực phẩm tươi" },
+      { id: 2, code: "DRY", name: "🥫 Đồ khô & Gia vị" },
+      { id: 3, code: "CHEMICAL", name: "🧴 Hóa mỹ phẩm" },
+      { id: 4, code: "FROZEN", name: "❄️ Đồ đông lạnh" }
+    ]);
 
-    // 2. Bulk Insert Locations (Gán ID tĩnh 1 đến 4 dựa trên UserZone)
-    console.log("📍 Đang tạo khu vực kho (Locations)...");
-    const locations = [
-      {
-        id: 1,
-        code: "CANDY",
-        name: "🍬 Bánh kẹo",
-        description: "Khu vực lưu trữ các loại bánh kẹo, ngũ cốc sỉ.",
+    // 2. Categories & Product Templates
+    const catTemplates = [
+      { 
+        name: "Hóa phẩm", 
+        desc: "Dầu gội, xà phòng, sữa tắm.", 
+        loc: 3, 
+        prods: [
+          { name: "Dầu gội Head & Shoulders 625ml", price: 155000, img: "https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?w=200" },
+          { name: "Sữa tắm Lifebuoy Bảo vệ vượt trội 800g", price: 185000, img: "https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?w=200" },
+          { name: "Xà bông cục Safeguard Trắng tinh khiết", price: 15000, img: "https://images.unsplash.com/photo-1600857062241-98e5dba7f214?w=200" }
+        ]
       },
-      {
-        id: 2,
-        code: "BEVERAGE",
-        name: "🥤 Đồ uống",
-        description: "Khu vực bia thùng, nước giải khát, sữa đóng hộp.",
+      { 
+        name: "Tẩy rửa", 
+        desc: "Nước lau sàn, rửa chén.", 
+        loc: 3, 
+        prods: [
+          { name: "Nước rửa chén Sunlight Chanh 3.6kg", price: 95000, img: "https://images.unsplash.com/photo-1584622781564-1d9876a13d00?w=200" },
+          { name: "Nước lau sàn Sunlight Hương hoa 3.8kg", price: 85000, img: "https://images.unsplash.com/photo-1563453392212-326f5e854473?w=200" },
+          { name: "Nước tẩy Javel Mỹ Hảo 1L", price: 18000, img: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=200" }
+        ]
       },
-      {
-        id: 3,
-        code: "CHEMICAL",
-        name: "🧴 Hóa phẩm",
-        description: "Khu vực chất tẩy rửa, dầu gội, mỹ phẩm gia dụng.",
+      { 
+        name: "Thực phẩm tươi sống", 
+        desc: "Thịt bò, trứng gà sạch.", 
+        loc: 1, 
+        prods: [
+          { name: "Thịt ba chỉ bò Mỹ khay 500g", price: 145000, img: "https://images.unsplash.com/photo-1588168333986-5078d3ae3976?w=200" },
+          { name: "Trứng gà Ba Huân hộp 10 quả", price: 32000, img: "https://images.unsplash.com/photo-1506976785307-8732e854ad03?w=200" },
+          { name: "Thịt đùi heo VietGAP 500g", price: 85000, img: "https://images.unsplash.com/photo-1602470520998-f4a52199a3d6?w=200" }
+        ]
       },
-      {
-        id: 4,
-        code: "PROMOTION",
-        name: "🎁 KM",
-        description: "Khu vực lưu trữ hàng khuyến mãi, quà tặng kèm.",
+      { 
+        name: "Trái cây nội địa", 
+        desc: "Xoài, bưởi, cam tươi.", 
+        loc: 1, 
+        prods: [
+          { name: "Bưởi da xanh túi 1.2kg", price: 65000, img: "https://images.unsplash.com/photo-1557800636-894a64c1696f?w=200" },
+          { name: "Cam sành túi lưới 2kg", price: 45000, img: "https://images.unsplash.com/photo-1611080626919-7cf5a9dcab5b?w=200" },
+          { name: "Xoài Cát Hòa Lộc 1kg", price: 75000, img: "https://images.unsplash.com/photo-1553279768-865429fa0078?w=200" }
+        ]
       },
-    ];
-    await AppDataSource.createQueryBuilder()
-      .insert()
-      .into(Location)
-      .values(locations)
-      .execute();
-    console.log("✅ Đã insert 4 Locations thành công!");
-
-    // 3. Chuẩn bị Categories & Products data
-    const categoryTemplates = [
-      {
-        prefix: "Bánh kẹo",
-        items: [
-          "Bánh quy sỉ",
-          "Kẹo mềm hoa quả",
-          "Sô-cô-la ngoại",
-          "Snack & ngũ cốc",
-        ],
-        keywords: "candy,biscuit,snack",
-        locId: 1,
+      { 
+        name: "Thịt, Cá", 
+        desc: "Cá hồi, tôm tươi.", 
+        loc: 1, 
+        prods: [
+          { name: "Filet cá hồi Na Uy 300g", price: 215000, img: "https://images.unsplash.com/photo-1599084993091-1cb5c0721cc6?w=200" },
+          { name: "Tôm thẻ chân trắng size 30 con", price: 185000, img: "https://images.unsplash.com/photo-1559740038-005663738006?w=200" },
+          { name: "Mực lá tươi Phan Thiết 500g", price: 250000, img: "https://images.unsplash.com/photo-1534080397700-d9d3008064e2?w=200" }
+        ]
       },
-      {
-        prefix: "Đồ uống",
-        items: [
-          "Bia thùng nhập",
-          "Nước giải khát",
-          "Nước ép đóng hộp",
-          "Trà sữa sỉ",
-        ],
-        keywords: "beverage,juice,drink",
-        locId: 2,
+      { 
+        name: "Đồ đông lạnh", 
+        desc: "Cá viên, xúc xích.", 
+        loc: 4, 
+        prods: [
+          { name: "Cá viên CP gói 500g", price: 55000, img: "https://images.unsplash.com/photo-1585238341267-1cfec2046a55?w=200" },
+          { name: "Xúc xích Đức Vissan gói 500g", price: 75000, img: "https://images.unsplash.com/photo-1541048612927-85454868f29d?w=200" }
+        ]
       },
-      {
-        prefix: "Hóa mỹ phẩm",
-        items: [
-          "Dầu gội xả sỉ",
-          "Nước giặt xả",
-          "Tẩy rửa gia dụng",
-          "Xà phòng tắm",
-        ],
-        keywords: "soap,shampoo,detergent",
-        locId: 3,
-      },
-      {
-        prefix: "Khuyến mãi",
-        items: ["Combo Giftbox", "Hàng tặng kèm", "Mẫu thử VIP", "Đồ lưu niệm"],
-        keywords: "gift,promotion,box",
-        locId: 4,
-      },
-      {
-        prefix: "Ăn vặt sỉ",
-        items: [
-          "Hạt sấy khô",
-          "Trái cây dẻo",
-          "Mực tẩm gia vị",
-          "Rong biển ăn liền",
-        ],
-        keywords: "snack,food,grocery",
-        locId: 1,
-      },
-      {
-        prefix: "Đồ giải khát",
-        items: [
-          "Nước khoáng chai",
-          "Nước tăng lực",
-          "Bia lon nội địa",
-          "Rượu vang tiệc",
-        ],
-        keywords: "drink,soda,beverage",
-        locId: 2,
-      },
-      {
-        prefix: "Hóa phẩm phụ",
-        items: [
-          "Khăn giấy sỉ",
-          "Nước lau sàn",
-          "Xịt thơm phòng",
-          "Bột giặt gói",
-        ],
-        keywords: "cleaning,household,detergent",
-        locId: 3,
-      },
-      {
-        prefix: "Quà tặng KM",
-        items: ["Ly cốc in logo", "Túi vải Eco", "Lịch tết sỉ", "Gấu bông KM"],
-        keywords: "gift,souvenir,promotion",
-        locId: 4,
-      },
+      { 
+        name: "Gia vị & Đồ khô", 
+        desc: "Mì gói, dầu ăn.", 
+        loc: 2, 
+        prods: [
+          { name: "Mì Hảo Hảo Tôm Chua Cay thùng 30 gói", price: 115000, img: "https://images.unsplash.com/photo-1612927608555-592d755981ca?w=200" },
+          { name: "Dầu đậu nành Simply 2L", price: 125000, img: "https://images.unsplash.com/photo-1474979266404-7eaacbad8a0f?w=200" },
+          { name: "Hạt nêm Knorr 900g", price: 82000, img: "https://images.unsplash.com/photo-1518133910546-b6c2fb7d79e3?w=200" }
+        ]
+      }
     ];
 
-    const categoriesToSave: any[] = [];
-    const productsToSave: any[] = [];
-    let catId = 1;
-    let prodId = 1;
+    const catsToInsert: any[] = [];
+    for (const temp of catTemplates) {
+      catsToInsert.push({ name: temp.name, description: temp.desc, locationId: temp.loc, status: CategoryStatus.ACTIVE });
+    }
+    const catResult = await AppDataSource.manager.insert(Category, catsToInsert);
+    const catIds = catResult.identifiers.map(i => i.id);
 
-    for (const template of categoryTemplates) {
-      for (const subItem of template.items) {
-        if (catId > 30) break; // Giới hạn đúng 30 Categories theo đề bài
-
-        const categoryName = `${template.prefix} ${subItem}`;
-        categoriesToSave.push({
-          id: catId,
-          name: categoryName,
-          description: `Danh mục sỉ nhóm hàng ${categoryName} chất lượng cao.`,
-          locationId: template.locId,
-          status: "active",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        });
-
-        // Tạo 7 sản phẩm cho mỗi Category -> Tổng cộng 30 * 7 = 210 sản phẩm
-        for (let i = 1; i <= 7; i++) {
-          const wholesalePrices = [
-            45000, 65000, 85000, 120000, 150000, 240000, 320000,
-          ];
-          const discountOptions = [0, 5, 10, 15];
-          const price = wholesalePrices[i - 1];
-          const discount = discountOptions[i % discountOptions.length];
-
-          productsToSave.push({
-            id: prodId++,
-            name: `${categoryName} - Hạng Sỉ #${i}`,
-            price: price,
-            discount: discount,
-            image: `https://loremflickr.com/640/480/${template.keywords}?lock=${prodId}`,
-            description: `Sản phẩm đóng gói sỉ ${categoryName} chuyên cung cấp cho chuỗi 144 siêu thị Kingfood.`,
-            categoryId: catId,
-            status: "active",
-            createdAt: new Date(),
-            updatedAt: new Date(),
-          });
-        }
-        catId++;
+    const prodsData: any[] = [];
+    for (let i = 0; i < catIds.length; i++) {
+      const cid = catIds[i];
+      for (const p of catTemplates[i].prods) {
+        prodsData.push({ name: p.name, price: p.price, categoryId: cid, status: ProductStatus.ACTIVE, image: p.img });
       }
     }
+    await AppDataSource.manager.insert(Product, prodsData);
+    const savedProds = await AppDataSource.manager.find(Product);
+    const branches = await AppDataSource.manager.find(Branch);
+    const staff = await AppDataSource.manager.find(User, { where: { role: UserRole.STAFF } });
 
-    console.log(`📤 Đang Bulk Insert ${categoriesToSave.length} Categories...`);
-    await AppDataSource.createQueryBuilder()
-      .insert()
-      .into(Category)
-      .values(categoriesToSave)
-      .execute();
-
-    console.log(`📤 Đang Bulk Insert ${productsToSave.length} Products...`);
-    await AppDataSource.createQueryBuilder()
-      .insert()
-      .into(Product)
-      .values(productsToSave)
-      .execute();
-    console.log("✅ Đã nạp Categories và Products thành công!");
-
-    // Load tất cả sản phẩm từ cơ sở dữ liệu để dùng cho Đơn hàng & Chi tiết, đảm bảo dữ liệu an toàn tuyệt đối
-    const allProducts = await AppDataSource.manager.find(Product, {
-      relations: ["category"],
-    });
-
-    // 4. Load thông tin các bảng đã tồn tại để phục vụ liên kết
-    console.log(
-      "🏢 Đang ánh xạ dữ liệu từ các bảng hiện có (Branches, Customers, Users)...",
-    );
-    const savedBranches = await AppDataSource.manager.find(Branch);
-    const savedCustomers = await AppDataSource.manager.find(Customer);
-    const savedUsers = await AppDataSource.manager.find(User);
-
-    if (
-      savedBranches.length === 0 ||
-      savedCustomers.length === 0 ||
-      savedUsers.length === 0
-    ) {
-      throw new Error(
-        "❌ Không tìm thấy dữ liệu nền trong bảng Branch, Customer hoặc User!",
-      );
+    // 3. Orders (1,000 orders)
+    console.log("🛒 Bulk generating 1,000 orders...");
+    const ordersData: any[] = [];
+    for (let i = 0; i < 1000; i++) {
+      const branch = branches[i % branches.length];
+      const statusList = [OrderStatus.PENDING, OrderStatus.PROCESSING, OrderStatus.SHIPPED, OrderStatus.DELIVERED];
+      ordersData.push({ customerId: branch.id, status: statusList[i % statusList.length], totalPrice: 0 });
     }
+    const orderResult = await AppDataSource.manager.insert(Order, ordersData);
+    const orderIds = orderResult.identifiers.map(i => i.id);
 
-    const staffUsers = savedUsers.filter((u) => u.role === UserRole.STAFF);
-    if (staffUsers.length === 0) {
-      throw new Error(
-        "❌ Hệ thống chưa có tài khoản nhân viên kho (role STAFF)!",
-      );
-    }
-    console.log(
-      `   🎯 Tìm thấy ${savedBranches.length} chi nhánh, ${savedCustomers.length} quản lý, và ${staffUsers.length} nhân viên kho.`,
-    );
-
-    // 5. Tạo 2,000 Đơn hàng (Orders) & Chi tiết đơn hàng (OrderDetails)
-    console.log("🛒 Bắt đầu khởi tạo 2,000 Đơn hàng (Orders) sỉ...");
-    const ordersToSave: any[] = [];
-    const orderDetailsToSave: any[] = [];
-    let orderDetailId = 1;
-
-    for (let o = 1; o <= 2000; o++) {
-      const branchIdx = o % savedBranches.length;
-      const branch = savedBranches[branchIdx];
-
-      const statusList = [
-        OrderStatus.PENDING,
-        OrderStatus.PROCESSING,
-        OrderStatus.SHIPPED,
-        OrderStatus.DELIVERED,
-      ];
-      const randomStatus = statusList[o % statusList.length];
-
-      // Chọn ngẫu nhiên 3 đến 8 sản phẩm từ kho cho mỗi đơn hàng để dữ liệu thực tế hơn
-      const distinctProductIndices = new Set<number>();
-      const numberOfItems = Math.floor(Math.random() * 6) + 3;
-      while (distinctProductIndices.size < numberOfItems) {
-        // Lấy ngẫu nhiên ID từ danh sách allProducts đã load từ DB
-        const randomProduct =
-          allProducts[Math.floor(Math.random() * allProducts.length)];
-        distinctProductIndices.add(randomProduct.id);
-      }
-
-      let totalOfOrder = 0;
-      const orderStaffIds = new Set<number>();
-      for (const prodIdVal of distinctProductIndices) {
-        const product = allProducts.find((p) => p.id === prodIdVal);
-        if (!product) continue;
-
-        const quantity = Math.floor(Math.random() * 20) + 1; // Từ 1 đến 20 thùng
-        const price = Number(product.price); // Ép kiểu Number để cộng giá tiền chuẩn xác
-        totalOfOrder += price * quantity;
-
-        const assignedStaff =
-          staffUsers[Math.floor(Math.random() * staffUsers.length)];
-        orderStaffIds.add(assignedStaff.id);
-
-        orderDetailsToSave.push({
-          id: orderDetailId++,
-          orderId: o,
-          productId: prodIdVal,
-          quantity: quantity,
-          price: price,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        });
-      }
-
-      ordersToSave.push({
-        id: o,
-        customerId: branch.id, // Đây chính là FK branch_id trong DB dựa trên thiết kế Entity!
-        status: randomStatus,
-        totalPrice: totalOfOrder,
-        createdAt: new Date(
-          Date.now() - Math.floor(Math.random() * 30 * 24 * 60 * 60 * 1000),
-        ), // Phân bổ 30 ngày để Dashboard hiển thị đẹp
-        updatedAt: new Date(),
-      });
-    }
-
-    console.log(`📤 Đang Bulk Insert 1,000 Orders lên Cloud...`);
-    const orderChunks = chunkArray(ordersToSave, 200);
-    for (const chunk of orderChunks) {
-      await AppDataSource.createQueryBuilder()
-        .insert()
-        .into(Order)
-        .values(chunk)
-        .execute();
-    }
-    console.log("✅ Bulk Insert 2,000 Orders hoàn tất.");
-
-    console.log(
-      `📤 Đang Bulk Insert ${orderDetailsToSave.length} OrderDetails lên Cloud...`,
-    );
-    const detailChunks = chunkArray(orderDetailsToSave, 500);
-    let batchCount = 1;
-    for (const chunk of detailChunks) {
-      await AppDataSource.createQueryBuilder()
-        .insert()
-        .into(OrderDetail)
-        .values(chunk)
-        .execute();
-      if (batchCount % 10 === 0 || batchCount === detailChunks.length) {
-        console.log(
-          `   ⏳ Tiến độ: Đã insert ${Math.min(batchCount * 500, orderDetailsToSave.length)} / ${orderDetailsToSave.length} chi tiết...`,
-        );
-      }
-      batchCount++;
-    }
-    console.log("✅ Bulk Insert OrderDetails thành công!");
-
-    // 6. Phân công Nhiệm vụ Lấy hàng (PickingTasks) mẫu cho 30 đơn hàng Processing
-    console.log("📋 Đang sinh các nhiệm vụ Pick hàng mẫu (PickingTasks)...");
-    const pickingTasksToSave: any[] = [];
-    let taskCounter = 1;
-
-    // Sinh nhiệm vụ cho toàn bộ các đơn hàng đã qua bước PENDING (PROCESSING, SHIPPED, DELIVERED)
-    const taskOrders = ordersToSave
-      .filter((o) => o.status !== OrderStatus.PENDING);
-    for (const order of taskOrders) {
-      const details = orderDetailsToSave.filter((d) => d.orderId === order.id);
-      for (const detail of details) {
-        const isCompleted = Math.random() > 0.4;
-        const product = allProducts.find((p) => p.id === detail.productId);
-        const assignedStaff = staffUsers[Math.floor(Math.random() * staffUsers.length)];
-
-        pickingTasksToSave.push({
-          id: taskCounter++,
-          orderDetailId: detail.id,
-          assignedUserId: assignedStaff.id,
-          quantityToPick: detail.quantity,
-          quantityPicked: isCompleted ? detail.quantity : 0,
-          status: isCompleted
-            ? PickingTaskStatus.COMPLETED
-            : PickingTaskStatus.PENDING,
-          locationId: product?.category?.locationId || 1,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        });
-      }
-    }
-
-    if (pickingTasksToSave.length > 0) {
-      const taskChunks = chunkArray(pickingTasksToSave, 200);
-      for (const chunk of taskChunks) {
-        await AppDataSource.createQueryBuilder()
-          .insert()
-          .into(PickingTask)
-          .values(chunk)
-          .execute();
-      }
-      console.log(
-        `✅ Đã insert thành công ${pickingTasksToSave.length} PickingTasks!`,
-      );
-    }
-
-    // 6.5. Generate mock Incident Reports
-    console.log("⚠️ Đang sinh các báo cáo sự cố (IncidentReports) mẫu...");
-    const incidentsToSave: any[] = [];
-    let incidentCounter = 1;
-
-    // FETCH tasks from DB so we have the real auto-incremented IDs
-    const pendingTasks = await AppDataSource.manager.find(PickingTask, {
-      where: { status: PickingTaskStatus.PENDING },
-      take: 15,
-    });
-
-    const reasons = [
-      "Kệ trống",
-      "Hàng hỏng",
-      "Sai vị trí",
-      "Mất mã vạch",
-      "Hàng quá hạn",
-    ];
-
-    for (const task of pendingTasks) {
-      const reasonKeywords: Record<string, string> = {
-        "Kệ trống": "empty,shelf,warehouse",
-        "Hàng hỏng": "damaged,box,warehouse",
-        "Sai vị trí": "warehouse,error,logistic",
-        "Mất mã vạch": "barcode,scanner,warehouse",
-        "Hàng quá hạn": "expired,food,waste"
-      };
+    // 4. OrderDetails (8,000 items) - NO PRICE COLUMN
+    console.log("📋 Bulk generating 8,000 order details...");
+    const detailsData: any[] = [];
+    for (let i = 0; i < 8000; i++) {
+      const ordIdx = i % orderIds.length;
+      const ordId = orderIds[ordIdx];
+      const prod = savedProds[i % savedProds.length];
+      const qty = Math.floor(Math.random() * 10) + 1;
       
-      const reason = reasons[Math.floor(Math.random() * reasons.length)];
-      const keywords = reasonKeywords[reason] || "warehouse,incident";
-
-      incidentsToSave.push({
-        taskId: task.id,
-        reporterId: task.assignedUserId,
-        photoUrl: `https://loremflickr.com/640/480/${keywords}?lock=${incidentCounter++}`,
-        reason: reason,
-        status:
-          Math.random() > 0.5
-            ? IncidentStatus.PENDING
-            : IncidentStatus.RESOLVED,
-        createdAt: new Date(
-          Date.now() - Math.floor(Math.random() * 5 * 24 * 60 * 60 * 1000),
-        ),
-        updatedAt: new Date(),
+      detailsData.push({
+        orderId: ordId,
+        productId: prod.id,
+        quantity: qty,
+        _tempStatus: ordersData[ordIdx].status,
+        _tempCatId: prod.categoryId,
+        _tempPrice: prod.price // For total calc in memory
       });
     }
+    const detailResult = await AppDataSource.manager.insert(OrderDetail, detailsData.map(d => {
+      const { _tempStatus, _tempCatId, _tempPrice, ...rest } = d;
+      return rest;
+    }));
+    const detailIds = detailResult.identifiers.map(i => i.id);
 
-    if (incidentsToSave.length > 0) {
-      await AppDataSource.createQueryBuilder()
-        .insert()
-        .into(IncidentReport)
-        .values(incidentsToSave)
-        .execute();
-      console.log(
-        `✅ Đã insert thành công ${incidentsToSave.length} IncidentReports!`,
-      );
+    // Update total price for orders (using product price * quantity)
+    console.log("💰 Calculating order total prices...");
+    const orderTotals: Record<number, number> = {};
+    for (const d of detailsData) {
+      const ordId = d.orderId;
+      orderTotals[ordId] = (orderTotals[ordId] || 0) + (Number(d._tempPrice) * d.quantity);
+    }
+    for (const ordId in orderTotals) {
+      await AppDataSource.manager.update(Order, ordId, { totalPrice: orderTotals[ordId] });
     }
 
-    // 7. Tạo Thùng hàng (Containers) & ContainerItems
-    console.log("📦 Đang tạo Thùng hàng (Containers) mẫu...");
-    const containersToSave: any[] = [];
-    for (let c = 1; c <= 25; c++) {
-      containersToSave.push({
-        id: c,
-        code: `CON-KING-${String(c).padStart(3, "0")}`,
-        name: `Thùng hàng KingFoods #${c}`,
-        capacity: 500,
-        currentUsage: 0,
-        status: ContainerStatus.ACTIVE,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      });
-    }
-    await AppDataSource.createQueryBuilder()
-      .insert()
-      .into(Container)
-      .values(containersToSave)
-      .execute();
-    console.log(`✅ Đã tạo 25 Thùng hàng rỗng.`);
-
-    console.log(
-      "📦 Nạp sản phẩm đã đóng gói vào thùng hàng (ContainerItems)...",
-    );
-    // Đóng gói thử sản phẩm của các đơn hàng PROCESSING cho các Thùng hàng đầu tiên
-    const processingOrders = ordersToSave.filter(o => o.status === OrderStatus.PROCESSING);
-    const sampleOrderIds = processingOrders.slice(0, 5).map(o => o.id);
-    const containerItemsToSave: any[] = [];
-    let contItemCounter = 1;
-
-    for (let i = 0; i < sampleOrderIds.length; i++) {
-      const ordId = sampleOrderIds[i];
-      const targetContainerId = i + 1;
-
-      // Lấy các PickingTask của đơn hàng này từ bộ nhớ (nhanh và chính xác hơn query)
-      const tasksForOrder = pickingTasksToSave.filter(t => {
-        const detail = orderDetailsToSave.find(d => d.id === t.orderDetailId);
-        return detail && detail.orderId === ordId;
-      });
-
-      console.log(`   🔎 Đơn hàng #${ordId}: Khớp được ${tasksForOrder.length} PickingTasks từ bộ nhớ...`);
-
-      let containerUsage = 0;
-      for (const task of tasksForOrder) {
-        if (task.quantityPicked === 0) task.quantityPicked = task.quantityToPick; // Ensure some quantity
+    // 5. PickingTasks (15,000 tasks)
+    console.log("📋 Bulk generating 15,000 tasks...");
+    const tasksData: any[] = [];
+    for (let i = 0; i < 15000; i++) {
+      const detIdx = i % detailIds.length;
+      const detId = detailIds[detIdx];
+      const det = detailsData[detIdx];
+      
+      if (det._tempStatus !== OrderStatus.PENDING) {
+        const taskStatusRand = Math.random();
+        const taskStatus = taskStatusRand > 0.6 ? PickingTaskStatus.COMPLETED : (taskStatusRand > 0.3 ? PickingTaskStatus.PICKING : PickingTaskStatus.PENDING);
         
-        containerUsage += task.quantityPicked;
-        containerItemsToSave.push({
-          containerId: targetContainerId,
-          taskId: task.id,
-          quantity: task.quantityPicked,
-          status: ContainerItemStatus.GOOD,
-          createdAt: new Date(),
-          updatedAt: new Date(),
+        let qtyPicked = 0;
+        if (taskStatus === PickingTaskStatus.COMPLETED) qtyPicked = det.quantity;
+        else if (taskStatus === PickingTaskStatus.PICKING) qtyPicked = Math.max(0, Math.floor(det.quantity / 2));
+
+        tasksData.push({
+          orderDetailId: detId,
+          assignedUserId: staff[i % staff.length].id,
+          quantityToPick: det.quantity,
+          quantityPicked: qtyPicked,
+          status: taskStatus,
+          locationId: det._tempCatId % 4 + 1
         });
       }
-      
-      // Cập nhật sức chứa thực tế lên thùng hàng tương ứng
-      await AppDataSource.manager.update(Container, targetContainerId, {
-        currentUsage: containerUsage,
+    }
+    const taskResult = await AppDataSource.manager.insert(PickingTask, tasksData);
+    const taskIds = taskResult.identifiers.map(i => i.id);
+
+    // 6. Containers (500)
+    console.log("📦 Creating 500 containers...");
+    const containersData: any[] = [];
+    for (let i = 1; i <= 500; i++) {
+      containersData.push({
+        code: `KFOOD-CON-${String(i).padStart(3, "0")}`,
+        name: `Thùng hàng KingFood #${i}`,
+        capacity: 5000,
+        currentUsage: 0,
+        status: ContainerStatus.ACTIVE
       });
     }
+    const containerResult = await AppDataSource.manager.insert(Container, containersData);
+    const containerIds = containerResult.identifiers.map(i => i.id);
 
-    if (containerItemsToSave.length > 0) {
-      await AppDataSource.createQueryBuilder()
-        .insert()
-        .into(ContainerItem)
-        .values(containerItemsToSave)
-        .execute();
-      console.log(`✅ Đã đóng gói thành công ${containerItemsToSave.length} món hàng vào Container!`);
-    } else {
-      console.log("⚠️ Không có món hàng nào được đóng gói vào Container.");
+    // 7. ContainerItems (5,000)
+    console.log("📦 Creating 5,000 container items...");
+    const itemsToInsert: any[] = [];
+    const containerUsage: Record<number, number> = {};
+
+    for (let i = 0; i < 5000; i++) {
+      const taskIdx = i % taskIds.length;
+      const task = tasksData[taskIdx];
+      const tid = taskIds[taskIdx];
+      const cid = containerIds[i % containerIds.length];
+
+      if (task.quantityPicked > 0) {
+        itemsToInsert.push({ containerId: cid, taskId: tid, quantity: task.quantityPicked, status: ContainerItemStatus.GOOD });
+        containerUsage[cid] = (containerUsage[cid] || 0) + task.quantityPicked;
+      }
+    }
+    await AppDataSource.manager.insert(ContainerItem, itemsToInsert);
+    for (const cid in containerUsage) {
+      await AppDataSource.manager.update(Container, cid, { currentUsage: containerUsage[cid] });
     }
 
-    console.log(
-      "\n🎉 CHÚC MỪNG! ĐÃ HYPER-SEED DỮ LIỆU MẪU THÀNH CÔNG VỚI TỐC ĐỘ TỐI ĐA!",
-    );
-    console.log("------------------------------------------------------------");
-    console.log("📊 TÓM TẮT DỮ LIỆU VỪA ĐƯỢC NẠP:");
-    console.log(`   🔹 Vị trí kho: 4 Khu vực`);
-    console.log(`   🔹 Danh mục sản phẩm: 30 Nhóm`);
-    console.log(`   🔹 Tổng sản phẩm sỉ: 210 Sản phẩm`);
-    console.log(`   🔹 Số lượng Đơn hàng sỉ: 2,000 Đơn hàng`);
-    console.log(
-      `   🔹 Số lượng Chi tiết món hàng: ${orderDetailsToSave.length} Dòng sản phẩm`,
-    );
-    console.log(
-      `   🔹 Nhiệm vụ kho (Tasks): ${pickingTasksToSave.length} Nhiệm vụ gán tự động`,
-    );
-    console.log(`   🔹 Sự cố (Incidents): ${incidentsToSave.length} Báo cáo`);
-    console.log(`   🔹 Thùng hàng đã tạo: 25 Thùng hàng`);
-    console.log("------------------------------------------------------------");
+    console.log(`✅ MEGA SEED V2 COMPLETE.`);
   } catch (error) {
-    console.error("❌ Lỗi nghiêm trọng trong quá trình Hyper-Seed:");
-    console.error(error);
+    console.error("❌ SEED ERROR:", error);
   } finally {
-    if (AppDataSource.isInitialized) {
-      await AppDataSource.query("SET FOREIGN_KEY_CHECKS = 1;");
-      await AppDataSource.destroy();
-    }
-    console.log("🔌 Đã ngắt kết nối an toàn với database.");
+    await AppDataSource.query("SET FOREIGN_KEY_CHECKS = 1;");
+    await AppDataSource.destroy();
   }
 }
 

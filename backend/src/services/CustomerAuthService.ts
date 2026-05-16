@@ -39,7 +39,7 @@ export class CustomerAuthService {
       name,
       email,
       password: hashedPassword,
-      phone,
+      phoneNumber: phone,
       status: AccountStatus.ACTIVE,
     });
 
