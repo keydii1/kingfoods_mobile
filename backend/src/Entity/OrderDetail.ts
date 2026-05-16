@@ -8,10 +8,12 @@ import { ColumnNumericTransformer } from "../helpers/ColumnTransformer";
 
 @Entity("order_details")
 export class OrderDetail extends BaseEntity {
+  @Index()
   @Column({ name: "order_id", nullable: false })
   @Property()
   orderId: number;
 
+  @Index()
   @Column({ name: "product_id", nullable: false })
   @Property()
   productId: number;

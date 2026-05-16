@@ -13,6 +13,7 @@ export enum ContainerStatus {
 
 @Entity("containers")
 export class Container extends BaseEntity {
+  @Index()
   @Column({ unique: true })
   @Property()
   code: string;
@@ -29,6 +30,7 @@ export class Container extends BaseEntity {
   @Property()
   currentUsage: number;
 
+  @Index()
   @Column({
     type: "enum",
     enum: ContainerStatus,

@@ -1,4 +1,4 @@
-import { Entity, Column, ManyToOne, JoinColumn } from "typeorm";
+import { Entity, Column, ManyToOne, JoinColumn, Index } from "typeorm";
 import { Property, Enum } from "@tsed/schema";
 import { BaseEntity } from "./BaseEntity";
 import { PickingTask } from "./PickingTask";
@@ -11,10 +11,12 @@ export enum IncidentStatus {
 
 @Entity("incident_reports")
 export class IncidentReport extends BaseEntity {
+  @Index()
   @Column({ name: "task_id", nullable: false })
   @Property()
   taskId: number;
 
+  @Index()
   @Column({ name: "reporter_id", nullable: false })
   @Property()
   reporterId: number;
@@ -27,6 +29,7 @@ export class IncidentReport extends BaseEntity {
   @Property()
   reason: string; // "Kệ trống", "Hàng hỏng", "Sai vị trí"
 
+  @Index()
   @Column({ type: "enum", enum: IncidentStatus, default: IncidentStatus.PENDING })
   @Enum(IncidentStatus)
   status: IncidentStatus;

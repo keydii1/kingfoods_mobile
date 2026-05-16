@@ -3,6 +3,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
+  Index,
   BaseEntity as TypeORMBaseEntity,
   FindManyOptions,
   FindOneOptions,
@@ -20,6 +21,7 @@ export abstract class BaseEntity extends TypeORMBaseEntity {
   @Property()
   id: number;
 
+  @Index()
   @CreateDateColumn({ name: "created_at" })
   @Property()
   createdAt: Date;

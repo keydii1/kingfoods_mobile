@@ -1,4 +1,4 @@
-import { Entity, Column, ManyToOne, JoinColumn } from "typeorm";
+import { Entity, Column, ManyToOne, JoinColumn, Index } from "typeorm";
 import { Property, Enum } from "@tsed/schema";
 import { BaseEntity } from "./BaseEntity";
 import { OrderDetail } from "./OrderDetail";
@@ -12,11 +12,14 @@ export enum PickingTaskStatus {
 }
 
 @Entity("picking_tasks")
+@Index(["assignedUserId", "status"])
 export class PickingTask extends BaseEntity {
+  @Index()
   @Column({ name: "order_detail_id", nullable: false })
   @Property()
   orderDetailId: number;
 
+  @Index()
   @Column({ name: "assigned_user_id", nullable: false })
   @Property()
   assignedUserId: number; // Nhân viên chịu trách nhiệm pick
@@ -29,10 +32,12 @@ export class PickingTask extends BaseEntity {
   @Property()
   quantityPicked: number; // Số lượng đã pick thực tế
 
+  @Index()
   @Column({ type: "enum", enum: PickingTaskStatus, default: PickingTaskStatus.PENDING })
   @Enum(PickingTaskStatus)
   status: PickingTaskStatus;
 
+  @Index()
   @Column({ name: "location_id", nullable: true })
   @Property()
   locationId: number; // ID của Vị trí kệ hàng

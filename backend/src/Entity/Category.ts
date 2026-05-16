@@ -18,6 +18,7 @@ export class Category extends BaseEntity {
   @Property()
   name: string;
 
+  @Index()
   @Column({
     type: "enum",
     enum: Status,
@@ -31,6 +32,7 @@ export class Category extends BaseEntity {
   @Property()
   description: string;
 
+  @Index()
   @Column({ name: "location_id", nullable: true })
   @Property()
   locationId: number | null;

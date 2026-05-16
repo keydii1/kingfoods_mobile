@@ -11,10 +11,12 @@ export enum ProductStatus {
 
 @Entity("products")
 export class Product extends BaseEntity {
+  @Index()
   @Column({ name: "category_id" })
   @Property(Number)
   categoryId: Category["id"];
 
+  @Index()
   @Column()
   @Property()
   name: string;
@@ -46,6 +48,7 @@ export class Product extends BaseEntity {
   @Property()
   description: string;
 
+  @Index()
   @Column({ type: "enum", enum: ProductStatus, default: ProductStatus.ACTIVE })
   @Property()
   status: ProductStatus;

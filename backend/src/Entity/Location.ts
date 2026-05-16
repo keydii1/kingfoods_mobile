@@ -1,10 +1,11 @@
-import { Entity, Column, OneToMany } from "typeorm";
+import { Entity, Column, OneToMany, Index } from "typeorm";
 import { Property } from "@tsed/schema";
 import { BaseEntity } from "./BaseEntity";
 import { Category } from "./Category";
 
 @Entity("locations")
 export class Location extends BaseEntity {
+  @Index()
   @Column({ unique: true, nullable: false })
   @Property()
   code: string; // Mã vị trí, ví dụ: "ZONE-A", "SHELF-COLD-01"

@@ -22,10 +22,12 @@ export enum OrderStatus {
 }
 
 @Entity("orders")
+@Index(["customerId", "status"])
 export class Order extends BaseEntity {
   /**
    * FK lưu riêng để dễ query, quan hệ được định nghĩa qua @ManyToOne bên dưới
    */
+  @Index()
   @Column({ name: "branch_id", nullable: false })
   @Property()
   customerId: number;
@@ -37,6 +39,7 @@ export class Order extends BaseEntity {
     this.customerId = value;
   }
 
+  @Index()
   @Column({ type: "enum", enum: OrderStatus, default: OrderStatus.PENDING })
   @Enum(OrderStatus)
   status: OrderStatus;

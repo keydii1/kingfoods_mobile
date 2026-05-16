@@ -1,4 +1,4 @@
-import { Entity, Column, OneToMany } from "typeorm";
+import { Entity, Column, OneToMany, Index } from "typeorm";
 import { Property, Enum } from "@tsed/schema";
 import { BaseEntity } from "./BaseEntity";
 import { Order } from "./Order";
@@ -19,6 +19,7 @@ export class Branch extends BaseEntity {
   @Property()
   address: string; // Địa chỉ chi nhánh
 
+  @Index()
   @Column({ type: "enum", enum: BranchStatus, default: BranchStatus.ACTIVE })
   @Enum(BranchStatus)
   status: BranchStatus;

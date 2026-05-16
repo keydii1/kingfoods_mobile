@@ -18,6 +18,7 @@ export interface CustomerPayload {
 
 @Entity("customers")
 export class Customer extends BaseEntity {
+  @Index()
   @Column({ name: "branch_id", nullable: false })
   @Property()
   branchId: number; // ID chi nhánh mà tài khoản này trực thuộc
@@ -37,6 +38,7 @@ export class Customer extends BaseEntity {
   @Property()
   phoneNumber: string;
 
+  @Index()
   @Column({ type: "enum", enum: AccountStatus, default: AccountStatus.ACTIVE })
   @Enum(AccountStatus)
   status: AccountStatus;

@@ -12,10 +12,12 @@ export enum ContainerItemStatus {
 
 @Entity("container_items")
 export class ContainerItem extends BaseEntity {
+  @Index()
   @Column({ name: "container_id", nullable: false })
   @Property()
   containerId: number;
 
+  @Index()
   @Column({ name: "task_id", nullable: false })
   @Property()
   taskId: number;
@@ -24,6 +26,7 @@ export class ContainerItem extends BaseEntity {
   @Property()
   quantity: number;
 
+  @Index()
   @Column({ type: "enum", enum: ContainerItemStatus, default: ContainerItemStatus.GOOD })
   @Enum(ContainerItemStatus)
   status: ContainerItemStatus;

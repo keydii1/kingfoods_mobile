@@ -45,6 +45,7 @@ export class User extends BaseEntity {
   @Property()
   dateOfBirth: Date;
 
+  @Index()
   @Column({ type: "enum", enum: UserStatus, default: UserStatus.ACTIVE })
   @Enum(UserStatus)
   status: UserStatus;
@@ -64,9 +65,11 @@ export class User extends BaseEntity {
     "Và nhớ nói cho mọi người biết nó chỉ được nhận các giá trị trong cái Enum này thôi nhé!"
     Vì vậy, mã chuẩn xác và gọn gàng nhất sẽ viết như sau (chỉ dùng 1 cái thôi):
   */
+  @Index()
   @Enum(UserRole)
   role: UserRole;
 
+  @Index()
   @Column({ name: "assigned_location_id", nullable: true })
   @Property()
   assignedLocationId: number | null;
