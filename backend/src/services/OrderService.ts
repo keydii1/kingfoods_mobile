@@ -66,17 +66,16 @@ export class OrderService {
             orderId: savedOrder.id,
             productId: product.id,
             quantity: item.quantity,
-            price: product.price,
           });
         });
 
         const savedOrderDetails =
           await transactionalEntityManager.save(orderDetailData);
 
-        const totalPrice = savedOrderDetails.reduce(
-          (acc, item) => acc + item.price * item.quantity,
-          0,
-        );
+        const totalPrice = products.reduce((acc, item) => {
+          const product = productsDb.find((p) => p.id === item.productId);
+          return acc + (product ? product.price * item.quantity : 0);
+        }, 0);
 
         savedOrder.totalPrice = totalPrice;
         await transactionalEntityManager.save(savedOrder);
