@@ -1,4 +1,4 @@
-import { Controller, Inject } from "@tsed/di";
+import { Controller } from "@tsed/di";
 import { Get, Post, Security, Summary, Tags } from "@tsed/schema";
 import { BodyParams, PathParams, Req, Res, QueryParams } from "@tsed/common";
 import { Docs } from "@tsed/swagger";
@@ -21,8 +21,7 @@ import {
 @Tags("Warehouse Picking & Traceability")
 @Security("bearer")
 export class PickingController {
-  @Inject()
-  private pickingService: PickingService;
+  constructor(private pickingService: PickingService) {}
 
   @Post("/assign")
   @Summary("Quản lý: Phân chia đơn đặt hàng thành các nhiệm vụ nhỏ cho nhân viên")

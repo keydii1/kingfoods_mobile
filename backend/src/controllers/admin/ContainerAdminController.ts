@@ -1,5 +1,5 @@
 import { Docs } from "@tsed/swagger";
-import { Controller, Inject } from "@tsed/di";
+import { Controller } from "@tsed/di";
 import { Get, Post, Delete, Patch, Security, Summary, Tags } from "@tsed/schema";
 import { BodyParams, PathParams, Req, Res, QueryParams } from "@tsed/common";
 import { Response } from "express";
@@ -11,8 +11,7 @@ import { ContainerService } from "../../services/ContainerService";
 @Tags("Admin - Containers")
 @Security("bearer")
 export class ContainerAdminController {
-  @Inject()
-  containerService: ContainerService;
+  constructor(private containerService: ContainerService) {}
 
   @Get("/")
   @Summary("Xem danh sách thùng hàng")

@@ -1,5 +1,5 @@
 import { Docs } from "@tsed/swagger";
-import { Controller, Inject } from "@tsed/di";
+import { Controller } from "@tsed/di";
 import { Post, Delete, Patch, Get, Security, Summary, Tags } from "@tsed/schema";
 import { BodyParams, PathParams, Req, Res, QueryParams } from "@tsed/common";
 import { Response } from "express";
@@ -16,8 +16,7 @@ import { Validator } from "../../decorators/Validator";
 @Tags("Admin - Categories")
 @Security("bearer")
 export class CategoryAdminController {
-  @Inject()
-  categoryService: CategoryService;
+  constructor(private categoryService: CategoryService) {}
 
   @Get("/")
   @Summary("Xem danh sách danh mục (có phân trang)")

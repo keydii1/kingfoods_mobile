@@ -1,5 +1,5 @@
 import { Docs } from "@tsed/swagger";
-import { Controller, Inject } from "@tsed/di";
+import { Controller } from "@tsed/di";
 import { Post, Summary, Tags, Property } from "@tsed/schema";
 import { BodyParams, Req, Res } from "@tsed/common";
 import { Response } from "express";
@@ -20,8 +20,7 @@ class CustomerLoginParams {
 @Controller("/auth/customer")
 @Tags("Auth - Customer")
 export class CustomerAuthController {
-  @Inject()
-  customerAuthService: CustomerAuthService;
+  constructor(private customerAuthService: CustomerAuthService) {}
 
   @Post("/login")
   @Validator(LoginCustomerSchema)

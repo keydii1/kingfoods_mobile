@@ -1,4 +1,4 @@
-import { Service, Inject } from "@tsed/di";
+import { Service } from "@tsed/di";
 import { Order, OrderStatus } from "../Entity/Order";
 import { OrderDetail } from "../Entity/OrderDetail";
 import { Product } from "../Entity/Product";
@@ -8,8 +8,7 @@ import { In } from "typeorm";
 
 @Service()
 export class OrderService {
-  @Inject(TypeORMService)
-  private typeORMService: TypeORMService;
+  constructor(private typeORMService: TypeORMService) {}
 
   async getOrdersByCustomer(customerId: number) {
     return await Order.find({

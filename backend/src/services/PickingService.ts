@@ -1,4 +1,4 @@
-import { Service, Inject } from "@tsed/di";
+import { Service } from "@tsed/di";
 import { Order, OrderStatus } from "../Entity/Order";
 import { OrderDetail } from "../Entity/OrderDetail";
 import { Container, ContainerStatus } from "../Entity/Container";
@@ -11,8 +11,7 @@ import { TypeORMService } from "@tsed/typeorm";
 
 @Service()
 export class PickingService {
-  @Inject(TypeORMService)
-  private typeORMService: TypeORMService;
+  constructor(private typeORMService: TypeORMService) {}
 
   /**
    * 1. Quản lý: Nhận đơn hàng sỉ của chi nhánh và chia tách/phân công nhiệm vụ pick hàng cho nhân viên

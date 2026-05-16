@@ -1,5 +1,5 @@
 import { Docs } from "@tsed/swagger";
-import { Controller, Inject } from "@tsed/di";
+import { Controller } from "@tsed/di";
 import { Get, Delete, Patch, Security, Summary, Tags } from "@tsed/schema";
 import { BodyParams, PathParams, Req, Res, QueryParams } from "@tsed/common";
 import { Response } from "express";
@@ -11,8 +11,7 @@ import { IncidentReport } from "../../Entity/IncidentReport";
 @Tags("Admin - Incidents")
 @Security("bearer")
 export class IncidentReportAdminController {
-  @Inject()
-  incidentService: IncidentReportService;
+  constructor(private incidentService: IncidentReportService) {}
 
   @Get("/")
   @Summary("Xem danh sách báo cáo sự cố kệ trống")

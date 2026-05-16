@@ -1,5 +1,5 @@
 import { Docs } from "@tsed/swagger";
-import { Controller, Inject } from "@tsed/di";
+import { Controller } from "@tsed/di";
 import { Post, Patch, Summary, Tags, Property, Returns } from "@tsed/schema";
 import { BodyParams, Req, Res, HeaderParams } from "@tsed/common";
 import { Request, Response } from "express";
@@ -21,8 +21,7 @@ class ResetPasswordParams {
 @Controller("/auth/user")
 @Tags("Auth - User/Staff")
 export class UserAuthController {
-  @Inject()
-  userAuthService: UserAuthService;
+  constructor(private userAuthService: UserAuthService) {}
 
   @Post("/init-admin")
   @Summary("Khởi tạo Admin đầu tiên")

@@ -1,5 +1,5 @@
 import { Docs } from "@tsed/swagger";
-import { Controller, Inject } from "@tsed/di";
+import { Controller } from "@tsed/di";
 import { Get, Security, Summary, Tags } from "@tsed/schema";
 import { Req, Res, QueryParams } from "@tsed/common";
 import { Response } from "express";
@@ -10,8 +10,7 @@ import { DashboardService } from "../../services/DashboardService";
 @Tags("Admin - Dashboard")
 @Security("bearer")
 export class DashboardController {
-  @Inject()
-  private dashboardService: DashboardService;
+  constructor(private dashboardService: DashboardService) {}
 
   @Get("/stats")
   @Summary("Thống kê tổng quan")

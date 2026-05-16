@@ -1,5 +1,5 @@
 import { Docs } from "@tsed/swagger";
-import { Controller, Inject } from "@tsed/di";
+import { Controller } from "@tsed/di";
 import { Get, Post, Delete, Patch, Security, Summary, Tags } from "@tsed/schema";
 import { BodyParams, PathParams, Req, Res, QueryParams } from "@tsed/common";
 import { Response } from "express";
@@ -11,8 +11,7 @@ import { LocationService } from "../../services/LocationService";
 @Tags("Admin - Locations")
 @Security("bearer")
 export class LocationAdminController {
-  @Inject()
-  locationService: LocationService;
+  constructor(private locationService: LocationService) {}
 
   @Get("/")
   @Summary("Xem danh sách vị trí kho")

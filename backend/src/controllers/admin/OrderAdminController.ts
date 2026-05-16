@@ -1,5 +1,5 @@
 import { Docs } from "@tsed/swagger";
-import { Controller, Inject } from "@tsed/di";
+import { Controller } from "@tsed/di";
 import {
   Get,
   Delete,
@@ -19,8 +19,7 @@ import { OrderStatus } from "../../Entity/Order";
 @Tags("Admin - Orders")
 @Security("bearer")
 export class OrderAdminController {
-  @Inject()
-  private orderService: OrderService;
+  constructor(private orderService: OrderService) {}
 
   @Get("/")
   @Summary("Danh sách toàn bộ đơn hàng")

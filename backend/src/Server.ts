@@ -1,4 +1,4 @@
-import { Configuration, Inject, PlatformApplication } from "@tsed/common";
+import { Configuration, PlatformApplication } from "@tsed/common";
 import "@tsed/platform-express";
 import "@tsed/ajv";
 import "@tsed/swagger";
@@ -108,8 +108,7 @@ import { Request, Response } from "express";
   ],
 })
 export class Server {
-  @Inject()
-  protected app: PlatformApplication;
+  constructor(protected app: PlatformApplication) {}
 
   $afterRoutesInit() {
     this.app.use(ErrorHandlerMiddleware);

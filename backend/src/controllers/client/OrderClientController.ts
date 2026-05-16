@@ -1,5 +1,5 @@
 import { Docs } from "@tsed/swagger";
-import { Controller, Inject } from "@tsed/di";
+import { Controller } from "@tsed/di";
 import {
   Get,
   Post,
@@ -40,8 +40,7 @@ class UpdateOrderParams {
 @Tags("Client - Orders")
 @Security("bearer")
 export class OrderClientController {
-  @Inject()
-  private orderService: OrderService;
+  constructor(private orderService: OrderService) {}
 
   @Get("/")
   @Summary("Danh sách đơn hàng của tôi")

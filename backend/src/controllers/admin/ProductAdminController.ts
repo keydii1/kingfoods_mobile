@@ -1,5 +1,5 @@
 import { Docs } from "@tsed/swagger";
-import { Controller, Inject } from "@tsed/di";
+import { Controller } from "@tsed/di";
 import { Post, Delete, Patch, Get, Security, Summary, Tags } from "@tsed/schema";
 import { BodyParams, PathParams, Req, Res, QueryParams } from "@tsed/common";
 import { Response } from "express";
@@ -13,8 +13,7 @@ import { Validator } from "../../decorators/Validator";
 @Tags("Admin - Products")
 @Security("bearer")
 export class ProductAdminController {
-  @Inject()
-  productService: ProductService;
+  constructor(private productService: ProductService) {}
 
   @Get("/")
   @Summary("Xem danh sách sản phẩm (có phân trang)")

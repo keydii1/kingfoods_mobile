@@ -1,5 +1,5 @@
 import { Docs } from "@tsed/swagger";
-import { Controller, Inject } from "@tsed/di";
+import { Controller } from "@tsed/di";
 import { Post, Get, Delete, Patch, Security, Summary, Tags, Property } from "@tsed/schema";
 import { BodyParams, PathParams, Req, Res } from "@tsed/common";
 import { Request, Response } from "express";
@@ -18,8 +18,7 @@ class ChangePasswordParams {
 @Tags("Admin - Users")
 @Security("bearer")
 export class UserAdminController {
-  @Inject()
-  userService: UserService;
+  constructor(private userService: UserService) {}
 
   @Post("/")
   @Validator(CreateUserSchema)
