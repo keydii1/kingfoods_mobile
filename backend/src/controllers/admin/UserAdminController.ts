@@ -43,6 +43,12 @@ export class UserAdminController {
     return res.OK("Users fetched successfully", users);
   }
 
+  @Get("/me")
+  @Summary("Lấy thông tin cá nhân nhân viên đang đăng nhập")
+  async getMe(@Req() req: any, @Res() res: Response) {
+    return res.OK("User profile fetched successfully", req.decodeUser);
+  }
+
   @Get("/:id")
   @Summary("Chi tiết nhân viên")
   async getUser(@Req() req: Request, @Res() res: Response, @PathParams("id") id: number) {

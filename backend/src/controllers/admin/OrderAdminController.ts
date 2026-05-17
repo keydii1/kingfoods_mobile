@@ -32,6 +32,17 @@ export class OrderAdminController {
     return res.OK("All orders fetched successfully", orders);
   }
 
+  @Get("/:id")
+  @Summary("Chi tiết đơn hàng")
+  async getOrderDetail(
+    @Req() req: any,
+    @Res() res: Response,
+    @PathParams("id") id: number,
+  ) {
+    const detail = await this.orderService.getOrderDetail(id);
+    return res.OK("Order detail fetched successfully", detail);
+  }
+
   @Patch("/:id")
   @Summary("Cập nhật trạng thái đơn hàng")
   async updateByAdmin(

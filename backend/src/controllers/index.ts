@@ -15,4 +15,5 @@ export * from "./admin/ContainerAdminController";
 export * from "./admin/IncidentReportAdminController";
 export * from "./admin/PickingTaskAdminController";
 export * from "./admin/CustomerAdminController";
+export * from "./admin/BranchAdminController";
 
