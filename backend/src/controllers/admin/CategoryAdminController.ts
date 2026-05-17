@@ -1,6 +1,14 @@
 import { Docs } from "@tsed/swagger";
 import { Controller } from "@tsed/di";
-import { Post, Delete, Patch, Get, Security, Summary, Tags } from "@tsed/schema";
+import {
+  Post,
+  Delete,
+  Patch,
+  Get,
+  Security,
+  Summary,
+  Tags,
+} from "@tsed/schema";
 import { BodyParams, PathParams, Req, Res, QueryParams } from "@tsed/common";
 import { Response } from "express";
 import { Category } from "../../Entity/Category";
@@ -20,14 +28,22 @@ export class CategoryAdminController {
 
   @Get("/")
   @Summary("Xem danh sách danh mục (có phân trang)")
-  async getAllCategories(@Req() req: any, @Res() res: Response, @QueryParams() query: any) {
+  async getAllCategories(
+    @Req() req: Request,
+    @Res() res: Response,
+    @QueryParams() query: any,
+  ) {
     const result = await this.categoryService.getAllCategories(query);
     return res.OK("Categories fetched successfully", result);
   }
 
   @Get("/:id")
   @Summary("Xem chi tiết danh mục")
-  async getCategoryById(@Req() req: any, @Res() res: Response, @PathParams("id") id: number) {
+  async getCategoryById(
+    @Req() req: any,
+    @Res() res: Response,
+    @PathParams("id") id: number,
+  ) {
     const result = await this.categoryService.getCategory(id);
     return res.OK("Category fetched successfully", result);
   }

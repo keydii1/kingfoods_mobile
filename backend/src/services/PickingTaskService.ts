@@ -5,13 +5,13 @@ import { PickingTask } from "../Entity/PickingTask";
 export class PickingTaskService {
   async getAllTasks(query: any) {
     return await PickingTask.paginate(query, {
-      relations: ["order", "product", "assignedUser", "location"]
+      relations: ["orderDetail", "orderDetail.order", "orderDetail.product", "assignedUser", "location"]
     });
   }
 
   async getTaskById(id: number) {
     return await PickingTask.getByIdOrFail(id, {
-      relations: ["order", "product", "assignedUser", "location"]
+      relations: ["orderDetail", "orderDetail.order", "orderDetail.product", "assignedUser", "location"]
     });
   }
 

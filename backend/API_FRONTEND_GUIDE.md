@@ -153,7 +153,7 @@ Admin (Quản lý kho) có quyền thao tác trên hầu hết các dữ liệu 
 | **PickingTask (Nhiệm vụ)** | 🟢 Toàn quyền | Sinh task từ đơn hàng, Gán việc, Xóa/Hủy task, Sửa task. |
 | **Container (Thùng hàng)** | 🟢 Toàn quyền | Tạo mã thùng mới, Kiểm tra, Xóa thùng. |
 | **Incident (Sự cố)** | 🟢 Toàn quyền | Xem báo cáo trống kệ, Cập nhật trạng thái đã giải quyết. |
-| 🚫 **Customer (Quản lý cửa hàng)**| 🔴 Không có quyền | Thuộc phân hệ kinh doanh/nhân sự, Admin kho không thao tác. |
+| **Customer (Quản lý cửa hàng)**| 🟢 Toàn quyền | Xem danh sách cửa hàng, Thêm mới, Cập nhật thông tin chi nhánh liên kết, Xóa tài khoản cửa hàng. |
 | 🚫 **Branch (Chi nhánh)** | 🔴 Không có quyền | Thuộc phân hệ kinh doanh hệ thống, Admin kho không thao tác. |
 
 ### 🛠️ DANH SÁCH API CỦA ADMIN
@@ -203,6 +203,58 @@ Admin (Quản lý kho) có quyền thao tác trên hầu hết các dữ liệu 
 #### 3.6. Quản lý sự cố kệ trống (Incidents)
 * **Xem danh sách:** `GET /api/v1/admin/picking/incidents` (Lấy các kệ đang báo trống).
 * **Đánh dấu đã xử lý/Châm kệ xong:** `POST /api/v1/admin/picking/incident/:id/resolve` (Để nhân viên nhặt hàng tiếp).
+
+#### 3.7. Quản lý danh sách Cửa hàng (Customer Accounts)
+* **Lấy danh sách cửa hàng (Có phân trang):** `GET /api/v1/admin/customers`
+  * Trả về danh sách tài khoản cửa hàng kèm thông tin chi nhánh (`branch`).
+* **Xem chi tiết cửa hàng:** `GET /api/v1/admin/customers/:id`
+* **Tạo cửa hàng mới:** `POST /api/v1/admin/customers`
+  * Body parameters:
+    ```json
+    {
+      "name": "Nguyễn Văn A",
+      "email": "branch.nguyenthithap@kingfoods.com",
+      "password": "Password123!",
+      "phoneNumber": "0987654321",
+      "branchId": 1,
+      "status": "active"
+    }
+    ```
+* **Cập nhật cửa hàng:** `PATCH /api/v1/admin/customers/:id`
+  * Body parameters (Truyền các trường muốn thay đổi):
+    ```json
+    {
+      "name": "Nguyễn Văn A (Cập nhật)",
+      "phoneNumber": "0900000000",
+      "status": "inactive"
+    }
+    ```
+* **Xóa cửa hàng (Soft Delete):** `DELETE /api/v1/admin/customers/:id`
+
+#### 3.8. Quản lý Nhiệm vụ lấy hàng (Picking Tasks)
+* **Lấy danh sách nhiệm vụ (Có phân trang):** `GET /api/v1/admin/tasks`
+  * Trả về danh sách nhiệm vụ kèm chi tiết dòng đơn (`orderDetail`), thông tin sản phẩm (`product`), đơn hàng (`order`), nhân viên được gán (`assignedUser`), vị trí kệ (`location`).
+* **Xem chi tiết nhiệm vụ:** `GET /api/v1/admin/tasks/:id`
+* **Tạo nhiệm vụ thủ công:** `POST /api/v1/admin/tasks`
+  * Body parameters:
+    ```json
+    {
+      "orderDetailId": 12,
+      "assignedUserId": 5,
+      "quantityToPick": 10,
+      "locationId": 2
+    }
+    ```
+* **Cập nhật nhiệm vụ:** `PATCH /api/v1/admin/tasks/:id`
+  * Body parameters (Truyền các trường muốn thay đổi):
+    ```json
+    {
+      "assignedUserId": 6,
+      "quantityPicked": 8,
+      "status": "picking"
+    }
+    ```
+* **Xóa nhiệm vụ (Soft Delete):** `DELETE /api/v1/admin/tasks/:id`
 
 ---
 

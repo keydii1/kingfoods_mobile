@@ -13,6 +13,11 @@ import { BodyParams, PathParams, Req, Res, QueryParams } from "@tsed/common";
 import { Response, Request } from "express";
 import { PickingTask } from "../../Entity/PickingTask";
 import { PickingTaskService } from "../../services/PickingTaskService";
+import { Validator } from "../../decorators/Validator";
+import {
+  CreatePickingTaskSchema,
+  UpdatePickingTaskSchema,
+} from "../../schemas/PickingTaskSchema";
 
 @Docs("admin")
 @Controller("/admin/tasks")
@@ -44,6 +49,7 @@ export class PickingTaskAdminController {
   }
 
   @Post("/")
+  @Validator(CreatePickingTaskSchema)
   @Summary("Thêm nhiệm vụ lấy hàng thủ công")
   async createTask(
     @Req() req: any,
@@ -55,6 +61,7 @@ export class PickingTaskAdminController {
   }
 
   @Patch("/:id")
+  @Validator(UpdatePickingTaskSchema)
   @Summary("Cập nhật nhiệm vụ lấy hàng")
   async updateTask(
     @Req() req: any,
