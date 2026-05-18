@@ -34,6 +34,15 @@ export class OrderService {
     };
   }
 
+  async getOrderDetailForClient(orderId: number, customerId: number) {
+    const order = await Order.findOne({
+      where: { id: orderId, customerId },
+      relations: ["orderDetails", "orderDetails.product", "branch"],
+    });
+    if (!order) throw new NotFound("Order not found");
+    return order;
+  }
+
   async createOrder(data: {
     customerId: number;
     products: any[];
@@ -83,15 +92,23 @@ export class OrderService {
       });
   }
 
-  async updateOrderByClient(id: number, data: any) {
+  async updateOrderByClient(id: number, data: any, customerId?: number) {
     const { status } = data;
     const order = await Order.getByIdOrFail(id);
 
+    if (customerId != null && order.customerId !== customerId) {
+      throw new BadRequest("You do not have permission to update this order");
+    }
+
     if (status === "cancelled") {
-      if (order.status !== OrderStatus.PENDING)
+      if (
+        order.status !== OrderStatus.PENDING &&
+        order.status !== OrderStatus.PROCESSING
+      ) {
         throw new BadRequest(
-          "Order is not in pending status, customer can't cancel order",
+          "Order can only be cancelled while pending or processing",
         );
+      }
       order.status = OrderStatus.CANCELLED;
     }
     return await order.save();

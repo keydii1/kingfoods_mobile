@@ -88,11 +88,12 @@ export class OrderClientController {
     @Res() res: Response,
     @PathParams("orderId") orderId: number,
   ) {
-    const result = await this.orderService.getOrderDetail(orderId);
-    return res.OK("Order detail fetched successfully", {
-      OrderDetail: result.detail,
-      totalPrice: result.totalPriceOfOrder,
-    });
+    const customerId = req.decodeUser.branchId || req.decodeUser.id;
+    const order = await this.orderService.getOrderDetailForClient(
+      orderId,
+      customerId,
+    );
+    return res.OK("Order detail fetched successfully", order);
   }
 
   @Post("/")
@@ -118,7 +119,8 @@ export class OrderClientController {
     @PathParams("id") id: number,
     @BodyParams() body: UpdateOrderParams,
   ) {
-    const order = await this.orderService.updateOrderByClient(id, body);
+    const customerId = req.decodeUser.branchId || req.decodeUser.id;
+    const order = await this.orderService.updateOrderByClient(id, body, customerId);
     return res.OK("Order updated successfully", order);
   }
 }
