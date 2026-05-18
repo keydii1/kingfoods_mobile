@@ -1,4 +1,5 @@
-import {Text, View, StyleSheet, ScrollView, TouchableOpacity, Alert} from 'react-native';
+import {Text, View, StyleSheet, ScrollView, TouchableOpacity} from 'react-native';
+import { Alert } from '../../utils/appAlert';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {router} from 'expo-router';
 import {Ionicons} from '@expo/vector-icons';

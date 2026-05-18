@@ -1,3 +1,4 @@
+import { Alert } from '../utils/appAlert';
 import { useState, useRef } from 'react';
 import { router } from 'expo-router';
 import {
@@ -6,7 +7,6 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  Alert,
   ScrollView,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';

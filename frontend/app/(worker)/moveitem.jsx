@@ -1,4 +1,5 @@
-import {Text, View, TouchableOpacity, ScrollView, StyleSheet, Alert} from 'react-native';
+import {Text, View, TouchableOpacity, ScrollView, StyleSheet} from 'react-native';
+import { Alert } from '../../utils/appAlert';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {useState} from 'react';
 import {router} from 'expo-router';

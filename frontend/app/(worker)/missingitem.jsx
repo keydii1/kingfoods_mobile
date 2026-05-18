@@ -1,4 +1,5 @@
-import {Text, View, ScrollView, TouchableOpacity,StyleSheet,Alert,Image} from 'react-native';
+import {Text, View, ScrollView, TouchableOpacity,StyleSheet,Image} from 'react-native';
+import { Alert } from '../../utils/appAlert';
 import {useState} from 'react'
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {router, useLocalSearchParams} from 'expo-router';

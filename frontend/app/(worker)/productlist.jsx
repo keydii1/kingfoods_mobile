@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Text, View, TouchableOpacity, StyleSheet, FlatList, Alert, ActivityIndicator } from 'react-native';
+import { Text, View, TouchableOpacity, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
+import { Alert } from '../../utils/appAlert';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import {getAssignedTasks} from '../../constants/services/api'

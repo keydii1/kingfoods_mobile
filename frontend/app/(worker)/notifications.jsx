@@ -1,7 +1,7 @@
 import {Text, View, SectionList, StyleSheet, TouchableOpacity} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useState, useEffect} from 'react';
-import {ActivityIndicator, Alert} from 'react-native';
+import {ActivityIndicator} from 'react-native';
 import {Ionicons} from '@expo/vector-icons';
 import {getAssignedTasks} from '../../constants/services/api'
 import {router, usePathname} from 'expo-router';

@@ -1,5 +1,6 @@
 import {useState} from 'react';
-import {Text, View, TouchableOpacity, StyleSheet, Alert} from 'react-native';
+import {Text, View, TouchableOpacity, StyleSheet} from 'react-native';
+import { Alert } from '../utils/appAlert';
 import {CameraView, useCameraPermissions} from 'expo-camera';
 import {COLORS} from '../constants/colors';
 

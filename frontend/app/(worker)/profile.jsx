@@ -1,11 +1,12 @@
 import {Text, View, TextInput, TouchableOpacity, ScrollView, StyleSheet} from 'react-native'
+import { Alert } from '../../utils/appAlert';
 import { SafeAreaView } from 'react-native-safe-area-context'
 import {router} from 'expo-router'
 import { Ionicons } from '@expo/vector-icons';
 import {COLORS} from '../../constants/colors'
 import StaffBottomNav from '../../components/StaffBottomNav';
 import { useEffect, useState } from 'react';
-import { ActivityIndicator, Alert } from 'react-native';
+import { ActivityIndicator} from 'react-native';
 import { getProfile, updateProfile } from '../../constants/services/api';
 
 function InfoRow({label, value, valueColor}){

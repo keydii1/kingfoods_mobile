@@ -1,3 +1,4 @@
+import { Alert } from '../../utils/appAlert';
 import { useState, useEffect } from "react";
 import {
   View,
@@ -7,8 +8,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   ActivityIndicator,
-  Alert,
-} from "react-native";
+} from 'react-native';
 import { Ionicons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";

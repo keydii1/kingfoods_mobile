@@ -1,10 +1,9 @@
 import { router, useFocusEffect } from 'expo-router';
-import{
+import {
     View,
     Text,
     TouchableOpacity,
     StyleSheet,
-    Alert,
     ActivityIndicator,
     ScrollView,
 } from 'react-native';

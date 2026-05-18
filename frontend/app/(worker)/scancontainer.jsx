@@ -1,11 +1,12 @@
 import {Text, View, StyleSheet, TouchableOpacity,ScrollView} from 'react-native';
+import { Alert } from '../../utils/appAlert';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {router} from 'expo-router';
 import {Ionicons} from '@expo/vector-icons';
 import {COLORS} from '../../constants/colors';
 import StaffBottomNav from '../../components/StaffBottomNav';
 import { useState } from 'react';
-import { Modal, Alert } from 'react-native';
+import { Modal} from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import BarcodeScanner from '../../components/BarcodeScanner';
 import { packItem } from '../../constants/services/api';
