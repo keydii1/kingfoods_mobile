@@ -1179,3 +1179,5 @@
 [32m      * Env: development[39m
 [32m      **************************************************[39m
 [32m    [39m
+2026-05-16 16:34:23:3423 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-16 16:34:23:3423 [31merror[39m: [31mlisten EADDRINUSE: address already in use 0.0.0.0:9999[39m
