@@ -2,52 +2,56 @@ import { View, Text, StyleSheet,
          ScrollView, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
-import {useState, useEffect} from 'react';
-import {getDashboardStatus, getIncidents} from '../../constants/services/api'
+import { useState, useEffect } from 'react';
+import { Ionicons } from '@expo/vector-icons';
+import { getDashboardStatus, getIncidents } from '../../constants/services/api';
 import { COLORS } from '../../constants/colors';
 
-// 4 KPI cards
+// 4 KPI cards initial config (Ionicons name)
 const kpis = [
-    { icon: '✅', value: '1,284', label: 'SKU đã pick', color: COLORS.successBg, textColor: COLORS.primary },
-    { icon: '👥', value: '8/10',  label: 'NV đang làm', color: '#e3f2fd',        textColor: '#1565c0' },
-    { icon: '⚠️', value: '5',     label: 'Báo thiếu',   color: COLORS.warningBg, textColor: '#e65100' },
-    { icon: '📦', value: '3',     label: 'Đơn tồn',     color: '#f3e5f5',        textColor: '#7b1fa2' },
+    { icon: 'checkmark-circle-outline', value: '1,284', label: 'SKU đã pick', color: COLORS.successBg, textColor: COLORS.primary },
+    { icon: 'people-outline', value: '8/10',  label: 'NV đang làm', color: '#e3f2fd',        textColor: '#1565c0' },
+    { icon: 'warning-outline', value: '5',     label: 'Báo thiếu',   color: COLORS.warningBg, textColor: '#e65100' },
+    { icon: 'cube-outline', value: '3',     label: 'Đơn tồn',     color: '#f3e5f5',        textColor: '#7b1fa2' },
 ];
 
-// Hoàn thành theo khu vực
+// Hoàn thành theo khu vực (Ionicons name)
 const zones = [
-    { icon: '🍬', name: 'Bánh kẹo',  pct: 87, color: COLORS.primary },
-    { icon: '🥤', name: 'Đồ uống',   pct: 95, color: COLORS.primary },
-    { icon: '🧴', name: 'Hóa phẩm',  pct: 64, color: COLORS.error   },
-    { icon: '🎁', name: 'KM',        pct: 78, color: '#1976d2'},
+    { icon: 'nutrition-outline', name: 'Bánh kẹo',  pct: 87, color: COLORS.primary },
+    { icon: 'cafe-outline', name: 'Đồ uống',   pct: 95, color: COLORS.primary },
+    { icon: 'flask-outline', name: 'Hóa phẩm',  pct: 64, color: COLORS.error   },
+    { icon: 'gift-outline', name: 'KM',        pct: 78, color: '#1976d2'},
 ];
 
-// Sản phẩm thiếu
+// Sản phẩm thiếu (Ionicons name)
 const shortages = [
-    { id: '1', icon: '🥫',
+    { id: '1', icon: 'cube-outline',
       name: 'Nước tương Chinsu 500ml',
       loc: 'Kệ 14.07.B · Khu Bánh kẹo',
       who: 'mai · 15:28' },
-    { id: '2', icon: '🍟',
+    { id: '2', icon: 'fast-food-outline',
       name: 'Snack Oishi Tôm 68g',
       loc: 'Kệ 22.08.A · Khu Bánh kẹo',
       who: 'đức · 14:12' },
 ];
+
 // component KPI card
 function KpiCard ({item}){
     return (
         <View style = {[styles.kpiCard, {backgroundColor: item.color}]} >
-            <Text style = {styles.kpiIcon}>{item.icon}</Text>
+            <Ionicons name={item.icon} size={28} color={item.textColor} />
             <Text style = {[styles.kpiValue, {color: item.textColor}]}>{item.value}</Text>
             <Text style = {styles.kpiLabel}>{item.label}</Text>
         </View>
     );
 }
+
 // Component cho 1 dòng tiến độ khu vực
 function ZoneRow({zone}){
     return(
         <View style = {styles.zoneRow}>
-            <Text style = {styles.zoneName}>{zone.icon} {zone.name}</Text>
+            <Ionicons name={zone.icon} size={18} color={zone.color} style={{ marginRight: 6 }} />
+            <Text style = {styles.zoneName}>{zone.name}</Text>
             <View style = {styles.zoneBar}>
                 <View style = {[styles.zoneBarFill, {width: `${zone.pct}%`, backgroundColor: zone.color}]}/> 
             </View>
@@ -55,11 +59,12 @@ function ZoneRow({zone}){
         </View>
     );
 }
+
 // component cho sản phẩm bị Thiếu
 function ShortageItem({item}){
     return(
         <View style={styles.shortageRow}>
-            <Text style = {styles.shortageIcon}>{item.icon}</Text>
+            <Ionicons name={item.icon} size={22} color={COLORS.error} />
             <View style = {styles.shortageInfo}>
                 <Text style = {styles.shortageName}>{item.name}</Text>
                 <Text style = {styles.shortageLoc}>{item.loc}</Text>
@@ -68,6 +73,7 @@ function ShortageItem({item}){
         </View>
     );
 }
+
 export default function ManagerDashboardScreen(){
     const [stats, setStats] = useState(null);
     const [incidents, setIncidents] = useState([]);
@@ -81,52 +87,54 @@ export default function ManagerDashboardScreen(){
     const zoneData       = null;
 
     const displayKpis = [
-        { icon: '✅', value: String(totalPickedSku),
+        { icon: 'checkmark-circle-outline', value: String(totalPickedSku),
           label: 'SKU đã pick', color: COLORS.successBg, textColor: COLORS.primary },
-        { icon: '👥', value: `${activeWorkers}/${totalWorkers}`,
+        { icon: 'people-outline', value: `${activeWorkers}/${totalWorkers}`,
           label: 'NV đang làm', color: '#e3f2fd', textColor: '#1565c0' },
-        { icon: '⚠️', value: String(incidents.length),
+        { icon: 'warning-outline', value: String(incidents.length),
           label: 'Báo thiếu', color: COLORS.warningBg, textColor: '#e65100' },
-        { icon: '📦', value: String(pendingOrders),
+        { icon: 'cube-outline', value: String(pendingOrders),
           label: 'Đơn tồn', color: '#f3e5f5', textColor: '#7b1fa2' },
     ];
     const displayZones = Array.isArray(zoneData) && zoneData.length > 0
         ? zoneData.map(z => ({
-            icon: z.icon || '📦',
+            icon: z.icon || 'cube-outline',
             name: z.name || z.zoneName || z.zone_name || '',
-            pct:  z.pct ?? z.percentage ?? z.completion ?? 0,
+            pct:  z.pct ?? z.completion ?? 0,
             color: z.color || COLORS.primary,
           }))
         : zones;
     const displayShortages = incidents.length > 0
     ? incidents.slice(0, 3).map(inc => ({
         id: inc._id,
-        icon: '⚠️',
+        icon: 'warning-outline',
         name: inc.productName || inc.product_name || 'Sản phẩm',
         loc: inc.location || inc.location_name || '',
         who: `${inc.reportedBy || inc.reported_by || ''} · ${inc.time || inc.created_at || ''}`,
     }))
     : shortages;
+
     useEffect(() => {
         async function fetchAll(){
             try{
-            const statsRes = await getDashboardStatus();
-            console.log('📊 Dashboard stats:', JSON.stringify(statsRes, null, 2));
-            setStats(statsRes);
-        } catch (err) {
-            console.log('❌ Stats error:', err.message);
+                const statsRes = await getDashboardStatus();
+                console.log('Dashboard stats:', JSON.stringify(statsRes, null, 2));
+                setStats(statsRes);
+            } catch (err) {
+                console.log('Stats error:', err.message);
+            }
+            try {
+                const incidentsRes = await getIncidents();
+                console.log('Incidents:', JSON.stringify(incidentsRes, null, 2));
+                setIncidents(Array.isArray(incidentsRes) ? incidentsRes: [] );
+            } catch (err) {
+                console.log('Incidents error:', err.message);
+            }
+            setLoading(false);
         }
-        try {
-            const incidentsRes = await getIncidents();
-            console.log('⚠️ Incidents:', JSON.stringify(incidentsRes, null, 2));
-            setIncidents(Array.isArray(incidentsRes) ? incidentsRes: [] );
-        } catch (err) {
-            console.log('❌ Incidents error:', err.message);
-        }
-        setLoading(false);
-    }
         fetchAll()
     }, []);
+
     if (loading) {
         return (
             <SafeAreaView style={styles.safeArea}>
@@ -134,6 +142,7 @@ export default function ManagerDashboardScreen(){
             </SafeAreaView>
         );
     }
+
     return(
         <SafeAreaView style={styles.safeArea}>
 
@@ -145,6 +154,7 @@ export default function ManagerDashboardScreen(){
                     <Text style={styles.liveText}>LIVE</Text>
                 </View>
             </View>
+
             {/* Body */}
             <ScrollView style = {styles.scroll}>
                 {/* 4 thẻ card 2x2 */}
@@ -152,7 +162,8 @@ export default function ManagerDashboardScreen(){
                     {displayKpis.map((item, index) => (
                         <KpiCard key = {index}  item = {item} />
                     ))}
-                    </View>
+                </View>
+
                 {/* Hoàn thành theo khu vực */}
                 <View style = {styles.card}>
                     <Text style = {styles.cardTitle}>Hoàn thành theo khu vực</Text>
@@ -160,15 +171,18 @@ export default function ManagerDashboardScreen(){
                         <ZoneRow key = {zone.name} zone = {zone} />
                     ))}
                 </View>
+
                 {/* Alert cảnh báo năng suất làm việc */}
                 <View style = {styles.alert}>
-                    <Text style = {styles.alertIcon}>⚠️</Text>
+                    <Ionicons name="warning-outline" size={24} color="#e65100" style={{ marginRight: 4 }} />
                     <View style = {styles.alertBody}>
-                        <Text style = {styles.alertTitle}> 2 nhân viên dưới mức năng suất</Text>
+                        <Text style = {styles.alertTitle}>2 nhân viên dưới mức năng suất</Text>
                         <Text style={styles.alertSub}>
-                            Phạm Thị Mai (43 SKU/h) và Trần Văn Đức (41 SKU/h) đang dưới ngưỡng 50 SKU/h. </Text>
+                            Phạm Thị Mai (43 SKU/h) và Trần Văn Đức (41 SKU/h) đang dưới ngưỡng 50 SKU/h.
+                        </Text>
                     </View>
-                    </View>
+                </View>
+
                 {/* Sản phẩm còn thiếu */}
                 <View style = {styles.card}>
                     <Text style = {styles.cardTitle}>Sản phẩm còn đang thiếu</Text>
@@ -177,32 +191,33 @@ export default function ManagerDashboardScreen(){
                     ))}
                 </View>
             </ScrollView>
-             {/* Bottom Navigation Manager */}
+
+            {/* Bottom Navigation Manager */}
             <View style={styles.bottomNav}>
                 <TouchableOpacity style={styles.navItem}>
-                    <Text style={styles.navIcon}>📋</Text>
+                    <Ionicons name="stats-chart" size={22} color={COLORS.primary} style={{ marginBottom: 4 }} />
                     <Text style={[styles.navLabel, styles.navActive]}>
                         Dashboard
                     </Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.navItem} onPress={() => router.push('/team')}>
-                    <Text style={styles.navIcon}>👥</Text>
+                    <Ionicons name="people-outline" size={22} color="#888" style={{ marginBottom: 4 }} />
                     <Text style={styles.navLabel}>Nhân viên</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.navItem} onPress={() => router.push('/storelist')}>
-                    <Text style={styles.navIcon}>🏪</Text>
+                    <Ionicons name="business-outline" size={22} color="#888" style={{ marginBottom: 4 }} />
                     <Text style={styles.navLabel}>Cửa hàng</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.navItem} onPress={() => router.push('/incidentreport')}>
-                    <Text style={styles.navIcon}>⚠️</Text>
+                    <Ionicons name="warning-outline" size={22} color="#888" style={{ marginBottom: 4 }} />
                     <Text style={styles.navLabel}>Sự cố</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.navItem} onPress={() => router.push('/setting')}>
-                    <Text style={styles.navIcon}>⚙️</Text>
+                    <Ionicons name="settings-outline" size={22} color="#888" style={{ marginBottom: 4 }} />
                     <Text style={styles.navLabel}>Cài đặt</Text>
                 </TouchableOpacity>
             </View>
-            </SafeAreaView>
+        </SafeAreaView>
     )
 }
 
@@ -340,6 +355,7 @@ const styles = StyleSheet.create({
         marginBottom: 12,
         borderLeftWidth: 4,
         borderLeftColor: COLORS.warning,
+        alignItems: 'center',
     },
     alertIcon: { fontSize: 22 },
     alertBody: { flex: 1 },

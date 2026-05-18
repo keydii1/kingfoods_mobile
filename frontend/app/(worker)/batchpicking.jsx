@@ -1,31 +1,32 @@
-import { View, Text, StyleSheet,
-         ScrollView, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { useState, useEffect } from 'react';
+import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../../constants/colors';
 import StaffBottomNav from '../../components/StaffBottomNav';
 import {getAssignedTasks} from '../../constants/services/api';
+
 // Danh sách item cần pick
 const batchItems = [
     {
         id: '1', location: '12.03\n.A',
         name: 'Bánh quy Hải Hà 200g (5 hộp)',
-        bins: [{ color: '#fff3e0', text: '#e65100', label: '🟡 BIN-401 (Q.7)' }],
+        bins: [{ color: '#fff3e0', text: '#e65100', label: 'BIN-401 (Q.7)' }],
         done: true, isCurrent: false,
     },
     {
         id: '2', location: '14.07\n.B',
         name: 'Nước tương Chinsu 500ml (3 chai)',
-        bins: [{ color: '#fff3e0', text: '#e65100', label: '🟡 BIN-401 (Q.7)' }],
+        bins: [{ color: '#fff3e0', text: '#e65100', label: 'BIN-401 (Q.7)' }],
         done: false, isCurrent: true,
     },
     {
         id: '3', location: '18.02\n.A',
         name: 'Mì gói Hảo Hảo (20 gói)',
         bins: [
-            { color: '#e8f5e9', text: '#2e7d32', label: '🟢 BIN-402' },
-            { color: '#e3f2fd', text: '#1565c0', label: '🔵 BIN-403' },
+            { color: '#e8f5e9', text: '#2e7d32', label: 'BIN-402' },
+            { color: '#e3f2fd', text: '#1565c0', label: 'BIN-403' },
         ],
         done: false, isCurrent: false,
     },
@@ -98,7 +99,7 @@ export default function BatchPickingScreen() {
                     bins: [{
                         color: '#fff3e0',
                          text: '#e65100',
-                        label: `🟡 BIN-${t.orderDetail?.order?.id || t.id}`
+                        label: `BIN-${t.orderDetail?.order?.id || t.id}`
                     }],
                     done: false,
                     isCurrent: ti === 0
@@ -137,7 +138,7 @@ export default function BatchPickingScreen() {
             {/* Header */}
             <View style={styles.header}>
                 <TouchableOpacity onPress={() => router.back()}>
-                    <Text style={styles.backBtn}>‹</Text>
+                    <Ionicons name="chevron-back" size={24} color={COLORS.primary} />
                 </TouchableOpacity>
                 <Text style={styles.headerTitle}>Batch Picking</Text>
                 <View style={styles.badge}>
@@ -149,9 +150,12 @@ export default function BatchPickingScreen() {
 
                 {/* Banner batch */}
                 <View style={styles.batchBanner}>
-                    <Text style={styles.bannerTitle}>
-                        🚀 Pick nhiều đơn cùng lúc
-                    </Text>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 4 }}>
+                        <Ionicons name="flash-outline" size={16} color="#fff" />
+                        <Text style={styles.bannerTitle}>
+                            Pick nhiều đơn cùng lúc
+                        </Text>
+                    </View>
                     <Text style={styles.bannerSub}>
                         Nhặt hàng cho 3 đơn trong 1 chuyến → Giảm 40% quãng đường
                     </Text>
@@ -171,7 +175,7 @@ export default function BatchPickingScreen() {
 
                 {/* Alert */}
                 <View style={styles.alert}>
-                    <Text style={styles.alertIcon}>💡</Text>
+                    <Ionicons name="bulb-outline" size={22} color="#1565c0" style={{ marginRight: 6 }} />
                     <View style={styles.alertBody}>
                         <Text style={styles.alertTitle}>
                             Hệ thống đã gộp & sắp thứ tự
@@ -185,9 +189,10 @@ export default function BatchPickingScreen() {
 
                 {/* Danh sách */}
                 <View style={styles.card}>
-                    <Text style={styles.cardTitle}>
-                        📋 Thứ tự Pick ({doneCount}/{items.length} xong)
-                    </Text>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 12 }}>
+                        <Ionicons name="list-outline" size={16} color="#222" />
+                        <Text style={styles.cardTitle}>Thứ tự Pick ({doneCount}/{items.length} xong)</Text>
+                    </View>
                     {loading ? (
                         <ActivityIndicator color={COLORS.primary} size="large" style={{ marginTop: 40 }} />
                     ) : (
@@ -203,9 +208,12 @@ export default function BatchPickingScreen() {
 
                 {/* Nút quét mã */}
                 <TouchableOpacity style={styles.btnScan}>
-                    <Text style={styles.btnScanText}>
-                        📷 QUÉT MÃ – KỆ 14.07.B
-                    </Text>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, justifyContent: 'center' }}>
+                        <Ionicons name="camera-outline" size={20} color="#fff" />
+                        <Text style={styles.btnScanText}>
+                            QUÉT MÃ – KỆ 14.07.B
+                        </Text>
+                    </View>
                 </TouchableOpacity>
 
             </ScrollView>

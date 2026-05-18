@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Text, View, TouchableOpacity, StyleSheet, FlatList, Alert, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Ionicons } from '@expo/vector-icons';
 import {getAssignedTasks} from '../../constants/services/api'
 import { COLORS } from '../../constants/colors';
 import { router, useLocalSearchParams, useFocusEffect } from 'expo-router';
@@ -37,7 +38,6 @@ export default function productListScreen() {
         console.log('productlist: found task data', JSON.stringify(task, null, 2));
         if(task){
           const orderId = task.orderDetail?.order?.id;
-          // find all tasks belonging to the same order
           const orderTasks = orderId
             ? arr.filter(t => t.orderDetail?.order?.id === orderId)
             : [task];
@@ -56,7 +56,6 @@ export default function productListScreen() {
             };
           }));
         } else {
-          // fallback: show hardcoded mock data để user thấy gì đó
           setProducts(initialProducts);
         }
       }
@@ -111,10 +110,14 @@ export default function productListScreen() {
           </View>
           <View style={styles.itemInfo}>
             <Text style={styles.itemName}>{item.name}</Text>
-            <Text style={styles.itemSKU}>{item.sku}</Text>
+            <Text style={styles.itemSku}>{item.sku}</Text>
           </View>
           <View style={styles.itemQty}>
-            <Text style={styles.qtyValue}>{item.done ? '✓' : item.qty}</Text>
+            {item.done ? (
+              <Ionicons name="checkmark-circle" size={24} color={COLORS.primary} />
+            ) : (
+              <Text style={styles.qtyValue}>{item.qty}</Text>
+            )}
             <Text style={styles.qtyUnit}>{item.unit}</Text>
           </View>
           <TouchableOpacity
@@ -139,7 +142,7 @@ export default function productListScreen() {
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => router.back()}>
-          <Text style={styles.backBtn}> ‹ </Text>
+          <Ionicons name="chevron-back" size={24} color={COLORS.primary} style={{ marginRight: 10 }} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>{taskInfo?.orderDetail?.order?.id ? `Đơn hàng #${taskInfo.orderDetail.order.id}` : `Đơn hàng #${taskId}`}</Text>
         <View style={styles.badge}>
@@ -149,7 +152,7 @@ export default function productListScreen() {
 
       {/* Zone Chip */}
       <View style={styles.zoneChip}>
-        <Text style={styles.zoneIcon}>🍬</Text>
+        <Ionicons name="cube-outline" size={28} color={COLORS.primary} />
         <View style={styles.zoneInfo}>
           <Text style={styles.zoneName}>Khu vực Bánh & Kẹo</Text>
           <Text style={styles.zoneSub}>12 sản phẩm thuộc khu vực của bạn</Text>
@@ -180,13 +183,19 @@ export default function productListScreen() {
       <View style={styles.confirmBar}>
         {allDone ? (
           <>
-            <Text style={styles.confirmText}>✅ Đã hoàn thành tất cả sản phẩm</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, justifyContent: 'center' }}>
+                <Ionicons name="checkmark-circle-outline" size={18} color={COLORS.primary} />
+                <Text style={styles.confirmText}>Đã hoàn thành tất cả sản phẩm</Text>
+            </View>
             <TouchableOpacity style={styles.confirmBtn} onPress={confirmOrder}>
               <Text style={styles.confirmBtnText}>Xác nhận hoàn thành đơn hàng</Text>
             </TouchableOpacity>
           </>
         ) : (
-          <Text style={styles.confirmText}>⏳ Còn {remaining} sản phẩm chưa lấy</Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, justifyContent: 'center' }}>
+              <Ionicons name="time-outline" size={18} color={COLORS.primary} />
+              <Text style={styles.confirmText}>Còn {remaining} sản phẩm chưa lấy</Text>
+          </View>
         )}
       </View>
       </View>

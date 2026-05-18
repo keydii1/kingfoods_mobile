@@ -2,20 +2,20 @@ import {Text, View, SectionList, StyleSheet, TouchableOpacity} from 'react-nativ
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useState, useEffect} from 'react';
 import {ActivityIndicator, Alert} from 'react-native';
+import {Ionicons} from '@expo/vector-icons';
 import {getAssignedTasks} from '../../constants/services/api'
 import {router, usePathname} from 'expo-router';
 import {COLORS} from '../../constants/colors';
 import StaffBottomNav from '../../components/StaffBottomNav';
 
-// Mockdata chia thành 2 section SectionList
-
 const sections = [
     {
-        title : '🔔 Mới nhất',
+        title : 'Mới nhất',
         data: [
             {
             id : '1',
-            icon: '🚨',
+            icon: 'alert-circle-outline',
+            iconColor: '#e53935',
             iconBg: '#ffebee',
             title : 'Hủy đơn khẩn cấp',
             message: '#KF-12349 – Bình Thạnh vừa bị hủy. Dừng pick ngay.',
@@ -24,7 +24,8 @@ const sections = [
         },
         {
             id: '2',
-            icon: '📦',
+            icon: 'cube-outline',
+            iconColor: '#e65100',
             iconBg: '#fff3e0',
             title: 'Thêm 5 SKU vào đơn #KF-12345',
             time: '15 phút trước · Hệ thống',
@@ -34,7 +35,8 @@ const sections = [
         },
         {
             id : '3',
-            icon: '📍',
+            icon: 'location-outline',
+            iconColor: '#1565c0',
             iconBg: '#e3f2fd',
             title: 'Thay đổi vị trí của hàng',
             message: 'Chinsu 500ml đã chuyển từ kệ 12.03.A sang 12.07.B',
@@ -44,11 +46,12 @@ const sections = [
     ],  
     },
     {
-        title: '📋 Trước đó',
+        title: 'Trước đó',
         data: [
             {
                 id: '4',
-                icon: '✅',
+                icon: 'checkmark-circle-outline',
+                iconColor: COLORS.primary,
                 iconBg: '#e8f5e9',
                 title: 'Bàn giao ca hoàn tất',
                 message: 'Ca sáng bàn giao thành công 3 ghi chú cho ca chiều.',
@@ -57,7 +60,8 @@ const sections = [
             },
             {
                 id: '5',
-                icon: '⚠️',
+                icon: 'warning-outline',
+                iconColor: '#e65100',
                 iconBg: '#fff3e0',
                 title: 'Cảnh báo năng suất',
                 message: 'Năng suất 10:00–11:00 chỉ đạt 43 SKU/h, dưới mức 50.',
@@ -75,7 +79,7 @@ function NotifItem({item}){
         style = {[styles.notifItem, item.unread && styles.notifUnread]}>
             {/* Icon */}
             <View style = {[styles.notifIcon, {backgroundColor:item.iconBg}]}>
-                <Text style = {styles.notifIconText}>{item.icon}</Text>
+                <Ionicons name={item.icon} size={20} color={item.iconColor || COLORS.primary} />
             </View>
             {/* Nội dung */}
             <View style = {styles.notifBody}>
@@ -101,7 +105,7 @@ export default function NotificationScreen(){
             .filter(t => t.status !== 'completed')
             .map((t, i) => ({
                 id: `new-${t.id}`,
-                icon: '📦', iconBg: '#e3f2fd',
+                icon: 'cube-outline', iconBg: '#e3f2fd', iconColor: '#1565c0',
                 title: `Đang pick: ${t.orderDetail?.product?.name || 'Sản phẩm'}`,
                 message: `${t.quantityPicked}/${t.quantityToPick} · ${t.orderDetail?.order?.branch?.name || ''}`,
                 time: t.createdAt ? new Date(t.createdAt).toLocaleTimeString('vi-VN') : ' ',
@@ -111,7 +115,7 @@ export default function NotificationScreen(){
             .filter(t => t.status === 'completed')
             .map(t => ({
                 id: `old-${t.id}`,
-                icon: '✅', iconBg: '#e8f5e9',
+                icon: 'checkmark-circle-outline', iconBg: '#e8f5e9', iconColor: COLORS.primary,
                 title: `Hoàn thành: ${t.orderDetail?.product?.name || 'Sản phẩm'}`,
                 message: `${t.quantityToPick} cái · ${t.orderDetail?.order?.branch?.name || ''}`,
                 time: t.updatedAt ? new Date(t.updatedAt).toLocaleTimeString('vi-VN') : ' ',
@@ -119,12 +123,12 @@ export default function NotificationScreen(){
             }));
             if(newOnes.length > 0 || old.length > 0){
                 setApiSections([
-                    { title: '🔔 Mới nhất', data: newOnes },
-                    { title: '📋 Trước đó', data: old },
+                    { title: 'Mới nhất', data: newOnes },
+                    { title: 'Trước đó', data: old },
                 ]);
             }
         } catch (err){
-            //  giữ mockdata nếu lõi
+            //  giữ mockdata nếu lỗi
         } finally {
             setLoading(false);
         }
@@ -139,35 +143,43 @@ export default function NotificationScreen(){
             {/* Header */}
             <View style = {styles.header}>
                 <TouchableOpacity onPress = {() => router.back()}>
-                    <Text style = {styles.backBtn}>‹</Text>
-                     </TouchableOpacity>
-                    <Text style = {styles.headerTitle}>Thông báo</Text>
-                    <View style = {styles.badge}>
-                        <Text style = {styles.badgeText}>{unreadCount} mới</Text>
-                    </View>
+                    <Ionicons name="chevron-back" size={24} color={COLORS.primary} />
+                </TouchableOpacity>
+                <Text style = {styles.headerTitle}>Thông báo</Text>
+                <View style = {styles.badge}>
+                    <Text style = {styles.badgeText}>{unreadCount} mới</Text>
+                </View>
             </View>
             {/* Danh sách thông báo */}
             {loading ? (
                 <ActivityIndicator color={COLORS.primary} size="large" style={{ marginTop: 40 }} />
             ) : (
-                       <SectionList
-                sections={displaySections}
-                keyExtractor={(item) => item.id}
-                renderItem={({ item }) => <NotifItem item={item} />}
-                renderSectionHeader={({ section }) => (
-                    <View style={styles.sectionHeader}>
-                        <Text style={styles.sectionTitle}>
-                            {section.title}
-                        </Text>
-                    </View>
-                )}
-                contentContainerStyle={styles.list}
-            />
+                <SectionList
+                    sections={displaySections}
+                    keyExtractor={(item) => item.id}
+                    renderItem={({ item }) => <NotifItem item={item} />}
+                    renderSectionHeader={({ section }) => (
+                        <View style={styles.sectionHeader}>
+                            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                                <Ionicons 
+                                    name={section.title === 'Mới nhất' ? 'notifications-outline' : 'archive-outline'} 
+                                    size={16} 
+                                    color="#888" 
+                                />
+                                <Text style={styles.sectionTitle}>
+                                    {section.title}
+                                </Text>
+                            </View>
+                        </View>
+                    )}
+                    contentContainerStyle={styles.list}
+                />
             )}
         <StaffBottomNav />
         </SafeAreaView>
     );
 }
+
 const styles = StyleSheet.create({
     safeArea: {
         flex: 1,

@@ -3,11 +3,12 @@ import { View, Text, StyleSheet,
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { useState } from 'react';
+import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../../constants/colors';
 
 // Thông tin hàng trả
 const returnItem = {
-    icon: '🥫',
+    icon: 'cube-outline',
     name: 'Nước tương Chinsu 500ml',
     sku: 'KF-00456',
     from: 'Kingfood Q.7',
@@ -24,9 +25,9 @@ const steps = [
 
 // Các lựa chọn tình trạng
 const conditions = [
-    { id: 'good',    label: '✅ Còn tốt – Nhập lại kho'  },
-    { id: 'damaged', label: '⚠️ Bao bì hỏng – Giảm giá' },
-    { id: 'broken',  label: '❌ Hư hỏng – Thanh lý'      },
+    { id: 'good',    label: 'Còn tốt – Nhập lại kho', icon: 'checkmark-circle-outline', color: COLORS.primary  },
+    { id: 'damaged', label: 'Bao bì hỏng – Giảm giá', icon: 'warning-outline', color: '#e65100' },
+    { id: 'broken',  label: 'Hư hỏng – Thanh lý', icon: 'close-circle-outline', color: COLORS.error },
 ];
 
 // Component 1 bước
@@ -56,7 +57,7 @@ export default function ReturnsScreen() {
             {/* Header */}
             <View style={styles.header}>
                 <TouchableOpacity onPress={() => router.back()}>
-                    <Text style={styles.backBtn}>‹</Text>
+                    <Ionicons name="chevron-back" size={24} color={COLORS.primary} />
                 </TouchableOpacity>
                 <Text style={styles.headerTitle}>Xử lý Hàng Trả về</Text>
                 <View style={{ width: 28 }} />
@@ -66,14 +67,13 @@ export default function ReturnsScreen() {
 
                 {/* Alert */}
                 <View style={styles.alert}>
-                    <Text style={styles.alertIcon}>↩️</Text>
+                    <Ionicons name="arrow-undo-outline" size={24} color="#1565c0" style={{ marginRight: 6 }} />
                     <View style={styles.alertBody}>
                         <Text style={styles.alertTitle}>
                             Hàng trả từ Cửa hàng
                         </Text>
                         <Text style={styles.alertSub}>
-                            Quét mã, kiểm tra trạng thái rồi nhập kho 
-                            hoặc gửi QC.
+                            Quét mã, kiểm tra trạng thái rồi nhập kho hoặc gửi QC.
                         </Text>
                     </View>
                 </View>
@@ -82,17 +82,13 @@ export default function ReturnsScreen() {
                 <View style={styles.returnCard}>
                     {/* Banner cam */}
                     <View style={styles.returnBanner}>
-                        <Text style={styles.returnEmoji}>
-                            {returnItem.icon}
-                        </Text>
+                        <Ionicons name={returnItem.icon} size={28} color="#fff" style={{ marginRight: 6 }} />
                         <View style={styles.returnInfo}>
                             <Text style={styles.returnName}>
                                 {returnItem.name}
                             </Text>
                             <Text style={styles.returnSub}>
-                                SKU: {returnItem.sku} · 
-                                Từ: {returnItem.from} · 
-                                {returnItem.qty}
+                                SKU: {returnItem.sku} · Từ: {returnItem.from} · {returnItem.qty}
                             </Text>
                         </View>
                     </View>
@@ -107,9 +103,10 @@ export default function ReturnsScreen() {
 
                 {/* Tình trạng sản phẩm */}
                 <View style={styles.card}>
-                    <Text style={styles.cardTitle}>
-                        🔍 Tình trạng sản phẩm
-                    </Text>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 12 }}>
+                        <Ionicons name="search-outline" size={18} color="#222" style={{ marginRight: 6 }} />
+                        <Text style={styles.cardTitle}>Tình trạng sản phẩm</Text>
+                    </View>
                     {conditions.map((item) => (
                         <TouchableOpacity
                             key={item.id}
@@ -120,13 +117,16 @@ export default function ReturnsScreen() {
                             ]}
                             onPress={() => setCondition(item.id)}
                         >
-                            <Text style={[
-                                styles.conditionText,
-                                condition === item.id &&
-                                    styles.conditionTextActive,
-                            ]}>
-                                {item.label}
-                            </Text>
+                            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                                <Ionicons name={item.icon} size={18} color={item.color} />
+                                <Text style={[
+                                    styles.conditionText,
+                                    condition === item.id &&
+                                        styles.conditionTextActive,
+                                ]}>
+                                    {item.label}
+                                </Text>
+                            </View>
                         </TouchableOpacity>
                     ))}
                 </View>
@@ -136,15 +136,21 @@ export default function ReturnsScreen() {
                     style={styles.btnPrimary}
                     onPress={() => router.back()}
                 >
-                    <Text style={styles.btnPrimaryText}>
-                        📥 Xác nhận Nhập kho – Kệ 14.07.B
-                    </Text>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                        <Ionicons name="download-outline" size={18} color="#fff" />
+                        <Text style={styles.btnPrimaryText}>
+                            Xác nhận Nhập kho – Kệ 14.07.B
+                        </Text>
+                    </View>
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.btnOutline}>
-                    <Text style={styles.btnOutlineText}>
-                        📋 Ghi chú thêm cho QC
-                    </Text>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                        <Ionicons name="document-text-outline" size={18} color="#666" />
+                        <Text style={styles.btnOutlineText}>
+                            Ghi chú thêm cho QC
+                        </Text>
+                    </View>
                 </TouchableOpacity>
 
             </ScrollView>
@@ -168,6 +174,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row', backgroundColor: '#e3f2fd',
         borderRadius: 14, padding: 14, gap: 10, marginBottom: 12,
         borderLeftWidth: 4, borderLeftColor: '#1976d2',
+        alignItems: 'center',
     },
     alertIcon: { fontSize: 22 },
     alertBody: { flex: 1 },
@@ -211,7 +218,7 @@ const styles = StyleSheet.create({
         padding: 16, marginBottom: 12,
     },
     cardTitle: { fontSize: 14, fontWeight: '700',
-        color: '#222', marginBottom: 12 },
+        color: '#222' },
 
     // Condition buttons
     conditionBtn: {

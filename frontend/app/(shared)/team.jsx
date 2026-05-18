@@ -2,13 +2,15 @@ import {Text, View, TouchableOpacity, StyleSheet, ScrollView, Alert, ActivityInd
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {router} from 'expo-router';
 import {useState, useEffect} from 'react';
+import {Ionicons} from '@expo/vector-icons';
 import {getUsers, updateUser, deleteUser} from '../../constants/services/api'
 import {COLORS} from '../../constants/colors';
 
 // MockData 2 khu vực
 const teams = [
     {
-        zone: '🍬 Khu Bánh & Kẹo',
+        zone: 'Khu Bánh & Kẹo',
+        icon: 'rose-outline',
         members: [
             {
                 id: '1', initials: 'LN', avatarColor: '#e8f5e9',
@@ -21,7 +23,7 @@ const teams = [
                 id: '2', initials: 'TM', avatarColor: '#fff3e0',
                 avatarText: '#e65100',
                 name: 'Phạm Thị Mai',
-                order: '⚠️ Đang làm #KF-12346 · 20/38 SKU',
+                order: 'Đang làm #KF-12346 · 20/38 SKU',
                 sku: 43, skuColor: COLORS.error, status: 'warn',
             },
             {
@@ -34,7 +36,8 @@ const teams = [
         ],
     },
     {
-        zone: '🥤 Khu Đồ Uống',
+        zone: 'Khu Đồ Uống',
+        icon: 'wine-outline',
         members: [
             {
                 id: '4', initials: 'VS', avatarColor: '#e3f2fd',
@@ -47,7 +50,7 @@ const teams = [
                 id: '5', initials: 'MT', avatarColor: '#e8f5e9',
                 avatarText: COLORS.primary,
                 name: 'Lê Minh Tùng',
-                order: 'Hoàn thành #KF-12348 ✅',
+                order: 'Hoàn thành #KF-12348',
                 sku: 55, skuColor: COLORS.primary, status: 'good',
             },
         ],
@@ -65,7 +68,11 @@ function MemberRow({member, onEdit, onDelete}){
         {/* Tên và đơn hàng */}
         <View style = {styles.memberInfo}>
             <Text style = {styles.memberName}>{member.name}</Text>
-            <Text style = {styles.memberOrder}>{member.order}</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 2 }}>
+                {member.status === 'warn' && <Ionicons name="warning" size={12} color="#e65100" />}
+                {member.status === 'good' && <Ionicons name="checkmark-circle" size={12} color={COLORS.primary} />}
+                <Text style = {styles.memberOrder}>{member.order}</Text>
+            </View>
         </View>
         {/* SKU/h */}
         <View style = {styles.memberSku}>
@@ -74,12 +81,12 @@ function MemberRow({member, onEdit, onDelete}){
         </View>
         {onEdit && (
             <TouchableOpacity onPress={onEdit} style={styles.memberAction}>
-                <Text style={styles.memberActionText}>✏️</Text>
+                <Ionicons name="create-outline" size={18} color={COLORS.primary} />
             </TouchableOpacity>
         )}
         {onDelete && (
             <TouchableOpacity onPress={onDelete} style={styles.memberAction}>
-                <Text style={styles.memberActionText}>🗑️</Text>
+                <Ionicons name="trash-outline" size={18} color={COLORS.error} />
             </TouchableOpacity>
         )}
     </View>
@@ -159,7 +166,7 @@ export default function TeamScreen(){
             {/* Headder */}
             <View style = {styles.header}>
                 <TouchableOpacity onPress = {() => router.back()}>
-                    <Text style = {styles.backBtn}>‹</Text>
+                    <Ionicons name="chevron-back" size={24} color={COLORS.primary} />
                 </TouchableOpacity>
                 <Text style = {styles.headerTitle}>Team Overview</Text>
                 <View style = {styles.badge}>
@@ -170,7 +177,7 @@ export default function TeamScreen(){
             <ScrollView style = {styles.scroll}>
                 {/* Alert tổng quan */}
                 <View style = {styles.alert}>
-                    <Text style = {styles.alertIcon}>👥</Text>
+                    <Ionicons name="people-outline" size={24} color={COLORS.primary} style={{ marginRight: 6 }} />
                     <View style = {styles.alertBody}>
                         <Text style = {styles.alertTitle}>{activeStats.totalActive} nhân viên vẫn còn đang hoạt động</Text>
                         <Text style = {styles.alertSub}>{activeStats.zoneDetails}Tổng năng suất: {activeStats.totalSKU} SKU/h</Text>
@@ -202,7 +209,10 @@ export default function TeamScreen(){
                 ):
             teams.map((team) => (
                 <View key = {team.zone} style = {styles.card}>
-                    <Text style = {styles.cardTitle}>{team.zone}</Text>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 12 }}>
+                        <Ionicons name={team.icon} size={18} color={COLORS.primary} />
+                        <Text style = {styles.cardTitle}>{team.zone}</Text>
+                    </View>
                     {team.members.map((member) => (
                         <MemberRow key = {member.id || member._id} member ={member}/>
                     ))}
@@ -219,6 +229,8 @@ export default function TeamScreen(){
                             value={editName}
                             onChangeText={setEditName}
                             placeholder="Nhập tên mới"
+                            autoCapitalize="none"
+                            autoCorrect={false}
                         />
                         <View style={styles.editActions}>
                             <TouchableOpacity style={styles.editCancelBtn} onPress={() => setEditingUser(null)}>

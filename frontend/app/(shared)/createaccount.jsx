@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, TextInput, Switch, Alert } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { COLORS } from '../../constants/colors';
 import {createUser} from '../../constants/services/api';
@@ -70,7 +71,7 @@ export default function CreateAccountScreen() {
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => router.back()}>
-          <Text style={styles.backBtn}>‹</Text>
+          <Ionicons name="chevron-back" size={24} color={COLORS.primary} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Tạo tài khoản</Text>
         <View style={{ width: 28 }} />
@@ -78,7 +79,10 @@ export default function CreateAccountScreen() {
 
       <ScrollView style={styles.scroll}>
         <View style={styles.card}>
-          <Text style={styles.cardTitle}>👤 Thông tin nhân viên</Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 16 }}>
+            <Ionicons name="person-outline" size={20} color="#222" style={{ marginRight: 6 }} />
+            <Text style={styles.cardTitle}>Thông tin nhân viên</Text>
+          </View>
 
           <TextInput
             style={styles.input}
@@ -86,6 +90,8 @@ export default function CreateAccountScreen() {
             placeholderTextColor="#aaa"
             value={name}
             onChangeText={setName}
+            autoCapitalize="none"
+            autoCorrect={false}
           />
           <TextInput
             style={styles.input}
@@ -94,6 +100,7 @@ export default function CreateAccountScreen() {
             value={username}
             onChangeText={setUsername}
             autoCapitalize="none"
+            autoCorrect={false}
           />
           <TextInput
             style={styles.input}
@@ -102,6 +109,8 @@ export default function CreateAccountScreen() {
             value={password}
             onChangeText={setPassword}
             secureTextEntry
+            autoCapitalize="none"
+            autoCorrect={false}
           />
 
           <Text style={styles.label}>Vai trò</Text>
@@ -165,9 +174,12 @@ export default function CreateAccountScreen() {
                 onPress={handleCreate}
                 disabled={submitting}
             >
-                <Text style={styles.createBtnText}>
-                    {submitting ? 'Đang tạo...' : '✅ Tạo tài khoản'}
-                </Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                  <Ionicons name="checkmark-circle-outline" size={18} color="#fff" />
+                  <Text style={styles.createBtnText}>
+                      {submitting ? 'Đang tạo...' : 'Tạo tài khoản'}
+                  </Text>
+                </View>
             </TouchableOpacity>
         </View>
       </ScrollView>

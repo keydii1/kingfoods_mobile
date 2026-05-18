@@ -2,15 +2,9 @@ import { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Alert, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../../constants/colors';
 import {getOrders, updateOrderStatus} from '../../constants/services/api';
-const mockOrders = [
-  { id: '#KF-12400', _id: '#KF-12400', store: 'Kingfood Nguyễn Văn Linh, Q.7', items: 12, status: 'Chờ duyệt', date: '10/05/2026' },
-  { id: '#KF-12399', _id: '#KF-12399', store: 'Kingfood Đinh Tiên Hoàng, Q.1', items: 8, status: 'Đang xử lý', date: '09/05/2026' },
-  { id: '#KF-12398', _id: '#KF-12398', store: 'Kingfood Lê Văn Việt, Q.9', items: 5, status: 'Chờ duyệt', date: '08/05/2026' },
-  { id: '#KF-12397', _id: '#KF-12397', store: 'Kingfood Nguyễn Văn Linh, Q.7', items: 15, status: 'Đang xử lý', date: '07/05/2026' },
-  { id: '#KF-12396', _id: '#KF-12396', store: 'Kingfood Đinh Tiên Hoàng, Q.1', items: 10, status: 'Hoàn thành', date: '06/05/2026' },
-];
 
 const statusConfig = {
   'Chờ duyệt': { color: '#fff3e0', textColor: '#e65100' },
@@ -21,25 +15,27 @@ const statusConfig = {
 
 export default function OrderProcessingScreen() {
   const [filter, setFilter] = useState('all');
-  const [orders, setOrders] = useState(mockOrders);
+  const [orders, setOrders] = useState([]);
   const [loadingOrders, setLoadingOrders] = useState(true);
   useEffect(() => {
     async function fetchOrders(){
       try{
         const res = await getOrders();
+        console.log('Orders admin fetched:', JSON.stringify(res, null, 2));
         if (Array.isArray(res)) {
           setOrders(res.map(o => ({
             id: o.id || o._id,
             _id: o._id || o.id,
-            store: o.store || o.storeName || '',
-            items: o.items || o.totalItems || o.productCount || 0,
-            date: o.date || (o.createdAt ? new Date(o.createdAt).toLocaleDateString('vi-VN') : ''),
-            status: o.status,
+            store: o.branch?.name || o.store || o.storeName || 'Cửa hàng',
+            items: o.orderDetails?.length || 0,
+            date: o.createdAt ? new Date(o.createdAt).toLocaleDateString('vi-VN') : '',
+            status: o.status === 'pending' ? 'Chờ duyệt' : o.status === 'processing' ? 'Đang xử lý' : o.status === 'completed' ? 'Hoàn thành' : 'Đã từ chối',
           })));
         }
       }
       catch(err){
-        // fallback to mock data
+        console.log('Fetch orders admin error:', err.message);
+        setOrders([]);
       }
       finally{
         setLoadingOrders(false);
@@ -80,7 +76,7 @@ export default function OrderProcessingScreen() {
             setOrders(prev => prev.map(o=>
               (o._id || o.id) === orderId ? {...o, status: 'Đang xử lí'}: o
             ));
-            Alert.alert('✅ Đã duyệt', `Đơn hàng đã được duyệt`);
+            Alert.alert('Đã duyệt', `Đơn hàng đã được duyệt`);
           } catch(err) { Alert.alert('Lỗi', err.message); }
         }
       },
@@ -96,7 +92,7 @@ export default function OrderProcessingScreen() {
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => router.back()}>
-          <Text style={styles.backBtn}>‹</Text>
+          <Ionicons name="chevron-back" size={24} color={COLORS.primary} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Xử lý đơn hàng</Text>
         <View style={{ width: 28 }} />

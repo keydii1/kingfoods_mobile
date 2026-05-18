@@ -1,15 +1,16 @@
 import {Text, TextInput, View, ScrollView, StyleSheet, TouchableOpacity} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {router} from 'expo-router';
+import {Ionicons} from '@expo/vector-icons';
 import {COLORS} from '../../constants/colors';
 import {useState} from 'react';
 import StaffBottomNav from '../../components/StaffBottomNav';
 
 // các loại mã có thể nhập
 const codeTypes = [
-    {id: 'sku', icon: '📦', label: 'Mã SKU'},
-    {id: 'bin', icon : '🗃️', label :'Mã thùng'},
-    {id: 'location', icon: '📍', label : 'Mã kệ'},
+    {id: 'sku', icon: 'cube-outline', label: 'Mã SKU', color: COLORS.primary},
+    {id: 'bin', icon : 'archive-outline', label :'Mã thùng', color: '#ff9800'},
+    {id: 'location', icon: 'location-outline', label : 'Mã kệ', color: '#1565c0'},
 ]
 
 // Các nút phím bấm
@@ -19,6 +20,7 @@ const keys = [
   '7','8','9',
   '⌫','0','✓'
 ];
+
 // Componet 1 nút bàn phím 
 function KeyButton({label, onPress }){
     const isDelete = label === '⌫';
@@ -56,7 +58,7 @@ export default function ManualEntryScreen(){
             {/* Header */}
             <View style = {styles.header}>
                 <TouchableOpacity onPress = {() => router.back()}>
-                    <Text style = {styles.backBtn}>‹</Text>
+                    <Ionicons name="chevron-back" size={24} color={COLORS.primary} />
                 </TouchableOpacity>
                 <Text style = {styles.headerTitle}>Nhập mã thủ công</Text>
                 <View style = {{width: 28}} />
@@ -65,9 +67,9 @@ export default function ManualEntryScreen(){
             <ScrollView style = {styles.scroll}>
                 {/* Alert */}
                 <View style = {styles.alert}>
-                    <Text style = {styles.alertIcon}>📵</Text>
+                    <Ionicons name="warning-outline" size={24} color="#e65100" style={{ marginRight: 6 }} />
                     <View style = {styles.alertBody}>
-                        <Text style = {styles.alertTitle}>Máy quét không hoạt đông ?</Text>
+                        <Text style = {styles.alertTitle}>Máy quét không hoạt động ?</Text>
                         <Text style = {styles.alertSub}>Nhập mã SKU hoặc mã thùng bằng bàn phím số</Text>
                     </View>
                 </View>
@@ -80,15 +82,25 @@ export default function ManualEntryScreen(){
                         onPress = {() => {setCodeType(type.id); 
                                             setCode('');
                         }}>
-                            <Text style = {[styles.typeBtnText, codeType === type.id && styles.typeBtnTextActive]}>{type.icon} {type.label}</Text>
+                            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                                <Ionicons 
+                                    name={type.icon} 
+                                    size={16} 
+                                    color={codeType === type.id ? '#fff' : type.color} 
+                                />
+                                <Text style = {[styles.typeBtnText, codeType === type.id && styles.typeBtnTextActive]}>{type.label}</Text>
+                            </View>
                         </TouchableOpacity>
                     ))}
                 </View>
                 {/* Hiển thị màn hình mã */}
                 <View style = {styles.display}>
-                    <Text style = {styles.displayLabel}>
-                        {currentType?.icon} {currentType?.label} đang nhập
-                    </Text>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 8 }}>
+                        <Ionicons name={currentType?.icon} size={16} color={currentType?.color} />
+                        <Text style = {styles.displayLabel}>
+                            {currentType?.label} đang nhập
+                        </Text>
+                    </View>
                     <Text style = {styles.displayValue}>
                         {code.length > 0 ? code : '_ _ _'}
                         {code.length > 0 ? '_': ' '}
@@ -153,6 +165,7 @@ const styles = StyleSheet.create({
         marginBottom: 16,
         borderLeftWidth: 4,
         borderLeftColor: COLORS.warning,
+        alignItems: 'center',
     },
     alertIcon: { fontSize: 22 },
     alertBody: { flex: 1 },
@@ -208,7 +221,6 @@ const styles = StyleSheet.create({
     displayLabel: {
         fontSize: 12,
         color: '#888',
-        marginBottom: 8,
     },
     displayValue: {
         fontSize: 32,

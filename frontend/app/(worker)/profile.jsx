@@ -1,12 +1,13 @@
 import {Text, View, TextInput, TouchableOpacity, ScrollView, StyleSheet} from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import {router} from 'expo-router'
+import { Ionicons } from '@expo/vector-icons';
 import {COLORS} from '../../constants/colors'
 import StaffBottomNav from '../../components/StaffBottomNav';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, Alert } from 'react-native';
 import { getProfile, updateProfile } from '../../constants/services/api';
-// componet tái sử dụng - tránh phải lặp đi lặp lại code vi phạm DRYƯ
+
 function InfoRow({label, value, valueColor}){
     return(
         <View style = {styles.infoRow}>
@@ -19,7 +20,7 @@ function InfoRow({label, value, valueColor}){
         </View>
     )
 }
-// Componet tái sử dung cho thành tích
+
 function Achievement ({medal, title, when}){
     return (
         <View style = {styles.achievement}>
@@ -35,56 +36,57 @@ function Achievement ({medal, title, when}){
         </View>
     )
 }
+
 export default function ProfileScreen (){
     const [user, setUser] = useState(null);
-const [loading, setLoading] = useState(true);
-const [editing, setEditing] = useState(false);
-const [editForm, setEditForm] = useState({});
+    const [loading, setLoading] = useState(true);
+    const [editing, setEditing] = useState(false);
+    const [editForm, setEditForm] = useState({});
 
-useEffect(() => {
-    async function fetchProfile() {
-        try {
-            const res = await getProfile();
-            setUser(res);
-        } catch (err) {
-            // Giữ data cứng nếu lỗi
-        } finally {
-            setLoading(false);
+    useEffect(() => {
+        async function fetchProfile() {
+            try {
+                const res = await getProfile();
+                setUser(res);
+            } catch (err) {
+                // Giữ data cứng nếu lỗi
+            } finally {
+                setLoading(false);
+            }
         }
-    }
-    fetchProfile();
-}, []);
+        fetchProfile();
+    }, []);
 
-const startEdit = () => {
-  setEditForm({ fullName: user?.fullName || '', zone: user?.zone || '' });
-  setEditing(true);
-};
+    const startEdit = () => {
+      setEditForm({ fullName: user?.fullName || '', zone: user?.zone || '' });
+      setEditing(true);
+    };
 
-const cancelEdit = () => setEditing(false);
+    const cancelEdit = () => setEditing(false);
 
-const saveEdit = async () => {
-  try {
-    await updateProfile(editForm);
-    setUser(prev => ({ ...prev, ...editForm }));
-    setEditing(false);
-    Alert.alert('Thành công', 'Cập nhật hồ sơ thành công');
-  } catch {
-    Alert.alert('Lỗi', 'Không thể cập nhật hồ sơ');
-  }
-};
+    const saveEdit = async () => {
+      try {
+        await updateProfile(editForm);
+        setUser(prev => ({ ...prev, ...editForm }));
+        setEditing(false);
+        Alert.alert('Thành công', 'Cập nhật hồ sơ thành công');
+      } catch {
+        Alert.alert('Lỗi', 'Không thể cập nhật hồ sơ');
+      }
+    };
+
     return (
         < SafeAreaView style = {styles.safeArea}>
             {/* phần header */}
             <View style = {styles.header}>
-                {/* // đợi event chuyển về trang trước đó */}
                 <TouchableOpacity onPress ={() => router.back()}>
-                    <Text style = {styles.backBtn}>‹</Text>
-                    </TouchableOpacity> 
+                    <Ionicons name="chevron-back" size={24} color={COLORS.primary} />
+                </TouchableOpacity> 
                 <Text style = {styles.headerTitle}>
                     Hồ sơ nhân viên
                 </Text>
                 <TouchableOpacity onPress={editing ? cancelEdit : startEdit}>
-                  <Text style={styles.editBtn}>{editing ? '✕' : '✏️'}</Text>
+                  <Ionicons name={editing ? "close" : "create-outline"} size={22} color={COLORS.primary} />
                 </TouchableOpacity>
             </View>
             {/*Ava + tên của nhân viên  */}
@@ -95,7 +97,9 @@ const saveEdit = async () => {
     <>
         {/* Banner */}
         <View style={styles.banner}>
-            <Text style={styles.avatarEmoji}>👷</Text>
+            <View style={{ width: 80, height: 80, borderRadius: 40, backgroundColor: 'rgba(255,255,255,0.2)', alignItems: 'center', justifyContent: 'center', marginBottom: 10 }}>
+                <Ionicons name="person" size={48} color="#fff" />
+            </View>
             {editing ? (
               <TextInput
                 style={[styles.name, styles.editInput, { color: '#fff', borderBottomColor: 'rgba(255,255,255,0.5)' }]}
@@ -120,7 +124,7 @@ const saveEdit = async () => {
                       />
                     ) : (
                       <Text style={styles.badgeText}>
-                          {user?.zone || '🍬 Bánh & Kẹo'}
+                          {user?.zone || 'Bánh & Kẹo'}
                       </Text>
                     )}
                 </View>
@@ -136,7 +140,7 @@ const saveEdit = async () => {
         <View style={styles.card}>
             <Text style={styles.cardTitle}>Thông tin cá nhân</Text>
             <InfoRow label='Họ và Tên' value={user?.fullName || 'Phạm Thị Mai'} />
-            <InfoRow label='Khu vực' value={user?.zone || '🍬 Bánh & Kẹo'} />
+            <InfoRow label='Khu vực' value={user?.zone || 'Bánh & Kẹo'} />
             <InfoRow label='Ngày vào làm'
                 value={user?.startDate
                     ? new Date(user.startDate).toLocaleDateString('vi-VN')
@@ -153,17 +157,18 @@ const saveEdit = async () => {
         {/* Ca làm — giữ mock vì backend chưa có */}
         <View style={styles.card}>
             <Text style={styles.cardTitle}>Ca làm Sắp tới</Text>
-            <InfoRow label="Hôm nay (22/04)" value="☀️ Ca Sáng 08:00–16:00" />
-            <InfoRow label="Ngày mai (23/04)" value="🌙 Ca Chiều 16:00–00:00" />
-            <InfoRow label="24/04" value="🏖️ Nghỉ" />
+            <InfoRow label="Hôm nay (22/04)" value="Ca Sáng 08:00–16:00" />
+            <InfoRow label="Ngày mai (23/04)" value="Ca Chiều 16:00–00:00" />
+            <InfoRow label="24/04" value="Nghỉ" />
         </View>
     </>
 )}
              </ScrollView>
              <StaffBottomNav />
-        </SafeAreaView>
+        </ SafeAreaView>
     );
 }
+
 const styles = StyleSheet.create({
     safeArea: {
         flex: 1,
@@ -315,79 +320,61 @@ const styles = StyleSheet.create({
         color: '#666',
     },
     shiftBtn: {
-    margin: 12,
-    marginBottom: 0,
-    padding: 16,
-    backgroundColor: COLORS.primary,
-    borderRadius: 16,
-    alignItems: 'center',
-},
-shiftBtnText: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#fff',
-},
-handoverBtn: {
-    marginHorizontal: 12,
-    marginTop: 12,
-
-    padding: 16,
-
-    backgroundColor: '#fff',
-
-    borderRadius: 16,
-
-    alignItems: 'center',
-
-    borderWidth: 1.5,
-    borderColor: '#dfe7df',
-},
-
-handoverBtnText: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: COLORS.primary,
-},
-historyBtn: {
-    marginHorizontal: 12,
-    marginTop: 12,
-
-    padding: 16,
-
-    backgroundColor: '#fff',
-
-    borderRadius: 16,
-
-    alignItems: 'center',
-
-    borderWidth: 1.5,
-    borderColor: '#e5e7eb',
-},
-
-historyBtnText: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: '#374151',
-},
-productivityBtn: {
-    marginHorizontal: 12,
-    marginTop: 12,
-
-    padding: 16,
-
-    backgroundColor: '#fff',
-
-    borderRadius: 16,
-
-    alignItems: 'center',
-
-    borderWidth: 1.5,
-    borderColor: '#d6e4ff',
-},
-
-productivityBtnText: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: COLORS.primary,
-},
+        margin: 12,
+        marginBottom: 0,
+        padding: 16,
+        backgroundColor: COLORS.primary,
+        borderRadius: 16,
+        alignItems: 'center',
+    },
+    shiftBtnText: {
+        fontSize: 14,
+        fontWeight: '600',
+        color: '#fff',
+    },
+    handoverBtn: {
+        marginHorizontal: 12,
+        marginTop: 12,
+        padding: 16,
+        backgroundColor: '#fff',
+        borderRadius: 16,
+        alignItems: 'center',
+        borderWidth: 1.5,
+        borderColor: '#dfe7df',
+    },
+    handoverBtnText: {
+        fontSize: 14,
+        fontWeight: '700',
+        color: COLORS.primary,
+    },
+    historyBtn: {
+        marginHorizontal: 12,
+        marginTop: 12,
+        padding: 16,
+        backgroundColor: '#fff',
+        borderRadius: 16,
+        alignItems: 'center',
+        borderWidth: 1.5,
+        borderColor: '#e5e7eb',
+    },
+    historyBtnText: {
+        fontSize: 14,
+        fontWeight: '700',
+        color: '#374151',
+    },
+    productivityBtn: {
+        marginHorizontal: 12,
+        marginTop: 12,
+        padding: 16,
+        backgroundColor: '#fff',
+        borderRadius: 16,
+        alignItems: 'center',
+        borderWidth: 1.5,
+        borderColor: '#d6e4ff',
+    },
+    productivityBtnText: {
+        fontSize: 14,
+        fontWeight: '700',
+        color: COLORS.primary,
+    },
 });

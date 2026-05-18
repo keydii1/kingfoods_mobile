@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, ActivityIndicator, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../../constants/colors';
 import { getCustomers } from '../../constants/services/api';
 
@@ -16,11 +17,11 @@ export default function StoreListScreen() {
   const fetchStores = async () => {
     try {
       const res = await getCustomers(1, 200);
-      console.log('🏪 Store list response:', JSON.stringify(res, null, 2));
+      console.log('Store list response:', JSON.stringify(res, null, 2));
       const list = res?.data ?? res?.customers ?? res?.items ?? (Array.isArray(res) ? res : []);
       setStores(list);
     } catch (err) {
-      console.log('🏪 Store list error:', err.message);
+      console.log('Store list error:', err.message);
       Alert.alert('Lỗi', `Không thể tải: ${err.message}`);
     } finally {
       setLoading(false);
@@ -33,14 +34,14 @@ export default function StoreListScreen() {
       onPress={() => router.push({ pathname: '/storeorders', params: { customerId: item.id, storeName: item.name } })}
     >
       <View style={styles.storeIcon}>
-        <Text style={styles.storeIconText}>🏪</Text>
+        <Ionicons name="business-outline" size={22} color={COLORS.primary} />
       </View>
       <View style={styles.storeInfo}>
         <Text style={styles.storeName}>{item.name}</Text>
         <Text style={styles.storeEmail}>{item.email}</Text>
         {item.phone && <Text style={styles.storePhone}>{item.phone}</Text>}
       </View>
-      <Text style={styles.arrow}>›</Text>
+      <Ionicons name="chevron-forward" size={16} color="#ccc" />
     </TouchableOpacity>
   );
 
@@ -58,7 +59,7 @@ export default function StoreListScreen() {
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => router.back()}>
-          <Text style={styles.backBtn}>‹</Text>
+          <Ionicons name="chevron-back" size={24} color={COLORS.primary} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Danh sách cửa hàng</Text>
         <Text style={styles.count}>{stores.length}</Text>

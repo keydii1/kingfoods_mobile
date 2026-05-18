@@ -1,4 +1,5 @@
 import {Text, View, TouchableOpacity, ScrollView, StyleSheet, FlatList, TextInput, ActivityIndicator, Alert} from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {router} from 'expo-router';
 import {COLORS} from '../../constants/colors';
@@ -65,16 +66,15 @@ export default function SkuSearchScreen(){
         setLoading(true);
         try{
             const res = await getProducts(query.trim());
-            const products = Array.isArray(res) ? res : [];
+            const products = Array.isArray(res) ? res : (res?.data || []);
             setResults(products.map(p =>({
-                id: p._id,
+                id: p.id,
                 location: p.location || '-',
                 name: p.name,
-                sku: p.sku,
-                zone: p.zone || p.category || ' ',
-                stock: p.stock ?? 0,
-                stockStatus: p.stock === 0 ? 'out' : p.stock < 10 ? 'low' : 'ok',
-
+                sku: p.sku || `SKU-${p.id}`,
+                zone: p.zone || p.category?.name || ' ',
+                stock: p.stock ?? 10,
+                stockStatus: (p.stock ?? 10) === 0 ? 'out' : (p.stock ?? 10) < 10 ? 'low' : 'ok',
             })));
         } catch(err){
             Alert.alert('Lỗi', 'Không tìm được sản phẩm');
@@ -97,7 +97,7 @@ export default function SkuSearchScreen(){
             </View>
 {/* Ô tìm kiếm */}
 <View style={styles.searchBar}>
-    <Text style={styles.searchIcon}>🔍</Text>
+    <Ionicons name="search" size={20} color="#888" style={{ marginRight: 8 }} />
 
     <TextInput
         style={styles.searchInput}
@@ -106,6 +106,12 @@ export default function SkuSearchScreen(){
         value={query}
         onChangeText={setQuery}
         autoFocus={true}
+        autoCapitalize="none"
+        autoCorrect={false}
+        spellCheck={false}
+        autoComplete="off"
+        importantForAutofill="no"
+        textContentType="oneTimeCode"
     />
 
     {query.length > 0 ? (
@@ -114,7 +120,7 @@ export default function SkuSearchScreen(){
         </TouchableOpacity>
     ) : (
         <TouchableOpacity>
-            <Text style={styles.cameraBtn}>📷</Text>
+            <Ionicons name="camera-outline" size={24} color={COLORS.primary} />
         </TouchableOpacity>
     )}
 </View>

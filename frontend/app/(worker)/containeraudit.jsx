@@ -1,7 +1,7 @@
-import { View, Text, StyleSheet,
-         ScrollView, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams} from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../../constants/colors';
 import StaffBottomNav from '../../components/StaffBottomNav';
 import {useState, useEffect} from 'react';
@@ -28,16 +28,11 @@ const skuList = [
 
 // Config theo status
 const auditConfig = {
-    ok:   { check: '✓', checkColor: COLORS.successBg,
-            checkText: COLORS.primary, valueColor: COLORS.primary,
-            suffix: '✓' },
-    bad:  { check: '✗', checkColor: COLORS.errorBg,
-            checkText: COLORS.error, valueColor: COLORS.error,
-            suffix: '✗' },
-    skip: { check: '–', checkColor: COLORS.warningBg,
-            checkText: COLORS.warning, valueColor: COLORS.warning,
-            suffix: '⚠️' },
+    ok:   { icon: 'checkmark-circle-outline', iconColor: COLORS.primary, checkColor: COLORS.successBg, valueColor: COLORS.primary },
+    bad:  { icon: 'close-circle-outline', iconColor: COLORS.error, checkColor: COLORS.errorBg, valueColor: COLORS.error },
+    skip: { icon: 'alert-circle-outline', iconColor: COLORS.warning, checkColor: COLORS.warningBg, valueColor: COLORS.warning },
 };
+
 // Tạo component danh sach trong thùng
 function AuditRow({item}){
     const config = auditConfig[item.status];
@@ -45,7 +40,7 @@ function AuditRow({item}){
         <View style = {styles.auditRow}>
             {/* Check badge */}
             <View style ={[styles.checkBadge, {backgroundColor: config.checkColor}]}>
-                <Text style = {[styles.checkText, {color: config.checkText}]}>{config.check}</Text>
+                <Ionicons name={config.icon} size={18} color={config.iconColor} />
             </View>
             {/* Thông tin SKU */}
             <View style = {styles.skuInfo}>
@@ -53,7 +48,10 @@ function AuditRow({item}){
                 <Text style = {styles.skuRequired}>Yêu cầu: {item.required}</Text>
             </View>
             {/* Số lượng thực tế */}
-            <Text style = {[styles.actualValue, {color: config.valueColor}]}>{item.actual} {config.suffix}</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+                <Text style = {[styles.actualValue, {color: config.valueColor}]}>{item.actual}</Text>
+                <Ionicons name={config.icon} size={14} color={config.iconColor} />
+            </View>
         </View>
     );
 }
@@ -101,7 +99,7 @@ export default function ContainerAuditScreen(){
             {/* Header */}
             <View style={styles.header}>
                 <TouchableOpacity onPress={() => router.back()}>
-                    <Text style={styles.backBtn}>‹</Text>
+                    <Ionicons name="chevron-back" size={24} color={COLORS.primary} />
                 </TouchableOpacity>
                 <Text style={styles.headerTitle}>Kiểm tra Thùng</Text>
                 <View style={styles.badge}>
@@ -117,7 +115,7 @@ export default function ContainerAuditScreen(){
             <ScrollView style = {styles.scroll}>
                 {/* Card thùng hàng */}
                 <View style = {styles.binCard}>
-                    <Text style = {styles.binEmoji}>📦</Text>
+                    <Ionicons name="cube-outline" size={40} color="#fff" />
                     <View style = {styles.binInfo}>
                         <Text style = {styles.binCode}>{displayBinInfo.code}</Text>
                         <Text style = {styles.binOrder}>{displayBinInfo.order}</Text>
@@ -136,20 +134,26 @@ export default function ContainerAuditScreen(){
                 {/* Kết quả audit */}
                 {displaySkuList.some(item => item.status === 'bad' || item.status === 'skip') && (
                 <View style = {styles.resultBox}>
-                    <Text style = {styles.resultIcon}>❌</Text>
-                    <Text style = {styles.resultTitle}>Không đạt - cần phải xử lí</Text>
+                    <Ionicons name="close-circle-outline" size={32} color="#c62828" />
+                    <Text style = {styles.resultTitle}>Không đạt - cần phải xử lý</Text>
                     <Text style = {styles.resultSub}>
                         {displayBinInfo.code} có{' '}
-                        {displaySkuList.filter(i => i.status !== 'ok').length} SKU cần xử lí.
+                        {displaySkuList.filter(i => i.status !== 'ok').length} SKU cần xử lý.
                     </Text>
                 </View>
                 )}
                 {/* Nút chụp ảnh + nút báo cáo */}
                 <TouchableOpacity style = {styles.btnPrimary}>
-                    <Text style = {styles.btnPrimaryText}>📸 Chụp ảnh & Báo cáo</Text>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, justifyContent: 'center' }}>
+                        <Ionicons name="camera-outline" size={18} color="#fff" />
+                        <Text style = {styles.btnPrimaryText}>Chụp ảnh & Báo cáo</Text>
+                    </View>
                 </TouchableOpacity>
                 <TouchableOpacity style = {styles.btnOutline}>
-                    <Text style = {styles.btnOutlineText}>↩️ Bổ sung hàng còn thiếu</Text>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, justifyContent: 'center' }}>
+                        <Ionicons name="arrow-undo-outline" size={18} color="#666" />
+                        <Text style = {styles.btnOutlineText}>Bổ sung hàng còn thiếu</Text>
+                    </View>
                 </TouchableOpacity>
             </ScrollView>
             )}

@@ -2,6 +2,7 @@ import {Text, View, TouchableOpacity, ScrollView, StyleSheet, Alert} from 'react
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {useState} from 'react';
 import {router} from 'expo-router';
+import {Ionicons} from '@expo/vector-icons';
 import {COLORS} from '../../constants/colors';
 import StaffBottomNav from '../../components/StaffBottomNav';
 import {moveItem as apiMoveItem} from '../../constants/services/api'
@@ -9,7 +10,6 @@ import {useLocalSearchParams} from 'expo-router';
 
 // tạo 1 component tái sử dụng
 function MoveStep ({number, label, value , status}) {
-    // Tính style dựa trên status
     const isActive = status === 'active';
     const isDone = status === 'done';
     return (
@@ -24,7 +24,11 @@ function MoveStep ({number, label, value , status}) {
             isDone && styles.stepNumDone,
             isActive && styles.stepNumActive,
             ]}>
-                <Text style = {styles.stepNumText}>{isDone ? '✓': number}</Text>
+                {isDone ? (
+                    <Ionicons name="checkmark" size={16} color="#fff" />
+                ) : (
+                    <Text style = {styles.stepNumText}>{number}</Text>
+                )}
             </View>
             {/* Nội dung bước */}
             <View style = {styles.stepBody}>
@@ -46,10 +50,11 @@ function MoveStep ({number, label, value , status}) {
         </View>
     );
 }
+
 export default function MoveItem(){
-        const params = useLocalSearchParams();
+    const params = useLocalSearchParams();
     const [submitting, setSubmitting] = useState(false);
-        const fromContainer = params.fromContainer || 'BIN-401';
+    const fromContainer = params.fromContainer || 'BIN-401';
     const toContainer = params.toContainer || 'BIN-402';
     const itemId = params.itemId || '';
 
@@ -62,19 +67,19 @@ export default function MoveItem(){
         return 'todo';
     }
     async function handleConfirm(){
-            setSubmitting(true);
-            try{
-                await apiMoveItem(itemId, fromContainer, toContainer);
-                Alert.alert('Thành công', 'Đã chuyển hành sang thùng mới');
-                router.back()
-            }
-            catch(err){
-                Alert.alert('Lỗi', err.message || 'Không thể chuyển hàng')
-            }
-            finally{
-                setSubmitting(false);
-            }
-           }
+        setSubmitting(true);
+        try{
+            await apiMoveItem(itemId, fromContainer, toContainer);
+            Alert.alert('Thành công', 'Đã chuyển hành sang thùng mới');
+            router.back()
+        }
+        catch(err){
+            Alert.alert('Lỗi', err.message || 'Không thể chuyển hàng')
+        }
+        finally{
+            setSubmitting(false);
+        }
+    }
     function handleScan(){
         if(step < 3){
             setStep(prev => prev + 1);
@@ -82,27 +87,27 @@ export default function MoveItem(){
             setStep(4);
         }
     }
-    const btnLabel = step === 1 ? '📷 Quét mã Sản phẩm' : step === 2 ? '📷 Quét mã Thùng CŨ' : '📷 Quét mã Thùng MỚI';
+    const btnLabel = step === 1 ? 'Quét mã Sản phẩm' : step === 2 ? 'Quét mã Thùng CŨ' : 'Quét mã Thùng MỚI';
 
     return (
         <SafeAreaView style = {styles.safeArea}>
             {/* Header */}
             <View style = {styles.header}>
-            <TouchableOpacity onPress = {() => router.back()}>
-                <Text style = {styles.backBtn}>‹</Text>
-            </TouchableOpacity>
-            <Text style = {styles.headerTitle}>Chuyển thùng</Text>
-            <View style = {{width: 28}} />
+                <TouchableOpacity onPress = {() => router.back()}>
+                    <Ionicons name="chevron-back" size={24} color="#222" />
+                </TouchableOpacity>
+                <Text style = {styles.headerTitle}>Chuyển thùng</Text>
+                <View style = {{width: 28}} />
             </View>
             <ScrollView>
                 {/* Body */}
                 <View style = {styles.content}>
                     {/* Cảnh báo */}
                     <View style = {styles.alertBox}>
-                        <Text style = {styles.alertIcon}>⚠️</Text>
+                        <Ionicons name="warning-outline" size={24} color="#e65100" style={{ marginRight: 6 }} />
                         <View style = {styles.alertBody}>
                             <Text style = {styles.alertTitle}>Quét nhầm thùng ? </Text>
-                            <Text style = {styles.alertText}>Thực hiện 3 bước để chuyển hàng sang đúng thùng. Hệ thống sẽ tự động cập nhât</Text>
+                            <Text style = {styles.alertText}>Thực hiện 3 bước để chuyển hàng sang đúng thùng. Hệ thống sẽ tự động cập nhật</Text>
                         </View>
                     </View>
                     {/* 3 bước tuần tự */}
@@ -110,7 +115,7 @@ export default function MoveItem(){
                      <Text style={styles.arrow}>↓</Text>
                     <MoveStep number={2} label ='Bước 2 - Thùng cũ (Origin)' value = {step > 2 ? 'BIN-205' : 'Chưa quét'} status = {getStatus(2)} />
                      <Text style={styles.arrow}>↓</Text>
-                    <MoveStep number={3}  label ='Bước 3 - Thùng mới(targat)' value = {step >= 3 ? 'BIN-401' : 'Chưa quét'} status = {getStatus(3)} />
+                    <MoveStep number={3}  label ='Bước 3 - Thùng mới(target)' value = {step >= 3 ? 'BIN-401' : 'Chưa quét'} status = {getStatus(3)} />
                     {/* Hướng dẫn */}
                     <View style = {styles.guideCard}>
                         <Text style = {styles.guideTitle}>Hướng dẫn</Text>
@@ -126,7 +131,10 @@ export default function MoveItem(){
                         style={styles.btnScan}
                         onPress={handleScan}
                     >
-                        <Text style={styles.btnScanText}>{btnLabel}</Text>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, justifyContent: 'center' }}>
+                            <Ionicons name="camera-outline" size={18} color="#fff" />
+                            <Text style={styles.btnScanText}>{btnLabel}</Text>
+                        </View>
                     </TouchableOpacity>
                 ) : (
                     <TouchableOpacity
@@ -134,9 +142,12 @@ export default function MoveItem(){
                         onPress={handleConfirm}
                         disabled={submitting}
                     >
-                        <Text style={styles.btnConfirmText}>
-                            {submitting ? 'Đang xử lý...' : '✅ Xác nhận chuyển thùng'}
-                        </Text>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, justifyContent: 'center' }}>
+                            <Ionicons name="checkmark-circle-outline" size={18} color="#fff" />
+                            <Text style={styles.btnConfirmText}>
+                                {submitting ? 'Đang xử lý...' : 'Xác nhận chuyển thùng'}
+                            </Text>
+                        </View>
                     </TouchableOpacity>
                 )}
             </ScrollView>
@@ -173,6 +184,7 @@ const styles = StyleSheet.create({
         marginBottom: 16,
         borderLeftWidth: 4,
         borderLeftColor: '#ff9800',
+        alignItems: 'center',
     },
     alertIcon: { fontSize: 20 },
     alertBody: { flex: 1 },

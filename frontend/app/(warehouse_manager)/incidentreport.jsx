@@ -2,22 +2,17 @@ import { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, TextInput, Alert, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
 import {getIncidents, resolveIncidents, reportIncident} from '../../constants/services/api';
 import { COLORS } from '../../constants/colors';
 
 const issueTypes = [
-  { key: 'damage', label: 'Hàng hư hỏng', icon: '💔' },
-  { key: 'missing', label: 'Thiếu hàng', icon: '❓' },
-  { key: 'wrong', label: 'Sai sản phẩm', icon: '⚠️' },
-  { key: 'equipment', label: 'Hỏng thiết bị', icon: '🔧' },
-  { key: 'safety', label: 'An toàn', icon: '🚨' },
-  { key: 'other', label: 'Khác', icon: '📝' },
-];
-
-const recentReports = [
-  { id: 1, type: 'Hàng hư hỏng', detail: 'Bánh Quy Hải Hà bị vỡ nát', by: 'Mai', time: '10/05 14:30', status: 'Đã xử lý' },
-  { id: 2, type: 'Thiếu hàng', detail: 'Thiếu 2 thùng Coca Cola so với phiếu', by: 'Đức', time: '09/05 09:15', status: 'Đang xem' },
-  { id: 3, type: 'Hỏng thiết bị', detail: 'Máy quét mã code LED-03 không hoạt động', by: 'Sơn', time: '08/05 16:45', status: 'Chờ' },
+  { key: 'damage', label: 'Hàng hư hỏng', icon: 'close-circle-outline' },
+  { key: 'missing', label: 'Thiếu hàng', icon: 'help-circle-outline' },
+  { key: 'wrong', label: 'Sai sản phẩm', icon: 'alert-circle-outline' },
+  { key: 'equipment', label: 'Hỏng thiết bị', icon: 'construct-outline' },
+  { key: 'safety', label: 'An toàn', icon: 'notifications-outline' },
+  { key: 'other', label: 'Khác', icon: 'document-text-outline' },
 ];
 
 export default function IncidentReportScreen() {
@@ -25,26 +20,28 @@ export default function IncidentReportScreen() {
   const [detail, setDetail] = useState('');
   const [location, setLocation] = useState('');
   const [showForm, setShowForm] = useState(false);
-  const [reports, setReports] = useState(recentReports); // fallback mock
-const [loadingReports, setLoadingReports] = useState(true);
-const [submitting, setSubmitting] = useState(false);
+  const [reports, setReports] = useState([]);
+  const [loadingReports, setLoadingReports] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
+
   useEffect(() =>{
     async function fetchReports(){
       try{
         const res = await getIncidents();
-        if(Array.isArray(res) && res.length > 0) {
-          setReports(res.map(r => ({
-              id: r._id,
-              type: r.type || r.issueTypes,
-              detail: r.detail || r.note,
-              by: r.reportedBy || '',
-              time: r.createdAt ? new Date(r.createdAt).toLocaleDateString('vi-VN') : '',
-              status: r.status === 'resolved' ? 'Đã xử lí' : 'Chờ xử lý',
-          })));
-        }
+        console.log('Incidents fetched:', JSON.stringify(res, null, 2));
+        const incidents = Array.isArray(res) ? res : (res?.data || []);
+        setReports(incidents.map(r => ({
+            id: r.id || r._id,
+            type: r.type || r.reason || 'Khác',
+            detail: r.detail || r.reason || '',
+            by: r.reportedBy || 'Nhân viên',
+            time: r.createdAt ? new Date(r.createdAt).toLocaleDateString('vi-VN') : '',
+            status: r.status === 'resolved' ? 'Đã xử lí' : 'Chờ xử lý',
+        })));
       }
       catch(err){
-        // Giữ nguyên mock nếu lỗi
+        console.log('Fetch incidents error:', err.message);
+        setReports([]);
       }
       finally{
         setLoadingReports(false);
@@ -61,7 +58,7 @@ const [submitting, setSubmitting] = useState(false);
     setSubmitting(true);
     try{
       await reportIncident('', selectedType, detail);
-      Alert.alert('✅ Thành công', 'Báo cáo sự cố đã được gửi');
+      Alert.alert('Thành công', 'Báo cáo sự cố đã được gửi');
       setSelectedType(''), setDetail(''), setLocation(''), setShowForm(false);
     }
     catch(err){
@@ -71,6 +68,7 @@ const [submitting, setSubmitting] = useState(false);
       setSubmitting(false)
     }
   };
+
   const handleResolve = async(id) =>{
     try{
       await resolveIncidents(id);
@@ -88,18 +86,21 @@ const [submitting, setSubmitting] = useState(false);
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => router.back()}>
-          <Text style={styles.backBtn}>‹</Text>
+          <Ionicons name="chevron-back" size={24} color={COLORS.primary} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Báo cáo sự cố</Text>
         <TouchableOpacity onPress={() => setShowForm(!showForm)}>
-          <Text style={styles.addBtn}>{showForm ? '✕' : '+'}</Text>
+          <Ionicons name={showForm ? "close" : "add"} size={24} color={COLORS.primary} />
         </TouchableOpacity>
       </View>
 
       <ScrollView style={styles.scroll}>
         {showForm && (
           <View style={styles.formCard}>
-            <Text style={styles.formTitle}>📝 Báo cáo mới</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 12 }}>
+              <Ionicons name="create-outline" size={20} color="#222" style={{ marginRight: 6 }} />
+              <Text style={styles.formTitle}>Báo cáo mới</Text>
+            </View>
             <Text style={styles.formLabel}>Loại sự cố:</Text>
             <View style={styles.typeGrid}>
               {issueTypes.map(t => (
@@ -108,7 +109,7 @@ const [submitting, setSubmitting] = useState(false);
                   style={[styles.typeBtn, selectedType === t.key && styles.typeBtnActive]}
                   onPress={() => setSelectedType(t.key)}
                 >
-                  <Text style={styles.typeIcon}>{t.icon}</Text>
+                  <Ionicons name={t.icon} size={16} color={selectedType === t.key ? COLORS.primary : '#666'} />
                   <Text style={[styles.typeLabel, selectedType === t.key && styles.typeLabelActive]}>
                     {t.label}
                   </Text>
@@ -121,6 +122,8 @@ const [submitting, setSubmitting] = useState(false);
               placeholderTextColor="#aaa"
               value={location}
               onChangeText={setLocation}
+              autoCapitalize="none"
+              autoCorrect={false}
             />
             <TextInput
               style={[styles.input, styles.detailInput]}
@@ -129,39 +132,23 @@ const [submitting, setSubmitting] = useState(false);
               value={detail}
               onChangeText={setDetail}
               multiline
+              autoCapitalize="none"
+              autoCorrect={false}
             />
             <TouchableOpacity
                     style={[styles.submitBtn, submitting && { opacity: 0.7 }]}
                     onPress={submitReport}
                     disabled={submitting}
                 >
-                    <Text style={styles.submitBtnText}>
-                        {submitting ? 'Đang gửi...' : '📤 Gửi báo cáo'}
-                    </Text>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                      <Ionicons name="send-outline" size={18} color="#fff" />
+                      <Text style={styles.submitBtnText}>
+                          {submitting ? 'Đang gửi...' : 'Gửi báo cáo'}
+                      </Text>
+                    </View>
                 </TouchableOpacity>
           </View>
         )}
-
-        {/* Recent reports */}
-        {/* <Text style={styles.sectionTitle}>📋 Các báo cáo gần đây</Text>
-        {recentReports.map((report) => (
-          <View key={report.id} style={styles.reportCard}>
-            <View style={styles.reportHead}>
-              <Text style={styles.reportType}>{report.type}</Text>
-              <View style={[styles.reportStatus, {
-                backgroundColor: report.status === 'Đã xử lý' ? '#e8f5e9' :
-                  report.status === 'Đang xem' ? '#fff3e0' : '#f5f5f5'
-              }]}>
-                <Text style={[styles.reportStatusText, {
-                  color: report.status === 'Đã xử lý' ? COLORS.primary :
-                    report.status === 'Đang xem' ? '#e65100' : '#888'
-                }]}>{report.status}</Text>
-              </View>
-            </View>
-            <Text style={styles.reportDetail}>{report.detail}</Text>
-            <Text style={styles.reportMeta}>{report.by} · {report.time}</Text>
-          </View>
-        ))} */}
 
         {loadingReports ? (
           <ActivityIndicator color = {COLORS.primary} />
@@ -206,7 +193,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff', borderRadius: 16, padding: 16, marginBottom: 16,
     borderWidth: 1.5, borderColor: COLORS.accent,
   },
-  formTitle: { fontSize: 15, fontWeight: '700', color: '#222', marginBottom: 12 },
+  formTitle: { fontSize: 15, fontWeight: '700', color: '#222' },
   formLabel: { fontSize: 12, fontWeight: '600', color: '#666', marginBottom: 8 },
   typeGrid: {
     flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 12,

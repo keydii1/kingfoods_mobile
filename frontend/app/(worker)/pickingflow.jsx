@@ -2,6 +2,7 @@ import { useState, useRef } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, TextInput, Animated, Alert, ScrollView, Modal } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../../constants/colors';
 import StaffBottomNav from '../../components/StaffBottomNav';
 import BarCodeScanner from '../../components/BarcodeScanner';
@@ -135,7 +136,7 @@ export default function PickingFlowScreen() {
         {step < 6 && (
           <View style={styles.header}>
             <TouchableOpacity onPress={() => router.back()}>
-              <Text style={styles.backBtn}>‹</Text>
+              <Ionicons name="chevron-back" size={24} color={COLORS.primary} />
             </TouchableOpacity>
             <View style={styles.headerCenter}>
               <Text style={styles.headerTitle}>Picking</Text>
@@ -153,12 +154,17 @@ export default function PickingFlowScreen() {
           {/* Step 1: Map */}
           {step === 1 && (
             <View style={styles.stepContainer}>
-              <Text style={styles.stepTitle}>🗺️ Di chuyển đến vị trí</Text>
+              <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginBottom: 8 }}>
+                <Ionicons name="map-outline" size={24} color="#222" style={{ marginRight: 6 }} />
+                <Text style={styles.stepTitle}>Di chuyển đến vị trí</Text>
+              </View>
               <View style={styles.mapCard}>
-                <Text style={styles.mapEmoji}>📍</Text>
+                <View style={{ alignItems: 'center', marginBottom: 8 }}>
+                  <Ionicons name="location-outline" size={40} color={COLORS.primary} />
+                </View>
                 <Text style={styles.mapLabel}>Vị trí sản phẩm</Text>
                 <View style={styles.mapDest}>
-                  <Text style={styles.mapDestIcon}>🏁</Text>
+                  <Ionicons name="flag-outline" size={24} color={COLORS.primary} style={{ marginRight: 6 }} />
                   <Text style={styles.mapDestLabel}>{currentTask?.location}</Text>
                 </View>
                 <View style={styles.mapInfo}>
@@ -166,12 +172,15 @@ export default function PickingFlowScreen() {
                   <Text style={styles.mapProductSku}>{currentTask?.sku}</Text>
                 </View>
                 <View style={styles.mapRoute}>
-                  <Text style={styles.mapArrow}>↓</Text>
+                  <Ionicons name="arrow-down" size={20} color="#666" style={{ marginRight: 12, width: 30, textAlign: 'center' }} />
                   <Text style={styles.mapStep}>Đi đến kệ, tìm vị trí {currentTask?.location}</Text>
                 </View>
               </View>
               <TouchableOpacity style={styles.arriveBtn} onPress={handleArrived}>
-                <Text style={styles.arriveBtnText}>✅ Tôi đã đến vị trí</Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                  <Ionicons name="checkmark-circle-outline" size={20} color="#fff" />
+                  <Text style={styles.arriveBtnText}>Tôi đã đến vị trí</Text>
+                </View>
               </TouchableOpacity>
             </View>
           )}
@@ -181,7 +190,7 @@ export default function PickingFlowScreen() {
             <View style={styles.stepContainer}>
               <View style={styles.scannerBox}>
                 <Animated.View style={[styles.scanFrame, { opacity: scanAnim }]}>
-                  <Text style={styles.scanIcon}>📷</Text>
+                  <Ionicons name="camera-outline" size={60} color="#fff" style={{ marginBottom: 12 }} />
                   <Text style={styles.scanHint}>Đưa mã vạch vào khung</Text>
                   <Animated.View style={[styles.scanLine, { opacity: scanAnim.interpolate({
                     inputRange: [0.3, 1], outputRange: [0.3, 1]
@@ -196,7 +205,10 @@ export default function PickingFlowScreen() {
                     style={styles.scanBtn}
                     onPress={() => { setCameraMode('product'); setShowCamera(true); }}
                   >
-                    <Text style={styles.scanBtnText}>📷 Mở camera quét mã</Text>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, justifyContent: 'center' }}>
+                      <Ionicons name="camera-outline" size={20} color="#fff" />
+                      <Text style={styles.scanBtnText}>Mở camera quét mã</Text>
+                    </View>
                   </TouchableOpacity>
                   <Text style={styles.orText}>— hoặc —</Text>
                   <View style={styles.manualRow}>
@@ -206,6 +218,12 @@ export default function PickingFlowScreen() {
                       placeholderTextColor="#aaa"
                       value={barcode}
                       onChangeText={setBarcode}
+                      autoCapitalize="none"
+                      autoCorrect={false}
+                      spellCheck={false}
+                      autoComplete="off"
+                      importantForAutofill="no"
+                      textContentType="oneTimeCode"
                     />
                     <TouchableOpacity style={styles.manualBtn} onPress={handleManualScan}>
                       <Text style={styles.manualBtnText}>Xác nhận</Text>
@@ -214,7 +232,7 @@ export default function PickingFlowScreen() {
                 </>
               ) : (
                 <View style={styles.scanResult}>
-                  <Text style={styles.scanSuccessIcon}>✅</Text>
+                  <Ionicons name="checkmark-circle" size={48} color={COLORS.primary} style={{ marginBottom: 8 }} />
                   <Text style={styles.scanSuccessText}>Quét thành công!</Text>
                   <Text style={styles.scanSku}>Mã: {barcode}</Text>
                   <Text style={styles.scanProduct}>{currentTask?.name}</Text>
@@ -227,7 +245,10 @@ export default function PickingFlowScreen() {
           {/* Step 3: Quantity */}
           {step === 3 && (
             <View style={styles.stepContainer}>
-              <Text style={styles.stepTitle}>🔢 Chọn số lượng</Text>
+              <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginBottom: 8 }}>
+                <Ionicons name="calculator-outline" size={24} color="#222" style={{ marginRight: 6 }} />
+                <Text style={styles.stepTitle}>Chọn số lượng</Text>
+              </View>
               <Text style={styles.qtyRequired}>Cần lấy: {currentTask?.qty || 0} {currentTask?.unit}</Text>
               <View style={styles.qtyCard}>
                 <Text style={styles.qtyProduct}>{currentTask?.name}</Text>
@@ -262,7 +283,7 @@ export default function PickingFlowScreen() {
             <View style={styles.stepContainer}>
               <View style={styles.scannerBox}>
                 <Animated.View style={[styles.scanFrame, { opacity: scanAnim }]}>
-                  <Text style={styles.scanIcon}>📦</Text>
+                  <Ionicons name="cube-outline" size={60} color="#fff" style={{ marginBottom: 12 }} />
                   <Text style={styles.scanHint}>Đưa mã thùng vào khung</Text>
                   <Animated.View style={[styles.scanLine, { opacity: scanAnim.interpolate({
                     inputRange: [0.3, 1], outputRange: [0.3, 1]
@@ -271,7 +292,10 @@ export default function PickingFlowScreen() {
                 <Animated.View style={[styles.flashOverlay, { opacity: flashAnim }]} />
               </View>
               <TouchableOpacity style={styles.scanBtn} onPress={openBinCamera}>
-                <Text style={styles.scanBtnText}>📷 Quét mã thùng</Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, justifyContent: 'center' }}>
+                  <Ionicons name="camera-outline" size={20} color="#fff" />
+                  <Text style={styles.scanBtnText}>Quét mã thùng</Text>
+                </View>
               </TouchableOpacity>
               <Text style={styles.orText}>— hoặc —</Text>
               <View style={styles.manualRow}>
@@ -281,6 +305,12 @@ export default function PickingFlowScreen() {
                   placeholderTextColor="#aaa"
                   value={binInput}
                   onChangeText={setBinInput}
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  spellCheck={false}
+                  autoComplete="off"
+                  importantForAutofill="no"
+                  textContentType="oneTimeCode"
                 />
                 <TouchableOpacity style={styles.manualBtn} onPress={handleManualBinScan}>
                   <Text style={styles.manualBtnText}>Xác nhận</Text>
@@ -292,7 +322,10 @@ export default function PickingFlowScreen() {
           {/* Step 5: Confirm bin */}
           {step === 5 && (
             <View style={styles.stepContainer}>
-              <Text style={styles.stepTitle}>📦 Xác nhận thùng</Text>
+              <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginBottom: 8 }}>
+                <Ionicons name="cube-outline" size={24} color="#222" style={{ marginRight: 6 }} />
+                <Text style={styles.stepTitle}>Xác nhận thùng</Text>
+              </View>
               <View style={styles.confirmCard}>
                 <Text style={styles.confirmLabel}>Thùng đã quét</Text>
                 <Text style={styles.confirmBinCode}>{scannedBinCode}</Text>
@@ -306,16 +339,22 @@ export default function PickingFlowScreen() {
                   style={styles.rescanBtn}
                   onPress={() => { setCameraMode('bin'); setShowCamera(true); }}
                 >
-                  <Text style={styles.rescanBtnText}>🔄 Quét lại</Text>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, justifyContent: 'center' }}>
+                    <Ionicons name="refresh-outline" size={18} color="#666" />
+                    <Text style={styles.rescanBtnText}>Quét lại</Text>
+                  </View>
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={[styles.confirmBtn, submitting && { opacity: 0.7 }]}
                   onPress={handleConfirmBin}
                   disabled={submitting}
                 >
-                  <Text style={styles.confirmBtnText}>
-                    {submitting ? 'Đang xử lý...' : '✅ Xác nhận đúng thùng'}
-                  </Text>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, justifyContent: 'center' }}>
+                    <Ionicons name="checkmark-circle-outline" size={20} color="#fff" />
+                    <Text style={styles.confirmBtnText}>
+                      {submitting ? 'Đang xử lý...' : 'Xác nhận đúng thùng'}
+                    </Text>
+                  </View>
                 </TouchableOpacity>
               </View>
             </View>
@@ -324,7 +363,7 @@ export default function PickingFlowScreen() {
           {/* Step 6: Order complete */}
           {step === 6 && (
             <View style={styles.completeContainer}>
-              <Text style={styles.completeIcon}>🎉</Text>
+              <Ionicons name="gift-outline" size={64} color={COLORS.primary} style={{ marginBottom: 16 }} />
               <Text style={styles.completeTitle}>Hoàn tất đơn hàng!</Text>
               <Text style={styles.completeSub}>
                 Tất cả {tasks.length} sản phẩm đã được lấy và bỏ vào thùng.

@@ -1,51 +1,51 @@
-import { View, Text, StyleSheet,
-         SectionList, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, SectionList, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { useState, useEffect } from 'react';
+import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../../constants/colors';
 import StaffBottomNav from '../../components/StaffBottomNav';
 import {getAssignedTasks} from '../../constants/services/api';
 
 // Filter tags
 const filters = [
-    { id: 'all',     label: '🗂️ Tất cả'    },
-    { id: 'pick',    label: '✅ Đã pick'    },
-    { id: 'missing', label: '⚠️ Báo thiếu' },
-    { id: 'move',    label: '🔄 Move'       },
+    { id: 'all',     icon: 'folder-open-outline', label: 'Tất cả', color: '#888' },
+    { id: 'pick',    icon: 'checkmark-circle-outline', label: 'Đã pick', color: COLORS.primary },
+    { id: 'missing', icon: 'alert-circle-outline', label: 'Báo thiếu', color: COLORS.warning },
+    { id: 'move',    icon: 'swap-horizontal-outline', label: 'Move', color: '#1565c0' },
 ];
 
 // Mock data lịch sử — chia theo ngày
 const allHistory = [
     {
-        title: '📅 Hôm nay – 22/04/2026',
+        title: 'Hôm nay – 22/04/2026',
         data: [
-            { id: '1', time: '15:42', icon: '📦', type: 'pick',
+            { id: '1', time: '15:42', icon: 'cube-outline', type: 'pick',
               title: 'Bánh quy Hải Hà (KF-00123)',
               sub: 'Kệ 12.03.A · Thùng BIN-401 · 5 hộp',
               status: 'ok', statusLabel: '✓ OK' },
-            { id: '2', time: '15:28', icon: '⚠️', type: 'missing',
+            { id: '2', time: '15:28', icon: 'alert-circle-outline', type: 'missing',
               title: 'Nước tương Chinsu 500ml',
               sub: 'Kệ 14.07.B · Báo thiếu hàng · 3 chai',
               status: 'skip', statusLabel: 'Thiếu' },
-            { id: '3', time: '15:10', icon: '🔄', type: 'move',
+            { id: '3', time: '15:10', icon: 'swap-horizontal-outline', type: 'move',
               title: 'Sữa chua Vinamilk (KF-00456)',
               sub: 'BIN-205 → BIN-206 · Chuyển thùng',
               status: 'move', statusLabel: 'Move' },
-            { id: '4', time: '14:55', icon: '📦', type: 'pick',
+            { id: '4', time: '15:55', icon: 'cube-outline', type: 'pick',
               title: 'Mì gói Hảo Hảo (KF-00789)',
               sub: 'Kệ 18.02.A · Thùng BIN-308 · 20 gói',
               status: 'ok', statusLabel: '✓ OK' },
         ],
     },
     {
-        title: '📅 Hôm qua – 21/04/2026',
+        title: 'Hôm qua – 21/04/2026',
         data: [
-            { id: '5', time: '16:30', icon: '📦', type: 'pick',
+            { id: '5', time: '16:30', icon: 'cube-outline', type: 'pick',
               title: 'Dầu ăn Neptune 1L (KF-01100)',
               sub: 'Kệ 09.03.C · Thùng BIN-210 · 6 chai',
               status: 'ok', statusLabel: '✓ OK' },
-            { id: '6', time: '14:20', icon: '⚠️', type: 'missing',
+            { id: '6', time: '14:20', icon: 'alert-circle-outline', type: 'missing',
               title: 'Snack Oishi Tôm 68g (KF-01024)',
               sub: 'Kệ 22.08.A · Báo thiếu · 12 gói',
               status: 'skip', statusLabel: 'Thiếu' },
@@ -65,7 +65,7 @@ function HistoryItem({ item }) {
     return (
         <View style={styles.historyItem}>
             <Text style={styles.itemTime}>{item.time}</Text>
-            <Text style={styles.itemIcon}>{item.icon}</Text>
+            <Ionicons name={item.icon} size={20} color={statusColors[item.status] || '#666'} />
             <View style={styles.itemBody}>
                 <Text style={styles.itemTitle}>{item.title}</Text>
                 <Text style={styles.itemSub}>{item.sub}</Text>
@@ -79,21 +79,21 @@ function HistoryItem({ item }) {
 }
 
 export default function HistoryScreen(){
-        const [apiSections, setApiSections] = useState([]);
+    const [apiSections, setApiSections] = useState([]);
     const [loading, setLoading] = useState(true);
     useEffect (() => {
         async function fetchHistory(){
             try {
                 const res = await getAssignedTasks(); // gọi API
-                const tasks = Array.isArray(res) ? res : []; // kiểm tra xem dữ liệu có phải mảng k 
-                const grouped = {}; // tạo object để theo nhóm ngày
+                const tasks = Array.isArray(res) ? res : [];
+                const grouped = {};
                 tasks.forEach(task => {
                     const date = task.createdAt ? new Date(task.createdAt).toLocaleDateString('vi-VN') : 'Hôm nay';
                     if(!grouped[date]) grouped[date] = [];
                     grouped[date].push({
                         id : task.id,
                         time: task.updatedAt ? new Date(task.updatedAt).toLocaleTimeString('vi-VN', {hour: '2-digit', minute: '2-digit'}): '',
-                        icon: task.status === 'completed' ? '✅' :'📦',
+                        icon: task.status === 'completed' ? 'checkmark-circle-outline' : 'cube-outline',
                         type : 'pick',
                         sub: `${task.quantityPicked || 0} / ${task.quantityToPick || 0} SKU`,
                         status: task.status === 'completed' ? 'ok' : 'skip',
@@ -103,7 +103,7 @@ export default function HistoryScreen(){
                 if(Object.keys(grouped).length > 0 ){
                     setApiSections (
                         Object.entries(grouped).map(([title, data]) => ({
-                             title: `📅 ${title}`,
+                             title: title,
                              data
                         }))
                     );
@@ -120,9 +120,7 @@ export default function HistoryScreen(){
     }, []);
     // Khi nhấn tag nào thì chỉ hiện những item thuộc loại đó. Đây là pattern active filter dùng
     const [filter, setFilter] = useState('all')
-    // Dùng data từ API, fallback về mock nếu lỗi
     const sourceData = apiSections.length > 0 ? apiSections : allHistory;
-    // Lọc data theo filter đang chọn
     const filteredSections = sourceData.map((section) =>({
         ...section,
         data: filter === 'all' ? section.data : section.data.filter((item) => item.type === filter),
@@ -132,10 +130,12 @@ export default function HistoryScreen(){
             {/* header */}
              <View style={styles.header}>
                 <TouchableOpacity onPress={() => router.back()}>
-                    <Text style={styles.backBtn}>‹</Text>
+                    <Ionicons name="chevron-back" size={24} color={COLORS.primary} />
                 </TouchableOpacity>
                 <Text style={styles.headerTitle}>Lịch sử Picking</Text>
-                <Text style={styles.searchIcon}>🔍</Text>
+                <TouchableOpacity onPress={() => Alert.alert('Tìm kiếm', 'Chức năng tìm kiếm')}>
+                    <Ionicons name="search-outline" size={20} color="#222" />
+                </TouchableOpacity>
             </View>
             {/* Body */}
             {/* filter tag */}
@@ -145,7 +145,14 @@ export default function HistoryScreen(){
                     key = {f.id}
                     style = {[styles.filterTag, filter === f.id && styles.filterTagActive]}
                     onPress = {() => setFilter(f.id)}>
-                        <Text style = {[styles.filterText, filter === f.id && styles.filterTextActive]}>{f.label}</Text>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                            <Ionicons 
+                                name={f.icon} 
+                                size={16} 
+                                color={filter === f.id ? COLORS.primary : f.color} 
+                            />
+                            <Text style = {[styles.filterText, filter === f.id && styles.filterTextActive]}>{f.label}</Text>
+                        </View>
                     </TouchableOpacity>
                 ))}
             </View>
@@ -158,12 +165,15 @@ export default function HistoryScreen(){
                 keyExtractor={(item) => item.id}
                 renderItem={({item}) => <HistoryItem item = {item} />}
                 renderSectionHeader={({section}) => (
-                    <Text style = {styles.sectionHeader}>{section.title}</Text>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, backgroundColor: '#f0f4f1', paddingVertical: 8, paddingHorizontal: 4 }}>
+                        <Ionicons name="calendar-outline" size={14} color={COLORS.primary} />
+                        <Text style = {styles.sectionHeader}>{section.title}</Text>
+                    </View>
                 )}
                 contentContainerStyle = {styles.list}
                 ListEmptyComponent={
                     <View style = {styles.emptyBox}>
-                        <Text style = {styles.emptyIcon}>🕐</Text>
+                        <Ionicons name="hourglass-outline" size={40} color="#aaa" />
                         <Text style = {styles.emptyText}>Không có lịch sử</Text>
                     </View>
                 }
@@ -239,8 +249,6 @@ const styles = StyleSheet.create({
         fontWeight: '700',
         color: COLORS.primary,
         letterSpacing: 0.5,
-        paddingVertical: 8,
-        paddingHorizontal: 4,
     },
 
     // History Item

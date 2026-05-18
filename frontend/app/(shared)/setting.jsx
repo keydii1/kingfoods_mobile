@@ -1,17 +1,18 @@
 import {Text, TextInput, View, TouchableOpacity, StyleSheet, ScrollView, Switch, Alert} from 'react-native'
 import {useState, useEffect} from 'react'
-import{router} from 'expo-router'
+import {router} from 'expo-router'
+import {Ionicons} from '@expo/vector-icons'
 import {COLORS} from '../../constants/colors'
-import  {SafeAreaView} from 'react-native-safe-area-context'
+import {SafeAreaView} from 'react-native-safe-area-context'
 import { useAuth } from '../../contexts/AuthContext'
-import {logout as apiLogout, updateProfile, changeUserPassword} from '../../constants/services/api'
-// Tạo 1 component chung cho tất cả các card (tại vì cấu trúc cho từng dòng khá giống nhau)
+import {logout as apiLogout, updateProfile, changeUserPassword, changeCustomerPassword} from '../../constants/services/api'
 
-function SettingRow({icon, iconBg, name, sub, value, onValueChange}){
+// Tạo 1 component chung cho tất cả các card
+function SettingRow({icon, iconBg, iconColor, name, sub, value, onValueChange}){
     return(
         <View style = {styles.settingRow}>
             <View style ={[styles.setIcon, {backgroundColor: iconBg}]}>
-                <Text style ={styles.setIconText}>{icon}</Text>
+                <Ionicons name={icon} size={18} color={iconColor || COLORS.primary} />
             </View>
             <View style = {styles.setLabel}>
                 <Text style = {styles.setName}>{name}</Text>
@@ -25,6 +26,7 @@ function SettingRow({icon, iconBg, name, sub, value, onValueChange}){
         </View>
     );
 }
+
 // component dùng chung 1 dòng thông tin
 function InfoRow({label, value}){
     return(
@@ -34,6 +36,7 @@ function InfoRow({label, value}){
         </View>
     )
 }
+
 export default function SettingScreen(){
     const { isLoggedIn, userRole, logout } = useAuth();
 
@@ -47,6 +50,7 @@ export default function SettingScreen(){
     const[oldPassword, setOldPassword] = useState('');
     const[newPassword, setNewPassword] = useState('');
     const[confirmPassword, setConfirmPassword] = useState('');
+
     const handleChangePassword = async () => {
         if (!oldPassword || !newPassword || !confirmPassword) {
             Alert.alert('Lỗi', 'Vui lòng nhập đầy đủ thông tin');
@@ -57,7 +61,11 @@ export default function SettingScreen(){
             return;
         }
         try {
-            await changeUserPassword({ oldPassword, newPassword });
+            if (userRole === 'store_manager') {
+                await changeCustomerPassword({ oldPassword, newPassword });
+            } else {
+                await changeUserPassword({ oldPassword, newPassword });
+            }
             Alert.alert('Thành công', 'Đổi mật khẩu thành công');
             setOldPassword('');
             setNewPassword('');
@@ -66,100 +74,158 @@ export default function SettingScreen(){
             Alert.alert('Lỗi', 'Không thể đổi mật khẩu');
         }
     };
-const handleLogout = async () => {
-    try {
-        await apiLogout();
-    } catch (err) {
-        // kể cả có lỗi thì vẫn logout bth
-    } finally {
-        logout();
-    }
-};
+
+    const handleLogout = async () => {
+        try {
+            await apiLogout();
+        } catch (err) {
+            // fallback
+        } finally {
+            logout();
+        }
+    };
+
     return(
         <SafeAreaView style = {styles.safeArea}>
             {/* Header */}
             <View style = {styles.header}>
-            <TouchableOpacity onPress = {() => router.back()}>
-                <Text style = {styles.backBtn}>‹</Text>
+                <TouchableOpacity onPress = {() => router.back()}>
+                    <Ionicons name="chevron-back" size={24} color={COLORS.primary} />
                 </TouchableOpacity>
-            <Text style = {styles.headerTitle}>Cài đặt app</Text>
-            <View style = {{width: 28}} />
+                <Text style = {styles.headerTitle}>Cài đặt app</Text>
+                <View style = {{width: 28}} />
             </View>
-            {/* Thông báo và cảnh báo */}
 
+            {/* Thông báo và cảnh báo */}
             <ScrollView style = {styles.scroll}>
                 <View style = {styles.card}>
                     <Text style = {styles.cardTitle}>Thông báo & cảnh báo</Text>
                     <SettingRow
-                    icon="🔔" iconBg="#e8f5e9"
+                    icon="notifications-outline" iconBg="#e8f5e9" iconColor={COLORS.primary}
                     name='Âm Thanh khi quét mã'
                     sub='Phát tiếng beep khi quét thành công'
                     value ={beepSound}
                     onValueChange={setBeepSound} />
                     <SettingRow 
-                    icon="🚨" iconBg="#ffebee"
+                    icon="alert-circle-outline" iconBg="#ffebee" iconColor={COLORS.error}
                     name ='Rung khi quét sai'
                     sub='Rung mạnh khi phát hiện sai sản phẩm'
                     value = {vibrate}
                     onValueChange ={setVibrate} />
                     <SettingRow
-                    icon="⚠️" iconBg="#fff3e0"
+                    icon="warning-outline" iconBg="#fff3e0" iconColor="#e65100"
                     name ='Cảnh báo khi năng suất thấp'
                     sub ='Dưới 50 SKU/h sẽ thông báo'
                     value = {lowAlert}
                     onValueChange ={setLowAlert} />
                 </View>
+
                 {/* Hiển thị */}
                 <View style = {styles.card}>
                     <Text style = {styles.cardTitle}>Kết nối & dữ liệu</Text>
                     <SettingRow 
-                    icon="📵" iconBg="#e3f2fd"
+                    icon="wifi-outline" iconBg="#e3f2fd" iconColor="#1565c0"
                     name ='Chế độ Offline'
                     sub='Offline Mode'
                     value = {offlineMode}
                     onValueChange = {setOfflineMode} />
                     <SettingRow 
-                    icon="🔄" iconBg="#fff3e0"
+                    icon="sync-outline" iconBg="#fff3e0" iconColor="#e65100"
                     name = 'Tự đồng bộ khi có mạng'
                     sub = 'Gửi dữ liệu offline khi kết nối lại'
                     value = {autoSync}
                     onValueChange = {setAutoSync} />
                 </View>
+
                 <View style = {styles.card}>
                     <Text style = {styles.cardTitle}>Đổi mật khẩu</Text>
-                    <TextInput style={styles.passwordInput} placeholder="Mật khẩu cũ" secureTextEntry value={oldPassword} onChangeText={setOldPassword} />
-                    <TextInput style={styles.passwordInput} placeholder="Mật khẩu mới" secureTextEntry value={newPassword} onChangeText={setNewPassword} />
-                    <TextInput style={styles.passwordInput} placeholder="Xác nhận mật khẩu" secureTextEntry value={confirmPassword} onChangeText={setConfirmPassword} />
+                    <TextInput 
+                        style={styles.passwordInput} 
+                        placeholder="Mật khẩu cũ" 
+                        secureTextEntry 
+                        autoCapitalize="none"
+                        autoCorrect={false}
+                        value={oldPassword} 
+                        onChangeText={setOldPassword} 
+                    />
+                    <TextInput 
+                        style={styles.passwordInput} 
+                        placeholder="Mật khẩu mới" 
+                        secureTextEntry 
+                        autoCapitalize="none"
+                        autoCorrect={false}
+                        value={newPassword} 
+                        onChangeText={setNewPassword} 
+                    />
+                    <TextInput 
+                        style={styles.passwordInput} 
+                        placeholder="Xác nhận mật khẩu" 
+                        secureTextEntry 
+                        autoCapitalize="none"
+                        autoCorrect={false}
+                        value={confirmPassword} 
+                        onChangeText={setConfirmPassword} 
+                    />
                     <TouchableOpacity style={styles.changePasswordBtn} onPress={handleChangePassword}>
                         <Text style={styles.changePasswordText}>Đổi mật khẩu</Text>
                     </TouchableOpacity>
                 </View>
+
                 <View style = {styles.card}>
                     <Text style = {styles.cardTitle}>Thông tin App</Text>
                     <InfoRow label ='Phiên bản' value ='v2.5.0 (Build 450)'/>
                     <InfoRow label = 'Môi Trường' value = 'Production · Kingfood' />
                 </View>
+
                  {/* Nút tạo tài khoản — chỉ quản lý kho mới thấy */}
                 {userRole === 'admin' && (
                     <TouchableOpacity 
                         style={styles.createAccountBtn}
                         onPress={() => router.push('/createaccount')}
                     >
-                        <Text style={styles.createAccountText}>👤 Tạo tài khoản nhân viên</Text>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                            <Ionicons name="person-add-outline" size={18} color={COLORS.primary} />
+                            <Text style={styles.createAccountText}>Tạo tài khoản nhân viên</Text>
+                        </View>
                     </TouchableOpacity>
                 )}
+
                  {/* Nút đăng xuất */}
                 <TouchableOpacity 
                     style={styles.logoutBtn}
                     onPress={handleLogout}
                 >
-                    <Text style={styles.logoutText}> Đăng xuất</Text>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                        <Ionicons name="log-out-outline" size={18} color="#e53935" />
+                        <Text style={styles.logoutText}>Đăng xuất</Text>
+                    </View>
                 </TouchableOpacity>
             </ScrollView>
+
+            {/* Bottom Nav for customer */}
+            {userRole === 'store_manager' && (
+                <View style={styles.bottomNav}>
+                    <TouchableOpacity style={styles.navItem} onPress={() => router.push('/storeorder')}>
+                        <Ionicons name="cart-outline" size={22} color="#aaa" style={{ marginBottom: 2 }} />
+                        <Text style={styles.navLabel}>Đặt hàng</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.navItem} onPress={() => router.push('/storestatistics')}>
+                        <Ionicons name="stats-chart-outline" size={22} color="#aaa" style={{ marginBottom: 2 }} />
+                        <Text style={styles.navLabel}>Thống kê</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.navItem}>
+                        <Ionicons name="settings" size={22} color={COLORS.primary} style={{ marginBottom: 2 }} />
+                        <Text style={[styles.navLabel, styles.navActive]}>Cài đặt</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.navItem} onPress={() => router.push('/customerprofile')}>
+                        <Ionicons name="person-outline" size={22} color="#aaa" style={{ marginBottom: 2 }} />
+                        <Text style={styles.navLabel}>Cá nhân</Text>
+                    </TouchableOpacity>
+                </View>
+            )}
         </SafeAreaView>
     );
 }
-
 
 const styles = StyleSheet.create({
     safeArea: {
@@ -293,4 +359,11 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         color: '#e53935',
     },
+    bottomNav: {
+        flexDirection: 'row', backgroundColor: '#fff', paddingVertical: 10,
+        borderTopWidth: 1, borderTopColor: '#eee',
+    },
+    navItem: { flex: 1, alignItems: 'center' },
+    navLabel: { fontSize: 10, color: '#aaa', marginTop: 2 },
+    navActive: { color: COLORS.primary, fontWeight: '600' },
 });

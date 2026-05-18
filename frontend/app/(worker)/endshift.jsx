@@ -4,7 +4,9 @@ import {router} from 'expo-router';
 import {COLORS} from '../../constants/colors';
 import StaffBottomNav from '../../components/StaffBottomNav';
 import {useEffect, useState} from 'react';
+import { Ionicons } from '@expo/vector-icons';
 import {getAssignedTasks} from '../../constants/services/api';
+
 // Mockdata
 const shiftStart = {
     score: 87,
@@ -43,7 +45,6 @@ function StatBox ({value, label, valueColor}){
 
 // Component dòng đơn hàng
 function OrderRow({order}){
-    // Màu dot và tag theo tùy trạng thái
     const dotColor ={
         done:    '#4caf50',
         missing: '#ff9800',
@@ -113,14 +114,15 @@ export default function EndShiftScreen(){
             {/* Header */}
             <View style = {styles.header}>
                 <TouchableOpacity onPress = {() => router.back()}>
-                    <Text style = {styles.backBtn}>‹</Text>
+                    <Ionicons name="chevron-back" size={24} color={COLORS.primary} />
                 </TouchableOpacity>
                 <Text style = {styles.headerTitle}>Tổng kết ca sáng</Text>
                 <View style = {styles.badge}>
-                    <Text style = {styles.badgeText}>
-                        ✅ Kết thúc
-                    </Text>
-            </View>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+                        <Ionicons name="checkmark-circle-outline" size={14} color={COLORS.success} />
+                        <Text style={styles.badgeText}>Kết thúc</Text>
+                    </View>
+                </View>
             </View>
             {/* Body */}
             <ScrollView style = {styles.scroll}>
@@ -151,7 +153,10 @@ export default function EndShiftScreen(){
                 <TouchableOpacity 
                 style = {styles.btnConfirm}
                 onPress = {() => router.replace('/Login')}>
-                    <Text style = {styles.btnConfirmText}>Xác nhận kết thúc ca</Text>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, justifyContent: 'center' }}>
+                        <Ionicons name="checkmark-done-circle-outline" size={18} color="#fff" />
+                        <Text style = {styles.btnConfirmText}>Xác nhận kết thúc ca</Text>
+                    </View>
                 </TouchableOpacity>
             </ScrollView>
         <StaffBottomNav />
@@ -247,10 +252,10 @@ const styles = StyleSheet.create({
     // Stat Grid 2x2
     statGrid: {
         flexDirection: 'row',
-        flexWrap: 'wrap',       // ← tự xuống hàng
+        flexWrap: 'wrap',
     },
     statBox: {
-        width: '50%',           // ← mỗi ô 50% chiều ngang
+        width: '50%',
         alignItems: 'center',
         paddingVertical: 12,
     },

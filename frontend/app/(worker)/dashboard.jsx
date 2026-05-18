@@ -37,10 +37,7 @@ export default function DashboardScreen(){
             }
             catch (err){
                 console.log('dashboard: fetch error', err.message);
-                setTasks([
-                    { _id: '1', orderId: 'MOCK-001', storeName: 'Cửa hàng Q.7', totalCount: 5, pickedCount: 2, status: 'in_progress' },
-                    { _id: '2', orderId: 'MOCK-002', storeName: 'Cửa hàng Q.1', totalCount: 3, pickedCount: 0, status: 'pending' },
-                ]);
+                setTasks([]);
             }
             finally { // dù có fetch thành công hay thất bại thì phải luôn tắt biểu tượng loading
                 setLoading(false);
@@ -79,7 +76,7 @@ export default function DashboardScreen(){
             <View style={styles.banner}>
                 <View style={styles.bannerTop}>
                     <View>
-                        <Text style={styles.greeting}>Xin chào 👋</Text>
+                        <Text style={styles.greeting}>Xin chào</Text>
                         <Text style={styles.name}>{userName || 'Nhân viên'}</Text>
                         <Text style={styles.zone}>{assignedZone || 'Chưa phân khu'}</Text>
                     </View>

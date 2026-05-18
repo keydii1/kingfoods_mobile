@@ -1,6 +1,7 @@
 import {Text, View, StyleSheet, TouchableOpacity,ScrollView} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {router} from 'expo-router';
+import {Ionicons} from '@expo/vector-icons';
 import {COLORS} from '../../constants/colors';
 import StaffBottomNav from '../../components/StaffBottomNav';
 import { useState } from 'react';
@@ -23,7 +24,7 @@ const scanData ={
     client: 'Kingfood Q.7',
     binCode:'Bin-401',
     binLocation:'Hàng 4-cột 1 - Khu xuất hàng', 
-    binEmoji: '📦',
+    binIcon: 'cube-outline',
 }
 
 export default function ScancontainerScreen(){
@@ -55,7 +56,7 @@ export default function ScancontainerScreen(){
     const targetBin = binCode || scannedCode;
     if (binCode && scannedCode !== binCode) {
         Alert.alert(
-            '❌ Sai thùng',
+            'Sai thùng',
             `Mã quét: ${scannedCode}\nMã cần: ${binCode}`,
             [{ text: 'Quét lại', onPress: () => setShowCamera(true) }]
         );
@@ -69,7 +70,7 @@ export default function ScancontainerScreen(){
     try {
         await packItem(taskId, targetBin, parseInt(productQty, 10));
         Alert.alert(
-            '✅ Hoàn thành!',
+            'Hoàn thành!',
             `Đã bỏ ${productQty} ${displayData.unit} vào ${targetBin}`,
             [{ text: 'Về danh sách', onPress: () => router.back() }]
         );
@@ -84,29 +85,35 @@ export default function ScancontainerScreen(){
         <SafeAreaView style = {styles.safeArea}>
             <View style = {styles.header}>
                 <TouchableOpacity onPress = {() => router.back()}>
-                    <Text style ={styles.backBtn}>‹</Text>
+                    <Ionicons name="chevron-back" size={24} color={COLORS.text} />
                 </TouchableOpacity>
                 <Text style = {styles.headerTitle}>Packing - Bước 2/2</Text>
                 <View style ={styles.confirmBadge}>
-                    <Text style ={styles.confirmBadgeText}>✅Xác nhận hàng</Text>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+                        <Ionicons name="checkmark-circle-outline" size={14} color="#fff" />
+                        <Text style ={styles.confirmBadgeText}>Xác nhận hàng</Text>
+                    </View>
                 </View>
             </View>
             <ScrollView style={styles.scroll}>
             {/* Banner vị trí kệ */}
             <View style ={styles.locationCard}>
-            <Text style = {styles.locationLabel}>📍 Vị trí kệ</Text>
-            <Text style ={styles.locationCode}>{displayData.location}</Text>
-            <Text style = {styles.locationDetail}>{displayData.locationDetail}</Text>
-            {/* Thanh bước 2 đang làm */}
-            <View style = {styles.stepRow}>
-                <View style ={[styles.stepDot, styles.stepDone]} />
-                <View style = {[styles.stepLine, styles.stepLineDone]} />
-                <View style = {[styles.stepDot,styles.stepActive]} />
-            </View>
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 4 }}>
+                    <Ionicons name="location-outline" size={16} color="rgba(255,255,255,0.7)" />
+                    <Text style = {styles.locationLabel}>Vị trí kệ</Text>
+                </View>
+                <Text style ={styles.locationCode}>{displayData.location}</Text>
+                <Text style = {styles.locationDetail}>{displayData.locationDetail}</Text>
+                {/* Thanh bước 2 đang làm */}
+                <View style = {styles.stepRow}>
+                    <View style ={[styles.stepDot, styles.stepDone]} />
+                    <View style = {[styles.stepLine, styles.stepLineDone]} />
+                    <View style = {[styles.stepDot,styles.stepActive]} />
+                </View>
              </View>
             {/* Thẻ confirm xác nhận đúng đơn hàng */}
             <View style = {styles.successBanner}>
-                <Text style ={styles.successIcon}>✅</Text>
+                <Ionicons name="checkmark-circle" size={28} color={COLORS.primary} style={{ marginRight: 6 }} />
                 <View style ={styles.successBody}>
                     <Text style ={styles.successTitle}>Đúng sản phẩm rồi</Text>
                     <Text style ={styles.successSub}>{displayData.name} {displayData.sku} đã được xác nhận</Text>
@@ -128,18 +135,24 @@ export default function ScancontainerScreen(){
                 onPress={() => setShowCamera(true)}
                 disabled={submitting}
             >
-                <Text style={styles.btnPrimaryText}>
-                    {submitting ? 'Đang xác nhận...' : '📷 QUÉT MÃ THÙNG ĐỂ XÁC NHẬN'}
-                </Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, justifyContent: 'center' }}>
+                    <Ionicons name="camera-outline" size={18} color="#fff" />
+                    <Text style={styles.btnPrimaryText}>
+                        {submitting ? 'Đang xác nhận...' : 'QUÉT MÃ THÙNG ĐỂ XÁC NHẬN'}
+                    </Text>
+                </View>
             </TouchableOpacity>
             {/* Sai BIN / Chuyển thùng */}
             <TouchableOpacity
                 style={styles.moveBtn}
                 onPress={() => router.push('/moveitem')}
             >
-                <Text style={styles.moveBtnText}>
-                    🔄 Quét nhầm thùng? Chuyển thùng
-                </Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, justifyContent: 'center' }}>
+                    <Ionicons name="swap-horizontal-outline" size={16} color="#e65100" />
+                    <Text style={styles.moveBtnText}>
+                        Quét nhầm thùng? Chuyển thùng
+                    </Text>
+                </View>
             </TouchableOpacity>
             {/* Nút quét lại sản phẩm */}
             <TouchableOpacity

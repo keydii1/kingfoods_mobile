@@ -1,6 +1,7 @@
 import {Text, TextInput, View, ScrollView, StyleSheet, TouchableOpacity} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {router} from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
 import {COLORS} from '../../constants/colors';
 import StaffBottomNav from '../../components/StaffBottomNav';
 
@@ -10,7 +11,7 @@ const pickItem ={
     locationDetail :'Dãy 14-Kệ 07-Tầng B-Khu bánh kẹo',
     sku :'KF-00456',
     name:'Nước tương chinsu 500ml',
-    emoji :'🥫',
+    icon :'cube-outline',
     qty:'3',
     unit:'chai',
     bin:'BIN-401',
@@ -19,6 +20,7 @@ const pickItem ={
     current:'5',
     total:'12'
 }
+
 // tạo component tái sử dung
 function MetaItem({label, value, valueColor}){
         return (
@@ -28,13 +30,14 @@ function MetaItem({label, value, valueColor}){
             </View>
         );
 }
+
 export default function PackingScreen(){
     return(
         <SafeAreaView style ={styles.safeArea}>
             {/* Header */}
             <View style = {styles.header}>
             <TouchableOpacity onPress = {() => router.back()}>
-            <Text style = {styles.backBtn}>‹</Text>
+                <Ionicons name="chevron-back" size={24} color={COLORS.text} />
             </TouchableOpacity>    
             <Text style = {styles.headerTitle}>Picking-Bước 1/2</Text>
             <View style = {styles.badge}>
@@ -46,7 +49,10 @@ export default function PackingScreen(){
             <ScrollView style = {styles.scroll}>
                 {/*Card Vị trí kệ */}
                 <View style = {styles.locationCard}>
-                    <Text style = {styles.locationLabel}>📍 Vị trí kệ</Text>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, marginBottom: 6 }}>
+                        <Ionicons name="location-outline" size={14} color="rgba(255,255,255,0.7)" />
+                        <Text style = {styles.locationLabel}>Vị trí kệ</Text>
+                    </View>
                     <Text style = {styles.locationCode}>{pickItem.location}</Text>
                     <Text style = {styles.locationDetail}>{pickItem.locationDetail}</Text>
                 {/* Thanh hiển thị step */}
@@ -55,14 +61,14 @@ export default function PackingScreen(){
                     <View style = {styles.stepLine}/>
                     <View style = {styles.stepDot}/>
                 </View>
-                   </View>
+                </View>
                 {/* Card sản phẩm */}
                 <View style = {styles.productCard}>
                     {/* Emoji + Số lượng sản phẩm */}
                 <View style = {styles.productLeft}>
-                    <Text style = {styles.productEmoji}>
-                        {pickItem.emoji}
-                    </Text>
+                    <View style={{ width: 50, height: 50, borderRadius: 25, backgroundColor: '#f0f4f1', alignItems: 'center', justifyContent: 'center' }}>
+                        <Ionicons name={pickItem.icon} size={32} color={COLORS.primary} />
+                    </View>
                     <View style = {styles.qtyBadge}>
                         <Text style = {styles.qtyValue}>{pickItem.qty}</Text>
                         <Text style = {styles.qtyUnit}>{pickItem.unit}</Text>
@@ -82,7 +88,7 @@ export default function PackingScreen(){
                 </View>
                 {/* Hộp thông báo */}
                 <View style = {styles.infoBox}>
-                    <Text style = {styles.infoIcon}>ℹ️</Text>
+                    <Ionicons name="information-circle" size={20} color="#1565c0" />
                     <View style = {styles.infoBody}>
                         <Text style = {styles.infoTitle}>
                             Quét mã sản phẩm trước
@@ -117,13 +123,17 @@ export default function PackingScreen(){
                     style={styles.btnMap}
                     onPress={() => router.push('/warehousemap')}
                     >
-                    <Text style={styles.btnMapText}>🗺️ Xem bản đồ kho</Text>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                        <Ionicons name="map-outline" size={16} color={COLORS.primary} />
+                        <Text style={styles.btnMapText}>Xem bản đồ kho</Text>
+                    </View>
                 </TouchableOpacity>
             </ScrollView>
              <StaffBottomNav />
         </SafeAreaView>
     );
 }
+
 const styles = StyleSheet.create({
     safeArea: {
         flex: 1,
@@ -173,7 +183,6 @@ const styles = StyleSheet.create({
     locationLabel: {
         color: 'rgba(255,255,255,0.7)',
         fontSize: 12,
-        marginBottom: 6,
     },
     locationCode: {
         color: '#fff',
@@ -323,38 +332,32 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontWeight: '600',
     },
-btnMap: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-
-    backgroundColor: '#eef4ff',
-
-    borderWidth: 1.5,
-    borderColor: '#d6e4ff',
-
-    borderRadius: 14,
-
-    paddingVertical: 14,
-    paddingHorizontal: 16,
-
-    marginBottom: 16,
-},
-btnMapText: {
-    fontSize: 13,
-    color: COLORS.primary,
-    fontWeight: '600',
-},
-manualEntryBtn: {
-    alignItems: 'center',
-    paddingVertical: 6,
-    marginBottom: 18,
-},
-
-manualEntryText: {
-    fontSize: 13,
-    color: COLORS.primary,
-    fontWeight: '600',
-    textDecorationLine: 'underline',
-},
+    btnMap: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#eef4ff',
+        borderWidth: 1.5,
+        borderColor: '#d6e4ff',
+        borderRadius: 14,
+        paddingVertical: 14,
+        paddingHorizontal: 16,
+        marginBottom: 16,
+    },
+    btnMapText: {
+        fontSize: 13,
+        color: COLORS.primary,
+        fontWeight: '600',
+    },
+    manualEntryBtn: {
+        alignItems: 'center',
+        paddingVertical: 6,
+        marginBottom: 18,
+    },
+    manualEntryText: {
+        fontSize: 13,
+        color: COLORS.primary,
+        fontWeight: '600',
+        textDecorationLine: 'underline',
+    },
 });

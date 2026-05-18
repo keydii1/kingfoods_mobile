@@ -82,6 +82,14 @@ export const createOrder = (products, address = '') =>
     request ('POST', '/client/orders', { products, address });
 export const getClientOrders = () =>
     request('GET', '/client/orders');
+export const getClientStatistics = (startDate = '', endDate = '') => {
+    let url = '/client/orders/statistics';
+    const params = [];
+    if (startDate) params.push(`startDate=${startDate}`);
+    if (endDate) params.push(`endDate=${endDate}`);
+    if (params.length > 0) url += `?${params.join('&')}`;
+    return request('GET', url);
+};
 // PRODUCTS
 export const getProducts = (query = '') =>
     request ('GET', `/public/products${query ? `?search=${query}`: ''}`)
@@ -174,6 +182,8 @@ export const updateUser = (id, data) =>
 
 export const changeUserPassword = (data) =>
     request('PATCH', '/admin/users/change-password', data);
+export const changeCustomerPassword = (data) =>
+    request('PATCH', '/client/profile/change-password', data);
 
 // ── PICKING — phân công task ─────────────────────
 export const assignPickingTask = (data) =>

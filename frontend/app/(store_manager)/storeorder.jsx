@@ -1,21 +1,11 @@
 import { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView, TextInput, Alert, ActivityIndicator } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, TextInput, Alert, ActivityIndicator, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../../constants/colors';
 import { useAuth } from '../../contexts/AuthContext';
 import { getProducts, createOrder } from '../../constants/services/api';
-
-const productCatalog = [
-  { id: '1', name: 'Bánh Quy Hải Hà 200g', sku: 'KF-00123', unit: 'Hộp', price: 8500 },
-  { id: '2', name: 'Nước tương Chinsu 500ml', sku: 'KF-00456', unit: 'Chai', price: 12500 },
-  { id: '3', name: 'Mì gói Hảo Hảo tôm 75g', sku: 'KF-00789', unit: 'Gói', price: 3500 },
-  { id: '4', name: 'Snack Oshi Tôm 68g', sku: 'KF-01024', unit: 'Gói', price: 5000 },
-  { id: '5', name: 'Dầu ăn Neptune 1L', sku: 'KF-01100', unit: 'Chai', price: 32000 },
-  { id: '6', name: 'Coca Cola 330ml', sku: 'KF-01300', unit: 'Lon', price: 8000 },
-  { id: '7', name: 'Bột ngọt Ajinomoto 200g', sku: 'KF-01400', unit: 'Gói', price: 7500 },
-  { id: '8', name: 'Dầu gội Sunsilk 180ml', sku: 'KF-01500', unit: 'Chai', price: 18000 },
-];
 
 export default function StoreOrderScreen() {
   const [productCatalog, setProductCatalog] = useState([]);
@@ -24,32 +14,35 @@ export default function StoreOrderScreen() {
   const { userName } = useAuth();
   const [cart, setCart] = useState([]);
   const [search, setSearch] = useState('');
+  
   const filteredProducts = productCatalog.filter(p =>
     p.name.toLowerCase().includes(search.toLowerCase()) ||
     p.sku.toLowerCase().includes(search.toLowerCase())
   );
-useEffect(() => {
-    async function fetchCatalog() {
-        try {
-            const res = await getProducts();
-            const products = Array.isArray(res) ? res : [];
-            if (products.length > 0) {
-                setProductCatalog(products.map(p => ({
-                    id: p._id,
-                    name: p.name,
-                    sku: p.sku,
-                    unit: p.unit || 'cái',
-                    price: p.price || 0,
-                })));
-            }
-        } catch (err) {
-            // productCatalog vẫn là [] → filteredProducts = []
-        } finally {
-            setLoadingProducts(false);
-        }
-    }
-    fetchCatalog();
-}, []);
+
+  useEffect(() => {
+      async function fetchCatalog() {
+          try {
+              const res = await getProducts();
+              console.log('Catalog fetched response:', JSON.stringify(res, null, 2));
+              const products = Array.isArray(res) ? res : (res?.data || []);
+              setProductCatalog(products.map(p => ({
+                  id: p.id,
+                  name: p.name,
+                  sku: p.sku || `SKU-${p.id}`,
+                  unit: p.unit || 'cái',
+                  price: typeof p.price === 'string' ? parseFloat(p.price) : (p.price || 0),
+                  image: p.image || '',
+              })));
+          } catch (err) {
+              console.log('Catalog fetch error:', err.message);
+          } finally {
+              setLoadingProducts(false);
+          }
+      }
+      fetchCatalog();
+  }, []);
+
   const addToCart = (product) => {
     setCart(prev => {
       const exist = prev.find(c => c.product.id === product.id);
@@ -89,19 +82,19 @@ useEffect(() => {
         { text: 'Huỷ', style: 'cancel' },
         {
           text: 'Xác nhận',
-onPress: async () => {
-    setSubmitting(true);
-    try {
-        await createOrder(
-            cart.map(c => ({
-                productId: c.product.id,
-                quantity: c.qty,
-            }))
-        );
-                  Alert.alert('✅ Thành công', 'Đơn hàng đã được gửi đến kho');
+          onPress: async () => {
+              setSubmitting(true);
+              try {
+                  await createOrder(
+                      cart.map(c => ({
+                          productId: c.product.id,
+                          quantity: c.qty,
+                      }))
+                  );
+                  Alert.alert('Thành công', 'Đơn hàng đã được gửi đến kho');
                   setCart([]);
               } catch (err) {
-                  Alert.alert('❌ Lỗi', err.message || 'Không đặt được hàng');
+                  Alert.alert('Lỗi', err.message || 'Không đặt được hàng');
               } finally {
                   setSubmitting(false);
               }
@@ -116,45 +109,73 @@ onPress: async () => {
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => router.push('/setting')}>
-          <Text style={styles.settingsIcon}>⚙️</Text>
+          <Ionicons name="settings-outline" size={22} color="#222" />
         </TouchableOpacity>
-        <View>
+        <View style={{ alignItems: 'center' }}>
           <Text style={styles.headerTitle}>Đặt hàng</Text>
-          <Text style={styles.headerSub}>{userName} · Kingfood Q.7</Text>
+          <Text style={[styles.headerSub, { fontWeight: 'bold', color: '#222' }]}>{userName} · Kingfood Q.7</Text>
         </View>
         <TouchableOpacity onPress={() => router.push('/storestatistics')}>
-          <Text style={styles.statIcon}>📊</Text>
+          <Ionicons name="stats-chart-outline" size={22} color="#222" />
         </TouchableOpacity>
       </View>
 
       <ScrollView style={styles.scroll}>
         {/* Search */}
-        <TextInput
-          style={styles.searchInput}
-          placeholder="🔍 Tìm sản phẩm..."
-          placeholderTextColor="#aaa"
-          value={search}
-          onChangeText={setSearch}
-        />
+        <View style={styles.searchContainer}>
+          <Ionicons name="search-outline" size={18} color="#aaa" style={{ marginRight: 8 }} />
+          <TextInput
+            style={styles.searchInput}
+            placeholder="Tìm sản phẩm..."
+            placeholderTextColor="#aaa"
+            value={search}
+            onChangeText={setSearch}
+            autoCapitalize="none"
+            autoCorrect={false}
+            spellCheck={false}
+            autoComplete="off"
+            importantForAutofill="no"
+            textContentType="oneTimeCode"
+          />
+        </View>
 
         {/* Danh mục sản phẩm */}
-        <Text style={styles.sectionTitle}>🛒 Danh mục sản phẩm</Text>
-        {filteredProducts.map(product => (
-          <TouchableOpacity
-            key={product.id}
-            style={styles.productRow}
-            onPress={() => addToCart(product)}
-          >
-            <View style={styles.productInfo}>
-              <Text style={styles.productName}>{product.name}</Text>
-              <Text style={styles.productSku}>{product.sku}</Text>
-              <Text style={styles.productPrice}>{product.price.toLocaleString()}đ / {product.unit}</Text>
-            </View>
-            <View style={styles.productAdd}>
-              <Text style={styles.productAddBtn}>+</Text>
-            </View>
-          </TouchableOpacity>
-        ))}
+        <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 12 }}>
+          <Ionicons name="cart-outline" size={20} color="#222" style={{ marginRight: 6 }} />
+          <Text style={styles.sectionTitle}>Danh mục sản phẩm</Text>
+        </View>
+
+        {loadingProducts ? (
+          <ActivityIndicator color={COLORS.primary} size="large" />
+        ) : (
+          filteredProducts.map(product => (
+            <TouchableOpacity
+              key={product.id}
+              style={styles.productRow}
+              onPress={() => addToCart(product)}
+            >
+              {product.image ? (
+                <Image
+                  source={{ uri: product.image }}
+                  style={styles.productImage}
+                  resizeMode="cover"
+                />
+              ) : (
+                <View style={styles.imagePlaceholder}>
+                  <Ionicons name="basket-outline" size={22} color={COLORS.primary} />
+                </View>
+              )}
+              <View style={styles.productInfo}>
+                <Text style={styles.productName}>{product.name}</Text>
+                <Text style={styles.productSku}>{product.sku}</Text>
+                <Text style={styles.productPrice}>{product.price.toLocaleString()}đ / {product.unit}</Text>
+              </View>
+              <View style={styles.productAdd}>
+                <Text style={styles.productAddBtn}>+</Text>
+              </View>
+            </TouchableOpacity>
+          ))
+        )}
       </ScrollView>
 
       {/* Cart Bottom Bar */}
@@ -181,7 +202,10 @@ onPress: async () => {
       {/* Cart detail modal (inline) */}
       {cart.length > 0 && (
         <View style={styles.cartDetail}>
-          <Text style={styles.cartDetailTitle}>🧾 Giỏ hàng</Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
+            <Ionicons name="document-text-outline" size={18} color="#222" style={{ marginRight: 6 }} />
+            <Text style={styles.cartDetailTitle}>Giỏ hàng</Text>
+          </View>
           {cart.map(item => (
             <View key={item.product.id} style={styles.cartItem}>
               <Text style={styles.cartItemName} numberOfLines={1}>{item.product.name}</Text>
@@ -202,16 +226,20 @@ onPress: async () => {
       {/* Bottom Nav */}
       <View style={styles.bottomNav}>
         <TouchableOpacity style={styles.navItem}>
-          <Text style={styles.navIcon}>📋</Text>
+          <Ionicons name="cart" size={22} color={COLORS.primary} style={{ marginBottom: 2 }} />
           <Text style={[styles.navLabel, styles.navActive]}>Đặt hàng</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.navItem} onPress={() => router.push('/storestatistics')}>
-          <Text style={styles.navIcon}>📊</Text>
+          <Ionicons name="stats-chart-outline" size={22} color="#aaa" style={{ marginBottom: 2 }} />
           <Text style={styles.navLabel}>Thống kê</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.navItem} onPress={() => router.push('/setting')}>
-          <Text style={styles.navIcon}>⚙️</Text>
+          <Ionicons name="settings-outline" size={22} color="#aaa" style={{ marginBottom: 2 }} />
           <Text style={styles.navLabel}>Cài đặt</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.navItem} onPress={() => router.push('/customerprofile')}>
+          <Ionicons name="person-outline" size={22} color="#aaa" style={{ marginBottom: 2 }} />
+          <Text style={styles.navLabel}>Cá nhân</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -229,14 +257,32 @@ const styles = StyleSheet.create({
   headerTitle: { fontSize: 18, fontWeight: '700', color: '#222' },
   headerSub: { fontSize: 12, color: '#888', marginTop: 2 },
   scroll: { flex: 1, padding: 16 },
-  searchInput: {
-    backgroundColor: '#fff', borderRadius: 14, padding: 14, fontSize: 14,
-    marginBottom: 12, borderWidth: 1.5, borderColor: COLORS.accent,
+  searchContainer: {
+    flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff',
+    borderRadius: 14, paddingHorizontal: 14, marginBottom: 12,
+    borderWidth: 1.5, borderColor: COLORS.accent, height: 52,
   },
-  sectionTitle: { fontSize: 15, fontWeight: '700', color: '#222', marginBottom: 10 },
+  searchInput: {
+    flex: 1, fontSize: 14, color: '#222',
+  },
+  sectionTitle: { fontSize: 15, fontWeight: '700', color: '#222' },
   productRow: {
     flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff',
     borderRadius: 14, padding: 14, marginBottom: 8, gap: 12,
+  },
+  productImage: {
+    width: 60,
+    height: 60,
+    borderRadius: 10,
+    backgroundColor: '#f5f5f5',
+  },
+  imagePlaceholder: {
+    width: 60,
+    height: 60,
+    borderRadius: 10,
+    backgroundColor: '#e8f5e9',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   productInfo: { flex: 1 },
   productName: { fontSize: 13, fontWeight: '600', color: '#222' },
@@ -268,7 +314,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff', padding: 14, borderTopWidth: 1, borderTopColor: '#eee',
     maxHeight: 200,
   },
-  cartDetailTitle: { fontSize: 13, fontWeight: '700', color: '#222', marginBottom: 8 },
+  cartDetailTitle: { fontSize: 13, fontWeight: '700', color: '#222' },
   cartItem: {
     flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
     paddingVertical: 6,

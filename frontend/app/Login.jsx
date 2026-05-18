@@ -10,13 +10,14 @@ import {
   ScrollView,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Ionicons } from '@expo/vector-icons';
 import {login as apiLogin, customerLogin, forgetPassword, verifyOtp, resetPassword} from '../constants/services/api'
 import { COLORS } from '../constants/colors';
 import { useAuth } from '../contexts/AuthContext';
 
 const roles = [
-  { key: 'admin', label: 'Quản lý kho',      icon: '📦' },
-  { key: 'staff',  label: 'Nhân viên kho',     icon: '👷' },
+  { key: 'admin', label: 'Quản lý kho',      icon: 'cube-outline' },
+  { key: 'staff',  label: 'Nhân viên kho',     icon: 'construct-outline' },
 ];
 
 export default function LoginScreen() {
@@ -129,7 +130,7 @@ export default function LoginScreen() {
       <ScrollView contentContainerStyle={styles.container}>
 
         <View style={styles.logoBox}>
-          <Text style={styles.logoIcon}>📦</Text>
+          <Ionicons name="cube" size={44} color={COLORS.white} />
         </View>
         <Text style={styles.title}>Kingfood WMS</Text>
         <Text style={styles.subtitle}>Warehouse Management System</Text>
@@ -165,6 +166,8 @@ export default function LoginScreen() {
                     placeholder="Mã OTP"
                     placeholderTextColor="rgba(255,255,255,0.45)"
                     keyboardType="number-pad"
+                    autoCapitalize="none"
+                    autoCorrect={false}
                     value={otp}
                     onChangeText={setOtp}
                   />
@@ -179,6 +182,7 @@ export default function LoginScreen() {
                     placeholder="Mật khẩu mới"
                     placeholderTextColor="rgba(255,255,255,0.45)"
                     secureTextEntry
+                    autoCapitalize="none"
                     value={newPassword}
                     onChangeText={setNewPassword}
                   />
@@ -205,6 +209,7 @@ export default function LoginScreen() {
                     placeholderTextColor="rgba(255,255,255,0.45)"
                     keyboardType="email-address"
                     autoCapitalize="none"
+                    autoCorrect={false}
                     value={email}
                     onChangeText={setEmail}
                   />
@@ -219,7 +224,11 @@ export default function LoginScreen() {
                         style={[styles.roleBtn, role === r.key && styles.roleBtnActive]}
                         onPress={() => { setRole(r.key); }}
                       >
-                        <Text style={styles.roleIcon}>{r.icon}</Text>
+                        <Ionicons 
+                          name={r.icon} 
+                          size={24} 
+                          color={role === r.key ? COLORS.accent : 'rgba(255,255,255,0.7)'} 
+                        />
                         <Text style={[styles.roleLabel, role === r.key && styles.roleLabelActive]}>
                           {r.label}
                         </Text>
@@ -231,6 +240,8 @@ export default function LoginScreen() {
                     style={styles.input}
                     placeholder="Tên đăng nhập"
                     placeholderTextColor="rgba(255,255,255,0.45)"
+                    autoCapitalize="none"
+                    autoCorrect={false}
                     value={username}
                     onChangeText={setUsername}
                   />
@@ -242,6 +253,8 @@ export default function LoginScreen() {
                 placeholder="Mật khẩu"
                 placeholderTextColor="rgba(255,255,255,0.45)"
                 secureTextEntry={true}
+                autoCapitalize="none"
+                autoCorrect={false}
                 value={password}
                 onChangeText={setPassword}
               />

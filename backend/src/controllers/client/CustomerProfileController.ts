@@ -23,7 +23,9 @@ export class CustomerProfileController {
   @Get("/")
   @Summary("Thông tin cá nhân")
   async getProfile(@Req() req: any, @Res() res: Response) {
-    const customer = await Customer.getByIdOrFail(req.decodeUser.id);
+    const customer = await Customer.getByIdOrFail(req.decodeUser.id, {
+      relations: ["branch"],
+    });
     return res.OK("Profile fetched successfully", customer);
   }
 
