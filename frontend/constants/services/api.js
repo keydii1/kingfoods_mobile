@@ -92,7 +92,7 @@ export const getClientStatistics = (startDate = '', endDate = '') => {
 };
 // PRODUCTS
 export const getProducts = (query = '') => {
-    let url = `/public/products?limit=1000`;
+    let url = `/public/products?limit=200`;
     if (query) url += `&search=${query}`;
     return request('GET', url);
 };
