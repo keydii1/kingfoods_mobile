@@ -42,9 +42,10 @@ export class CustomerProfileController {
   @Summary("Đổi mật khẩu")
   async changePassword(@Req() req: any, @Res() res: Response, @BodyParams() body: ChangePasswordParams) {
     const { oldPassword, newPassword } = body;
-    const customer = await Customer.getByIdOrFail(req.decodeUser.id, {
-      select: ["id", "password"]
+    const customer = await Customer.findOneAndIncludePassword({
+      id: req.decodeUser.id,
     });
+    if (!customer) throw new BadRequest("Customer not found");
 
     const isMatch = await bcrypt.compare(oldPassword, customer.password);
     if (!isMatch) throw new BadRequest("Old password is incorrect");
