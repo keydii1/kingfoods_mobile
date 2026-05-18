@@ -214,10 +214,29 @@ async function seed() {
     // 3. Orders (1,000 orders)
     console.log("🛒 Bulk generating 1,000 orders...");
     const ordersData: any[] = [];
+    const seedStartDate = new Date("2026-04-01T00:00:00Z");
+    const seedEndDate = new Date("2026-05-18T23:59:59Z");
+    
     for (let i = 0; i < 1000; i++) {
       const branch = branches[i % branches.length];
-      const statusList = [OrderStatus.PENDING, OrderStatus.PROCESSING, OrderStatus.SHIPPED, OrderStatus.DELIVERED];
-      ordersData.push({ customerId: branch.id, status: statusList[i % statusList.length], totalPrice: 0 });
+      const rand = Math.random();
+      let status = OrderStatus.PENDING;
+      if (rand < 0.5) status = OrderStatus.DELIVERED;
+      else if (rand < 0.7) status = OrderStatus.PROCESSING;
+      else if (rand < 0.85) status = OrderStatus.PENDING;
+      else if (rand < 0.95) status = OrderStatus.SHIPPED;
+      else status = OrderStatus.CANCELLED;
+
+      // Spreads exactly between April 1st and May 18th, 2026
+      const orderDate = new Date(seedStartDate.getTime() + Math.random() * (seedEndDate.getTime() - seedStartDate.getTime()));
+
+      ordersData.push({ 
+        customerId: branch.id, 
+        status: status, 
+        totalPrice: 0,
+        createdAt: orderDate,
+        updatedAt: orderDate
+      });
     }
     const orderResult = await AppDataSource.manager.insert(Order, ordersData);
     const orderIds = orderResult.identifiers.map(i => i.id);

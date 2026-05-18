@@ -46,7 +46,7 @@ export class OrderClientController {
   @Summary("Danh sách đơn hàng của tôi")
   async getMyOrders(@Req() req: any, @Res() res: Response) {
     const orders = await this.orderService.getOrdersByCustomer(
-      req.decodeUser.id,
+      req.decodeUser.branchId || req.decodeUser.id,
     );
     return res.OK("Orders fetched successfully", orders);
   }
@@ -60,7 +60,7 @@ export class OrderClientController {
     @QueryParams("endDate") endDate?: string,
   ) {
     const result = await this.orderService.getStoreStatistics(
-      req.decodeUser.id,
+      req.decodeUser.branchId || req.decodeUser.id,
       startDate,
       endDate,
     );
@@ -75,7 +75,7 @@ export class OrderClientController {
     @PathParams("status") status: OrderStatus,
   ) {
     const orders = await this.orderService.getHistory(
-      req.decodeUser.id,
+      req.decodeUser.branchId || req.decodeUser.id,
       status,
     );
     return res.OK("Orders history fetched successfully", orders);
@@ -104,7 +104,7 @@ export class OrderClientController {
     @BodyParams() body: CreateOrderParams,
   ) {
     const result = await this.orderService.createOrder({
-      customerId: req.decodeUser.id,
+      customerId: req.decodeUser.branchId || req.decodeUser.id,
       products: body.products,
     });
     return res.CREATED("Order created successfully", result);
