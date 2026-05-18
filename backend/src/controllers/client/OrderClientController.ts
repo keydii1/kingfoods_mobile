@@ -10,7 +10,7 @@ import {
   Property,
   Enum,
 } from "@tsed/schema";
-import { BodyParams, PathParams, Req, Res } from "@tsed/common";
+import { BodyParams, PathParams, Req, Res, QueryParams } from "@tsed/common";
 import { Response } from "express";
 import { OrderService } from "../../services/OrderService";
 import { OrderStatus } from "../../Entity/Order";
@@ -49,6 +49,22 @@ export class OrderClientController {
       req.decodeUser.id,
     );
     return res.OK("Orders fetched successfully", orders);
+  }
+
+  @Get("/statistics")
+  @Summary("Thống kê cửa hàng theo ngày")
+  async getStatistics(
+    @Req() req: any,
+    @Res() res: Response,
+    @QueryParams("startDate") startDate?: string,
+    @QueryParams("endDate") endDate?: string,
+  ) {
+    const result = await this.orderService.getStoreStatistics(
+      req.decodeUser.id,
+      startDate,
+      endDate,
+    );
+    return res.OK("Statistics fetched successfully", result);
   }
 
   @Get("/history/:status")

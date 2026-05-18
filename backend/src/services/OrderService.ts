@@ -116,4 +116,50 @@ export class OrderService {
     const order = await Order.getByIdOrFail(id);
     return await order.softDelete();
   }
+
+  async getStoreStatistics(customerId: number, startDate?: string, endDate?: string) {
+    let query = Order.createQueryBuilder("order")
+      .leftJoinAndSelect("order.orderDetails", "detail")
+      .leftJoinAndSelect("detail.product", "product")
+      .leftJoinAndSelect("order.branch", "branch")
+      .where("order.customerId = :customerId", { customerId });
+
+    if (startDate) {
+      query = query.andWhere("order.created_at >= :startDate", { startDate: new Date(startDate + "T00:00:00.000Z") });
+    }
+    if (endDate) {
+      query = query.andWhere("order.created_at <= :endDate", { endDate: new Date(endDate + "T23:59:59.999Z") });
+    }
+
+    const orders = await query.orderBy("order.created_at", "DESC").getMany();
+
+    // Aggregate Top Products
+    const productAgg: { [key: number]: { name: string; qty: number; unit: string } } = {};
+    for (const order of orders) {
+      if (order.orderDetails) {
+        for (const detail of order.orderDetails) {
+          if (detail.product) {
+            const pId = detail.product.id;
+            const pName = detail.product.name;
+            const qty = detail.quantity || 0;
+            const pUnit = "Sản phẩm";
+
+            if (!productAgg[pId]) {
+              productAgg[pId] = { name: pName, qty: 0, unit: pUnit };
+            }
+            productAgg[pId].qty += qty;
+          }
+        }
+      }
+    }
+
+    const topProducts = Object.values(productAgg)
+      .sort((a, b) => b.qty - a.qty)
+      .slice(0, 5);
+
+    return {
+      orders,
+      topProducts,
+    };
+  }
 }
