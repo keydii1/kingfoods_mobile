@@ -1,19 +1,29 @@
 import { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView, TextInput, Alert, ActivityIndicator, Image } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, TextInput, ActivityIndicator, Image } from 'react-native';
+import { Alert } from '../../utils/appAlert';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../../constants/colors';
 import { useAuth } from '../../contexts/AuthContext';
+import { useStoreCart } from '../../contexts/StoreCartContext';
 import { getProducts, createOrder } from '../../constants/services/api';
+import { OrderConfirmModal, OrderSuccessOverlay } from '../../components/OrderCheckoutOverlay';
+import { notifyOrdersRefresh } from '../../utils/ordersRefresh';
+
+const CART_LIST_MAX_HEIGHT = 152;
 
 export default function StoreOrderScreen() {
   const [productCatalog, setProductCatalog] = useState([]);
   const [loadingProducts, setLoadingProducts] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
   const { userName } = useAuth();
-  const [cart, setCart] = useState([]);
+  const { cart, addToCart, removeFromCart, clearCart } = useStoreCart();
+  const insets = useSafeAreaInsets();
   const [search, setSearch] = useState('');
+  const [cartExpanded, setCartExpanded] = useState(true);
   
   const filteredProducts = productCatalog.filter(p =>
     p.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -43,69 +53,41 @@ export default function StoreOrderScreen() {
       fetchCatalog();
   }, []);
 
-  const addToCart = (product) => {
-    setCart(prev => {
-      const exist = prev.find(c => c.product.id === product.id);
-      if (exist) {
-        return prev.map(c =>
-          c.product.id === product.id ? { ...c, qty: c.qty + 1 } : c
-        );
-      }
-      return [...prev, { product, qty: 1 }];
-    });
-  };
-
-  const removeFromCart = (productId) => {
-    setCart(prev => {
-      const exist = prev.find(c => c.product.id === productId);
-      if (exist && exist.qty > 1) {
-        return prev.map(c =>
-          c.product.id === productId ? { ...c, qty: c.qty - 1 } : c
-        );
-      }
-      return prev.filter(c => c.product.id !== productId);
-    });
-  };
-
   const totalItems = cart.reduce((sum, c) => sum + c.qty, 0);
   const totalAmount = cart.reduce((sum, c) => sum + c.qty * c.product.price, 0);
 
-  const submitOrder = () => {
+  const openConfirm = () => {
     if (cart.length === 0) {
       Alert.alert('Giỏ hàng trống', 'Vui lòng thêm sản phẩm trước khi đặt hàng');
       return;
     }
-    Alert.alert(
-      'Xác nhận đặt hàng',
-      `Bạn sắp đặt ${totalItems} sản phẩm với tổng tiền ${totalAmount.toLocaleString()}đ?\n\nĐơn hàng sẽ được gửi đến kho Kingfood.`,
-      [
-        { text: 'Huỷ', style: 'cancel' },
-        {
-          text: 'Xác nhận',
-          onPress: async () => {
-              setSubmitting(true);
-              try {
-                  await createOrder(
-                      cart.map(c => ({
-                          productId: c.product.id,
-                          quantity: c.qty,
-                      }))
-                  );
-                  Alert.alert('Thành công', 'Đơn hàng đã được gửi đến kho');
-                  setCart([]);
-              } catch (err) {
-                  Alert.alert('Lỗi', err.message || 'Không đặt được hàng');
-              } finally {
-                  setSubmitting(false);
-              }
-          },
-        },
-      ]
-    );
+    setShowConfirm(true);
   };
 
+  const handleConfirmOrder = async () => {
+    setSubmitting(true);
+    try {
+      await createOrder(
+        cart.map(c => ({
+          productId: c.product.id,
+          quantity: c.qty,
+        }))
+      );
+      setShowConfirm(false);
+      clearCart();
+      notifyOrdersRefresh();
+      setShowSuccess(true);
+    } catch (err) {
+      Alert.alert('Lỗi', err.message || 'Không đặt được hàng');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const hasCart = cart.length > 0;
+
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView style={styles.safeArea} edges={['top', 'left', 'right']}>
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => router.push('/setting')}>
@@ -120,7 +102,11 @@ export default function StoreOrderScreen() {
         </TouchableOpacity>
       </View>
 
-      <ScrollView style={styles.scroll}>
+      <ScrollView
+        style={styles.scroll}
+        contentContainerStyle={styles.scrollContent}
+        keyboardShouldPersistTaps="handled"
+      >
         {/* Search */}
         <View style={styles.searchContainer}>
           <Ionicons name="search-outline" size={18} color="#aaa" style={{ marginRight: 8 }} />
@@ -178,53 +164,83 @@ export default function StoreOrderScreen() {
         )}
       </ScrollView>
 
-      {/* Cart Bottom Bar */}
-      {cart.length > 0 && (
-        <View style={styles.cartBar}>
-          <View style={styles.cartInfo}>
-            <Text style={styles.cartCount}>{totalItems} sản phẩm</Text>
-            <Text style={styles.cartTotal}>{totalAmount.toLocaleString()}đ</Text>
-          </View>
-          <TouchableOpacity
-            style={[styles.orderBtn, submitting && { opacity: 0.7 }]}
-            onPress={submitOrder}
-            disabled={submitting}
-          >
-            <Text style={styles.orderBtnText}>
-              {submitting
-                ? 'Đang gửi...'
-                : `Đặt hàng · ${totalItems} SP · ${totalAmount.toLocaleString()}đ`}
-            </Text>
-          </TouchableOpacity>
-        </View>
-      )}
-
-      {/* Cart detail modal (inline) */}
-      {cart.length > 0 && (
-        <View style={styles.cartDetail}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
-            <Ionicons name="document-text-outline" size={18} color="#222" style={{ marginRight: 6 }} />
-            <Text style={styles.cartDetailTitle}>Giỏ hàng</Text>
-          </View>
-          {cart.map(item => (
-            <View key={item.product.id} style={styles.cartItem}>
-              <Text style={styles.cartItemName} numberOfLines={1}>{item.product.name}</Text>
-              <View style={styles.cartQtyRow}>
-                <TouchableOpacity onPress={() => removeFromCart(item.product.id)}>
-                  <Text style={styles.qtyBtn}>−</Text>
-                </TouchableOpacity>
-                <Text style={styles.cartQty}>{item.qty}</Text>
-                <TouchableOpacity onPress={() => addToCart(item.product)}>
-                  <Text style={styles.qtyBtn}>+</Text>
-                </TouchableOpacity>
-              </View>
+      {hasCart && (
+        <View style={styles.cartFooter}>
+          <View style={styles.cartBar}>
+            <View style={styles.cartInfo}>
+              <Text style={styles.cartCount}>{totalItems} sản phẩm</Text>
+              <Text style={styles.cartTotal}>{totalAmount.toLocaleString()}đ</Text>
             </View>
-          ))}
+            <TouchableOpacity
+              style={[styles.orderBtn, submitting && { opacity: 0.7 }]}
+              onPress={openConfirm}
+              disabled={submitting || showSuccess}
+            >
+              <Text style={styles.orderBtnText} numberOfLines={1}>
+                {submitting
+                  ? 'Đang gửi...'
+                  : `Đặt hàng · ${totalItems} SP · ${totalAmount.toLocaleString()}đ`}
+              </Text>
+            </TouchableOpacity>
+          </View>
+
+          <TouchableOpacity
+            style={styles.cartDetailHeader}
+            onPress={() => setCartExpanded(v => !v)}
+            activeOpacity={0.8}
+          >
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Ionicons name="document-text-outline" size={18} color="#222" style={{ marginRight: 6 }} />
+              <Text style={styles.cartDetailTitle}>Giỏ hàng ({cart.length})</Text>
+            </View>
+            <Ionicons
+              name={cartExpanded ? 'chevron-down' : 'chevron-up'}
+              size={18}
+              color="#888"
+            />
+          </TouchableOpacity>
+
+          {cartExpanded && (
+            <ScrollView
+              style={{ maxHeight: CART_LIST_MAX_HEIGHT }}
+              nestedScrollEnabled
+              showsVerticalScrollIndicator
+              bounces={false}
+            >
+              {cart.map(item => (
+                <View key={item.product.id} style={styles.cartItem}>
+                  <Text style={styles.cartItemName} numberOfLines={2}>{item.product.name}</Text>
+                  <View style={styles.cartQtyRow}>
+                    <TouchableOpacity onPress={() => removeFromCart(item.product.id)} hitSlop={8}>
+                      <Text style={styles.qtyBtn}>−</Text>
+                    </TouchableOpacity>
+                    <Text style={styles.cartQty}>{item.qty}</Text>
+                    <TouchableOpacity onPress={() => addToCart(item.product)} hitSlop={8}>
+                      <Text style={styles.qtyBtn}>+</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              ))}
+            </ScrollView>
+          )}
         </View>
       )}
 
-      {/* Bottom Nav */}
-      <View style={styles.bottomNav}>
+      <OrderConfirmModal
+        visible={showConfirm}
+        totalItems={totalItems}
+        totalAmount={totalAmount}
+        submitting={submitting}
+        onCancel={() => !submitting && setShowConfirm(false)}
+        onConfirm={handleConfirmOrder}
+      />
+
+      <OrderSuccessOverlay
+        visible={showSuccess}
+        onDone={() => setShowSuccess(false)}
+      />
+
+      <View style={[styles.bottomNav, { paddingBottom: Math.max(insets.bottom, 8) }]}>
         <TouchableOpacity style={styles.navItem}>
           <Ionicons name="cart" size={22} color={COLORS.primary} style={{ marginBottom: 2 }} />
           <Text style={[styles.navLabel, styles.navActive]}>Đặt hàng</Text>
@@ -256,7 +272,25 @@ const styles = StyleSheet.create({
   statIcon: { fontSize: 22 },
   headerTitle: { fontSize: 18, fontWeight: '700', color: '#222' },
   headerSub: { fontSize: 12, color: '#888', marginTop: 2 },
-  scroll: { flex: 1, padding: 16 },
+  scroll: { flex: 1 },
+  scrollContent: { padding: 16, paddingBottom: 8 },
+  cartFooter: {
+    backgroundColor: '#fff',
+    borderTopWidth: 1,
+    borderTopColor: '#eee',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: -2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 6,
+    elevation: 8,
+  },
+  cartDetailHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 14,
+    paddingBottom: 8,
+  },
   searchContainer: {
     flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff',
     borderRadius: 14, paddingHorizontal: 14, marginBottom: 12,
@@ -294,8 +328,8 @@ const styles = StyleSheet.create({
   },
   productAddBtn: { color: '#fff', fontSize: 20, fontWeight: '700', marginTop: -2 },
   cartBar: {
-    flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff',
-    padding: 14, borderTopWidth: 1, borderTopColor: '#eee', gap: 12,
+    flexDirection: 'row', alignItems: 'center',
+    padding: 14, paddingBottom: 10, gap: 12,
   },
   cartInfo: { flex: 1 },
   cartCount: { fontSize: 13, fontWeight: '600', color: '#222' },
@@ -306,25 +340,26 @@ const styles = StyleSheet.create({
   },
   cartBtnText: { color: '#fff', fontSize: 14, fontWeight: '800' },
   orderBtn: {
-    backgroundColor: COLORS.primary, borderRadius: 14, paddingHorizontal: 20,
+    flexShrink: 1,
+    maxWidth: '58%',
+    backgroundColor: COLORS.primary, borderRadius: 14, paddingHorizontal: 14,
     paddingVertical: 12,
   },
   orderBtnText: { color: '#fff', fontSize: 14, fontWeight: '800' },
-  cartDetail: {
-    backgroundColor: '#fff', padding: 14, borderTopWidth: 1, borderTopColor: '#eee',
-    maxHeight: 200,
-  },
   cartDetailTitle: { fontSize: 13, fontWeight: '700', color: '#222' },
   cartItem: {
     flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
-    paddingVertical: 6,
+    paddingVertical: 8,
+    paddingHorizontal: 14,
+    borderTopWidth: 1,
+    borderTopColor: '#f3f3f3',
   },
   cartItemName: { fontSize: 12, color: '#444', flex: 1, marginRight: 10 },
   cartQtyRow: { flexDirection: 'row', alignItems: 'center', gap: 10 },
   qtyBtn: { fontSize: 20, fontWeight: '700', color: COLORS.primary, width: 28, textAlign: 'center' },
   cartQty: { fontSize: 14, fontWeight: '700', color: '#222', minWidth: 20, textAlign: 'center' },
   bottomNav: {
-    flexDirection: 'row', backgroundColor: '#fff', paddingVertical: 10,
+    flexDirection: 'row', backgroundColor: '#fff', paddingTop: 10, paddingBottom: 6,
     borderTopWidth: 1, borderTopColor: '#eee',
   },
   navItem: { flex: 1, alignItems: 'center' },

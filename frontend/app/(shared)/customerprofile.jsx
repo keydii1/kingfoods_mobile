@@ -1,4 +1,5 @@
-import { Text, View, TextInput, TouchableOpacity, ScrollView, StyleSheet, ActivityIndicator, Alert } from 'react-native';
+import { Text, View, TextInput, TouchableOpacity, ScrollView, StyleSheet, ActivityIndicator} from 'react-native';
+import { Alert } from '../../utils/appAlert';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -6,7 +7,20 @@ import { COLORS } from '../../constants/colors';
 import { useEffect, useState } from 'react';
 import { getProfile, updateProfile } from '../../constants/services/api';
 
-function InfoRow({ label, value, valueColor }) {
+function InfoRow({ label, value, valueColor, stacked }) {
+  const useStacked =
+    stacked ??
+    (typeof value === 'string' && (value.includes('@') || value.length > 26));
+
+  if (useStacked) {
+    return (
+      <View style={styles.infoRowStacked}>
+        <Text style={styles.infoLabelMuted}>{label}</Text>
+        <Text style={[styles.infoValueFull, valueColor && { color: valueColor }]}>{value}</Text>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.infoRow}>
       <Text style={styles.infoLabel}>{label}</Text>
@@ -122,9 +136,9 @@ export default function CustomerProfileScreen() {
             <View style={styles.card}>
               <Text style={styles.cardTitle}>Thông tin liên hệ</Text>
               <InfoRow label="Người quản lý" value={user?.name || 'Chưa cập nhật'} />
-              <InfoRow label="Email đăng nhập" value={user?.email || 'Chưa cập nhật'} />
+              <InfoRow label="Email đăng nhập" value={user?.email || 'Chưa cập nhật'} stacked />
               
-              <View style={styles.infoRowContainer}>
+              <View style={styles.infoRow}>
                 <Text style={styles.infoLabel}>Số điện thoại</Text>
                 {editing ? (
                   <TextInput
@@ -141,7 +155,9 @@ export default function CustomerProfileScreen() {
                     textContentType="oneTimeCode"
                   />
                 ) : (
-                  <Text style={styles.infoValue}>{user?.phoneNumber || 'Chưa có'}</Text>
+                  <Text style={[styles.infoValue, styles.infoValueInline]}>
+                    {user?.phoneNumber || 'Chưa có'}
+                  </Text>
                 )}
               </View>
             </View>
@@ -150,7 +166,7 @@ export default function CustomerProfileScreen() {
             <View style={styles.card}>
               <Text style={styles.cardTitle}>Chi nhánh quản lý</Text>
               <InfoRow label="Tên chi nhánh" value={user?.branch?.name || 'Chưa cấu hình'} />
-              <InfoRow label="Địa chỉ" value={user?.branch?.address || 'Chưa cấu hình'} />
+              <InfoRow label="Địa chỉ" value={user?.branch?.address || 'Chưa cấu hình'} stacked />
               <InfoRow label="Trạng thái" value={user?.status === 'active' ? 'Hoạt động' : 'Tạm khóa'} valueColor={user?.status === 'active' ? COLORS.primary : COLORS.error} />
             </View>
           </>
@@ -213,18 +229,56 @@ const styles = StyleSheet.create({
   },
   cardTitle: { fontSize: 13, fontWeight: '700', color: '#888', padding: 14, paddingBottom: 8 },
   infoRow: {
-    flexDirection: 'row', justifyContent: 'space-between', padding: 14,
-    borderTopWidth: 0.5, borderTopColor: '#eee', alignItems: 'center',
+    flexDirection: 'row',
+    padding: 14,
+    borderTopWidth: 0.5,
+    borderTopColor: '#eee',
+    alignItems: 'center',
+    gap: 12,
   },
-  infoRowContainer: {
-    flexDirection: 'row', justifyContent: 'space-between', padding: 14,
-    borderTopWidth: 0.5, borderTopColor: '#eee', alignItems: 'center', height: 48,
+  infoRowStacked: {
+    padding: 14,
+    borderTopWidth: 0.5,
+    borderTopColor: '#eee',
+    gap: 6,
   },
-  infoLabel: { fontSize: 13, color: '#888' },
-  infoValue: { fontSize: 13, fontWeight: '600', color: '#222' },
+  infoLabel: {
+    fontSize: 13,
+    color: '#888',
+    width: 108,
+    flexShrink: 0,
+  },
+  infoLabelMuted: {
+    fontSize: 12,
+    color: '#888',
+  },
+  infoValue: {
+    flex: 1,
+    flexShrink: 1,
+    fontSize: 13,
+    fontWeight: '600',
+    color: '#222',
+    textAlign: 'right',
+  },
+  infoValueInline: {
+    lineHeight: 18,
+  },
+  infoValueFull: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#222',
+    lineHeight: 21,
+  },
   inlineInput: {
-    fontSize: 13, fontWeight: '600', color: '#222', borderBottomWidth: 1,
-    borderBottomColor: COLORS.primary, width: 140, textAlign: 'right', paddingVertical: 2,
+    flex: 1,
+    fontSize: 13,
+    fontWeight: '600',
+    color: '#222',
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.primary,
+    textAlign: 'right',
+    paddingVertical: 2,
+    minWidth: 0,
   },
   bottomNav: {
     flexDirection: 'row', backgroundColor: '#fff', paddingVertical: 10,

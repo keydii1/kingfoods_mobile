@@ -1,15 +1,19 @@
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Alert, ActivityIndicator, TextInput } from 'react-native';
-import {useState, useEffect} from 'react'
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, ActivityIndicator, TextInput } from 'react-native';
+import { Alert } from '../../utils/appAlert';
+import { useState, useCallback, useRef } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { router } from 'expo-router';
+import { router, useFocusEffect } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../../constants/colors';
-import {getClientStatistics} from '../../constants/services/api';
+import { getClientStatistics, cancelClientOrder } from '../../constants/services/api';
+import { getOrderStatusMeta, canCustomerCancelOrder } from '../../constants/orderStatus';
+import { subscribeOrdersRefresh, notifyOrdersRefresh } from '../../utils/ordersRefresh';
 
 const defaultKpis = [
   { icon: 'cube-outline', value: '0', label: 'Đơn đã đặt', color: '#e8f5e9', textColor: COLORS.primary },
   { icon: 'checkmark-circle-outline', value: '0', label: 'Đã giao', color: '#e3f2fd', textColor: '#1565c0' },
-  { icon: 'time-outline', value: '0', label: 'Đang xử lý', color: '#fff3e0', textColor: '#e65100' },
+  { icon: 'hourglass-outline', value: '0', label: 'Chờ xác nhận', color: '#fff3e0', textColor: '#e65100' },
+  { icon: 'time-outline', value: '0', label: 'Đang xử lý', color: '#e3f2fd', textColor: '#1565c0' },
   { icon: 'close-circle-outline', value: '0', label: 'Đã huỷ', color: '#ffebee', textColor: '#e53935' },
 ];
 
@@ -30,29 +34,36 @@ export default function StoreStatisticsScreen() {
   const [startDate, setStartDate] = useState(getFirstDayOfMonth());
   const [endDate, setEndDate] = useState(getTodayStr());
   const [activePreset, setActivePreset] = useState('month');
+  const hasLoadedRef = useRef(false);
 
-  async function fetchStats(start = startDate, end = endDate){
-    setLoading(true);
-    try{
+  const fetchStats = useCallback(async (start = startDate, end = endDate, silent = false) => {
+    if (!silent) setLoading(true);
+    try {
       const res = await getClientStatistics(start, end);
-      console.log('Statistics payload fetched:', JSON.stringify(res, null, 2));
       setOrders(res?.orders || []);
       setTopProducts(res?.topProducts || []);
-    }
-    catch(err){
+    } catch (err) {
       console.log('Fetch stats error:', err.message);
-      Alert.alert('Lỗi', 'Không thể kết nối đến máy chủ.');
-      setOrders([]);
-      setTopProducts([]);
+      if (!silent) {
+        Alert.alert('Lỗi', 'Không thể kết nối đến máy chủ.');
+        setOrders([]);
+        setTopProducts([]);
+      }
+    } finally {
+      if (!silent) setLoading(false);
     }
-    finally {
-      setLoading(false);
-    }
-  }
+  }, [startDate, endDate]);
 
-  useEffect(() => {
-    fetchStats(getFirstDayOfMonth(), getTodayStr());
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      fetchStats(startDate, endDate, hasLoadedRef.current);
+      hasLoadedRef.current = true;
+
+      return subscribeOrdersRefresh(() => {
+        fetchStats(startDate, endDate, true);
+      });
+    }, [fetchStats, startDate, endDate])
+  );
 
   const handleFilterPress = () => {
     const regex = /^\d{4}-\d{2}-\d{2}$/;
@@ -85,23 +96,50 @@ export default function StoreStatisticsScreen() {
   const displayKpis = [
     { icon: 'cube-outline', value: String(orders.length),
       label: 'Đơn đã đặt', color: '#e8f5e9', textColor: COLORS.primary },
+    { icon: 'hourglass-outline', value: String(orders.filter(o => o.status === 'pending').length),
+      label: 'Chờ xác nhận', color: '#fff3e0', textColor: '#e65100' },
+    { icon: 'time-outline', value: String(orders.filter(o => o.status === 'processing').length),
+      label: 'Đang xử lý', color: '#e3f2fd', textColor: '#1565c0' },
     { icon: 'checkmark-circle-outline', value: String(orders.filter(o => o.status === 'delivered').length),
-      label: 'Đã giao', color: '#e3f2fd', textColor: '#1565c0' },
-    { icon: 'time-outline', value: String(orders.filter(o => o.status === 'processing' || o.status === 'pending').length),
-      label: 'Đang xử lý', color: '#fff3e0', textColor: '#e65100' },
+      label: 'Đã giao', color: '#e8f5e9', textColor: COLORS.primary },
     { icon: 'close-circle-outline', value: String(orders.filter(o => o.status === 'cancelled').length),
       label: 'Đã huỷ', color: '#ffebee', textColor: '#e53935' },
   ];
 
-  const displayOrders = orders.map(o => ({
-    id: `#${o.id}`,
-    date: o.createdAt ? new Date(o.createdAt).toLocaleDateString('vi-VN') : '',
-    items: o.orderDetails?.length || 0,
-    total: `${(parseFloat(o.totalPrice) || 0).toLocaleString()}đ`,
-    status: o.status === 'delivered' ? 'Đã giao'
-          : (o.status === 'processing' || o.status === 'pending') ? 'Đang xử lý'
-          : o.status === 'cancelled' ? 'Đã huỷ' : o.status,
-  }));
+  const openOrderDetail = (order) => {
+    router.push({
+      pathname: '/orderdetail',
+      params: { orderId: String(order.id) },
+    });
+  };
+
+  const handleQuickCancel = (order) => {
+    const id = order.id;
+    Alert.alert(
+      'Huỷ đơn hàng',
+      `Huỷ đơn #${id}?`,
+      [
+        { text: 'Không', style: 'cancel' },
+        {
+          text: 'Huỷ đơn',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              await cancelClientOrder(id);
+              setOrders((prev) =>
+                prev.map((o) => (o.id === id ? { ...o, status: 'cancelled' } : o))
+              );
+              notifyOrdersRefresh();
+              fetchStats(startDate, endDate, true);
+              Alert.alert('Thành công', 'Đơn hàng đã được huỷ');
+            } catch (err) {
+              Alert.alert('Lỗi', err.message || 'Không thể huỷ đơn');
+            }
+          },
+        },
+      ]
+    );
+  };
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -220,22 +258,49 @@ export default function StoreStatisticsScreen() {
               <Ionicons name="document-text-outline" size={20} color="#222" style={{ marginRight: 6 }} />
               <Text style={styles.cardTitle}>Đơn hàng trong giai đoạn</Text>
             </View>
-            {displayOrders.length > 0 ? (
-              displayOrders.map((order, i) => (
-                <View key={i} style={styles.orderRow}>
-                  <View style={styles.orderInfo}>
-                    <Text style={styles.orderId}>{order.id}</Text>
-                    <Text style={styles.orderDate}>{order.date} · {order.items} sản phẩm</Text>
-                  </View>
-                  <View style={styles.orderRight}>
-                    <Text style={styles.orderTotal}>{order.total}</Text>
-                    <Text style={[styles.orderStatus, {
-                      color: order.status === 'Đã giao' ? COLORS.primary :
-                             order.status === 'Đang xử lý' ? '#e65100' : '#e53935'
-                    }]}>{order.status}</Text>
-                  </View>
-                </View>
-              ))
+            {orders.length > 0 ? (
+              orders.map((o) => {
+                const meta = getOrderStatusMeta(o.status);
+                const cancellable = canCustomerCancelOrder(o.status);
+                const itemCount = o.orderDetails?.length || 0;
+                const total = `${(parseFloat(o.totalPrice) || 0).toLocaleString()}đ`;
+                const date = o.createdAt
+                  ? new Date(o.createdAt).toLocaleDateString('vi-VN')
+                  : '';
+
+                return (
+                  <TouchableOpacity
+                    key={o.id}
+                    style={styles.orderRow}
+                    onPress={() => openOrderDetail(o)}
+                    activeOpacity={0.75}
+                  >
+                    <View style={styles.orderInfo}>
+                      <Text style={styles.orderId}>#{o.id}</Text>
+                      <Text style={styles.orderDate}>
+                        {date} · {itemCount} sản phẩm
+                      </Text>
+                      {cancellable && (
+                        <TouchableOpacity
+                          style={styles.cancelLink}
+                          onPress={() => handleQuickCancel(o)}
+                        >
+                          <Text style={styles.cancelLinkText}>Huỷ đơn</Text>
+                        </TouchableOpacity>
+                      )}
+                    </View>
+                    <View style={styles.orderRight}>
+                      <Text style={styles.orderTotal}>{total}</Text>
+                      <View style={[styles.statusPill, { backgroundColor: meta.bg }]}>
+                        <Text style={[styles.orderStatus, { color: meta.color }]}>
+                          {meta.label}
+                        </Text>
+                      </View>
+                      <Ionicons name="chevron-forward" size={16} color="#ccc" style={{ marginTop: 6 }} />
+                    </View>
+                  </TouchableOpacity>
+                );
+              })
             ) : (
               <View style={{ paddingVertical: 12, alignItems: 'center' }}>
                 <Text style={{ fontSize: 13, color: '#999' }}>Không tìm thấy đơn hàng nào</Text>
@@ -280,10 +345,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row', flexWrap: 'wrap', gap: 10, marginBottom: 12,
   },
   kpiCard: {
-    width: '47%', borderRadius: 16, padding: 14, alignItems: 'center', gap: 4,
+    width: '31%', borderRadius: 14, padding: 12, alignItems: 'center', gap: 4,
   },
-  kpiValue: { fontSize: 26, fontWeight: '900' },
-  kpiLabel: { fontSize: 11, color: '#888', textAlign: 'center' },
+  kpiValue: { fontSize: 22, fontWeight: '900' },
+  kpiLabel: { fontSize: 10, color: '#888', textAlign: 'center' },
   card: {
     backgroundColor: '#fff', borderRadius: 16, padding: 16, marginBottom: 12,
   },
@@ -298,15 +363,28 @@ const styles = StyleSheet.create({
   topName: { fontSize: 13, fontWeight: '600', color: '#222' },
   topQty: { fontSize: 11, color: '#888', marginTop: 2 },
   orderRow: {
-    flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
-    paddingVertical: 10, borderBottomWidth: 0.5, borderBottomColor: '#eee',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 12,
+    borderBottomWidth: 0.5,
+    borderBottomColor: '#eee',
+    gap: 8,
   },
   orderInfo: { flex: 1 },
-  orderId: { fontSize: 13, fontWeight: '600', color: '#222' },
-  orderDate: { fontSize: 11, color: '#888', marginTop: 2 },
+  orderId: { fontSize: 14, fontWeight: '700', color: '#222' },
+  orderDate: { fontSize: 11, color: '#888', marginTop: 3 },
+  cancelLink: { marginTop: 6, alignSelf: 'flex-start' },
+  cancelLinkText: { fontSize: 12, fontWeight: '700', color: '#e53935' },
   orderRight: { alignItems: 'flex-end' },
-  orderTotal: { fontSize: 13, fontWeight: '700', color: COLORS.primary },
-  orderStatus: { fontSize: 11, fontWeight: '600', marginTop: 2 },
+  orderTotal: { fontSize: 14, fontWeight: '800', color: COLORS.primary },
+  statusPill: {
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 10,
+    marginTop: 4,
+  },
+  orderStatus: { fontSize: 11, fontWeight: '700' },
   bottomNav: {
     flexDirection: 'row', backgroundColor: '#fff', paddingVertical: 10,
     borderTopWidth: 1, borderTopColor: '#eee',

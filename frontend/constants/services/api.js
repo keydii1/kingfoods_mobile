@@ -90,6 +90,10 @@ export const getClientStatistics = (startDate = '', endDate = '') => {
     if (params.length > 0) url += `?${params.join('&')}`;
     return request('GET', url);
 };
+export const getClientOrderDetail = (orderId) =>
+    request('GET', `/client/orders/detail/${orderId}`);
+export const cancelClientOrder = (orderId) =>
+    request('PATCH', `/client/orders/${orderId}`, { status: 'cancelled' });
 // PRODUCTS
 export const getProducts = (query = '') => {
     let url = `/public/products?limit=100`;

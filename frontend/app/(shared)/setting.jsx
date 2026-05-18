@@ -1,11 +1,14 @@
-import {Text, TextInput, View, TouchableOpacity, StyleSheet, ScrollView, Switch, Alert} from 'react-native'
-import {useState, useEffect} from 'react'
+import {Text, TextInput, View, TouchableOpacity, StyleSheet, ScrollView, Switch, Linking} from 'react-native'
+import { Alert } from '../../utils/appAlert';
+import {useState} from 'react'
 import {router} from 'expo-router'
 import {Ionicons} from '@expo/vector-icons'
 import {COLORS} from '../../constants/colors'
-import {SafeAreaView} from 'react-native-safe-area-context'
+import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context'
 import { useAuth } from '../../contexts/AuthContext'
-import {logout as apiLogout, updateProfile, changeUserPassword, changeCustomerPassword} from '../../constants/services/api'
+import { useStoreCart } from '../../contexts/StoreCartContext'
+import {logout as apiLogout, changeUserPassword, changeCustomerPassword} from '../../constants/services/api'
+import { validateNewPassword, PASSWORD_HINT } from '../../constants/passwordPolicy';
 
 // Tạo 1 component chung cho tất cả các card
 function SettingRow({icon, iconBg, iconColor, name, sub, value, onValueChange}){
@@ -27,7 +30,6 @@ function SettingRow({icon, iconBg, iconColor, name, sub, value, onValueChange}){
     );
 }
 
-// component dùng chung 1 dòng thông tin
 function InfoRow({label, value}){
     return(
         <View style = {styles.infoRow}>
@@ -37,16 +39,50 @@ function InfoRow({label, value}){
     )
 }
 
-export default function SettingScreen(){
-    const { isLoggedIn, userRole, logout } = useAuth();
+function CartPersistSetting() {
+    const { persistCart, setPersistCart } = useStoreCart();
+    return (
+        <SettingRow
+            icon="cart-outline"
+            iconBg="#e8f5e9"
+            iconColor={COLORS.primary}
+            name="Lưu giỏ hàng tự động"
+            sub="Giữ sản phẩm đã chọn khi thoát app"
+            value={persistCart}
+            onValueChange={setPersistCart}
+        />
+    );
+}
 
-    // Mỗi switch sẽ có 1 useState riêng
+function LinkRow({icon, iconBg, iconColor, name, sub, onPress}){
+    return(
+        <TouchableOpacity style={styles.linkRow} onPress={onPress} activeOpacity={0.75}>
+            <View style={[styles.setIcon, {backgroundColor: iconBg}]}>
+                <Ionicons name={icon} size={18} color={iconColor || COLORS.primary} />
+            </View>
+            <View style={styles.setLabel}>
+                <Text style={styles.setName}>{name}</Text>
+                {sub ? <Text style={styles.setSub}>{sub}</Text> : null}
+            </View>
+            <Ionicons name="chevron-forward" size={18} color="#ccc" />
+        </TouchableOpacity>
+    );
+}
+
+export default function SettingScreen(){
+    const { userRole, logout, userName } = useAuth();
+    const insets = useSafeAreaInsets();
+    const isCustomer = userRole === 'store_manager';
+
     const[beepSound, setBeepSound] = useState(true);
     const[vibrate, setVibrate] = useState(true);
     const[lowAlert, setLowAlert] = useState(true);
-    const[keepScreen, setKeepScreen] = useState(true);
     const[offlineMode, setOfflineMode] = useState(true);
     const[autoSync, setAutoSync] = useState(true);
+
+    const[orderStatusNotify, setOrderStatusNotify] = useState(true);
+    const[orderReminder, setOrderReminder] = useState(true);
+    const[notifySound, setNotifySound] = useState(true);
     const[oldPassword, setOldPassword] = useState('');
     const[newPassword, setNewPassword] = useState('');
     const[confirmPassword, setConfirmPassword] = useState('');
@@ -60,6 +96,11 @@ export default function SettingScreen(){
             Alert.alert('Lỗi', 'Mật khẩu mới không khớp');
             return;
         }
+        const passwordError = validateNewPassword(newPassword);
+        if (passwordError) {
+            Alert.alert('Mật khẩu không hợp lệ', passwordError);
+            return;
+        }
         try {
             if (userRole === 'store_manager') {
                 await changeCustomerPassword({ oldPassword, newPassword });
@@ -70,8 +111,13 @@ export default function SettingScreen(){
             setOldPassword('');
             setNewPassword('');
             setConfirmPassword('');
-        } catch {
-            Alert.alert('Lỗi', 'Không thể đổi mật khẩu');
+        } catch (err) {
+            const msg = err?.message || 'Không thể đổi mật khẩu';
+            const friendly =
+              msg.toLowerCase().includes('old password')
+                ? 'Mật khẩu cũ không đúng'
+                : msg;
+            Alert.alert('Lỗi', friendly);
         }
     };
 
@@ -92,53 +138,110 @@ export default function SettingScreen(){
                 <TouchableOpacity onPress = {() => router.back()}>
                     <Ionicons name="chevron-back" size={24} color={COLORS.primary} />
                 </TouchableOpacity>
-                <Text style = {styles.headerTitle}>Cài đặt app</Text>
+                <Text style = {styles.headerTitle}>{isCustomer ? 'Cài đặt' : 'Cài đặt app'}</Text>
                 <View style = {{width: 28}} />
             </View>
 
-            {/* Thông báo và cảnh báo */}
-            <ScrollView style = {styles.scroll}>
-                <View style = {styles.card}>
-                    <Text style = {styles.cardTitle}>Thông báo & cảnh báo</Text>
-                    <SettingRow
-                    icon="notifications-outline" iconBg="#e8f5e9" iconColor={COLORS.primary}
-                    name='Âm Thanh khi quét mã'
-                    sub='Phát tiếng beep khi quét thành công'
-                    value ={beepSound}
-                    onValueChange={setBeepSound} />
-                    <SettingRow 
-                    icon="alert-circle-outline" iconBg="#ffebee" iconColor={COLORS.error}
-                    name ='Rung khi quét sai'
-                    sub='Rung mạnh khi phát hiện sai sản phẩm'
-                    value = {vibrate}
-                    onValueChange ={setVibrate} />
-                    <SettingRow
-                    icon="warning-outline" iconBg="#fff3e0" iconColor="#e65100"
-                    name ='Cảnh báo khi năng suất thấp'
-                    sub ='Dưới 50 SKU/h sẽ thông báo'
-                    value = {lowAlert}
-                    onValueChange ={setLowAlert} />
-                </View>
+            <ScrollView style = {styles.scroll} contentContainerStyle={{ paddingBottom: 16 }}>
+                {isCustomer ? (
+                    <>
+                        <View style={styles.card}>
+                            <Text style={styles.cardTitle}>Thông báo đơn hàng</Text>
+                            <SettingRow
+                                icon="bag-check-outline" iconBg="#e8f5e9" iconColor={COLORS.primary}
+                                name="Cập nhật trạng thái đơn"
+                                sub="Khi đơn được duyệt, đang giao hoặc đã giao"
+                                value={orderStatusNotify}
+                                onValueChange={setOrderStatusNotify}
+                            />
+                            <SettingRow
+                                icon="time-outline" iconBg="#fff3e0" iconColor="#e65100"
+                                name="Nhắc đơn chưa hoàn tất"
+                                sub="Nhắc khi còn đơn đang chờ xử lý"
+                                value={orderReminder}
+                                onValueChange={setOrderReminder}
+                            />
+                            <SettingRow
+                                icon="volume-medium-outline" iconBg="#e3f2fd" iconColor="#1565c0"
+                                name="Âm thanh thông báo"
+                                sub="Phát âm thanh khi có cập nhật mới"
+                                value={notifySound}
+                                onValueChange={setNotifySound}
+                            />
+                        </View>
 
-                {/* Hiển thị */}
-                <View style = {styles.card}>
-                    <Text style = {styles.cardTitle}>Kết nối & dữ liệu</Text>
-                    <SettingRow 
-                    icon="wifi-outline" iconBg="#e3f2fd" iconColor="#1565c0"
-                    name ='Chế độ Offline'
-                    sub='Offline Mode'
-                    value = {offlineMode}
-                    onValueChange = {setOfflineMode} />
-                    <SettingRow 
-                    icon="sync-outline" iconBg="#fff3e0" iconColor="#e65100"
-                    name = 'Tự đồng bộ khi có mạng'
-                    sub = 'Gửi dữ liệu offline khi kết nối lại'
-                    value = {autoSync}
-                    onValueChange = {setAutoSync} />
-                </View>
+                        <View style={styles.card}>
+                            <Text style={styles.cardTitle}>Đặt hàng</Text>
+                            <CartPersistSetting />
+                        </View>
+
+                        <View style={styles.card}>
+                            <Text style={styles.cardTitle}>Tài khoản & hỗ trợ</Text>
+                            <LinkRow
+                                icon="person-outline" iconBg="#e8f5e9" iconColor={COLORS.primary}
+                                name="Hồ sơ cửa hàng"
+                                sub={userName || 'Xem và chỉnh sửa thông tin'}
+                                onPress={() => router.push('/customerprofile')}
+                            />
+                            <LinkRow
+                                icon="stats-chart-outline" iconBg="#e3f2fd" iconColor="#1565c0"
+                                name="Thống kê đơn hàng"
+                                sub="Theo dõi đơn đã đặt và trạng thái"
+                                onPress={() => router.push('/storestatistics')}
+                            />
+                            <LinkRow
+                                icon="call-outline" iconBg="#fff3e0" iconColor="#e65100"
+                                name="Hotline kho Kingfood"
+                                sub="1900 1234 · 8:00 – 21:00"
+                                onPress={() => Linking.openURL('tel:19001234')}
+                            />
+                        </View>
+                    </>
+                ) : (
+                    <>
+                        <View style = {styles.card}>
+                            <Text style = {styles.cardTitle}>Thông báo & cảnh báo</Text>
+                            <SettingRow
+                            icon="notifications-outline" iconBg="#e8f5e9" iconColor={COLORS.primary}
+                            name='Âm Thanh khi quét mã'
+                            sub='Phát tiếng beep khi quét thành công'
+                            value ={beepSound}
+                            onValueChange={setBeepSound} />
+                            <SettingRow 
+                            icon="alert-circle-outline" iconBg="#ffebee" iconColor={COLORS.error}
+                            name ='Rung khi quét sai'
+                            sub='Rung mạnh khi phát hiện sai sản phẩm'
+                            value = {vibrate}
+                            onValueChange ={setVibrate} />
+                            <SettingRow
+                            icon="warning-outline" iconBg="#fff3e0" iconColor="#e65100"
+                            name ='Cảnh báo khi năng suất thấp'
+                            sub ='Dưới 50 SKU/h sẽ thông báo'
+                            value = {lowAlert}
+                            onValueChange ={setLowAlert} />
+                        </View>
+
+                        <View style = {styles.card}>
+                            <Text style = {styles.cardTitle}>Kết nối & dữ liệu</Text>
+                            <SettingRow 
+                            icon="wifi-outline" iconBg="#e3f2fd" iconColor="#1565c0"
+                            name ='Chế độ Offline'
+                            sub='Offline Mode'
+                            value = {offlineMode}
+                            onValueChange = {setOfflineMode} />
+                            <SettingRow 
+                            icon="sync-outline" iconBg="#fff3e0" iconColor="#e65100"
+                            name = 'Tự đồng bộ khi có mạng'
+                            sub = 'Gửi dữ liệu offline khi kết nối lại'
+                            value = {autoSync}
+                            onValueChange = {setAutoSync} />
+                        </View>
+                    </>
+                )}
 
                 <View style = {styles.card}>
                     <Text style = {styles.cardTitle}>Đổi mật khẩu</Text>
+                    <Text style={styles.passwordHint}>{PASSWORD_HINT}</Text>
                     <TextInput 
                         style={styles.passwordInput} 
                         placeholder="Mật khẩu cũ" 
@@ -174,7 +277,10 @@ export default function SettingScreen(){
                 <View style = {styles.card}>
                     <Text style = {styles.cardTitle}>Thông tin App</Text>
                     <InfoRow label ='Phiên bản' value ='v2.5.0 (Build 450)'/>
-                    <InfoRow label = 'Môi Trường' value = 'Production · Kingfood' />
+                    <InfoRow
+                        label = 'Ứng dụng'
+                        value = {isCustomer ? 'Kingfood · Đặt hàng cửa hàng' : 'Production · Kingfood WMS'}
+                    />
                 </View>
 
                  {/* Nút tạo tài khoản — chỉ quản lý kho mới thấy */}
@@ -203,8 +309,8 @@ export default function SettingScreen(){
             </ScrollView>
 
             {/* Bottom Nav for customer */}
-            {userRole === 'store_manager' && (
-                <View style={styles.bottomNav}>
+            {isCustomer && (
+                <View style={[styles.bottomNav, { paddingBottom: Math.max(insets.bottom, 8) }]}>
                     <TouchableOpacity style={styles.navItem} onPress={() => router.push('/storeorder')}>
                         <Ionicons name="cart-outline" size={22} color="#aaa" style={{ marginBottom: 2 }} />
                         <Text style={styles.navLabel}>Đặt hàng</Text>
@@ -296,6 +402,14 @@ const styles = StyleSheet.create({
         color: '#888',
         marginTop: 2,
     },
+    linkRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: 14,
+        gap: 12,
+        borderTopWidth: 0.5,
+        borderTopColor: '#eee',
+    },
 
     // Info Row
     infoRow: {
@@ -315,6 +429,13 @@ const styles = StyleSheet.create({
         color: '#222',
     },
 
+    passwordHint: {
+        fontSize: 11,
+        color: '#888',
+        lineHeight: 16,
+        marginHorizontal: 14,
+        marginBottom: 10,
+    },
     passwordInput: {
         borderWidth: 1, borderColor: '#ddd', borderRadius: 10,
         padding: 12, fontSize: 14, marginHorizontal: 14, marginBottom: 10,

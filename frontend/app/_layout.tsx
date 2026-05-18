@@ -6,6 +6,8 @@ import {
 
 import { AuthProvider, useAuth }
 from '../contexts/AuthContext';
+import { StoreCartProvider } from '../contexts/StoreCartContext';
+import { AppAlertProvider } from '../components/AppAlertProvider';
 
 import FloatingAssistiveButton
 from '../components/FloatingAssistiveButton';
@@ -52,7 +54,11 @@ export default function Layout() {
     return (
 
         <AuthProvider>
-            <LayoutContent />
+            <StoreCartProvider>
+                <AppAlertProvider>
+                    <LayoutContent />
+                </AppAlertProvider>
+            </StoreCartProvider>
         </AuthProvider>
 
     );
