@@ -91,8 +91,11 @@ export const getClientStatistics = (startDate = '', endDate = '') => {
     return request('GET', url);
 };
 // PRODUCTS
-export const getProducts = (query = '') =>
-    request ('GET', `/public/products${query ? `?search=${query}`: ''}`)
+export const getProducts = (query = '') => {
+    let url = `/public/products?limit=1000`;
+    if (query) url += `&search=${query}`;
+    return request('GET', url);
+};
 export const getByProductId = (id) =>
     request ('GET', `/public/products/${id}`);
 // Admin

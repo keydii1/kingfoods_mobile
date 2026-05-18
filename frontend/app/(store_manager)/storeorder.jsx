@@ -25,7 +25,7 @@ export default function StoreOrderScreen() {
           try {
               const res = await getProducts();
               console.log('Catalog fetched response:', JSON.stringify(res, null, 2));
-              const products = Array.isArray(res) ? res : (res?.data || []);
+              const products = Array.isArray(res) ? res : (res?.items || res?.data || []);
               setProductCatalog(products.map(p => ({
                   id: p.id,
                   name: p.name,
