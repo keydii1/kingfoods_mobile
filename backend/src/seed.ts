@@ -1,4 +1,6 @@
 import "reflect-metadata";
+import * as fs from "fs-extra";
+import * as path from "path";
 import { AppDataSource } from "./config/DataSource";
 import { Location } from "./Entity/Location";
 import { Category, Status as CategoryStatus } from "./Entity/Category";
@@ -192,6 +194,14 @@ async function seed() {
       }
     ];
 
+    // Load real product image mapping từ JSON đã lưu sẵn
+    const mappingFilePath = path.join(__dirname, "../data/product-images-mapping.json");
+    let imageMapping: { [key: string]: string } = {};
+    if (await fs.pathExists(mappingFilePath)) {
+      imageMapping = await fs.readJson(mappingFilePath);
+      console.log(`🖼️  Đã tải ${Object.keys(imageMapping).length} mapping ảnh thực từ file JSON.`);
+    }
+
     const catsToInsert: any[] = [];
     for (const temp of catTemplates) {
       catsToInsert.push({ name: temp.name, description: temp.desc, locationId: temp.loc, status: CategoryStatus.ACTIVE });
@@ -203,7 +213,9 @@ async function seed() {
     for (let i = 0; i < catIds.length; i++) {
       const cid = catIds[i];
       for (const p of catTemplates[i].prods) {
-        prodsData.push({ name: p.name, price: p.price, categoryId: cid, status: ProductStatus.ACTIVE, image: p.img });
+        // Ưu tiên dùng ảnh thực từ mapping, fallback về ảnh cũ trong seed
+        const realImage = imageMapping[p.name] || p.img;
+        prodsData.push({ name: p.name, price: p.price, categoryId: cid, status: ProductStatus.ACTIVE, image: realImage });
       }
     }
     await AppDataSource.manager.insert(Product, prodsData);
