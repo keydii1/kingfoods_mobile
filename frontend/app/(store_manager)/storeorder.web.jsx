@@ -37,6 +37,10 @@ export default function StoreOrderWebScreen() {
 
   const [activeTab, setActiveTab] = useState('order');
 
+  // Draft checking invoice modal state
+  const [showDraftInvoiceModal, setShowDraftInvoiceModal] = useState(false);
+  const [draftInvoiceNumber, setDraftInvoiceNumber] = useState('');
+
   // Products catalog
   const [productCatalog, setProductCatalog] = useState([]);
   const [loadingProducts, setLoadingProducts] = useState(true);
@@ -255,6 +259,17 @@ export default function StoreOrderWebScreen() {
     } else {
       setFavoritesList(prev => [...prev, product]);
     }
+  };
+
+  // Open Draft Invoice preview modal
+  const handleOpenDraftInvoice = () => {
+    if (cart.length === 0) {
+      Alert.alert('Giỏ hàng trống', 'Vui lòng thêm sản phẩm vào giỏ hàng trước khi xuất hoá đơn.');
+      return;
+    }
+    const rand = Math.floor(1000 + Math.random() * 9000);
+    setDraftInvoiceNumber(`KF-WMS-2026-05-19-${rand}`);
+    setShowDraftInvoiceModal(true);
   };
 
   // Submit order checkout
@@ -841,20 +856,30 @@ export default function StoreOrderWebScreen() {
                         <Text style={styles.summaryValue}>{totalAmount.toLocaleString()}đ</Text>
                       </View>
 
-                      <TouchableOpacity 
-                        style={[styles.checkoutActionBtn, submittingOrder && { opacity: 0.7 }]} 
-                        onPress={handleCheckout}
-                        disabled={submittingOrder}
-                      >
-                        {submittingOrder ? (
-                          <ActivityIndicator size="small" color="#fff" />
-                        ) : (
-                          <>
-                            <Ionicons name="bag-check" size={18} color="#fff" style={{ marginRight: 6 }} />
-                            <Text style={styles.checkoutActionBtnText}>Gửi Đơn Đặt Hàng</Text>
-                          </>
-                        )}
-                      </TouchableOpacity>
+                      <View style={{ flexDirection: 'row', gap: 10, marginTop: 12 }}>
+                        <TouchableOpacity 
+                          style={[styles.checkoutActionBtn, { flex: 1, backgroundColor: '#475569' }]} 
+                          onPress={handleOpenDraftInvoice}
+                        >
+                          <Ionicons name="receipt" size={18} color="#fff" style={{ marginRight: 6 }} />
+                          <Text style={styles.checkoutActionBtnText}>Xuất HĐ Kiểm Tra</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity 
+                          style={[styles.checkoutActionBtn, { flex: 1 }, submittingOrder && { opacity: 0.7 }]} 
+                          onPress={handleCheckout}
+                          disabled={submittingOrder}
+                        >
+                          {submittingOrder ? (
+                            <ActivityIndicator size="small" color="#fff" />
+                          ) : (
+                            <>
+                              <Ionicons name="bag-check" size={18} color="#fff" style={{ marginRight: 6 }} />
+                              <Text style={styles.checkoutActionBtnText}>Gửi Đơn Hàng</Text>
+                            </>
+                          )}
+                        </TouchableOpacity>
+                      </View>
                     </View>
                   </>
                 )}
@@ -1832,6 +1857,181 @@ export default function StoreOrderWebScreen() {
 
         </View>
       </View>
+
+      {/* 3. DRAFT INVOICE PREVIEW OVERLAY */}
+      {showDraftInvoiceModal && (
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalPaperContainer}>
+            
+            {/* Modal Control actions (no-print) */}
+            <View style={[styles.modalActionsBar, { className: 'no-print' } as any]}>
+              <Text style={styles.modalTitleText}>Xem trước Hóa đơn Kiểm tra (Draft Invoice)</Text>
+              
+              <View style={{ flexDirection: 'row', gap: 8 }}>
+                <TouchableOpacity style={[styles.modalActionBtn, { backgroundColor: '#475569' }]} onPress={() => window.print()}>
+                  <Ionicons name="print" size={16} color="#fff" style={{ marginRight: 4 }} />
+                  <Text style={{ color: '#fff', fontSize: 12, fontWeight: '700' }}>In Hóa Đơn</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={[styles.modalActionBtn, { backgroundColor: '#3b82f6' }]} onPress={() => {
+                  Alert.alert('Tải xuống thành công', 'File hóa đơn định dạng PDF đã được lưu về thiết bị để kiểm tra chất lượng.');
+                }}>
+                  <Ionicons name="download" size={16} color="#fff" style={{ marginRight: 4 }} />
+                  <Text style={{ color: '#fff', fontSize: 12, fontWeight: '700' }}>Tải file PDF</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={[styles.modalActionBtn, { backgroundColor: ORANGE_THEME.primary }]} onPress={() => {
+                  setShowDraftInvoiceModal(false);
+                  handleCheckout();
+                }}>
+                  <Ionicons name="bag-check" size={16} color="#fff" style={{ marginRight: 4 }} />
+                  <Text style={{ color: '#fff', fontSize: 12, fontWeight: '700' }}>Duyệt & Đặt luôn</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={[styles.modalActionBtn, { backgroundColor: '#94a3b8' }]} onPress={() => setShowDraftInvoiceModal(false)}>
+                  <Ionicons name="close" size={16} color="#fff" style={{ marginRight: 4 }} />
+                  <Text style={{ color: '#fff', fontSize: 12, fontWeight: '700' }}>Đóng</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+
+            {/* Premium Tax Invoice Paper */}
+            <ScrollView style={styles.invoicePaperScroll} id="print-area">
+              <View style={styles.invoicePaper}>
+                
+                {/* Header brand and Metadata */}
+                <View style={styles.paperHeader}>
+                  <View style={{ flex: 1.5 }}>
+                    <Text style={styles.paperBrandName}>CÔNG TY CỔ PHẦN KINGFOOD MARKET</Text>
+                    <Text style={styles.paperBrandAddress}>Địa chỉ: 12 Hùng Vương, Phường 4, Quận 5, TP. Hồ Chí Minh</Text>
+                    <Text style={styles.paperBrandContact}>Tổng đài sỉ: 1900 6363 · Email: wholesale@kingfoodmarket.com</Text>
+                  </View>
+                  <View style={{ flex: 1, alignItems: 'flex-end' }}>
+                    <View style={styles.draftStamp}>
+                      <Text style={styles.draftStampText}>HÓA ĐƠN NHÁP KIỂM TRA</Text>
+                    </View>
+                    <Text style={styles.paperMetaLabel}>Số hóa đơn: <Text style={{ fontFamily: 'monospace', fontWeight: 'bold' }}>{draftInvoiceNumber}</Text></Text>
+                    <Text style={styles.paperMetaLabel}>Ngày lập: <Text style={{ fontWeight: 'bold' }}>19/05/2026 11:29</Text></Text>
+                  </View>
+                </View>
+
+                <View style={styles.paperDividerDouble} />
+
+                {/* Title */}
+                <Text style={styles.paperTitle}>HÓA ĐƠN BÁN SỈ & KÊ KHAI BÀN GIAO HÀNG HÓA</Text>
+                <Text style={styles.paperSubtitle}>(DRAFT WHOLESALE COMMERCIAL & QC CHECKLIST INVOICE)</Text>
+
+                {/* Delivery and Customer Details */}
+                <View style={styles.paperDetailsGrid}>
+                  <View style={styles.detailsBlock}>
+                    <Text style={styles.detailsBlockTitle}>ĐƠN VỊ CUNG CẤP (SELLER):</Text>
+                    <Text style={styles.detailsText}><Text style={{ fontWeight: 'bold' }}>TỔNG KHO VẬN HÀNH LOGISTICS WMS KINGFOOD</Text></Text>
+                    <Text style={styles.detailsText}>Người lập đơn: Quản trị hệ thống WMS</Text>
+                    <Text style={styles.detailsText}>Kho xuất hàng: Zone Alpha - Kho sỉ Tân Bình</Text>
+                  </View>
+
+                  <View style={styles.detailsBlock}>
+                    <Text style={styles.detailsBlockTitle}>ĐƠN VỊ MUA HÀNG (BUYER):</Text>
+                    <Text style={styles.detailsText}><Text style={{ fontWeight: 'bold' }}>CHI NHÁNH SIÊU THỊ KINGFOOD MARKET</Text></Text>
+                    <Text style={styles.detailsText}>Người nhận đại diện: Quản lý {userName}</Text>
+                    <Text style={styles.detailsText}>Ghi chú giao nhận: {deliveryAddress || 'Giao nhận tiêu chuẩn WMS chặng cuối'}</Text>
+                  </View>
+                </View>
+
+                {/* Item List Table */}
+                <View style={styles.paperTableContainer}>
+                  <View style={styles.paperTableHeader}>
+                    <Text style={[styles.pTh, { flex: 0.5, textAlign: 'center' }]}>STT</Text>
+                    <Text style={[styles.pTh, { flex: 3 }]}>Tên sản phẩm sỉ</Text>
+                    <Text style={[styles.pTh, { flex: 1 }]}>SKU</Text>
+                    <Text style={[styles.pTh, { flex: 1, textAlign: 'center' }]}>Đơn vị</Text>
+                    <Text style={[styles.pTh, { flex: 1.2, textAlign: 'right' }]}>Đơn giá</Text>
+                    <Text style={[styles.pTh, { flex: 1, textAlign: 'center' }]}>Số lượng</Text>
+                    <Text style={[styles.pTh, { flex: 1.5, textAlign: 'right' }]}>Thành tiền</Text>
+                  </View>
+
+                  {cart.map((item, idx) => (
+                    <View key={item.product.id} style={styles.paperTableRow}>
+                      <Text style={[styles.pTd, { flex: 0.5, textAlign: 'center' }]}>{idx + 1}</Text>
+                      <Text style={[styles.pTd, { flex: 3, fontWeight: '700' }]}>{item.product.name}</Text>
+                      <Text style={[styles.pTd, { flex: 1, fontFamily: 'monospace' }]}>{item.product.sku}</Text>
+                      <Text style={[styles.pTd, { flex: 1, textAlign: 'center' }]}>{item.product.unit}</Text>
+                      <Text style={[styles.pTd, { flex: 1.2, textAlign: 'right' }]}>{(item.product.price).toLocaleString()}đ</Text>
+                      <Text style={[styles.pTd, { flex: 1, textAlign: 'center', fontWeight: 'bold' }]}>{item.qty}</Text>
+                      <Text style={[styles.pTd, { flex: 1.5, textAlign: 'right', fontWeight: 'bold' }]}>{(item.product.price * item.qty).toLocaleString()}đ</Text>
+                    </View>
+                  ))}
+                </View>
+
+                {/* Summary Section */}
+                <View style={styles.paperSummaryBlock}>
+                  <View style={{ flex: 1 }}>
+                    <View style={styles.qrRow}>
+                      <View style={styles.mockQrCode}>
+                        <Ionicons name="qr-code" size={64} color="#0f172a" />
+                      </View>
+                      <View style={{ flex: 1 }}>
+                        <Text style={styles.qrTitle}>QUÉT KIỂM TRA MÃ CONTAINER</Text>
+                        <Text style={styles.qrDesc}>Thủ kho quét mã QR này để truy vết Container Tote đóng hàng trước khi xếp xe giao hàng sỉ chặng cuối.</Text>
+                      </View>
+                    </View>
+                  </View>
+
+                  <View style={styles.paperTotalCalculations}>
+                    <View style={styles.calcRow}>
+                      <Text style={styles.calcLabel}>Cộng tiền hàng (Subtotal):</Text>
+                      <Text style={styles.calcVal}>{totalAmount.toLocaleString()}đ</Text>
+                    </View>
+                    <View style={styles.calcRow}>
+                      <Text style={styles.calcLabel}>Thuế suất giá trị gia tăng (VAT 8%):</Text>
+                      <Text style={styles.calcVal}>{(totalAmount * 0.08).toLocaleString()}đ</Text>
+                    </View>
+                    <View style={styles.calcRowTotal}>
+                      <Text style={styles.calcLabelTotal}>TỔNG CỘNG TIỀN THANH TOÁN (TOTAL):</Text>
+                      <Text style={styles.calcValTotal}>{(totalAmount * 1.08).toLocaleString()}đ</Text>
+                    </View>
+                  </View>
+                </View>
+
+                <View style={styles.paperDivider} />
+
+                {/* Signatures block */}
+                <View style={styles.signaturesContainer}>
+                  <View style={styles.signNode}>
+                    <Text style={styles.signRole}>Người Lập Phiếu</Text>
+                    <Text style={styles.signHint}>(Ký, ghi rõ họ tên)</Text>
+                    <View style={styles.signGap} />
+                    <Text style={styles.signName}>Hệ thống WMS Kingfood</Text>
+                  </View>
+
+                  <View style={styles.signNode}>
+                    <Text style={styles.signRole}>Thủ Kho Giao Hàng</Text>
+                    <Text style={styles.signHint}>(Ký, ghi rõ họ tên)</Text>
+                    <View style={styles.signGap} />
+                    <Text style={styles.signName}>Trưởng ca WMS</Text>
+                  </View>
+
+                  <View style={styles.signNode}>
+                    <Text style={styles.signRole}>Đại Diện Giao Nhận</Text>
+                    <Text style={styles.signHint}>(Ký, ghi rõ họ tên)</Text>
+                    <View style={styles.signGap} />
+                    <Text style={styles.signName}>Đội xe tải sỉ</Text>
+                  </View>
+
+                  <View style={styles.signNode}>
+                    <Text style={styles.signRole}>Người Nhận Hàng</Text>
+                    <Text style={styles.signHint}>(Ký, ghi rõ họ tên)</Text>
+                    <View style={styles.signGap} />
+                    <Text style={styles.signName}>Quản lý {userName}</Text>
+                  </View>
+                </View>
+
+              </View>
+            </ScrollView>
+          </View>
+        </View>
+      )}
+
     </View>
   );
 }
@@ -3104,5 +3304,290 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 11,
     fontWeight: '800',
+  },
+
+  // Modal styling for Draft Checking Invoice
+  modalOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(15, 23, 42, 0.6)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 999,
+    padding: 40,
+  },
+  modalPaperContainer: {
+    width: '80%',
+    maxWidth: 900,
+    height: '90%',
+    backgroundColor: '#fff',
+    borderRadius: 24,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.25,
+    shadowRadius: 20,
+    overflow: 'hidden',
+    flexDirection: 'column',
+  },
+  modalActionsBar: {
+    padding: 20,
+    backgroundColor: '#f8fafc',
+    borderBottomWidth: 1.5,
+    borderBottomColor: '#cbd5e1',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  modalTitleText: {
+    fontSize: 15,
+    fontWeight: '900',
+    color: ORANGE_THEME.textDark,
+  },
+  modalActionBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 10,
+  },
+  invoicePaperScroll: {
+    flex: 1,
+    backgroundColor: '#f1f5f9',
+  },
+  invoicePaper: {
+    backgroundColor: '#fff',
+    padding: 48,
+    margin: 20,
+    borderRadius: 8,
+    minHeight: 1000,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.05,
+    shadowRadius: 10,
+  },
+  paperHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+  },
+  paperBrandName: {
+    fontSize: 15,
+    fontWeight: '950',
+    color: '#0f172a',
+  },
+  paperBrandAddress: {
+    fontSize: 12,
+    color: '#475569',
+    marginTop: 4,
+  },
+  paperBrandContact: {
+    fontSize: 11,
+    color: '#64748b',
+    marginTop: 2,
+  },
+  draftStamp: {
+    borderWidth: 2,
+    borderColor: '#e53935',
+    borderRadius: 8,
+    paddingVertical: 4,
+    paddingHorizontal: 12,
+    marginBottom: 12,
+    transform: [{ rotate: '-3deg' }],
+  },
+  draftStampText: {
+    fontSize: 12,
+    fontWeight: '950',
+    color: '#e53935',
+    textTransform: 'uppercase',
+  },
+  paperMetaLabel: {
+    fontSize: 12,
+    color: '#475569',
+    marginTop: 4,
+  },
+  paperDividerDouble: {
+    height: 4,
+    borderTopWidth: 2,
+    borderBottomWidth: 1,
+    borderColor: '#0f172a',
+    marginVertical: 20,
+  },
+  paperDivider: {
+    height: 1,
+    backgroundColor: '#cbd5e1',
+    marginVertical: 24,
+  },
+  paperTitle: {
+    fontSize: 20,
+    fontWeight: '950',
+    color: '#0f172a',
+    textAlign: 'center',
+  },
+  paperSubtitle: {
+    fontSize: 11,
+    color: '#64748b',
+    textAlign: 'center',
+    fontWeight: '700',
+    marginTop: 4,
+    marginBottom: 28,
+  },
+  paperDetailsGrid: {
+    flexDirection: 'row',
+    gap: 24,
+    marginBottom: 28,
+  },
+  detailsBlock: {
+    flex: 1,
+    backgroundColor: '#f8fafc',
+    borderWidth: 1,
+    borderColor: '#e2e8f0',
+    borderRadius: 12,
+    padding: 16,
+  },
+  detailsBlockTitle: {
+    fontSize: 11,
+    fontWeight: '900',
+    color: '#64748b',
+    marginBottom: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: '#e2e8f0',
+    paddingBottom: 6,
+  },
+  detailsText: {
+    fontSize: 12,
+    color: '#334155',
+    lineHeight: 18,
+    marginTop: 2,
+  },
+  paperTableContainer: {
+    borderWidth: 1.5,
+    borderColor: '#0f172a',
+    borderRadius: 6,
+    overflow: 'hidden',
+    marginBottom: 28,
+  },
+  paperTableHeader: {
+    flexDirection: 'row',
+    backgroundColor: '#f1f5f9',
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    borderBottomWidth: 1.5,
+    borderBottomColor: '#0f172a',
+  },
+  pTh: {
+    fontSize: 11,
+    fontWeight: '900',
+    color: '#0f172a',
+  },
+  paperTableRow: {
+    flexDirection: 'row',
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: '#e2e8f0',
+    alignItems: 'center',
+  },
+  pTd: {
+    fontSize: 12,
+    color: '#334155',
+  },
+  paperSummaryBlock: {
+    flexDirection: 'row',
+    gap: 24,
+    marginBottom: 28,
+  },
+  qrRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    backgroundColor: '#f8fafc',
+    borderWidth: 1,
+    borderColor: '#e2e8f0',
+    borderRadius: 12,
+    padding: 16,
+  },
+  mockQrCode: {
+    backgroundColor: '#fff',
+    padding: 10,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#cbd5e1',
+  },
+  qrTitle: {
+    fontSize: 12,
+    fontWeight: '900',
+    color: '#0f172a',
+  },
+  qrDesc: {
+    fontSize: 10,
+    color: '#64748b',
+    lineHeight: 14,
+    marginTop: 4,
+  },
+  paperTotalCalculations: {
+    width: 320,
+    alignSelf: 'flex-start',
+    gap: 8,
+  },
+  calcRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  calcLabel: {
+    fontSize: 12,
+    color: '#475569',
+  },
+  calcVal: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: '#0f172a',
+  },
+  calcRowTotal: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    borderTopWidth: 1.5,
+    borderColor: '#0f172a',
+    paddingTop: 8,
+    marginTop: 4,
+  },
+  calcLabelTotal: {
+    fontSize: 12,
+    fontWeight: '900',
+    color: '#0f172a',
+  },
+  calcValTotal: {
+    fontSize: 15,
+    fontWeight: '950',
+    color: ORANGE_THEME.primary,
+  },
+  signaturesContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 20,
+  },
+  signNode: {
+    width: '22%',
+    alignItems: 'center',
+  },
+  signRole: {
+    fontSize: 12,
+    fontWeight: '900',
+    color: '#0f172a',
+  },
+  signHint: {
+    fontSize: 10,
+    color: '#64748b',
+    marginTop: 2,
+  },
+  signGap: {
+    height: 64,
+  },
+  signName: {
+    fontSize: 11,
+    fontWeight: '800',
+    color: '#334155',
   },
 });
