@@ -7,6 +7,26 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../../contexts/AuthContext';
 import StaffBottomNav from '../../components/StaffBottomNav';
+import { Ionicons } from '@expo/vector-icons';
+
+const getZoneMeta = (locationName) => {
+  if (!locationName) return { icon: 'cube-outline', label: 'Kho sỉ', color: COLORS.primary, bg: '#e8f5e9' };
+  // Remove emojis and get clear name
+  const name = locationName.replace(/[^\w\s\dÀ-ỹ]/g, '').trim();
+  if (locationName.includes('tươi') || locationName.includes('fresh') || locationName.includes('1')) {
+    return { icon: 'leaf-outline', label: 'Thực phẩm tươi', color: '#2e7d32', bg: '#e8f5e9' };
+  }
+  if (locationName.includes('khô') || locationName.includes('dry') || locationName.includes('2')) {
+    return { icon: 'fast-food-outline', label: 'Đồ khô & Gia vị', color: '#ef6c00', bg: '#fff3e0' };
+  }
+  if (locationName.includes('mỹ') || locationName.includes('chemical') || locationName.includes('3')) {
+    return { icon: 'color-palette-outline', label: 'Hoá mỹ phẩm', color: '#00838f', bg: '#e0f7fa' };
+  }
+  if (locationName.includes('lạnh') || locationName.includes('frozen') || locationName.includes('4')) {
+    return { icon: 'snow-outline', label: 'Đồ đông lạnh', color: '#1565c0', bg: '#e3f2fd' };
+  }
+  return { icon: 'cube-outline', label: name || 'Khu vực kệ', color: COLORS.primary, bg: '#e8f5e9' };
+};
 
 const initialProducts = [
   { id: 1, location: '26.10.15', name: 'Bánh Quy Hải Hà 200g', sku: 'KF-00123', qty: 5, unit: 'Hộp', done: true },
@@ -106,31 +126,114 @@ export default function productListScreen() {
   };
 
   function renderItem({ item, index }) {
+    const isDone = item.done;
+    const meta = getZoneMeta(item.location);
+
     return (
-      <TouchableOpacity onPress={() => !item.done && startPicking(item, index)} disabled={item.done}>
-        <View style={[styles.itemRow, item.done && styles.itemDone]}>
-          <View style={styles.locationBox}>
-            <Text style={styles.locationText}>{item.location}</Text>
+      <TouchableOpacity 
+        onPress={() => !isDone && startPicking(item, index)} 
+        disabled={isDone}
+        activeOpacity={0.7}
+        style={{ marginBottom: 10 }}
+      >
+        <View style={[
+          styles.itemRow, 
+          isDone && styles.itemDone,
+          { 
+            backgroundColor: '#fff',
+            borderRadius: 16,
+            padding: 16,
+            flexDirection: 'row',
+            alignItems: 'center',
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.05,
+            shadowRadius: 8,
+            elevation: 2,
+            borderWidth: 1,
+            borderColor: isDone ? '#e2e8f0' : '#f1f5f9'
+          }
+        ]}>
+          {/* 1. Left Icon Container: Zone category indicator */}
+          <View style={{
+            width: 48,
+            height: 48,
+            borderRadius: 12,
+            backgroundColor: meta.bg || '#f1f5f9',
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginRight: 12
+          }}>
+            <Ionicons name={meta.icon} size={24} color={meta.color} />
           </View>
-          <View style={styles.itemInfo}>
-            <Text style={styles.itemName}>{item.name}</Text>
-            <Text style={styles.itemSKU}>{item.sku}</Text>
+
+          {/* 2. Middle Content: Product name, SKU, and Clean Zone Label */}
+          <View style={{ flex: 1, marginRight: 8 }}>
+            <Text 
+              style={{ 
+                fontSize: 14, 
+                fontWeight: '700', 
+                color: isDone ? '#94a3b8' : '#1e293b',
+                lineHeight: 18 
+              }} 
+              numberOfLines={2}
+            >
+              {item.name}
+            </Text>
+            
+            <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 6, flexWrap: 'wrap', gap: 6 }}>
+              {/* SKU label */}
+              <Text style={{ fontSize: 11, fontWeight: '600', color: '#64748b', backgroundColor: '#f1f5f9', paddingHorizontal: 6, paddingVertical: 2, borderRadius: 4 }}>
+                SKU: {item.sku}
+              </Text>
+              
+              {/* Zone label */}
+              <Text style={{ fontSize: 11, fontWeight: '700', color: meta.color, backgroundColor: meta.bg, paddingHorizontal: 8, paddingVertical: 2, borderRadius: 4 }}>
+                {meta.label}
+              </Text>
+            </View>
           </View>
-          <View style={styles.itemQty}>
-            <Text style={styles.qtyValue}>{item.done ? '✓' : item.qty}</Text>
-            <Text style={styles.qtyUnit}>{item.unit}</Text>
+
+          {/* 3. Right Content: Qty and Report Button */}
+          <View style={{ alignItems: 'flex-end', justifyContent: 'center', minWidth: 85 }}>
+            {/* Qty value */}
+            <View style={{ flexDirection: 'row', alignItems: 'baseline', marginBottom: 6 }}>
+              <Text style={{ 
+                fontSize: 20, 
+                fontWeight: '900', 
+                color: isDone ? '#94a3b8' : COLORS.primary 
+              }}>
+                {isDone ? '✓' : item.qty}
+              </Text>
+              {!isDone && (
+                <Text style={{ fontSize: 11, fontWeight: '600', color: '#64748b', marginLeft: 2 }}>
+                  {item.unit || 'cái'}
+                </Text>
+              )}
+            </View>
+
+            {/* Báo thiếu button */}
+            {!isDone && (
+              <TouchableOpacity
+                style={{
+                  backgroundColor: '#fff5f5',
+                  borderWidth: 1.2,
+                  borderColor: '#feb2b2',
+                  borderRadius: 8,
+                  paddingHorizontal: 8,
+                  paddingVertical: 4,
+                }}
+                onPress={() =>
+                  router.push({
+                    pathname: '/(worker)/missingitem',
+                    params: { itemId: item.taskId },
+                  })
+                }
+              >
+                <Text style={{ color: '#c53030', fontSize: 11, fontWeight: '700' }}>Báo thiếu</Text>
+              </TouchableOpacity>
+            )}
           </View>
-          <TouchableOpacity
-            style={styles.reportBtn}
-            onPress={() =>
-              router.push({
-                pathname: '/(worker)/missingitem',
-                params: { itemId: item.taskId },
-              })
-            }
-          >
-            <Text style={styles.reportBtnText}>Báo thiếu</Text>
-          </TouchableOpacity>
         </View>
       </TouchableOpacity>
     );
