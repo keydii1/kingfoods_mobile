@@ -19,6 +19,36 @@ import {
 import { getOrderStatusMeta, canCustomerCancelOrder } from '../../constants/orderStatus';
 import { validateNewPassword, PASSWORD_HINT } from '../../constants/passwordPolicy';
 
+// Timezone and Date formatting helpers for Vietnam Timezone (UTC+7)
+const formatOrderDate = (dateStr) => {
+  if (!dateStr) return '';
+  let normalizedStr = dateStr;
+  if (!dateStr.endsWith('Z') && !dateStr.includes('+') && !dateStr.includes('GMT')) {
+    normalizedStr = dateStr.replace(' ', 'T') + 'Z';
+  }
+  const date = new Date(normalizedStr);
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const year = date.getFullYear();
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  const seconds = String(date.getSeconds()).padStart(2, '0');
+  return `${hours}:${minutes}:${seconds} ${day}/${month}/${year}`;
+};
+
+const formatOrderDateOnly = (dateStr) => {
+  if (!dateStr) return '';
+  let normalizedStr = dateStr;
+  if (!dateStr.endsWith('Z') && !dateStr.includes('+') && !dateStr.includes('GMT')) {
+    normalizedStr = dateStr.replace(' ', 'T') + 'Z';
+  }
+  const date = new Date(normalizedStr);
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const year = date.getFullYear();
+  return `${day}/${month}/${year}`;
+};
+
 // Theme Colors
 const ORANGE_THEME = {
   primary: '#F26522', // Kingfood iconic orange
@@ -1084,7 +1114,7 @@ export default function StoreOrderWebScreen() {
                     {orders.map(order => {
                       const meta = getOrderStatusMeta(order.status);
                       const isSelected = selectedOrder?.id === order.id;
-                      const dateText = order.createdAt ? new Date(order.createdAt).toLocaleString('vi-VN') : '';
+                      const dateText = formatOrderDate(order.createdAt);
 
                       return (
                         <TouchableOpacity 
@@ -1124,7 +1154,7 @@ export default function StoreOrderWebScreen() {
                     <View style={styles.invoiceHeaderRow}>
                       <View>
                         <Text style={styles.invoiceHeading}>CHI TIẾT HÓA ĐƠN ĐẶT HÀNG</Text>
-                        <Text style={styles.invoiceSubtext}>Mã đơn hàng: #{selectedOrder.id} · Đặt ngày: {new Date(selectedOrder.createdAt).toLocaleString('vi-VN')}</Text>
+                        <Text style={styles.invoiceSubtext}>Mã đơn hàng: #{selectedOrder.id} · Đặt ngày: {formatOrderDate(selectedOrder.createdAt)}</Text>
                       </View>
 
                       {/* Web-only action items */}
@@ -1408,7 +1438,7 @@ export default function StoreOrderWebScreen() {
                           {statsOrders.map(order => (
                             <View key={order.id} style={styles.reportsTableRowWeb}>
                               <Text style={[styles.rtdCell, { flex: 1, fontWeight: 'bold' }]}>#{order.id}</Text>
-                              <Text style={[styles.rtdCell, { flex: 2.5 }]}>{new Date(order.createdAt).toLocaleDateString('vi-VN')}</Text>
+                              <Text style={[styles.rtdCell, { flex: 2.5 }]}>{formatOrderDateOnly(order.createdAt)}</Text>
                               <Text style={[styles.rtdCell, { flex: 2, color: getOrderStatusMeta(order.status).color, fontWeight: '800' }]}>
                                 {getOrderStatusMeta(order.status).label}
                               </Text>
