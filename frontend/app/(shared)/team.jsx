@@ -4,7 +4,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {router} from 'expo-router';
 import {useState, useEffect} from 'react';
 import {Ionicons} from '@expo/vector-icons';
-import {getUsers, updateUser, deleteUser} from '../../constants/services/api'
+import {getUsers, updateUser, deleteUser, getLocations, getDashboardStatus} from '../../constants/services/api'
 import {COLORS} from '../../constants/colors';
 
 // MockData 2 khu vực
@@ -17,14 +17,14 @@ const teams = [
                 id: '1', initials: 'LN', avatarColor: '#e8f5e9',
                 avatarText: COLORS.primary,
                 name: 'Trần Thị Lan',
-                order: 'Đang làm #KF-12345 · 45/52 SKU',
+                order: 'Đang làm #KF-12345 · 45/52 sp',
                 sku: 72, skuColor: COLORS.primary, status: 'good',
             },
             {
                 id: '2', initials: 'TM', avatarColor: '#fff3e0',
                 avatarText: '#e65100',
                 name: 'Phạm Thị Mai',
-                order: 'Đang làm #KF-12346 · 20/38 SKU',
+                order: 'Đang làm #KF-12346 · 20/38 sp',
                 sku: 43, skuColor: COLORS.error, status: 'warn',
             },
             {
@@ -44,7 +44,7 @@ const teams = [
                 id: '4', initials: 'VS', avatarColor: '#e3f2fd',
                 avatarText: '#1565c0',
                 name: 'Nguyễn Văn Sơn',
-                order: 'Đang làm #KF-12347 · 38/40 SKU',
+                order: 'Đang làm #KF-12347 · 38/40 sp',
                 sku: 61, skuColor: COLORS.primary, status: 'good',
             },
             {
@@ -78,7 +78,7 @@ function MemberRow({member, onEdit, onDelete}){
         {/* SKU/h */}
         <View style = {styles.memberSku}>
             <Text style= {[styles.skuValue, {color: member.skuColor}]}>{member.sku ?? '-'}</Text>
-            <Text style = {styles.skuUnit}>{member.status === 'break' ? 'Nghỉ': 'SKU/h'}</Text>
+            <Text style = {styles.skuUnit}>{member.status === 'break' ? 'Nghỉ': 'sp/giờ'}</Text>
         </View>
         {onEdit && (
             <TouchableOpacity onPress={onEdit} style={styles.memberAction}>
@@ -95,35 +95,49 @@ function MemberRow({member, onEdit, onDelete}){
 }
 
 export default function TeamScreen(){
-        const [users, setUsers] = useState([]);
+    const [users, setUsers] = useState([]);
+    const [locations, setLocations] = useState([]);
+    const [performance, setPerformance] = useState([]);
     const [loading, setLoading] = useState(true);
     const [editingUser, setEditingUser] = useState(null);
     const [editName, setEditName] = useState('');
+
     useEffect(() => {
-        async function fetchUsers(){
+        async function fetchTeamData(){
             try{
-                const res = await getUsers();
-                setUsers(Array.isArray(res) ? res : []);
+                const [usersRes, locationsRes, statsRes] = await Promise.all([
+                    getUsers(),
+                    getLocations(),
+                    getDashboardStatus()
+                ]);
+                console.log("[DEBUG TEAM] usersRes type/length:", Array.isArray(usersRes), usersRes?.length);
+                console.log("[DEBUG TEAM] locationsRes keys:", Object.keys(locationsRes || {}));
+                console.log("[DEBUG TEAM] statsRes performance count:", statsRes?.staffPerformance?.length);
+                
+                setUsers(Array.isArray(usersRes) ? usersRes : []);
+                setLocations(locationsRes?.data || locationsRes?.items || locationsRes || []);
+                setPerformance(statsRes?.staffPerformance || []);
             }
             catch(err){
-                // giữ mockdata nêu lõi
+                console.error("[CRITICAL ERROR IN TEAM.JSX FETCH]:", err);
             }
             finally {
                 setLoading(false);
             }
         }
-        fetchUsers();
+        fetchTeamData();
     }, []);
+
     const handleEditUser = (user) => {
         setEditingUser(user);
-        setEditName(user.fullName || user.username || '');
+        setEditName(user.name || user.fullName || user.username || '');
     };
 
     const confirmEditUser = async () => {
         if (!editingUser) return;
         try {
-            const updated = await updateUser(editingUser._id || editingUser.id, { fullName: editName });
-            setUsers(prev => prev.map(u => (u._id || u.id) === (editingUser._id || editingUser.id) ? { ...u, fullName: editName } : u));
+            const updated = await updateUser(editingUser._id || editingUser.id, { name: editName });
+            setUsers(prev => prev.map(u => (u._id || u.id) === (editingUser._id || editingUser.id) ? { ...u, name: editName, fullName: editName } : u));
             setEditingUser(null);
             Alert.alert('Thành công', 'Cập nhật thông tin thành công');
         } catch {
@@ -134,7 +148,7 @@ export default function TeamScreen(){
     const handleDeleteUser = (user) => {
         Alert.alert(
             'Xoá nhân viên',
-            `Xoá "${user.fullName || user.username}"?`,
+            `Xoá "${user.name || user.fullName || user.username}"?`,
             [
                 { text: 'Huỷ', style: 'cancel' },
                 { text: 'Xoá', style: 'destructive', onPress: async () => {
@@ -149,10 +163,22 @@ export default function TeamScreen(){
         );
     };
 
+    // Location mapping
+    const locMap = {};
+    locations.forEach(loc => {
+        locMap[loc.id] = loc.name;
+    });
+
+    // Performance mapping
+    const perfMap = {};
+    performance.forEach(p => {
+        perfMap[p.staffId] = p;
+    });
+
     const activeStats = users.length > 0
       ? {
-          totalActive: users.filter(u => u.isActive).length,
-          totalSKU: users.reduce((s, u) => s + (u.todaySku || 0), 0),
+          totalActive: performance.filter(p => p.totalItemsPicked > 0).length,
+          totalSKU: Math.round(performance.reduce((s, p) => s + (p.pickingSpeed || 0), 0) * 10) / 10,
           zoneDetails: '',
         }
       : teams.reduce((acc, t) => {
@@ -162,6 +188,7 @@ export default function TeamScreen(){
           acc.zoneDetails += `${t.zone.split(' ').slice(1).join(' ')}: ${active.length} · `;
           return acc;
         }, { totalActive: 0, totalSKU: 0, zoneDetails: '' });
+
     return(
         <SafeAreaView style = {styles.safeArea}>
             {/* Headder */}
@@ -181,7 +208,7 @@ export default function TeamScreen(){
                     <Ionicons name="people-outline" size={24} color={COLORS.primary} style={{ marginRight: 6 }} />
                     <View style = {styles.alertBody}>
                         <Text style = {styles.alertTitle}>{activeStats.totalActive} nhân viên vẫn còn đang hoạt động</Text>
-                        <Text style = {styles.alertSub}>{activeStats.zoneDetails}Tổng năng suất: {activeStats.totalSKU} SKU/h</Text>
+                        <Text style = {styles.alertSub}>{activeStats.zoneDetails}Tổng năng suất: {activeStats.totalSKU} sp/giờ</Text>
                     </View>
                 </View>
                 {/* Danh sách từng khu vực */}
@@ -189,24 +216,28 @@ export default function TeamScreen(){
                     <ActivityIndicator color={COLORS.primary} size = 'large' style = {{marginTop : 40}} />
                 ): 
                 users.length > 0 ? (
-                    users.map(user =>(
-                        <MemberRow
-                        key = {user._id || user.id}
-                        member = {{
-                            id: user._id,
-                            initials : (user.fullName || user.username || 'NV').split(' ').map(w =>w[0]).slice(-2).join('').toUpperCase(),
-                            avatarColor: '#e8f5e9',
-                            avatarText: COLORS.primary,
-                            name: user.fullName || user.username,
-                            order: user.currentTask || 'Không có nhiệm vụ',
-                            sku: user.todaySku || null,
-                            skuColor: COLORS.primary,
-                            status: user.isActive ? 'good' : 'offline',
-                        }}
-                        onEdit={() => handleEditUser(user)}
-                        onDelete={() => handleDeleteUser(user)}
-                    />
-                    ))
+                    users.map(user =>{
+                        const perf = perfMap[user.id] || {};
+                        const locName = locMap[user.assignedLocationId] || 'Chưa phân công';
+                        return (
+                            <MemberRow
+                                key = {user._id || user.id}
+                                member = {{
+                                    id: user._id || user.id,
+                                    initials : (user.name || user.fullName || user.username || 'NV').split(' ').map(w =>w[0]).slice(-2).join('').toUpperCase(),
+                                    avatarColor: '#e8f5e9',
+                                    avatarText: COLORS.primary,
+                                    name: user.name || user.fullName || user.username,
+                                    order: user.currentTask || `Phân công: ${locName}`,
+                                    sku: perf.pickingSpeed !== undefined ? perf.pickingSpeed : null,
+                                    skuColor: perf.warning ? COLORS.error : COLORS.primary,
+                                    status: perf.totalItemsPicked > 0 ? 'good' : (perf.pickingSpeed !== undefined ? 'warn' : 'offline'),
+                                }}
+                                onEdit={() => handleEditUser(user)}
+                                onDelete={() => handleDeleteUser(user)}
+                            />
+                        );
+                    })
                 ):
             teams.map((team) => (
                 <View key = {team.zone} style = {styles.card}>

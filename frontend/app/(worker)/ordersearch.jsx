@@ -112,11 +112,8 @@ export default function OrderSearchScreen() {
           onChangeText={setQuery}
           autoFocus={true}
           autoCapitalize="none"
-          autoCorrect={false}
+          autoCorrect={true}
           spellCheck={false}
-          autoComplete="off"
-          importantForAutofill="no"
-          textContentType="oneTimeCode"
         />
         {query.length > 0 && (
           <TouchableOpacity onPress={() => setQuery("")}>

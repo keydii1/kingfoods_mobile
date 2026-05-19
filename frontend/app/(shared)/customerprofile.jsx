@@ -112,11 +112,8 @@ export default function CustomerProfileScreen() {
                   placeholder="Tên quản lý"
                   placeholderTextColor="rgba(255,255,255,0.6)"
                   autoCapitalize="none"
-                  autoCorrect={false}
+                  autoCorrect={true}
                   spellCheck={false}
-                  autoComplete="off"
-                  importantForAutofill="no"
-                  textContentType="oneTimeCode"
                 />
               ) : (
                 <Text style={styles.name}>{user?.name || 'Chưa cập nhật'}</Text>
@@ -148,11 +145,8 @@ export default function CustomerProfileScreen() {
                     placeholder="Số điện thoại"
                     keyboardType="phone-pad"
                     autoCapitalize="none"
-                    autoCorrect={false}
+                    autoCorrect={true}
                     spellCheck={false}
-                    autoComplete="off"
-                    importantForAutofill="no"
-                    textContentType="oneTimeCode"
                   />
                 ) : (
                   <Text style={[styles.infoValue, styles.infoValueInline]}>

@@ -108,11 +108,8 @@ export default function SkuSearchScreen(){
         onChangeText={setQuery}
         autoFocus={true}
         autoCapitalize="none"
-        autoCorrect={false}
+        autoCorrect={true}
         spellCheck={false}
-        autoComplete="off"
-        importantForAutofill="no"
-        textContentType="oneTimeCode"
     />
 
     {query.length > 0 ? (

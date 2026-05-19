@@ -82,11 +82,13 @@ export class DashboardService {
           ? Math.round((totalItemsPicked / totalHoursSpent) * 10) / 10
           : 0;
 
-      // Cảnh báo nếu hiệu suất dưới 60 sản phẩm / giờ
-      const warning = pickingSpeed < 60;
-      const alertMessage = warning
-        ? `⚠️ Cảnh báo: Tốc độ pick hàng thấp (${pickingSpeed} sp/giờ), dưới định mức tối thiểu 60 sp/giờ!`
-        : `✅ Đạt yêu cầu: Hiệu suất tốt (${pickingSpeed} sp/giờ).`;
+      // Cảnh báo nếu hiệu suất dưới 6.5 sản phẩm / giờ và nhân viên ĐÃ thực sự pick hàng
+      const warning = totalItemsPicked > 0 && pickingSpeed < 6.5;
+      const alertMessage = totalItemsPicked === 0
+        ? `ℹ️ Chưa ghi nhận ca soạn hàng hôm nay.`
+        : warning
+          ? `⚠️ Cảnh báo: Tốc độ pick hàng thấp (${pickingSpeed} sp/giờ), dưới định mức tối thiểu 6.5 sp/giờ!`
+          : `✅ Đạt yêu cầu: Hiệu suất tốt (${pickingSpeed} sp/giờ).`;
 
       staffPerformance.push({
         staffId: staff.id,

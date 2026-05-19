@@ -23,7 +23,7 @@ export class UserAdminController {
   @Post("/")
   @Validator(CreateUserSchema)
   @Summary("Tạo nhân viên mới")
-  async register(@Req() req: Request, @Res() res: Response, @BodyParams() body: User) {
+  async register(@Req() req: Request, @Res() res: Response, @BodyParams() body: any) {
     const result = await this.userService.register(body);
     return res.CREATED("User created successfully", result);
   }

@@ -59,7 +59,7 @@ export default function ProfileScreen (){
     }, []);
 
     const startEdit = () => {
-      setEditForm({ fullName: user?.fullName || '', zone: user?.zone || '' });
+      setEditForm({ name: user?.name || user?.fullName || '', zone: user?.zone || '' });
       setEditing(true);
     };
 
@@ -67,8 +67,8 @@ export default function ProfileScreen (){
 
     const saveEdit = async () => {
       try {
-        await updateProfile(editForm);
-        setUser(prev => ({ ...prev, ...editForm }));
+        await updateProfile({ name: editForm.name });
+        setUser(prev => ({ ...prev, name: editForm.name }));
         setEditing(false);
         Alert.alert('Thành công', 'Cập nhật hồ sơ thành công');
       } catch {
@@ -104,12 +104,12 @@ export default function ProfileScreen (){
             {editing ? (
               <TextInput
                 style={[styles.name, styles.editInput, { color: '#fff', borderBottomColor: 'rgba(255,255,255,0.5)' }]}
-                value={editForm.fullName}
-                onChangeText={t => setEditForm(f => ({ ...f, fullName: t }))}
+                value={editForm.name}
+                onChangeText={t => setEditForm(f => ({ ...f, name: t }))}
                 placeholderTextColor="rgba(255,255,255,0.5)"
               />
             ) : (
-              <Text style={styles.name}>{user?.fullName || 'Phạm Thị Mai'}</Text>
+              <Text style={styles.name}>{user?.name || user?.fullName || 'Phạm Thị Mai'}</Text>
             )}
             <Text style={styles.idText}>
                 Mã NV: {user?.employeeId || 'KF-NV-042'} Ca Sáng
@@ -140,7 +140,7 @@ export default function ProfileScreen (){
         {/* Thông tin */}
         <View style={styles.card}>
             <Text style={styles.cardTitle}>Thông tin cá nhân</Text>
-            <InfoRow label='Họ và Tên' value={user?.fullName || 'Phạm Thị Mai'} />
+            <InfoRow label='Họ và Tên' value={user?.name || user?.fullName || 'Phạm Thị Mai'} />
             <InfoRow label='Khu vực' value={user?.zone || 'Bánh & Kẹo'} />
             <InfoRow label='Ngày vào làm'
                 value={user?.startDate

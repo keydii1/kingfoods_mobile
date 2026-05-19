@@ -1,4 +1,22 @@
-export const BASE_URL = 'https://kingfood-wms-backend.onrender.com/api/v1';
+import Constants from 'expo-constants';
+
+const getBaseUrl = () => {
+    // Dynamically detect local host IP to work on both simulators and physical devices
+    const debuggerHost = Constants.expoConfig?.hostUri || '';
+    const localhost = debuggerHost.split(':')[0];
+    
+    if (__DEV__ && localhost) {
+        return `http://${localhost}:9999/api/v1`;
+    }
+    // Fallback to local host if no debuggerHost
+    if (__DEV__) {
+        return 'http://localhost:9999/api/v1';
+    }
+    return 'https://kingfood-wms-backend.onrender.com/api/v1';
+};
+
+export const BASE_URL = getBaseUrl();
+console.log('[WMS] Connected to API URL:', BASE_URL);
 
 
 let authToken = null;

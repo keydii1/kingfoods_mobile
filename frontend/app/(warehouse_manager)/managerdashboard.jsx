@@ -64,12 +64,19 @@ function ZoneRow({zone}){
 function ShortageItem({item}){
     return(
         <View style={styles.shortageRow}>
-            <Ionicons name={item.icon} size={22} color={COLORS.error} />
-            <View style = {styles.shortageInfo}>
-                <Text style = {styles.shortageName}>{item.name}</Text>
-                <Text style = {styles.shortageLoc}>{item.loc}</Text>
+            <View style={styles.shortageIconContainer}>
+                <Ionicons name="alert-circle" size={18} color="#e53935" />
             </View>
-            <Text style = {styles.shortageWho}>{item.who}</Text>
+            <View style={styles.shortageInfo}>
+                <Text style={styles.shortageName}>{item.name}</Text>
+                <View style={styles.shortageMeta}>
+                    <View style={styles.shortageLocBadge}>
+                        <Ionicons name="location-outline" size={10} color="#666" style={{ marginRight: 2 }} />
+                        <Text style={styles.shortageLocText}>{item.loc}</Text>
+                    </View>
+                    <Text style={styles.shortageWhoText}>{item.who}</Text>
+                </View>
+            </View>
         </View>
     );
 }
@@ -78,54 +85,81 @@ export default function ManagerDashboardScreen(){
     const [stats, setStats] = useState(null);
     const [incidents, setIncidents] = useState([]);
     const [loading, setLoading] = useState(true);
+
     const s = stats || {};
     const totals = s.totals || {};
-    const totalPickedSku = totals.itemsPicked ?? 0;
-    const activeWorkers  = s.staffPerformance?.length ?? 0;
-    const totalWorkers   = (s.staffPerformance?.length ?? 0) + 0;
+    
+    // Dynamic KPI calculations
+    const totalPickedItems = totals.itemsPicked ?? 0;
+    const activeWorkers  = s.staffPerformance?.filter(p => p.totalItemsPicked > 0).length ?? 0;
+    const totalWorkers   = s.staffPerformance?.length ?? 0;
     const pendingOrders  = totals.pendingOrders ?? 0;
-    const zoneData       = null;
+    const pendingIncidentsCount = incidents.filter(inc => inc.status === 'pending').length;
 
     const displayKpis = [
-        { icon: 'checkmark-circle-outline', value: String(totalPickedSku),
-          label: 'SKU đã pick', color: COLORS.successBg, textColor: COLORS.primary },
+        { icon: 'checkmark-circle-outline', value: String(totalPickedItems),
+          label: 'Sản phẩm đã pick', color: COLORS.successBg, textColor: COLORS.primary },
         { icon: 'people-outline', value: `${activeWorkers}/${totalWorkers}`,
-          label: 'NV đang làm', color: '#e3f2fd', textColor: '#1565c0' },
-        { icon: 'warning-outline', value: String(incidents.length),
+          label: 'NV hoạt động', color: '#e3f2fd', textColor: '#1565c0' },
+        { icon: 'warning-outline', value: String(pendingIncidentsCount),
           label: 'Báo thiếu', color: COLORS.warningBg, textColor: '#e65100' },
         { icon: 'cube-outline', value: String(pendingOrders),
           label: 'Đơn tồn', color: '#f3e5f5', textColor: '#7b1fa2' },
     ];
-    const displayZones = Array.isArray(zoneData) && zoneData.length > 0
-        ? zoneData.map(z => ({
-            icon: z.icon || 'cube-outline',
-            name: z.name || z.zoneName || z.zone_name || '',
-            pct:  z.pct ?? z.completion ?? 0,
-            color: z.color || COLORS.primary,
-          }))
-        : zones;
-    const displayShortages = incidents.length > 0
-    ? incidents.slice(0, 3).map(inc => ({
-        id: inc._id,
-        icon: 'warning-outline',
-        name: inc.productName || inc.product_name || 'Sản phẩm',
-        loc: inc.location || inc.location_name || '',
-        who: `${inc.reportedBy || inc.reported_by || ''} · ${inc.time || inc.created_at || ''}`,
-    }))
-    : shortages;
+
+    // Dynamic hourly productivity mapping
+    const maxHourPicked = Math.max(...(s.hourlyProductivity?.map(h => h.totalItemsPicked) || [1]));
+
+    // Dynamic Top picking staff sorted by speed
+    const topStaff = [...(s.staffPerformance || [])]
+        .sort((a, b) => b.pickingSpeed - a.pickingSpeed)
+        .slice(0, 3);
+
+    // Dynamic Underperforming staff below 60 sp/giờ
+    const underperformingStaff = s.staffPerformance?.filter(p => p.warning && p.totalItemsPicked > 0) || [];
+
+    // Dynamic pending shortages
+    const displayShortages = incidents.filter(inc => inc.status === 'pending').slice(0, 3).map(inc => {
+        let productName = 'Sản phẩm';
+        let locationName = 'Chưa định vị';
+
+        if (inc.task?.orderDetail?.product?.name) {
+            productName = inc.task.orderDetail.product.name;
+        } else if (inc.reason?.includes(':')) {
+            const detailText = inc.reason.substring(inc.reason.indexOf(':') + 1).trim();
+            productName = detailText.split('(')[0].trim();
+        }
+
+        if (inc.task?.location?.code) {
+            locationName = inc.task.location.code;
+        } else if (inc.reason?.includes('Tại vị trí:')) {
+            const match = inc.reason.match(/Tại vị trí:\s*([^)]+)/);
+            if (match && match[1]) {
+                locationName = match[1].trim();
+            }
+        }
+
+        const reporterName = inc.reporter?.name || inc.reporter?.fullName || inc.reporter?.username || inc.reportedBy || 'Nhân viên';
+
+        return {
+            id: inc.id || inc._id,
+            icon: 'warning',
+            name: productName,
+            loc: locationName,
+            who: `${reporterName} · ${inc.createdAt ? new Date(inc.createdAt).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) : ''}`,
+        };
+    });
 
     useEffect(() => {
         async function fetchAll(){
             try{
                 const statsRes = await getDashboardStatus();
-                console.log('Dashboard stats:', JSON.stringify(statsRes, null, 2));
                 setStats(statsRes);
             } catch (err) {
                 console.log('Stats error:', err.message);
             }
             try {
                 const incidentsRes = await getIncidents();
-                console.log('Incidents:', JSON.stringify(incidentsRes, null, 2));
                 setIncidents(Array.isArray(incidentsRes) ? incidentsRes: [] );
             } catch (err) {
                 console.log('Incidents error:', err.message);
@@ -164,31 +198,138 @@ export default function ManagerDashboardScreen(){
                     ))}
                 </View>
 
-                {/* Hoàn thành theo khu vực */}
+                {/* Phân tích trạng thái đơn hàng */}
                 <View style = {styles.card}>
-                    <Text style = {styles.cardTitle}>Hoàn thành theo khu vực</Text>
-                    {displayZones.map((zone) => (
-                        <ZoneRow key = {zone.name} zone = {zone} />
-                    ))}
-                </View>
-
-                {/* Alert cảnh báo năng suất làm việc */}
-                <View style = {styles.alert}>
-                    <Ionicons name="warning-outline" size={24} color="#e65100" style={{ marginRight: 4 }} />
-                    <View style = {styles.alertBody}>
-                        <Text style = {styles.alertTitle}>2 nhân viên dưới mức năng suất</Text>
-                        <Text style={styles.alertSub}>
-                            Phạm Thị Mai (43 SKU/h) và Trần Văn Đức (41 SKU/h) đang dưới ngưỡng 50 SKU/h.
-                        </Text>
+                    <Text style = {styles.cardTitle}>Phân tích trạng thái đơn hàng</Text>
+                    <View style = {styles.orderStatsGrid}>
+                        <View style = {styles.orderStatBox}>
+                            <View style = {[styles.orderStatIconContainer, { backgroundColor: '#e3f2fd' }]}>
+                                <Ionicons name="time-outline" size={20} color="#2196f3" />
+                            </View>
+                            <View style = {styles.orderStatInfo}>
+                                <Text style = {styles.orderStatValue}>{s.ordersByStatus?.pending ?? 0}</Text>
+                                <Text style = {styles.orderStatLabel}>Chờ xử lý / Đơn mới</Text>
+                            </View>
+                        </View>
+                        <View style = {styles.orderStatBox}>
+                            <View style = {[styles.orderStatIconContainer, { backgroundColor: '#fff3e0' }]}>
+                                <Ionicons name="cube-outline" size={20} color="#ff9800" />
+                            </View>
+                            <View style = {styles.orderStatInfo}>
+                                <Text style = {styles.orderStatValue}>{s.ordersByStatus?.processing ?? 0}</Text>
+                                <Text style = {styles.orderStatLabel}>Đang soạn hàng</Text>
+                            </View>
+                        </View>
+                        <View style = {styles.orderStatBox}>
+                            <View style = {[styles.orderStatIconContainer, { backgroundColor: '#e8f5e9' }]}>
+                                <Ionicons name="checkmark-circle-outline" size={20} color="#4caf50" />
+                            </View>
+                            <View style = {styles.orderStatInfo}>
+                                <Text style = {styles.orderStatValue}>{(s.ordersByStatus?.delivered ?? 0) + (s.ordersByStatus?.shipped ?? 0)}</Text>
+                                <Text style = {styles.orderStatLabel}>Thành công</Text>
+                            </View>
+                        </View>
+                        <View style = {styles.orderStatBox}>
+                            <View style = {[styles.orderStatIconContainer, { backgroundColor: '#ffebee' }]}>
+                                <Ionicons name="close-circle-outline" size={20} color="#f44336" />
+                            </View>
+                            <View style = {styles.orderStatInfo}>
+                                <Text style = {styles.orderStatValue}>{s.ordersByStatus?.cancelled ?? 0}</Text>
+                                <Text style = {styles.orderStatLabel}>Đã huỷ</Text>
+                            </View>
+                        </View>
                     </View>
                 </View>
 
+                {/* Live Hourly Productivity Chart */}
+                <View style = {styles.card}>
+                    <Text style = {styles.cardTitle}>Năng suất soạn hàng theo giờ</Text>
+                    {s.hourlyProductivity && s.hourlyProductivity.length > 0 ? (
+                        s.hourlyProductivity.slice(0, 4).map((h) => {
+                            const pct = Math.round((h.totalItemsPicked / maxHourPicked) * 100) || 0;
+                            return (
+                                <View style = {styles.zoneRow} key={h.hour}>
+                                    <Ionicons name="time-outline" size={18} color={COLORS.primary} style={{ marginRight: 6 }} />
+                                    <Text style = {styles.zoneName}>{h.label}</Text>
+                                    <View style = {styles.zoneBar}>
+                                        <View style = {[styles.zoneBarFill, {width: `${pct}%`, backgroundColor: COLORS.primary}]}/> 
+                                    </View>
+                                    <Text style = {[styles.zonePct, {color: COLORS.primary, width: 70}]} >{h.totalItemsPicked} sp</Text>
+                                </View>
+                            );
+                        })
+                    ) : (
+                        <View style={{ alignItems: 'center', paddingVertical: 15 }}>
+                            <Text style={{ fontSize: 13, color: '#888' }}>Chưa ghi nhận năng suất soạn hàng theo giờ</Text>
+                        </View>
+                    )}
+                </View>
+
+                {/* Top Picking Staff Leaderboard */}
+                <View style = {styles.card}>
+                    <Text style = {styles.cardTitle}>Picker xuất sắc nhất hôm nay</Text>
+                    {topStaff.length > 0 ? (
+                        topStaff.map((staff, idx) => {
+                            const icons = ['🥇', '🥈', '🥉'];
+                            return (
+                                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 10, borderBottomWidth: idx < topStaff.length - 1 ? 0.5 : 0, borderColor: '#eee' }} key={staff.staffId}>
+                                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                                        <Text style={{ fontSize: 16 }}>{icons[idx] || '👤'}</Text>
+                                        <Text style={{ fontSize: 14, fontWeight: '600', color: COLORS.text }}>{staff.name}</Text>
+                                    </View>
+                                    <View style={{ alignItems: 'flex-end' }}>
+                                        <Text style={{ fontSize: 13, fontWeight: '700', color: COLORS.primary }}>{staff.pickingSpeed} sp/giờ</Text>
+                                        <Text style={{ fontSize: 10, color: '#888' }}>Đã soạn: {staff.totalItemsPicked} sp</Text>
+                                    </View>
+                                </View>
+                            );
+                        })
+                    ) : (
+                        <View style={{ alignItems: 'center', paddingVertical: 10 }}>
+                            <Text style={{ fontSize: 13, color: '#888' }}>Chưa có số liệu picker</Text>
+                        </View>
+                    )}
+                </View>
+
+                {/* Alert cảnh báo năng suất làm việc */}
+                {underperformingStaff.length > 0 ? (
+                    <View style = {styles.alert}>
+                        <Ionicons name="warning-outline" size={24} color="#e65100" style={{ marginRight: 4 }} />
+                        <View style = {styles.alertBody}>
+                            <Text style = {styles.alertTitle}>{underperformingStaff.length} nhân viên dưới mức năng suất</Text>
+                            <Text style={styles.alertSub}>
+                                {underperformingStaff.slice(0, 3).map(p => `${p.name} (${p.pickingSpeed} sp/giờ)`).join(', ')}
+                                {underperformingStaff.length > 3 ? ` và ${underperformingStaff.length - 3} nhân viên khác` : ''} đang dưới định mức tối thiểu 6.5 sp/giờ.
+                            </Text>
+                        </View>
+                    </View>
+                ) : (
+                    <View style = {[styles.alert, { backgroundColor: '#e8f5e9', borderLeftColor: COLORS.success }]}>
+                        <Ionicons name="checkmark-circle-outline" size={24} color={COLORS.primary} style={{ marginRight: 4 }} />
+                        <View style = {styles.alertBody}>
+                            <Text style = {[styles.alertTitle, { color: COLORS.primary }]}>Năng suất Picker hoàn hảo!</Text>
+                            <Text style={styles.alertSub}>
+                                Tất cả nhân viên soạn hàng đều đạt hiệu suất tiêu chuẩn (trên 6.5 sp/giờ).
+                            </Text>
+                        </View>
+                    </View>
+                )}
+
                 {/* Sản phẩm còn thiếu */}
                 <View style = {styles.card}>
-                    <Text style = {styles.cardTitle}>Sản phẩm còn đang thiếu</Text>
-                    {displayShortages.map((item) => (
-                        <ShortageItem key = {item.id} item = {item} />
-                    ))}
+                    <Text style = {styles.cardTitle}>Sản phẩm báo thiếu tại kệ</Text>
+                    {displayShortages.length > 0 ? (
+                        displayShortages.map((item) => (
+                            <ShortageItem key = {item.id} item = {item} />
+                        ))
+                    ) : (
+                        <View style={{ alignItems: 'center', paddingVertical: 20 }}>
+                            <Ionicons name="checkmark-circle" size={40} color={COLORS.primary} />
+                            <Text style={{ fontSize: 13, color: '#888', marginTop: 8, fontWeight: '500' }}>
+                                Không có báo thiếu nào cần xử lý!
+                            </Text>
+                        </View>
+                    )}
                 </View>
             </ScrollView>
 
@@ -374,27 +515,54 @@ const styles = StyleSheet.create({
     // Shortage
     shortageRow: {
         flexDirection: 'row',
-        alignItems: 'center',
-        paddingVertical: 10,
+        alignItems: 'flex-start',
+        paddingVertical: 12,
         borderBottomWidth: 0.5,
-        borderBottomColor: '#f5f5f5',
-        gap: 10,
+        borderBottomColor: '#f0f0f0',
     },
-    shortageIcon: { fontSize: 22 },
-    shortageInfo: { flex: 1 },
-    shortageName: {
-        fontSize: 14,
-        fontWeight: '600',
-        color: COLORS.text,
-    },
-    shortageLoc: {
-        fontSize: 11,
-        color: '#888',
+    shortageIconContainer: {
+        width: 32,
+        height: 32,
+        borderRadius: 16,
+        backgroundColor: '#ffebee',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginRight: 10,
         marginTop: 2,
     },
-    shortageWho: {
+    shortageInfo: {
+        flex: 1,
+    },
+    shortageName: {
+        fontSize: 14,
+        fontWeight: '700',
+        color: '#222',
+        lineHeight: 20,
+    },
+    shortageMeta: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginTop: 6,
+    },
+    shortageLocBadge: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#f5f5f5',
+        paddingHorizontal: 8,
+        paddingVertical: 3,
+        borderRadius: 6,
+        borderWidth: 0.5,
+        borderColor: '#e0e0e0',
+    },
+    shortageLocText: {
+        fontSize: 10,
+        fontWeight: '700',
+        color: '#555',
+    },
+    shortageWhoText: {
         fontSize: 11,
-        color: '#aaa',
+        color: '#888',
     },
 
     // Bottom Nav
@@ -421,5 +589,40 @@ const styles = StyleSheet.create({
     navActive: {
         color: COLORS.primary,
         fontWeight: '700',
+    },
+    orderStatsGrid: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'space-between',
+        gap: 10,
+    },
+    orderStatBox: {
+        width: '48%',
+        backgroundColor: '#f8f9fa',
+        borderRadius: 12,
+        padding: 12,
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 10,
+    },
+    orderStatIconContainer: {
+        width: 36,
+        height: 36,
+        borderRadius: 18,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    orderStatInfo: {
+        flex: 1,
+    },
+    orderStatValue: {
+        fontSize: 18,
+        fontWeight: '800',
+        color: COLORS.text,
+    },
+    orderStatLabel: {
+        fontSize: 10,
+        color: '#777',
+        marginTop: 2,
     },
 });

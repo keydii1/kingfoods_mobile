@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, TextInput, ActivityIndicator, Image } from 'react-native';
 import { Alert } from '../../utils/appAlert';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
-import { router } from 'expo-router';
+import { router, useNavigation } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../../constants/colors';
 import { useAuth } from '../../contexts/AuthContext';
@@ -10,8 +10,68 @@ import { useStoreCart } from '../../contexts/StoreCartContext';
 import { getProducts, createOrder } from '../../constants/services/api';
 import { OrderConfirmModal, OrderSuccessOverlay } from '../../components/OrderCheckoutOverlay';
 import { notifyOrdersRefresh } from '../../utils/ordersRefresh';
+import { playSound } from '../../utils/soundService';
 
 const CART_LIST_MAX_HEIGHT = 152;
+
+// Static Vietnamese accent-insensitive helper
+const removeAccents = (str) => {
+  if (!str) return '';
+  return str
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/đ/g, 'd')
+    .replace(/Đ/g, 'D');
+};
+
+// Static Word boundary matching helper
+const matchesSearch = (text, search) => {
+  const normalizedText = removeAccents(text.toLowerCase());
+  const normalizedSearch = removeAccents(search.trim().toLowerCase());
+  if (!normalizedSearch) return true;
+  
+  const searchWords = normalizedSearch.split(/\s+/).filter(Boolean);
+  if (searchWords.length === 0) return true;
+  
+  const textWords = normalizedText.split(/\s+/).filter(Boolean);
+  
+  return searchWords.every(sWord => 
+    textWords.some(tWord => tWord.startsWith(sWord))
+  );
+};
+
+// Custom debounce utility
+const debounce = (func, delay) => {
+  let timeoutId;
+  return (...args) => {
+    if (timeoutId) clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => {
+      func(...args);
+    }, delay);
+  };
+};
+
+// Isolated Uncontrolled SearchBar component to prevent parent re-renders and any Telex IME conflicts
+const SearchBar = ({ onSearch }) => {
+  const debouncedSearch = useMemo(() => {
+    return debounce(onSearch, 500);
+  }, [onSearch]);
+
+  return (
+    <View style={styles.searchContainer}>
+      <Ionicons name="search-outline" size={18} color="#aaa" style={{ marginRight: 8 }} />
+      <TextInput
+        style={styles.searchInput}
+        placeholder="Tìm sản phẩm..."
+        placeholderTextColor="#aaa"
+        onChangeText={debouncedSearch}
+        autoCapitalize="none"
+        autoCorrect={true}
+        spellCheck={false}
+      />
+    </View>
+  );
+};
 
 export default function StoreOrderScreen() {
   const [productCatalog, setProductCatalog] = useState([]);
@@ -20,15 +80,30 @@ export default function StoreOrderScreen() {
   const [showConfirm, setShowConfirm] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const { userName } = useAuth();
-  const { cart, addToCart, removeFromCart, clearCart } = useStoreCart();
+  const { cart, addToCart, removeFromCart, clearCart, persistCart } = useStoreCart();
   const insets = useSafeAreaInsets();
-  const [search, setSearch] = useState('');
+  const [searchDebounced, setSearchDebounced] = useState('');
   const [cartExpanded, setCartExpanded] = useState(true);
+
+  const navigation = useNavigation();
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('blur', () => {
+      if (!persistCart) {
+        clearCart();
+      }
+    });
+    return unsubscribe;
+  }, [navigation, persistCart, clearCart]);
+
+  const handleSearch = useCallback((text) => {
+    setSearchDebounced(text);
+  }, []);
   
-  const filteredProducts = productCatalog.filter(p =>
-    p.name.toLowerCase().includes(search.toLowerCase()) ||
-    p.sku.toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredProducts = useMemo(() => {
+    return productCatalog.filter(p => {
+      return matchesSearch(p.name, searchDebounced) || matchesSearch(p.sku, searchDebounced);
+    });
+  }, [productCatalog, searchDebounced]);
 
   useEffect(() => {
       async function fetchCatalog() {
@@ -77,6 +152,7 @@ export default function StoreOrderScreen() {
       clearCart();
       notifyOrdersRefresh();
       setShowSuccess(true);
+      playSound('success'); // Play physical success sound!
     } catch (err) {
       Alert.alert('Lỗi', err.message || 'Không đặt được hàng');
     } finally {
@@ -108,22 +184,7 @@ export default function StoreOrderScreen() {
         keyboardShouldPersistTaps="handled"
       >
         {/* Search */}
-        <View style={styles.searchContainer}>
-          <Ionicons name="search-outline" size={18} color="#aaa" style={{ marginRight: 8 }} />
-          <TextInput
-            style={styles.searchInput}
-            placeholder="Tìm sản phẩm..."
-            placeholderTextColor="#aaa"
-            value={search}
-            onChangeText={setSearch}
-            autoCapitalize="none"
-            autoCorrect={false}
-            spellCheck={false}
-            autoComplete="off"
-            importantForAutofill="no"
-            textContentType="oneTimeCode"
-          />
-        </View>
+        <SearchBar onSearch={handleSearch} />
 
         {/* Danh mục sản phẩm */}
         <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 12 }}>

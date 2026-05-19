@@ -6,7 +6,9 @@ export const CreateUserSchema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().email().required(),
   username: Joi.string().min(5).required(),
-  password: Joi.string().pattern(passwordPattern).min(8).required()
+  password: Joi.string().pattern(passwordPattern).min(8).required(),
+  assignedLocationId: Joi.number().integer().allow(null).optional(),
+  role: Joi.string().valid("admin", "staff").optional()
 });
 
 export const LoginUserSchema = Joi.object({
@@ -15,7 +17,7 @@ export const LoginUserSchema = Joi.object({
 });
 
 export const ChangePasswordSchema = Joi.object({
-  oldPassword: Joi.string().min(8).required(),
+  oldPassword: Joi.string().required(),
   newPassword: Joi.string().pattern(passwordPattern).min(8).required()
 });
 

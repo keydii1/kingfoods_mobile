@@ -53,19 +53,15 @@ export function StoreCartProvider({ children }: { children: ReactNode }) {
   const [hydrated, setHydrated] = useState(false);
   const [persistCart, setPersistCartState] = useState(true);
 
-  useEffect(() => {
-    AsyncStorage.getItem(PERSIST_PREF_KEY)
-      .then(v => { if (v !== null) setPersistCartState(v === '1'); })
-      .catch(() => {});
-  }, []);
-
   const setPersistCart = useCallback((value: boolean) => {
     setPersistCartState(value);
     AsyncStorage.setItem(PERSIST_PREF_KEY, value ? '1' : '0').catch(() => {});
     if (!value && userId) {
       AsyncStorage.removeItem(storageKey(userId)).catch(() => {});
+    } else if (value && userId && cart.length > 0) {
+      AsyncStorage.setItem(storageKey(userId), JSON.stringify(cart)).catch(() => {});
     }
-  }, [userId]);
+  }, [userId, cart]);
 
   useEffect(() => {
     let cancelled = false;
@@ -78,13 +74,25 @@ export function StoreCartProvider({ children }: { children: ReactNode }) {
         return;
       }
       try {
-        const raw = await AsyncStorage.getItem(storageKey(userId));
-        if (!cancelled && raw) {
-          const parsed = JSON.parse(raw) as CartLine[];
-          if (Array.isArray(parsed)) setCart(parsed);
-        } else if (!cancelled) {
-          setCart([]);
+        // Load persistence preference first to avoid race condition
+        const persistVal = await AsyncStorage.getItem(PERSIST_PREF_KEY);
+        const isPersist = persistVal !== null ? persistVal === '1' : true;
+        if (!cancelled) {
+          setPersistCartState(isPersist);
         }
+
+        if (isPersist) {
+          const raw = await AsyncStorage.getItem(storageKey(userId));
+          if (!cancelled && raw) {
+            const parsed = JSON.parse(raw) as CartLine[];
+            if (Array.isArray(parsed)) {
+              setCart(parsed);
+              setHydrated(true);
+              return;
+            }
+          }
+        }
+        if (!cancelled) setCart([]);
       } catch {
         if (!cancelled) setCart([]);
       } finally {

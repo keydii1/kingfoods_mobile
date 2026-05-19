@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, TextInput, ActivityIndicator, Image } from 'react-native';
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -18,6 +18,7 @@ import {
 } from '../../constants/services/api';
 import { getOrderStatusMeta, canCustomerCancelOrder } from '../../constants/orderStatus';
 import { validateNewPassword, PASSWORD_HINT } from '../../constants/passwordPolicy';
+import { playSound } from '../../utils/soundService';
 
 // Timezone and Date formatting helpers for Vietnam Timezone (UTC+7)
 const formatOrderDate = (dateStr) => {
@@ -87,11 +88,75 @@ const ORANGE_THEME = {
   textMuted: '#64748b',
 };
 
+// Static Vietnamese accent-insensitive helper
+const removeAccents = (str) => {
+  if (!str) return '';
+  return str
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/đ/g, 'd')
+    .replace(/Đ/g, 'D');
+};
+
+// Static Word boundary matching helper
+const matchesSearch = (text, search) => {
+  const normalizedText = removeAccents(text.toLowerCase());
+  const normalizedSearch = removeAccents(search.trim().toLowerCase());
+  if (!normalizedSearch) return true;
+  
+  const searchWords = normalizedSearch.split(/\s+/).filter(Boolean);
+  if (searchWords.length === 0) return true;
+  
+  const textWords = normalizedText.split(/\s+/).filter(Boolean);
+  
+  return searchWords.every(sWord => 
+    textWords.some(tWord => tWord.startsWith(sWord))
+  );
+};
+
+// Custom debounce utility
+const debounce = (func, delay) => {
+  let timeoutId;
+  return (...args) => {
+    if (timeoutId) clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => {
+      func(...args);
+    }, delay);
+  };
+};
+
+// Isolated Uncontrolled SearchBarWeb component to prevent re-renders and Telex IME conflicts
+const SearchBarWeb = ({ onSearch }) => {
+  const debouncedSearch = useMemo(() => {
+    return debounce(onSearch, 500);
+  }, [onSearch]);
+
+  return (
+    <View style={styles.searchBar}>
+      <Ionicons name="search" size={18} color={ORANGE_THEME.textMuted} style={{ marginRight: 10 }} />
+      <TextInput 
+        style={styles.searchInputWeb}
+        placeholder="Tìm sản phẩm theo tên..."
+        onChangeText={debouncedSearch}
+        autoCapitalize="none"
+        autoCorrect={true}
+        spellCheck={false}
+      />
+    </View>
+  );
+};
+
 export default function StoreOrderWebScreen() {
   const { userName, logout } = useAuth();
-  const { cart, addToCart, removeFromCart, clearCart } = useStoreCart();
+  const { cart, addToCart, removeFromCart, clearCart, persistCart } = useStoreCart();
 
   const [activeTab, setActiveTab] = useState('order');
+
+  useEffect(() => {
+    if (activeTab !== 'order' && !persistCart) {
+      clearCart();
+    }
+  }, [activeTab, persistCart, clearCart]);
 
   // Draft checking invoice modal state
   const [showDraftInvoiceModal, setShowDraftInvoiceModal] = useState(false);
@@ -101,7 +166,10 @@ export default function StoreOrderWebScreen() {
   // Products catalog
   const [productCatalog, setProductCatalog] = useState([]);
   const [loadingProducts, setLoadingProducts] = useState(true);
-  const [search, setSearch] = useState('');
+  const [searchDebounced, setSearchDebounced] = useState('');
+  const handleSearch = useCallback((text) => {
+    setSearchDebounced(text);
+  }, []);
   const [selectedCategory, setSelectedCategory] = useState('All');
   
   // Order submission
@@ -509,6 +577,7 @@ export default function StoreOrderWebScreen() {
         quantity: item.qty,
       }));
       await createOrder(items, deliveryAddress);
+      playSound('success'); // Play sound
       Alert.alert('Thành công', 'Đơn đặt hàng chi nhánh đã được gửi trực tiếp đến hệ thống tổng kho WMS!');
       clearCart();
       setDeliveryAddress('');
@@ -728,13 +797,13 @@ export default function StoreOrderWebScreen() {
 
   const categories = ['All', ...new Set(productCatalog.map(p => p.category))];
 
-  const filteredProducts = productCatalog.filter(product => {
-    const matchesSearch = 
-      product.name.toLowerCase().includes(search.toLowerCase()) ||
-      product.sku.toLowerCase().includes(search.toLowerCase());
-    const matchesCategory = selectedCategory === 'All' || product.category === selectedCategory;
-    return matchesSearch && matchesCategory;
-  });
+  const filteredProducts = useMemo(() => {
+    return productCatalog.filter(product => {
+      const searchMatch = matchesSearch(product.name, searchDebounced) || matchesSearch(product.sku, searchDebounced);
+      const categoryMatch = selectedCategory === 'All' || product.category === selectedCategory;
+      return searchMatch && categoryMatch;
+    });
+  }, [productCatalog, searchDebounced, selectedCategory]);
 
   return (
     <View style={styles.webContainer}>
@@ -909,15 +978,7 @@ export default function StoreOrderWebScreen() {
                   </View>
 
                   <View style={styles.filterControllerRow}>
-                    <View style={styles.searchBar}>
-                      <Ionicons name="search" size={18} color={ORANGE_THEME.textMuted} style={{ marginRight: 10 }} />
-                      <TextInput 
-                        style={styles.searchInputWeb}
-                        placeholder="Tìm sản phẩm theo tên..."
-                        value={search}
-                        onChangeText={setSearch}
-                      />
-                    </View>
+                    <SearchBarWeb onSearch={handleSearch} />
 
                     {/* Chips scroll */}
                     <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.categoryScroll}>

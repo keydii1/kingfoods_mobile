@@ -7,7 +7,7 @@ import { AppConfig } from "../config/AppConfig";
 @Service()
 export class UserService {
   async register(body: any) {
-    const { name, username, password, email } = body;
+    const { name, username, password, email, assignedLocationId, role } = body;
 
     const exists = await User.isExists([{ username }, { email }]);
     if (exists) throw new BadRequest("Username or Email already exists");
@@ -19,8 +19,9 @@ export class UserService {
       username,
       email,
       password: hashedPassword,
-      role: UserRole.STAFF,
+      role: role || UserRole.STAFF,
       status: UserStatus.ACTIVE,
+      assignedLocationId: assignedLocationId || null,
     });
   }
 

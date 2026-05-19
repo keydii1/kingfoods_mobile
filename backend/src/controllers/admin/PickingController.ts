@@ -164,7 +164,13 @@ export class PickingController {
     }
 
     const incidents = await IncidentReport.find({
-      relations: ["reporter", "task", "task.product"],
+      relations: [
+        "reporter",
+        "task",
+        "task.location",
+        "task.orderDetail",
+        "task.orderDetail.product"
+      ],
       order: { createdAt: "DESC" }
     });
 

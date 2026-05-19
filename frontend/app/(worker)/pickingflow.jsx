@@ -8,6 +8,7 @@ import { COLORS } from '../../constants/colors';
 import StaffBottomNav from '../../components/StaffBottomNav';
 import BarCodeScanner from '../../components/BarcodeScanner';
 import { packItem } from '../../constants/services/api';
+import { playSound } from '../../utils/soundService';
 
 const STEP_LABELS = ['Map', 'Quét SP', 'SL', 'Quét thùng', 'Xác nhận'];
 
@@ -38,6 +39,7 @@ export default function PickingFlowScreen() {
 
   const handleCameraScanned = (data) => {
     setShowCamera(false);
+    playSound('beep'); // Play quick beep on camera scan
     if (cameraMode === 'product') {
       setBarcode(data);
       setScanned(true);
@@ -50,14 +52,17 @@ export default function PickingFlowScreen() {
 
   const handleManualScan = () => {
     if (!barcode.trim()) {
+      playSound('error');
       Alert.alert('Lỗi', 'Vui lòng nhập mã barcode');
       return;
     }
     const expected = currentTask?.sku;
     if (expected && barcode.trim() !== expected) {
+      playSound('error'); // Play alert/error sound
       Alert.alert('❌ Sai sản phẩm', `Mã nhập: ${barcode.trim()}\nMã cần: ${expected}`);
       return;
     }
+    playSound('beep'); // Play beep on successful manual barcode scan
     setScanned(true);
     setStep(3);
   };
@@ -69,15 +74,18 @@ export default function PickingFlowScreen() {
 
   const handleManualBinScan = () => {
     if (!binInput.trim()) {
+      playSound('error');
       Alert.alert('Lỗi', 'Vui lòng nhập mã thùng');
       return;
     }
+    playSound('beep'); // Play beep on manual bin scan
     setScannedBinCode(binInput.trim());
     setStep(5);
   };
 
   const handleConfirmBin = async () => {
     if (!currentTask?.taskId) {
+      playSound('error');
       Alert.alert('Lỗi', 'Thiếu thông tin nhiệm vụ');
       return;
     }
@@ -90,6 +98,7 @@ export default function PickingFlowScreen() {
     });
     try {
       await packItem(currentTask.taskId, scannedBinCode, quantity);
+      playSound('success'); // Play happy chime sound on successful item pick and pack
       if (isLast) {
         setStep(6);
       } else {
@@ -103,6 +112,7 @@ export default function PickingFlowScreen() {
         setBinInput('');
       }
     } catch (err) {
+      playSound('error'); // Play error sound on API failure
       Alert.alert('Lỗi', err.message || 'Không thể xác nhận');
     } finally {
       setSubmitting(false);

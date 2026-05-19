@@ -1,10 +1,11 @@
-import { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, TextInput, Switch} from 'react-native';
+import { useState, useEffect } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, TextInput, Switch, ActivityIndicator} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Alert } from '../../utils/appAlert';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { COLORS } from '../../constants/colors';
-import {createUser} from '../../constants/services/api';
+import {createUser, getLocations} from '../../constants/services/api';
 
 
 const roles = [
@@ -19,20 +20,39 @@ const zones = ['Khu A', 'Khu B', 'Khu C', 'Khu D'];
 export default function CreateAccountScreen() {
   const [submitting, setSubmitting] = useState(false);
   const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState('');
-  const [zone, setZone] = useState('');
+  const [role, setRole] = useState('picker');
+  const [dbLocations, setDbLocations] = useState([]);
+  const [selectedLocationId, setSelectedLocationId] = useState(null);
+  const [loadingLocations, setLoadingLocations] = useState(true);
   const [canManageTeam, setCanManageTeam] = useState(false);
 
+  useEffect(() => {
+    async function fetchLocations() {
+      try {
+        const res = await getLocations();
+        setDbLocations(Array.isArray(res) ? res : (res?.data || res?.items || []));
+      } catch (err) {
+        console.log('Failed to fetch locations:', err);
+      } finally {
+        setLoadingLocations(false);
+      }
+    }
+    fetchLocations();
+  }, []);
+
   const handleCreate = async() => {
-    if (!name || !username || !password || !role || !zone) {
-      Alert.alert('Lỗi', 'Vui lòng điền đầy đủ thông tin');
+    if (!name || !email || !username || !password || !role || !selectedLocationId) {
+      Alert.alert('Lỗi', 'Vui lòng điền đầy đủ thông tin và chọn Khu vực');
       return;
     }
+    const chosenLoc = dbLocations.find(l => l.id === selectedLocationId);
+    const locationName = chosenLoc ? chosenLoc.name : '';
     Alert.alert(
       'Xác nhận',
-      `Tạo tài khoản cho ${name} (${role}) tại ${zone}?`,
+      `Tạo tài khoản cho ${name} (${role}) tại ${locationName}?`,
       [
         { text: 'Huỷ', style: 'cancel' },
         {
@@ -41,20 +61,21 @@ export default function CreateAccountScreen() {
             setSubmitting(true);
             try{
               await createUser({
-                fullName: name,
+                name,
+                email,
                 username,
                 password,
-                role,
-                zone,
-                canManageTeam,
+                role: role === 'picker' || role === 'packer' ? 'staff' : 'admin',
+                assignedLocationId: selectedLocationId,
+                canManageTeam: false,
               });
               Alert.alert('Thành công', `Tài khoản "${username}" đã được tạo. Nhân viên có thể đăng nhập ngay.`);
               setName('');
+              setEmail('');
               setUsername('');
               setPassword('');
               setRole('');
-              setZone('');
-              setCanManageTeam(false);
+              setSelectedLocationId(null);
               router.back();
             } catch (err) {
               Alert.alert('❌ Lỗi', err.message || 'Không tạo được tài khoản');
@@ -96,6 +117,16 @@ export default function CreateAccountScreen() {
           />
           <TextInput
             style={styles.input}
+            placeholder="Địa chỉ Email"
+            placeholderTextColor="#aaa"
+            value={email}
+            onChangeText={setEmail}
+            autoCapitalize="none"
+            autoCorrect={false}
+            keyboardType="email-address"
+          />
+          <TextInput
+            style={styles.input}
             placeholder="Tên đăng nhập"
             placeholderTextColor="#aaa"
             value={username}
@@ -116,48 +147,37 @@ export default function CreateAccountScreen() {
 
           <Text style={styles.label}>Vai trò</Text>
           <View style={styles.optionRow}>
-            {roles.map(r => (
-              <TouchableOpacity
-                key={r.key}
-                style={[styles.optionBtn, role === r.key && styles.optionBtnActive]}
-                onPress={() => setRole(r.key)}
-              >
-                <Text style={[styles.optionBtnText, role === r.key && styles.optionBtnTextActive]}>
-                  {r.label}
-                </Text>
-              </TouchableOpacity>
-            ))}
+            <TouchableOpacity
+              style={[styles.optionBtn, styles.optionBtnActive, { opacity: 0.9, backgroundColor: '#e8f5e9', borderColor: COLORS.accent, borderWidth: 1 }]}
+              disabled={true}
+            >
+              <Text style={[styles.optionBtnText, styles.optionBtnTextActive, { fontWeight: '700', color: COLORS.primary }]}>
+                Nhân viên soạn hàng (Picker)
+              </Text>
+            </TouchableOpacity>
           </View>
 
-          <Text style={styles.label}>Khu vực</Text>
-          <View style={styles.optionRow}>
-            {zones.map(z => (
-              <TouchableOpacity
-                key={z}
-                style={[styles.zoneBtn, zone === z && styles.zoneBtnActive]}
-                onPress={() => setZone(z)}
-              >
-                <Text style={[styles.optionBtnText, zone === z && styles.optionBtnTextActive]}>
-                  {z}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </View>
+          <Text style={styles.label}>Khu vực kệ kho làm việc: *</Text>
+          {loadingLocations ? (
+            <ActivityIndicator size="small" color={COLORS.primary} style={{ marginVertical: 12 }} />
+          ) : (
+            <View style={styles.optionRow}>
+              {dbLocations.map(l => (
+                <TouchableOpacity
+                  key={l.id}
+                  style={[styles.zoneBtn, selectedLocationId === l.id && styles.zoneBtnActive]}
+                  onPress={() => setSelectedLocationId(l.id)}
+                >
+                  <Text style={[styles.optionBtnText, selectedLocationId === l.id && styles.optionBtnTextActive]}>
+                    {l.name}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          )}
 
           {/* Permissions */}
           <Text style={styles.label}>Phân quyền</Text>
-          <View style={styles.switchRow}>
-            <View style={styles.switchLabel}>
-              <Text style={styles.switchName}>Quản lý nhóm</Text>
-              <Text style={styles.switchSub}>Có thể xem và quản lý nhân viên</Text>
-            </View>
-            <Switch
-              value={canManageTeam}
-              onValueChange={setCanManageTeam}
-              trackColor={{ false: '#ddd', true: COLORS.accent }}
-              thumbColor="#fff"
-            />
-          </View>
           <View style={styles.switchRow}>
             <View style={styles.switchLabel}>
               <Text style={styles.switchName}>Báo cáo sự cố</Text>

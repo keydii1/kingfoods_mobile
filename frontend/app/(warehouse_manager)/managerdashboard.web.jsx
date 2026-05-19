@@ -78,10 +78,11 @@ export default function ManagerDashboardWebScreen() {
   const [workerForm, setWorkerForm] = useState({
     username: '',
     password: '',
-    fullName: '',
+    name: '',
+    email: '',
     role: 'staff',
     phoneNumber: '',
-    assignedZone: 'A',
+    assignedLocationId: '',
   });
   const [submittingWorker, setSubmittingWorker] = useState(false);
 
@@ -223,6 +224,7 @@ export default function ManagerDashboardWebScreen() {
       if (!silent) setLoadingTeam(true);
       const res = await getUsers();
       setTeamList(Array.isArray(res) ? res : []);
+      fetchLocationsList(true);
     } catch (err) {
       console.log('Team error:', err.message);
     } finally {
@@ -311,15 +313,18 @@ export default function ManagerDashboardWebScreen() {
   };
 
   const handleCreateWorker = async () => {
-    if (!workerForm.username.trim() || !workerForm.password.trim() || !workerForm.fullName.trim()) {
-      Alert.alert('Lỗi', 'Vui lòng nhập đầy đủ các trường có dấu *');
+    if (!workerForm.username.trim() || !workerForm.password.trim() || !workerForm.name.trim() || !workerForm.email.trim() || !workerForm.assignedLocationId) {
+      Alert.alert('Lỗi', 'Vui lòng điền đầy đủ các trường và chọn Khu vực kệ kho *');
       return;
     }
     setSubmittingWorker(true);
     try {
-      await createUser(workerForm);
-      Alert.alert('Thành công', `Tài khoản picker "${workerForm.fullName}" đã được tạo hoạt động!`);
-      setWorkerForm({ username: '', password: '', fullName: '', role: 'staff', phoneNumber: '', assignedZone: 'A' });
+      await createUser({
+        ...workerForm,
+        assignedLocationId: parseInt(workerForm.assignedLocationId) || null,
+      });
+      Alert.alert('Thành công', `Tài khoản picker "${workerForm.name}" đã được tạo hoạt động!`);
+      setWorkerForm({ username: '', password: '', name: '', email: '', role: 'staff', phoneNumber: '', assignedLocationId: '' });
       setShowAddWorker(false);
       fetchTeam();
     } catch (err) {
@@ -332,7 +337,7 @@ export default function ManagerDashboardWebScreen() {
   const handleDeleteWorker = (worker) => {
     Alert.alert(
       'Xác nhận xóa',
-      `Bạn có chắc chắn muốn thu hồi tài khoản picker ${worker.fullName}?`,
+      `Bạn có chắc chắn muốn thu hồi tài khoản picker ${worker.name || worker.fullName || worker.username}?`,
       [
         { text: 'Huỷ bỏ', style: 'cancel' },
         { 
@@ -960,7 +965,7 @@ export default function ManagerDashboardWebScreen() {
 
                           {stats.staffPerformance.map((item, idx) => (
                             <View key={idx} style={styles.overviewTableRow}>
-                              <Text style={[styles.otdCell, { flex: 2.5, fontWeight: '800' }]}>{item.fullName}</Text>
+                              <Text style={[styles.otdCell, { flex: 2.5, fontWeight: '800' }]}>{item.name || item.fullName || item.username}</Text>
                               <Text style={[styles.otdCell, { flex: 1.5, textAlign: 'center', fontWeight: 'bold' }]}>{item.ordersCompleted}</Text>
                               <Text style={[styles.otdCell, { flex: 1.5, textAlign: 'center', fontWeight: 'bold', color: GREEN_THEME.primary }]}>{item.itemsPicked}</Text>
                               <Text style={[styles.otdCell, { flex: 1.5, textAlign: 'center', fontWeight: '800' }]}>Zone {item.assignedZone}</Text>
@@ -1378,7 +1383,7 @@ export default function ManagerDashboardWebScreen() {
                     >
                       <option value="">-- Chọn nhân viên Picker soạn hàng --</option>
                       {teamList.filter(u => u.role !== 'admin').map(user => (
-                        <option key={user.id} value={user.id}>{user.fullName} (Zone {user.assignedZone || 'Chưa chia'})</option>
+                        <option key={user.id} value={user.id}>{user.name || user.fullName || user.username} (Zone {user.assignedZone || 'Chưa chia'})</option>
                       ))}
                     </select>
                   </View>
@@ -2119,7 +2124,7 @@ export default function ManagerDashboardWebScreen() {
 
                       {teamList.map((worker) => (
                         <View key={worker.id} style={styles.tableWebRow}>
-                          <Text style={[styles.tdCell, { flex: 2, fontWeight: '700' }]}>{worker.fullName}</Text>
+                          <Text style={[styles.tdCell, { flex: 2, fontWeight: '700' }]}>{worker.name || worker.fullName || worker.username}</Text>
                           <Text style={[styles.tdCell, { flex: 1.5, color: '#334155' }]}>{worker.username}</Text>
                           <Text style={[styles.tdCell, { flex: 1.2, textTransform: 'capitalize' }]}>{worker.role === 'admin' ? 'Quản lý' : 'Nhân viên'}</Text>
                           <Text style={[styles.tdCell, { flex: 1.5 }]}>{worker.phoneNumber || '—'}</Text>
@@ -2177,8 +2182,19 @@ export default function ManagerDashboardWebScreen() {
                       <TextInput 
                         style={styles.profileFormInput}
                         placeholder="Ví dụ: Nguyễn Văn Hải"
-                        value={workerForm.fullName}
-                        onChangeText={t => setWorkerForm(f => ({ ...f, fullName: t }))}
+                        value={workerForm.name}
+                        onChangeText={t => setWorkerForm(f => ({ ...f, name: t }))}
+                      />
+                    </View>
+
+                    <View style={styles.profileFormGroup}>
+                      <Text style={styles.profileInputLabel}>Địa chỉ Email: *</Text>
+                      <TextInput 
+                        style={styles.profileFormInput}
+                        placeholder="Ví dụ: hai.nguyen@kingfood.com"
+                        value={workerForm.email}
+                        onChangeText={t => setWorkerForm(f => ({ ...f, email: t }))}
+                        keyboardType="email-address"
                       />
                     </View>
 
@@ -2193,13 +2209,25 @@ export default function ManagerDashboardWebScreen() {
                     </View>
 
                     <View style={styles.profileFormGroup}>
-                      <Text style={styles.profileInputLabel}>Khu vực (Zone) nhặt hàng kệ kho:</Text>
-                      <TextInput 
-                        style={styles.profileFormInput}
-                        placeholder="Ví dụ: A, B, C, D..."
-                        value={workerForm.assignedZone}
-                        onChangeText={t => setWorkerForm(f => ({ ...f, assignedZone: t }))}
-                      />
+                      <Text style={styles.profileInputLabel}>Khu vực làm việc (Chọn từ kệ kho thực tế): *</Text>
+                      <select
+                        style={{
+                          padding: 12,
+                          borderRadius: 8,
+                          borderWidth: 1,
+                          borderColor: '#ccc',
+                          backgroundColor: '#fff',
+                          width: '100%',
+                          fontSize: 14,
+                        }}
+                        value={workerForm.assignedLocationId}
+                        onChange={e => setWorkerForm(f => ({ ...f, assignedLocationId: e.target.value }))}
+                      >
+                        <option value="">-- Chọn vị trí kệ kho thực tế --</option>
+                        {locationsList.map(l => (
+                          <option key={l.id} value={l.id}>{l.name} ({l.code})</option>
+                        ))}
+                      </select>
                     </View>
 
                     <TouchableOpacity 

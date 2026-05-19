@@ -1,6 +1,6 @@
 import {Text, TextInput, View, TouchableOpacity, StyleSheet, ScrollView, Switch, Linking} from 'react-native'
 import { Alert } from '../../utils/appAlert';
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 import {router} from 'expo-router'
 import {Ionicons} from '@expo/vector-icons'
 import {COLORS} from '../../constants/colors'
@@ -9,6 +9,7 @@ import { useAuth } from '../../contexts/AuthContext'
 import { useStoreCart } from '../../contexts/StoreCartContext'
 import {logout as apiLogout, changeUserPassword, changeCustomerPassword} from '../../constants/services/api'
 import { validateNewPassword, PASSWORD_HINT } from '../../constants/passwordPolicy';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Tạo 1 component chung cho tất cả các card
 function SettingRow({icon, iconBg, iconColor, name, sub, value, onValueChange}){
@@ -74,18 +75,60 @@ export default function SettingScreen(){
     const insets = useSafeAreaInsets();
     const isCustomer = userRole === 'store_manager';
 
-    const[beepSound, setBeepSound] = useState(true);
-    const[vibrate, setVibrate] = useState(true);
-    const[lowAlert, setLowAlert] = useState(true);
-    const[offlineMode, setOfflineMode] = useState(true);
-    const[autoSync, setAutoSync] = useState(true);
+    const [beepSound, setBeepSound] = useState(true);
+    const [vibrate, setVibrate] = useState(true);
+    const [lowAlert, setLowAlert] = useState(true);
+    const [offlineMode, setOfflineMode] = useState(true);
+    const [autoSync, setAutoSync] = useState(true);
 
-    const[orderStatusNotify, setOrderStatusNotify] = useState(true);
-    const[orderReminder, setOrderReminder] = useState(true);
-    const[notifySound, setNotifySound] = useState(true);
-    const[oldPassword, setOldPassword] = useState('');
-    const[newPassword, setNewPassword] = useState('');
-    const[confirmPassword, setConfirmPassword] = useState('');
+    const [orderStatusNotify, setOrderStatusNotify] = useState(true);
+    const [orderReminder, setOrderReminder] = useState(true);
+    const [notifySound, setNotifySound] = useState(true);
+    const [oldPassword, setOldPassword] = useState('');
+    const [newPassword, setNewPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+
+    useEffect(() => {
+        async function loadSettings() {
+            try {
+                const keys = [
+                    'setting_beepSound',
+                    'setting_vibrate',
+                    'setting_lowAlert',
+                    'setting_offlineMode',
+                    'setting_autoSync',
+                    'setting_orderStatusNotify',
+                    'setting_orderReminder',
+                    'setting_notifySound'
+                ];
+                const stores = await AsyncStorage.multiGet(keys);
+                stores.forEach(([key, val]) => {
+                    if (val !== null) {
+                        const bool = val === 'true';
+                        if (key === 'setting_beepSound') setBeepSound(bool);
+                        if (key === 'setting_vibrate') setVibrate(bool);
+                        if (key === 'setting_lowAlert') setLowAlert(bool);
+                        if (key === 'setting_offlineMode') setOfflineMode(bool);
+                        if (key === 'setting_autoSync') setAutoSync(bool);
+                        if (key === 'setting_orderStatusNotify') setOrderStatusNotify(bool);
+                        if (key === 'setting_orderReminder') setOrderReminder(bool);
+                        if (key === 'setting_notifySound') setNotifySound(bool);
+                    }
+                });
+            } catch (err) {
+                console.log('Error loading settings', err);
+            }
+        }
+        loadSettings();
+    }, []);
+
+    const saveSetting = async (key, val) => {
+        try {
+            await AsyncStorage.setItem(`setting_${key}`, String(val));
+        } catch (err) {
+            console.log('Error saving setting', err);
+        }
+    };
 
     const handleChangePassword = async () => {
         if (!oldPassword || !newPassword || !confirmPassword) {
@@ -148,25 +191,14 @@ export default function SettingScreen(){
                         <View style={styles.card}>
                             <Text style={styles.cardTitle}>Thông báo đơn hàng</Text>
                             <SettingRow
-                                icon="bag-check-outline" iconBg="#e8f5e9" iconColor={COLORS.primary}
-                                name="Cập nhật trạng thái đơn"
-                                sub="Khi đơn được duyệt, đang giao hoặc đã giao"
-                                value={orderStatusNotify}
-                                onValueChange={setOrderStatusNotify}
-                            />
-                            <SettingRow
-                                icon="time-outline" iconBg="#fff3e0" iconColor="#e65100"
-                                name="Nhắc đơn chưa hoàn tất"
-                                sub="Nhắc khi còn đơn đang chờ xử lý"
-                                value={orderReminder}
-                                onValueChange={setOrderReminder}
-                            />
-                            <SettingRow
                                 icon="volume-medium-outline" iconBg="#e3f2fd" iconColor="#1565c0"
-                                name="Âm thanh thông báo"
-                                sub="Phát âm thanh khi có cập nhật mới"
+                                name="Âm thanh đặt hàng thành công"
+                                sub="Phát âm thanh khi đặt hàng thành công"
                                 value={notifySound}
-                                onValueChange={setNotifySound}
+                                onValueChange={(val) => {
+                                    setNotifySound(val);
+                                    saveSetting('notifySound', val);
+                                }}
                             />
                         </View>
 
@@ -198,45 +230,62 @@ export default function SettingScreen(){
                         </View>
                     </>
                 ) : (
-                    <>
-                        <View style = {styles.card}>
-                            <Text style = {styles.cardTitle}>Thông báo & cảnh báo</Text>
-                            <SettingRow
-                            icon="notifications-outline" iconBg="#e8f5e9" iconColor={COLORS.primary}
-                            name='Âm Thanh khi quét mã'
-                            sub='Phát tiếng beep khi quét thành công'
-                            value ={beepSound}
-                            onValueChange={setBeepSound} />
-                            <SettingRow 
-                            icon="alert-circle-outline" iconBg="#ffebee" iconColor={COLORS.error}
-                            name ='Rung khi quét sai'
-                            sub='Rung mạnh khi phát hiện sai sản phẩm'
-                            value = {vibrate}
-                            onValueChange ={setVibrate} />
-                            <SettingRow
-                            icon="warning-outline" iconBg="#fff3e0" iconColor="#e65100"
-                            name ='Cảnh báo khi năng suất thấp'
-                            sub ='Dưới 50 SKU/h sẽ thông báo'
-                            value = {lowAlert}
-                            onValueChange ={setLowAlert} />
-                        </View>
+                    userRole === 'staff' ? (
+                        <>
+                            <View style = {styles.card}>
+                                <Text style = {styles.cardTitle}>Thông báo & cảnh báo</Text>
+                                <SettingRow
+                                icon="notifications-outline" iconBg="#e8f5e9" iconColor={COLORS.primary}
+                                name='Âm Thanh khi quét mã'
+                                sub='Phát tiếng beep khi quét thành công'
+                                value ={beepSound}
+                                onValueChange={(val) => {
+                                    setBeepSound(val);
+                                    saveSetting('beepSound', val);
+                                }} />
+                                <SettingRow 
+                                icon="alert-circle-outline" iconBg="#ffebee" iconColor={COLORS.error}
+                                name ='Rung khi quét sai'
+                                sub='Rung mạnh khi phát hiện sai sản phẩm'
+                                value = {vibrate}
+                                onValueChange ={(val) => {
+                                    setVibrate(val);
+                                    saveSetting('vibrate', val);
+                                }} />
+                                <SettingRow
+                                icon="warning-outline" iconBg="#fff3e0" iconColor="#e65100"
+                                name ='Cảnh báo khi năng suất thấp'
+                                sub ='Dưới 50 SKU/h sẽ thông báo'
+                                value = {lowAlert}
+                                onValueChange ={(val) => {
+                                    setLowAlert(val);
+                                    saveSetting('lowAlert', val);
+                                }} />
+                            </View>
 
-                        <View style = {styles.card}>
-                            <Text style = {styles.cardTitle}>Kết nối & dữ liệu</Text>
-                            <SettingRow 
-                            icon="wifi-outline" iconBg="#e3f2fd" iconColor="#1565c0"
-                            name ='Chế độ Offline'
-                            sub='Offline Mode'
-                            value = {offlineMode}
-                            onValueChange = {setOfflineMode} />
-                            <SettingRow 
-                            icon="sync-outline" iconBg="#fff3e0" iconColor="#e65100"
-                            name = 'Tự đồng bộ khi có mạng'
-                            sub = 'Gửi dữ liệu offline khi kết nối lại'
-                            value = {autoSync}
-                            onValueChange = {setAutoSync} />
-                        </View>
-                    </>
+                            <View style = {styles.card}>
+                                <Text style = {styles.cardTitle}>Kết nối & dữ liệu</Text>
+                                <SettingRow 
+                                icon="wifi-outline" iconBg="#e3f2fd" iconColor="#1565c0"
+                                name ='Chế độ Offline'
+                                sub='Offline Mode'
+                                value = {offlineMode}
+                                onValueChange = {(val) => {
+                                    setOfflineMode(val);
+                                    saveSetting('offlineMode', val);
+                                }} />
+                                <SettingRow 
+                                icon="sync-outline" iconBg="#fff3e0" iconColor="#e65100"
+                                name = 'Tự đồng bộ khi có mạng'
+                                sub = 'Gửi dữ liệu offline khi kết nối lại'
+                                value = {autoSync}
+                                onValueChange = {(val) => {
+                                    setAutoSync(val);
+                                    saveSetting('autoSync', val);
+                                }} />
+                            </View>
+                        </>
+                    ) : null
                 )}
 
                 <View style = {styles.card}>
@@ -245,6 +294,7 @@ export default function SettingScreen(){
                     <TextInput 
                         style={styles.passwordInput} 
                         placeholder="Mật khẩu cũ" 
+                        placeholderTextColor="#aaa"
                         secureTextEntry 
                         autoCapitalize="none"
                         autoCorrect={false}
@@ -254,6 +304,7 @@ export default function SettingScreen(){
                     <TextInput 
                         style={styles.passwordInput} 
                         placeholder="Mật khẩu mới" 
+                        placeholderTextColor="#aaa"
                         secureTextEntry 
                         autoCapitalize="none"
                         autoCorrect={false}
@@ -262,7 +313,8 @@ export default function SettingScreen(){
                     />
                     <TextInput 
                         style={styles.passwordInput} 
-                        placeholder="Xác nhận mật khẩu" 
+                        placeholder="Xác nhận mật khẩu mới" 
+                        placeholderTextColor="#aaa"
                         secureTextEntry 
                         autoCapitalize="none"
                         autoCorrect={false}

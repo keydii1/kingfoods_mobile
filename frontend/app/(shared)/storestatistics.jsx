@@ -5,33 +5,24 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useFocusEffect } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../../constants/colors';
-import { getClientStatistics, cancelClientOrder } from '../../constants/services/api';
+import { getClientStatistics, cancelClientOrder, BASE_URL } from '../../constants/services/api';
 import { getOrderStatusMeta, canCustomerCancelOrder } from '../../constants/orderStatus';
 import { subscribeOrdersRefresh, notifyOrdersRefresh } from '../../utils/ordersRefresh';
 
 // Timezone date helper for Vietnam (UTC+7)
 const formatVietnamDateOnly = (dateStr) => {
   if (!dateStr) return '';
-  const tStr = dateStr.replace(' ', 'T');
-  const match = tStr.match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})/);
-  if (!match) {
-    return dateStr;
+  let date = new Date(dateStr);
+  if (isNaN(date.getTime())) return dateStr;
+  
+  // Workaround: If connecting to Render (which has the timezone bug), compensate by adding 7 hours
+  if (BASE_URL && BASE_URL.includes('onrender.com')) {
+    date = new Date(date.getTime() + (7 * 60 * 60 * 1000));
   }
   
-  const year = parseInt(match[1], 10);
-  const month = parseInt(match[2], 10) - 1;
-  const day = parseInt(match[3], 10);
-  const hours = parseInt(match[4], 10);
-  const minutes = parseInt(match[5], 10);
-  const seconds = parseInt(match[6], 10);
-  
-  const utcDate = new Date(Date.UTC(year, month, day, hours, minutes, seconds));
-  const vnTimeMs = utcDate.getTime() + (7 * 60 * 60 * 1000);
-  const vnDate = new Date(vnTimeMs);
-  
-  const d = String(vnDate.getUTCDate()).padStart(2, '0');
-  const m = String(vnDate.getUTCMonth() + 1).padStart(2, '0');
-  const y = vnDate.getUTCFullYear();
+  const d = String(date.getDate()).padStart(2, '0');
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const y = date.getFullYear();
   
   return `${d}/${m}/${y}`;
 };

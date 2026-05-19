@@ -78,6 +78,7 @@ export class User extends BaseEntity {
    * Hidden column — không trả về trong query mặc định
    */
   @Column({ select: false })
+  @Property()
   password: string;
 
   @Column({ nullable: true, select: false })
