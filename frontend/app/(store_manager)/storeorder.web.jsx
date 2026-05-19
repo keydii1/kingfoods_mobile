@@ -399,14 +399,8 @@ export default function StoreOrderWebScreen() {
             </tbody>
           </table>
 
-          <div class="summary-block">
-            <div class="qr-block">
-              <div style="font-size: 24px;">🔲</div>
-              <div>
-                <div style="font-weight: bold; font-size: 11px;">QUÉT KIỂM TRA MÃ CONTAINER</div>
-                <div class="qr-desc">Thủ kho quét mã QR này để truy vết Container Tote đóng hàng trước khi xếp xe giao hàng sỉ chặng cuối.</div>
-              </div>
-            </div>
+          <div class="summary-block" style="justify-content: flex-end; display: flex;">
+            <div style="flex: 1;"></div>
             <div class="calcs">
               <div class="calc-row">
                 <span>Cộng tiền hàng (Subtotal):</span>
@@ -425,29 +419,17 @@ export default function StoreOrderWebScreen() {
 
           <div style="border-top: 1px dashed #cbd5e1; margin-top: 30px; margin-bottom: 15px;"></div>
 
-          <div class="signatures">
-            <div class="sign-node">
-              <div class="sign-role">Người Lập Phiếu</div>
+          <div class="signatures" style="display: flex; justify-content: space-around;">
+            <div class="sign-node" style="width: 40%; text-align: center;">
+              <div class="sign-role">Người Giao Hàng (Thủ Kho / Tài Xế)</div>
               <div class="sign-hint">(Ký, ghi rõ họ tên)</div>
-              <div class="sign-gap"></div>
-              <div class="sign-name">Hệ thống WMS Kingfood</div>
+              <div class="sign-gap" style="height: 60px;"></div>
+              <div class="sign-name">Trưởng ca WMS / Đội xe tải</div>
             </div>
-            <div class="sign-node">
-              <div class="sign-role">Thủ Kho Giao Hàng</div>
+            <div class="sign-node" style="width: 40%; text-align: center;">
+              <div class="sign-role">Người Nhận Hàng (Cửa Hàng)</div>
               <div class="sign-hint">(Ký, ghi rõ họ tên)</div>
-              <div class="sign-gap"></div>
-              <div class="sign-name">Trưởng ca WMS</div>
-            </div>
-            <div class="sign-node">
-              <div class="sign-role">Đại Diện Giao Nhận</div>
-              <div class="sign-hint">(Ký, ghi rõ họ tên)</div>
-              <div class="sign-gap"></div>
-              <div class="sign-name">Đội xe tải sỉ</div>
-            </div>
-            <div class="sign-node">
-              <div class="sign-role">Người Nhận Hàng</div>
-              <div class="sign-hint">(Ký, ghi rõ họ tên)</div>
-              <div class="sign-gap"></div>
+              <div class="sign-gap" style="height: 60px;"></div>
               <div class="sign-name">Quản lý ${userName}</div>
             </div>
           </div>
@@ -2148,18 +2130,8 @@ export default function StoreOrderWebScreen() {
                 </View>
 
                 {/* Summary Section */}
-                <View style={styles.paperSummaryBlock}>
-                  <View style={{ flex: 1 }}>
-                    <View style={styles.qrRow}>
-                      <View style={styles.mockQrCode}>
-                        <Ionicons name="qr-code" size={64} color="#0f172a" />
-                      </View>
-                      <View style={{ flex: 1 }}>
-                        <Text style={styles.qrTitle}>QUÉT KIỂM TRA MÃ CONTAINER</Text>
-                        <Text style={styles.qrDesc}>Thủ kho quét mã QR này để truy vết Container Tote đóng hàng trước khi xếp xe giao hàng sỉ chặng cuối.</Text>
-                      </View>
-                    </View>
-                  </View>
+                <View style={[styles.paperSummaryBlock, { justifyContent: 'flex-end' }]}>
+                  <View style={{ flex: 1 }} />
 
                   <View style={styles.paperTotalCalculations}>
                     <View style={styles.calcRow}>
@@ -2181,29 +2153,15 @@ export default function StoreOrderWebScreen() {
 
                 {/* Signatures block */}
                 <View style={styles.signaturesContainer}>
-                  <View style={styles.signNode}>
-                    <Text style={styles.signRole}>Người Lập Phiếu</Text>
+                  <View style={[styles.signNode, { flex: 1, alignItems: 'center' }]}>
+                    <Text style={styles.signRole}>Người Giao Hàng (Thủ Kho / Tài Xế)</Text>
                     <Text style={styles.signHint}>(Ký, ghi rõ họ tên)</Text>
                     <View style={styles.signGap} />
-                    <Text style={styles.signName}>Hệ thống WMS Kingfood</Text>
+                    <Text style={styles.signName}>Trưởng ca WMS / Đội xe tải</Text>
                   </View>
 
-                  <View style={styles.signNode}>
-                    <Text style={styles.signRole}>Thủ Kho Giao Hàng</Text>
-                    <Text style={styles.signHint}>(Ký, ghi rõ họ tên)</Text>
-                    <View style={styles.signGap} />
-                    <Text style={styles.signName}>Trưởng ca WMS</Text>
-                  </View>
-
-                  <View style={styles.signNode}>
-                    <Text style={styles.signRole}>Đại Diện Giao Nhận</Text>
-                    <Text style={styles.signHint}>(Ký, ghi rõ họ tên)</Text>
-                    <View style={styles.signGap} />
-                    <Text style={styles.signName}>Đội xe tải sỉ</Text>
-                  </View>
-
-                  <View style={styles.signNode}>
-                    <Text style={styles.signRole}>Người Nhận Hàng</Text>
+                  <View style={[styles.signNode, { flex: 1, alignItems: 'center' }]}>
+                    <Text style={styles.signRole}>Người Nhận Hàng (Cửa Hàng)</Text>
                     <Text style={styles.signHint}>(Ký, ghi rõ họ tên)</Text>
                     <View style={styles.signGap} />
                     <Text style={styles.signName}>Quản lý {userName}</Text>
