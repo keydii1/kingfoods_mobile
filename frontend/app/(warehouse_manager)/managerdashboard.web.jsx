@@ -101,11 +101,12 @@ export default function ManagerDashboardWebScreen() {
   // B. Containers states
   const [containersList, setContainersList] = useState([]);
   const [loadingContainers, setLoadingContainers] = useState(false);
-  const [containerForm, setContainerForm] = useState({ code: '', description: '', status: 'empty' });
+  const [containerForm, setContainerForm] = useState({ code: '', description: '', capacity: '50', status: 'empty' });
   const [submittingContainer, setSubmittingContainer] = useState(false);
   const [tracedContainerData, setTracedContainerData] = useState(null);
   const [tracingCode, setTracingCode] = useState('');
   const [loadingTrace, setLoadingTrace] = useState(false);
+  const [containerSort, setContainerSort] = useState('default');
 
   // C. Products Inventory states
   const [productsList, setProductsList] = useState([]);
@@ -277,7 +278,8 @@ export default function ManagerDashboardWebScreen() {
     try {
       if (!silent) setLoadingContainers(true);
       const res = await getContainers();
-      setContainersList(Array.isArray(res) ? res : []);
+      const list = Array.isArray(res) ? res : (res?.data || res?.items || []);
+      setContainersList(list);
     } catch (err) {
       console.log('Containers error:', err.message);
     } finally {
@@ -439,9 +441,14 @@ export default function ManagerDashboardWebScreen() {
     }
     setSubmittingContainer(true);
     try {
-      await createContainer(containerForm);
+      await createContainer({
+        code: containerForm.code.trim(),
+        name: containerForm.description.trim() || containerForm.code.trim(),
+        capacity: parseInt(containerForm.capacity || 50),
+        status: 'empty'
+      });
       Alert.alert('Thành công', `Tote chứa "${containerForm.code}" đã được kích hoạt.`);
-      setContainerForm({ code: '', description: '', status: 'empty' });
+      setContainerForm({ code: '', description: '', capacity: '50', status: 'empty' });
       fetchContainersList();
     } catch (err) {
       Alert.alert('Thất bại', err.message || 'Không thể tạo container');
@@ -2015,13 +2022,41 @@ export default function ManagerDashboardWebScreen() {
             <View style={styles.splitLayout}>
               
               <View style={[styles.catalogSide, { flex: 6.5, backgroundColor: '#fff', borderRightWidth: 1.5, borderRightColor: '#e2e8f0' }]}>
-                <View style={styles.panelTitleRow}>
-                  <Text style={styles.panelTitleHeading}>Truy vết live thùng hàng (Tote Containers)</Text>
+                <View style={[styles.panelTitleRow, { flexWrap: 'wrap', gap: 12 }]}>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                    <Ionicons name="cube" size={18} color={GREEN_THEME.primary} />
+                    <Text style={styles.panelTitleHeading}>Truy vết live thùng hàng (Tote Containers)</Text>
+                  </View>
                   
-                  <TouchableOpacity style={styles.refreshBtn} onPress={() => fetchContainersList()}>
-                    <Ionicons name="refresh" size={14} color={GREEN_THEME.primary} style={{ marginRight: 4 }} />
-                    <Text style={{ color: GREEN_THEME.primary, fontSize: 13, fontWeight: '700' }}>Tải lại</Text>
-                  </TouchableOpacity>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                      <Text style={{ fontSize: 12, fontWeight: '800', color: '#64748b' }}>Sắp xếp:</Text>
+                      <select
+                        value={containerSort}
+                        onChange={e => setContainerSort(e.target.value)}
+                        style={{
+                          backgroundColor: '#fff',
+                          border: '1.5px solid #cbd5e1',
+                          borderRadius: 6,
+                          padding: '6px 12px',
+                          fontSize: 12,
+                          fontWeight: '700',
+                          color: '#334155',
+                          outline: 'none',
+                          cursor: 'pointer'
+                        }}
+                      >
+                        <option value="default">Mặc định (ID)</option>
+                        <option value="full-desc">Độ đầy: Giảm dần (Gần đầy nhất) 📈</option>
+                        <option value="full-asc">Độ đầy: Tăng dần (Trống nhiều nhất) 📉</option>
+                      </select>
+                    </View>
+
+                    <TouchableOpacity style={styles.refreshBtn} onPress={() => fetchContainersList()}>
+                      <Ionicons name="refresh" size={14} color={GREEN_THEME.primary} style={{ marginRight: 4 }} />
+                      <Text style={{ color: GREEN_THEME.primary, fontSize: 13, fontWeight: '700' }}>Tải lại</Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
 
                 {loadingContainers ? (
@@ -2037,36 +2072,71 @@ export default function ManagerDashboardWebScreen() {
                   <ScrollView style={{ flex: 1, padding: 16 }}>
                     <View style={styles.tableWebContainer}>
                       <View style={styles.tableWebHeader}>
-                        <Text style={[styles.thCell, { flex: 2.5 }]}>Mã thùng (Tote Code)</Text>
-                        <Text style={[styles.thCell, { flex: 3.5 }]}>Ghi chú mô tả</Text>
-                        <Text style={[styles.thCell, { flex: 2, textAlign: 'center' }]}>Trạng thái chứa</Text>
-                        <Text style={[styles.thCell, { flex: 2.5, textAlign: 'center' }]}>Truy vết audit</Text>
-                        <Text style={[styles.thCell, { flex: 1.5, textAlign: 'center' }]}>Gỡ bỏ</Text>
+                        <Text style={[styles.thCell, { flex: 2 }]}>Mã thùng</Text>
+                        <Text style={[styles.thCell, { flex: 2.5 }]}>Mô tả</Text>
+                        <Text style={[styles.thCell, { flex: 3.5, textAlign: 'center' }]}>Độ đầy (Capacity Load)</Text>
+                        <Text style={[styles.thCell, { flex: 1.5, textAlign: 'center' }]}>Trạng thái</Text>
+                        <Text style={[styles.thCell, { flex: 2, textAlign: 'center' }]}>Trace Audit</Text>
+                        <Text style={[styles.thCell, { flex: 1, textAlign: 'center' }]}>Xoá</Text>
                       </View>
 
-                      {containersList.map((container) => (
-                        <View key={container.id} style={styles.tableWebRow}>
-                          <Text style={[styles.tdCell, { flex: 2.5, fontWeight: '800' }]}>{container.code}</Text>
-                          <Text style={[styles.tdCell, { flex: 3.5 }]}>{container.description || 'Thùng nhặt hàng tiêu chuẩn'}</Text>
-                          <View style={[styles.tdCell, { flex: 2, alignItems: 'center' }]}>
-                            <View style={[styles.alertPill, { backgroundColor: container.status === 'empty' ? '#f1f5f9' : '#e8f5e9' }]}>
-                              <Text style={{ fontSize: 10, fontWeight: '850', color: container.status === 'empty' ? '#475569' : GREEN_THEME.primary }}>
-                                {container.status === 'empty' ? 'Trống' : 'Có hàng'}
-                              </Text>
+                      {(() => {
+                        const sortedContainers = [...containersList].sort((a, b) => {
+                          const pctA = (a.currentUsage || 0) / (a.capacity || 50);
+                          const pctB = (b.currentUsage || 0) / (b.capacity || 50);
+
+                          if (containerSort === 'full-desc') {
+                            return pctB - pctA;
+                          }
+                          if (containerSort === 'full-asc') {
+                            return pctA - pctB;
+                          }
+                          return 0;
+                        });
+
+                        return sortedContainers.map((container) => {
+                          const cap = container.capacity || 50;
+                          const usage = container.currentUsage || 0;
+                          const pct = Math.min(100, Math.round((usage / cap) * 100));
+
+                          return (
+                            <View key={container.id} style={styles.tableWebRow}>
+                              <Text style={[styles.tdCell, { flex: 2, fontWeight: '800' }]}>{container.code}</Text>
+                              <Text style={[styles.tdCell, { flex: 2.5, color: '#64748b' }]}>{container.description || container.name || 'Tote tiêu chuẩn'}</Text>
+                              
+                              {/* Sức chứa Progress Bar */}
+                              <View style={[styles.tdCell, { flex: 3.5, alignItems: 'center' }]}>
+                                <View style={{ width: '90%', height: 7, backgroundColor: '#f1f5f9', borderRadius: 4, overflow: 'hidden', borderWidth: 0.5, borderColor: '#cbd5e1' }}>
+                                  <View style={{ width: `${pct}%`, height: '100%', backgroundColor: pct >= 85 ? '#ef4444' : pct >= 50 ? '#f97316' : GREEN_THEME.primary }} />
+                                </View>
+                                <Text style={{ fontSize: 10, fontWeight: '900', color: '#475569', marginTop: 4 }}>
+                                  {usage}/{cap} sp ({pct}%)
+                                </Text>
+                              </View>
+
+                              <View style={[styles.tdCell, { flex: 1.5, alignItems: 'center' }]}>
+                                <View style={[styles.alertPill, { backgroundColor: pct === 0 ? '#f1f5f9' : pct >= 85 ? '#fef2f2' : '#e8f5e9' }]}>
+                                  <Text style={{ fontSize: 9, fontWeight: '900', color: pct === 0 ? '#475569' : pct >= 85 ? '#ef4444' : GREEN_THEME.primary }}>
+                                    {pct === 0 ? 'Trống' : pct >= 85 ? 'Sắp đầy' : 'Hoạt động'}
+                                  </Text>
+                                </View>
+                              </View>
+
+                              <View style={[styles.tdCell, { flex: 2, alignItems: 'center' }]}>
+                                <TouchableOpacity style={[styles.resolveActionBtn, { backgroundColor: '#0284c7' }]} onPress={() => handleTraceContainer(container.code)}>
+                                  <Text style={styles.resolveActionBtnText}>Trace Audit</Text>
+                                </TouchableOpacity>
+                              </View>
+
+                              <View style={[styles.tdCell, { flex: 1, alignItems: 'center' }]}>
+                                <TouchableOpacity style={styles.deleteWorkerAction} onPress={() => handleDeleteContainer(container.id)}>
+                                  <Ionicons name="trash" size={14} color="#fff" />
+                                </TouchableOpacity>
+                              </View>
                             </View>
-                          </View>
-                          <View style={[styles.tdCell, { flex: 2.5, alignItems: 'center' }]}>
-                            <TouchableOpacity style={[styles.resolveActionBtn, { backgroundColor: '#0284c7' }]} onPress={() => handleTraceContainer(container.code)}>
-                              <Text style={styles.resolveActionBtnText}>Trace Audit</Text>
-                            </TouchableOpacity>
-                          </View>
-                          <View style={[styles.tdCell, { flex: 1.5, alignItems: 'center' }]}>
-                            <TouchableOpacity style={styles.deleteWorkerAction} onPress={() => handleDeleteContainer(container.id)}>
-                              <Ionicons name="trash" size={14} color="#fff" />
-                            </TouchableOpacity>
-                          </View>
-                        </View>
-                      ))}
+                          );
+                        });
+                      })()}
                     </View>
 
                     {/* LIVE TRACER DATA OUTPUT CONTAINER */}
@@ -2124,6 +2194,17 @@ export default function ManagerDashboardWebScreen() {
                     placeholder="Ví dụ: Thùng nhựa xanh đựng hàng tươi sống"
                     value={containerForm.description}
                     onChangeText={t => setContainerForm(f => ({ ...f, description: t }))}
+                  />
+                </View>
+
+                <View style={styles.profileFormGroup}>
+                  <Text style={styles.profileInputLabel}>Sức chứa tối đa (Định mức sản phẩm): *</Text>
+                  <TextInput 
+                    style={styles.profileFormInput}
+                    placeholder="Mặc định: 50"
+                    keyboardType="numeric"
+                    value={containerForm.capacity}
+                    onChangeText={t => setContainerForm(f => ({ ...f, capacity: t }))}
                   />
                 </View>
 
