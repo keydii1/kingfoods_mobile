@@ -1645,7 +1645,12 @@ export default function ManagerDashboardWebScreen() {
                 </View>
 
                 {/* Right Panel guidelines and helper */}
-                <View style={[styles.cartSide, { flex: 2.5, padding: 24, backgroundColor: '#f8fafc' }]}>
+                {/* Right Panel guidelines and helper - scrollable */}
+                <ScrollView 
+                  style={{ flex: 2.5, backgroundColor: '#f8fafc' }} 
+                  contentContainerStyle={{ padding: 24, paddingBottom: 40 }}
+                  showsVerticalScrollIndicator={false}
+                >
                   <View style={styles.profileHeadingRow}>
                     <Ionicons name="people-outline" size={22} color={GREEN_THEME.primary} />
                     <Text style={styles.profileSectionTitle}>Nhân sự Kho trực ca</Text>
@@ -1688,7 +1693,7 @@ export default function ManagerDashboardWebScreen() {
                       <Ionicons name="information-circle" /> Hệ thống hỗ trợ đánh dấu biểu tượng 🎯 đối với những nhân viên Picker đã được quản lý gán trực khu phân khu trùng khớp với khu vực chứa hàng của SKU đó để tăng tốc độ soạn hàng tối đa.
                     </Text>
                   </View>
-                </View>
+                </ScrollView>
 
               </View>
             );
