@@ -240,8 +240,9 @@ export default function ManagerDashboardWebScreen() {
   const fetchStores = async (silent = false) => {
     try {
       if (!silent) setLoadingStores(true);
-      const res = await getCustomers();
-      setStoresList(Array.isArray(res) ? res : []);
+      const res = await getCustomers(1, 1000);
+      const list = Array.isArray(res) ? res : (res?.data || res?.items || []);
+      setStoresList(list);
     } catch (err) {
       console.log('Stores error:', err.message);
     } finally {
@@ -2579,7 +2580,13 @@ export default function ManagerDashboardWebScreen() {
                           <Text style={[styles.tdCell, { flex: 1.2, textTransform: 'capitalize' }]}>{worker.role === 'admin' ? 'Quản lý' : 'Nhân viên'}</Text>
                           <Text style={[styles.tdCell, { flex: 1.5 }]}>{worker.phoneNumber || '—'}</Text>
                           <Text style={[styles.tdCell, { flex: 1.2, textAlign: 'center', fontWeight: '800', color: GREEN_THEME.primary }]}>
-                            Khu {worker.assignedZone || '—'}
+                            {(() => {
+                              if (worker.assignedLocationId) {
+                                const loc = locationsList.find(l => Number(l.id) === Number(worker.assignedLocationId));
+                                if (loc) return loc.name;
+                              }
+                              return worker.assignedZone || '—';
+                            })()}
                           </Text>
                           <View style={[styles.tdCell, { flex: 1.2, alignItems: 'center' }]}>
                             {worker.username !== 'admin' && worker.role !== 'admin' ? (
