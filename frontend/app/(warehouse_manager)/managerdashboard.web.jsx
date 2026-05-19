@@ -113,6 +113,39 @@ export default function ManagerDashboardWebScreen() {
   const [productForm, setProductForm] = useState({ name: '', sku: '', categoryId: 1, price: '', unit: 'Hộp', image: '' });
   const [submittingProduct, setSubmittingProduct] = useState(false);
 
+  // Auto generate SKU from name & category
+  useEffect(() => {
+    if (!productForm.name.trim()) {
+      setProductForm(f => f.sku !== '' ? { ...f, sku: '' } : f);
+      return;
+    }
+
+    let prefix = 'PROD';
+    const catId = parseInt(productForm.categoryId || 1);
+    if (catId === 1) prefix = 'FRESH';
+    else if (catId === 2) prefix = 'DRY';
+    else if (catId === 3) prefix = 'CHEM';
+    else if (catId === 4) prefix = 'COLD';
+
+    let cleanName = productForm.name
+      .trim()
+      .toLowerCase()
+      .replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, 'a')
+      .replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, 'e')
+      .replace(/ì|í|ị|ỉ|ĩ/g, 'i')
+      .replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, 'o')
+      .replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, 'u')
+      .replace(/ỳ|ý|ỵ|ỷ|ỹ/g, 'y')
+      .replace(/đ/g, 'd')
+      .replace(/[^a-z0-9\s]/g, '')
+      .replace(/\s+/g, '-');
+
+    const nameSlug = cleanName.toUpperCase().split('-').slice(0, 4).join('-');
+    const newSku = `${prefix}-${nameSlug}`;
+    
+    setProductForm(f => f.sku !== newSku ? { ...f, sku: newSku } : f);
+  }, [productForm.name, productForm.categoryId]);
+
   // D. Picking Dispatch states
   const [dispatchForm, setDispatchForm] = useState({ userId: '', orderId: '' });
   const [dispatchingTask, setDispatchingTask] = useState(false);
@@ -1778,12 +1811,12 @@ export default function ManagerDashboardWebScreen() {
                   </View>
 
                   <View style={styles.profileFormGroup}>
-                    <Text style={styles.profileInputLabel}>Mã định danh SKU: *</Text>
+                    <Text style={styles.profileInputLabel}>Mã định danh SKU (Hệ thống tự tạo):</Text>
                     <TextInput 
-                      style={styles.profileFormInput}
-                      placeholder="Ví dụ: FRUIT-TAO-DO"
+                      style={[styles.profileFormInput, { backgroundColor: '#f1f5f9', color: '#64748b', fontWeight: 'bold' }]}
+                      placeholder="Sẽ tự động sinh ra theo tên và phân khu..."
                       value={productForm.sku}
-                      onChangeText={t => setProductForm(f => ({ ...f, sku: t }))}
+                      editable={false}
                     />
                   </View>
 
