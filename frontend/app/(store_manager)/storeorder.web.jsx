@@ -452,7 +452,7 @@ export default function StoreOrderWebScreen() {
         productId: item.product.id,
         quantity: item.qty,
       }));
-      await createOrder({ items, address: deliveryAddress });
+      await createOrder(items, deliveryAddress);
       Alert.alert('Thành công', 'Đơn đặt hàng chi nhánh đã được gửi trực tiếp đến hệ thống tổng kho WMS!');
       clearCart();
       setDeliveryAddress('');
