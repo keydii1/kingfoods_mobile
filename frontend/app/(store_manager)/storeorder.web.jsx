@@ -1864,7 +1864,7 @@ export default function StoreOrderWebScreen() {
           <View style={styles.modalPaperContainer}>
             
             {/* Modal Control actions (no-print) */}
-            <View style={[styles.modalActionsBar, { className: 'no-print' } as any]}>
+            <View style={[styles.modalActionsBar, { className: 'no-print' }]}>
               <Text style={styles.modalTitleText}>Xem trước Hóa đơn Kiểm tra (Draft Invoice)</Text>
               
               <View style={{ flexDirection: 'row', gap: 8 }}>
