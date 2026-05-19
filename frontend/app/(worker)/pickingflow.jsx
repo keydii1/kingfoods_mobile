@@ -40,7 +40,7 @@ export default function PickingFlowScreen() {
 
   const handleBack = () => {
     if (step <= 1) return router.back();
-    const prev = step === 5 ? 3 : step - 1;
+    const prev = step - 1;
     if (prev === 1) {
       setBarcode('');
       setScanned(false);
@@ -53,6 +53,35 @@ export default function PickingFlowScreen() {
       setBinInput('');
     }
     setStep(prev);
+  };
+
+  const handleConfirmBin = async (binCodeOverride) => {
+    const finalBinCode = binCodeOverride !== undefined ? binCodeOverride : scannedBinCode;
+    if (!currentTask?.taskId) {
+      Alert.alert('Lỗi', 'Thiếu thông tin nhiệm vụ');
+      return;
+    }
+    setSubmitting(true);
+    try {
+      await packItem(currentTask.taskId, finalBinCode, quantity);
+      if (isLast) {
+        setStep(6);
+      } else {
+        setPrevLocation(currentTask?.locationCode || currentTask?.location || '');
+        const next = tasks[currentIndex + 1];
+        setCurrentIndex(prev => prev + 1);
+        setStep(1);
+        setBarcode('');
+        setScanned(false);
+        setQuantity(next?.qty || 1);
+        setScannedBinCode('');
+        setBinInput('');
+      }
+    } catch (err) {
+      Alert.alert('Lỗi', err.message || 'Không thể xác nhận');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const handleCameraScanned = (data) => {
@@ -76,7 +105,8 @@ export default function PickingFlowScreen() {
       setStep(3);
     } else {
       setScannedBinCode(data);
-      setStep(5);
+      // Auto confirm!
+      handleConfirmBin(data);
     }
   };
 
@@ -112,36 +142,10 @@ export default function PickingFlowScreen() {
       Alert.alert('Lỗi', 'Vui lòng nhập mã thùng');
       return;
     }
-    setScannedBinCode(binInput.trim());
-    setStep(5);
-  };
-
-  const handleConfirmBin = async () => {
-    if (!currentTask?.taskId) {
-      Alert.alert('Lỗi', 'Thiếu thông tin nhiệm vụ');
-      return;
-    }
-    setSubmitting(true);
-    try {
-      await packItem(currentTask.taskId, scannedBinCode, quantity);
-      if (isLast) {
-        setStep(6);
-      } else {
-        setPrevLocation(currentTask?.locationCode || currentTask?.location || '');
-        const next = tasks[currentIndex + 1];
-        setCurrentIndex(prev => prev + 1);
-        setStep(1);
-        setBarcode('');
-        setScanned(false);
-        setQuantity(next?.qty || 1);
-        setScannedBinCode('');
-        setBinInput('');
-      }
-    } catch (err) {
-      Alert.alert('Lỗi', err.message || 'Không thể xác nhận');
-    } finally {
-      setSubmitting(false);
-    }
+    const code = binInput.trim();
+    setScannedBinCode(code);
+    // Auto confirm!
+    handleConfirmBin(code);
   };
 
   const handleCompleteOrder = () => {
@@ -276,7 +280,7 @@ export default function PickingFlowScreen() {
                 </TouchableOpacity>
                 </View>
               </View>
-              <TouchableOpacity style={styles.nextBtn} onPress={() => setStep(5)}>
+              <TouchableOpacity style={styles.nextBtn} onPress={() => setStep(4)}>
                 <Text style={styles.nextBtnText}>Quét mã thùng →</Text>
               </TouchableOpacity>
             </View>
