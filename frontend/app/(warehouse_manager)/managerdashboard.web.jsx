@@ -2581,6 +2581,9 @@ export default function ManagerDashboardWebScreen() {
                           <Text style={[styles.tdCell, { flex: 1.5 }]}>{worker.phoneNumber || '—'}</Text>
                           <Text style={[styles.tdCell, { flex: 1.2, textAlign: 'center', fontWeight: '800', color: GREEN_THEME.primary }]}>
                             {(() => {
+                              if (worker.assignedLocation?.name) {
+                                return worker.assignedLocation.name;
+                              }
                               const locId = worker.assignedLocationId ?? worker.assigned_location_id;
                               if (locId) {
                                 const loc = locationsList.find(l => Number(l.id) === Number(locId));

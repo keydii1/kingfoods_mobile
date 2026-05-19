@@ -1,6 +1,7 @@
-import { Entity, Column, Index } from "typeorm";
+import { Entity, Column, Index, ManyToOne, JoinColumn } from "typeorm";
 import { Property, Enum, Required, MinLength, Email } from "@tsed/schema";
 import { BaseEntity } from "./BaseEntity";
+import { Location } from "./Location";
 
 export enum UserRole {
   ADMIN = "admin",
@@ -73,6 +74,11 @@ export class User extends BaseEntity {
   @Column({ name: "assigned_location_id", nullable: true })
   @Property()
   assignedLocationId: number | null;
+
+  @ManyToOne(() => Location)
+  @JoinColumn({ name: "assigned_location_id" })
+  @Property()
+  assignedLocation: Location | null;
 
   /**
    * Hidden column — không trả về trong query mặc định

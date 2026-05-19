@@ -42,11 +42,11 @@ export class UserService {
   }
 
   async getListUser() {
-    return await User.find();
+    return await User.find({ relations: ["assignedLocation"] });
   }
 
   async getUser(id: number) {
-    return await User.getByIdOrFail(id);
+    return await User.getByIdOrFail(id, { relations: ["assignedLocation"] });
   }
 
   async updateUser(id: number, body: any) {
