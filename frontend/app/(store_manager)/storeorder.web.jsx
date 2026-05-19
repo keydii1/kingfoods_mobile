@@ -40,6 +40,7 @@ export default function StoreOrderWebScreen() {
   // Draft checking invoice modal state
   const [showDraftInvoiceModal, setShowDraftInvoiceModal] = useState(false);
   const [draftInvoiceNumber, setDraftInvoiceNumber] = useState('');
+  const [draftInvoiceDate, setDraftInvoiceDate] = useState('');
 
   // Products catalog
   const [productCatalog, setProductCatalog] = useState([]);
@@ -261,6 +262,18 @@ export default function StoreOrderWebScreen() {
     }
   };
 
+  // Helper for real-time date/time formatting
+  const getFormattedDateTime = () => {
+    const now = new Date();
+    const day = String(now.getDate()).padStart(2, '0');
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const year = now.getFullYear();
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const seconds = String(now.getSeconds()).padStart(2, '0');
+    return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
+  };
+
   // Open Draft Invoice preview modal
   const handleOpenDraftInvoice = () => {
     if (cart.length === 0) {
@@ -268,8 +281,184 @@ export default function StoreOrderWebScreen() {
       return;
     }
     const rand = Math.floor(1000 + Math.random() * 9000);
-    setDraftInvoiceNumber(`KF-WMS-2026-05-19-${rand}`);
+    const now = new Date();
+    const yStr = now.getFullYear();
+    const mStr = String(now.getMonth() + 1).padStart(2, '0');
+    const dStr = String(now.getDate()).padStart(2, '0');
+    
+    setDraftInvoiceNumber(`KF-WMS-${yStr}-${mStr}-${dStr}-${rand}`);
+    setDraftInvoiceDate(getFormattedDateTime());
     setShowDraftInvoiceModal(true);
+  };
+
+  // Print detailed invoice / Export to PDF
+  const handlePrintInvoice = () => {
+    const printWindow = window.open('', '_blank', 'width=950,height=850');
+    if (!printWindow) {
+      Alert.alert('Trình chặn Pop-up', 'Vui lòng bật quyền hiển thị Pop-up cho trang web này để in/xuất hóa đơn kiểm tra.');
+      return;
+    }
+    
+    const itemsHtml = cart.map((item, idx) => `
+      <tr style="border-bottom: 1px solid #cbd5e1; height: 38px;">
+        <td style="text-align: center; padding: 6px;">${idx + 1}</td>
+        <td style="font-weight: 700; padding: 6px;">${item.product.name}</td>
+        <td style="font-family: monospace; padding: 6px;">${item.product.sku}</td>
+        <td style="text-align: center; padding: 6px;">${item.product.unit}</td>
+        <td style="text-align: right; padding: 6px;">${item.product.price.toLocaleString()}đ</td>
+        <td style="text-align: center; font-weight: bold; padding: 6px;">${item.qty}</td>
+        <td style="text-align: right; font-weight: bold; padding: 6px;">${(item.product.price * item.qty).toLocaleString()}đ</td>
+      </tr>
+    `).join('');
+
+    const subtotal = totalAmount;
+    const vat = totalAmount * 0.08;
+    const total = totalAmount * 1.08;
+
+    printWindow.document.write(\`
+      <html>
+        <head>
+          <title>Hóa đơn kiểm tra \${draftInvoiceNumber}</title>
+          <style>
+            body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; color: #0f172a; padding: 40px; margin: 0; background: #fff; }
+            .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
+            .brand-name { font-size: 15px; font-weight: 900; letter-spacing: 0.5px; }
+            .brand-addr, .brand-contact { font-size: 11px; color: #475569; margin-top: 3px; }
+            .stamp { border: 2px solid #e53935; border-radius: 6px; padding: 4px 10px; font-weight: 900; color: #e53935; text-transform: uppercase; transform: rotate(-3deg); display: inline-block; margin-bottom: 6px; font-size: 11px; }
+            .meta-label { font-size: 11px; color: #475569; margin-top: 3px; }
+            .title { font-size: 20px; font-weight: 900; text-align: center; margin-top: 15px; }
+            .subtitle { font-size: 10px; color: #64748b; text-align: center; font-weight: bold; margin-top: 4px; margin-bottom: 25px; }
+            .details-grid { display: flex; gap: 20px; margin-bottom: 25px; }
+            .details-block { flex: 1; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 14px; background-color: #f8fafc; }
+            .block-title { font-size: 10px; font-weight: 900; color: #64748b; margin-bottom: 6px; border-bottom: 1.5px solid #cbd5e1; padding-bottom: 4px; }
+            .details-text { font-size: 11px; color: #334155; line-height: 1.5; margin-top: 2px; }
+            table { width: 100%; border-collapse: collapse; border: 1.5px solid #0f172a; border-radius: 6px; overflow: hidden; margin-bottom: 25px; }
+            th { background-color: #f1f5f9; border-bottom: 1.5px solid #0f172a; padding: 8px; font-size: 10px; font-weight: 900; text-align: left; text-transform: uppercase; }
+            td { padding: 8px; font-size: 11px; }
+            .summary-block { display: flex; gap: 20px; margin-bottom: 25px; }
+            .qr-block { flex: 1; display: flex; align-items: center; gap: 12px; border: 1px solid #cbd5e1; border-radius: 10px; padding: 12px; background-color: #f8fafc; }
+            .qr-desc { font-size: 10px; color: #64748b; line-height: 1.4; }
+            .calcs { width: 300px; }
+            .calc-row { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 5px; }
+            .calc-row-total { display: flex; justify-content: space-between; font-size: 14px; font-weight: 900; border-top: 1.5px solid #0f172a; padding-top: 6px; margin-top: 6px; }
+            .signatures { display: flex; justify-content: space-between; margin-top: 30px; }
+            .sign-node { width: 22%; text-align: center; }
+            .sign-role { font-size: 11px; font-weight: 900; }
+            .sign-hint { font-size: 9px; color: #64748b; margin-top: 2px; }
+            .sign-gap { height: 60px; }
+            .sign-name { font-size: 10px; font-weight: 800; }
+          </style>
+        </head>
+        <body>
+          <div class="header">
+            <div>
+              <div class="brand-name">CÔNG TY CỔ PHẦN KINGFOOD MARKET</div>
+              <div class="brand-addr">Địa chỉ: 12 Hùng Vương, Phường 4, Quận 5, TP. Hồ Chí Minh</div>
+              <div class="brand-contact">Tổng đài sỉ: 1900 6363 · Email: wholesale@kingfoodmarket.com</div>
+            </div>
+            <div style="text-align: right;">
+              <div class="stamp">HÓA ĐƠN NHÁP KIỂM TRA</div>
+              <div class="meta-label">Số hóa đơn: <b>\${draftInvoiceNumber}</b></div>
+              <div class="meta-label">Ngày lập: <b>\${draftInvoiceDate}</b></div>
+            </div>
+          </div>
+          <div style="border-top: 1.5px solid #0f172a; border-bottom: 1px solid #cbd5e1; height: 3px; margin-bottom: 15px;"></div>
+          
+          <div class="title">HÓA ĐƠN BÁN SỈ & KÊ KHAI BÀN GIAO HÀNG HÓA</div>
+          <div class="subtitle">(DRAFT WHOLESALE COMMERCIAL & QC CHECKLIST INVOICE)</div>
+
+          <div class="details-grid">
+            <div class="details-block">
+              <div class="block-title">ĐƠN VỊ CUNG CẤP (SELLER):</div>
+              <div class="details-text"><b>TỔNG KHO VẬN HÀNH LOGISTICS WMS KINGFOOD</b></div>
+              <div class="details-text">Người lập đơn: Quản trị hệ thống WMS</div>
+              <div class="details-text">Kho xuất hàng: Zone Alpha - Kho sỉ Tân Bình</div>
+            </div>
+            <div class="details-block">
+              <div class="block-title">ĐƠN VỊ MUA HÀNG (BUYER):</div>
+              <div class="details-text"><b>CHI NHÁNH SIÊU THỊ KINGFOOD MARKET</b></div>
+              <div class="details-text">Người nhận đại diện: Quản lý \${userName}</div>
+              <div class="details-text">Ghi chú giao nhận: \${deliveryAddress || 'Giao nhận tiêu chuẩn WMS chặng cuối'}</div>
+            </div>
+          </div>
+
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 40px; text-align: center;">STT</th>
+                <th>Tên sản phẩm sỉ</th>
+                <th style="width: 90px;">SKU</th>
+                <th style="width: 60px; text-align: center;">Đơn vị</th>
+                <th style="width: 90px; text-align: right;">Đơn giá</th>
+                <th style="width: 60px; text-align: center;">Số lượng</th>
+                <th style="width: 110px; text-align: right;">Thành tiền</th>
+              </tr>
+            </thead>
+            <tbody>
+              \${itemsHtml}
+            </tbody>
+          </table>
+
+          <div class="summary-block">
+            <div class="qr-block">
+              <div style="font-size: 24px;">🔲</div>
+              <div>
+                <div style="font-weight: bold; font-size: 11px;">QUÉT KIỂM TRA MÃ CONTAINER</div>
+                <div class="qr-desc">Thủ kho quét mã QR này để truy vết Container Tote đóng hàng trước khi xếp xe giao hàng sỉ chặng cuối.</div>
+              </div>
+            </div>
+            <div class="calcs">
+              <div class="calc-row">
+                <span>Cộng tiền hàng (Subtotal):</span>
+                <b>\${subtotal.toLocaleString()}đ</b>
+              </div>
+              <div class="calc-row">
+                <span>Thuế suất giá trị gia tăng (VAT 8%):</span>
+                <b>\${vat.toLocaleString()}đ</b>
+              </div>
+              <div class="calc-row-total">
+                <span>TỔNG CỘNG TIỀN THANH TOÁN (TOTAL):</span>
+                <span style="color: #F26522;">\${total.toLocaleString()}đ</span>
+              </div>
+            </div>
+          </div>
+
+          <div style="border-top: 1px dashed #cbd5e1; margin-top: 30px; margin-bottom: 15px;"></div>
+
+          <div class="signatures">
+            <div class="sign-node">
+              <div class="sign-role">Người Lập Phiếu</div>
+              <div class="sign-hint">(Ký, ghi rõ họ tên)</div>
+              <div class="sign-gap"></div>
+              <div class="sign-name">Hệ thống WMS Kingfood</div>
+            </div>
+            <div class="sign-node">
+              <div class="sign-role">Thủ Kho Giao Hàng</div>
+              <div class="sign-hint">(Ký, ghi rõ họ tên)</div>
+              <div class="sign-gap"></div>
+              <div class="sign-name">Trưởng ca WMS</div>
+            </div>
+            <div class="sign-node">
+              <div class="sign-role">Đại Diện Giao Nhận</div>
+              <div class="sign-hint">(Ký, ghi rõ họ tên)</div>
+              <div class="sign-gap"></div>
+              <div class="sign-name">Đội xe tải sỉ</div>
+            </div>
+            <div class="sign-node">
+              <div class="sign-role">Người Nhận Hàng</div>
+              <div class="sign-hint">(Ký, ghi rõ họ tên)</div>
+              <div class="sign-gap"></div>
+              <div class="sign-name">Quản lý \${userName}</div>
+            </div>
+          </div>
+        </body>
+      </html>
+    \`);
+    printWindow.document.close();
+    printWindow.focus();
+    setTimeout(() => {
+      printWindow.print();
+    }, 500);
   };
 
   // Submit order checkout
@@ -1868,14 +2057,12 @@ export default function StoreOrderWebScreen() {
               <Text style={styles.modalTitleText}>Xem trước Hóa đơn Kiểm tra (Draft Invoice)</Text>
               
               <View style={{ flexDirection: 'row', gap: 8 }}>
-                <TouchableOpacity style={[styles.modalActionBtn, { backgroundColor: '#475569' }]} onPress={() => window.print()}>
+                <TouchableOpacity style={[styles.modalActionBtn, { backgroundColor: '#475569' }]} onPress={handlePrintInvoice}>
                   <Ionicons name="print" size={16} color="#fff" style={{ marginRight: 4 }} />
                   <Text style={{ color: '#fff', fontSize: 12, fontWeight: '700' }}>In Hóa Đơn</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={[styles.modalActionBtn, { backgroundColor: '#3b82f6' }]} onPress={() => {
-                  Alert.alert('Tải xuống thành công', 'File hóa đơn định dạng PDF đã được lưu về thiết bị để kiểm tra chất lượng.');
-                }}>
+                <TouchableOpacity style={[styles.modalActionBtn, { backgroundColor: '#3b82f6' }]} onPress={handlePrintInvoice}>
                   <Ionicons name="download" size={16} color="#fff" style={{ marginRight: 4 }} />
                   <Text style={{ color: '#fff', fontSize: 12, fontWeight: '700' }}>Tải file PDF</Text>
                 </TouchableOpacity>
@@ -1911,7 +2098,7 @@ export default function StoreOrderWebScreen() {
                       <Text style={styles.draftStampText}>HÓA ĐƠN NHÁP KIỂM TRA</Text>
                     </View>
                     <Text style={styles.paperMetaLabel}>Số hóa đơn: <Text style={{ fontFamily: 'monospace', fontWeight: 'bold' }}>{draftInvoiceNumber}</Text></Text>
-                    <Text style={styles.paperMetaLabel}>Ngày lập: <Text style={{ fontWeight: 'bold' }}>19/05/2026 11:29</Text></Text>
+                    <Text style={styles.paperMetaLabel}>Ngày lập: <Text style={{ fontWeight: 'bold' }}>{draftInvoiceDate}</Text></Text>
                   </View>
                 </View>
 
