@@ -153,7 +153,6 @@ export default function StoreOrderScreen() {
               )}
               <View style={styles.productInfo}>
                 <Text style={styles.productName}>{product.name}</Text>
-                <Text style={styles.productSku}>{product.sku}</Text>
                 <Text style={styles.productPrice}>{product.price.toLocaleString()}đ / {product.unit}</Text>
               </View>
               <View style={styles.productAdd}>

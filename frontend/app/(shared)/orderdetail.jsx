@@ -144,7 +144,7 @@ export default function OrderDetailScreen() {
                     {line.product?.name || `Sản phẩm #${line.productId}`}
                   </Text>
                   <Text style={styles.productSku}>
-                    {line.product?.sku || ''} · SL: {line.quantity}
+                    SL: {line.quantity}
                   </Text>
                 </View>
                 <Text style={styles.lineTotal}>

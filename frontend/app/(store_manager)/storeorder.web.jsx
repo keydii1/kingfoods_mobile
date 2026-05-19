@@ -359,7 +359,6 @@ export default function StoreOrderWebScreen() {
       <tr style="border-bottom: 1px solid #cbd5e1; height: 38px;">
         <td style="text-align: center; padding: 6px;">${idx + 1}</td>
         <td style="font-weight: 700; padding: 6px;">${item.product.name}</td>
-        <td style="font-family: monospace; padding: 6px;">${item.product.sku}</td>
         <td style="text-align: center; padding: 6px;">${item.product.unit}</td>
         <td style="text-align: right; padding: 6px;">${item.product.price.toLocaleString()}đ</td>
         <td style="text-align: center; font-weight: bold; padding: 6px;">${item.qty}</td>
@@ -443,7 +442,6 @@ export default function StoreOrderWebScreen() {
               <tr>
                 <th style="width: 40px; text-align: center;">STT</th>
                 <th>Tên sản phẩm sỉ</th>
-                <th style="width: 90px;">SKU</th>
                 <th style="width: 60px; text-align: center;">Đơn vị</th>
                 <th style="width: 90px; text-align: right;">Đơn giá</th>
                 <th style="width: 60px; text-align: center;">Số lượng</th>
@@ -913,7 +911,7 @@ export default function StoreOrderWebScreen() {
                       <Ionicons name="search" size={18} color={ORANGE_THEME.textMuted} style={{ marginRight: 10 }} />
                       <TextInput 
                         style={styles.searchInputWeb}
-                        placeholder="Tìm sản phẩm theo tên hoặc mã SKU sản phẩm..."
+                        placeholder="Tìm sản phẩm theo tên..."
                         value={search}
                         onChangeText={setSearch}
                       />
@@ -971,7 +969,6 @@ export default function StoreOrderWebScreen() {
                             <View style={styles.productCardInfo}>
                               <Text style={styles.productCategoryLabel}>{product.category}</Text>
                               <Text style={styles.productNameLabel} numberOfLines={2}>{product.name}</Text>
-                              <Text style={styles.productSkuLabel}>SKU: {product.sku}</Text>
                               
                               <View style={styles.productPriceActionRow}>
                                 <Text style={styles.productPriceVal}>
@@ -1015,24 +1012,7 @@ export default function StoreOrderWebScreen() {
                     </View>
                     <Text style={styles.cartSideTitle}>Giỏ hàng chi nhánh</Text>
                   </View>
-                  <Text style={styles.cartBadgeWeb}>{totalItems} SKU</Text>
-                </View>
-
-                {/* SKU DIRECT INPUT QUICK-ADD */}
-                <View style={styles.quickSkuPanel}>
-                  <Text style={styles.quickSkuLabel}>Thêm nhanh bằng mã SKU:</Text>
-                  <View style={{ flexDirection: 'row', gap: 8 }}>
-                    <TextInput 
-                      style={styles.quickSkuInput}
-                      placeholder="Nhập mã SKU (Ví dụ: SKU-1)"
-                      value={quickSkuText}
-                      onChangeText={setQuickSkuText}
-                      onSubmitEditing={handleQuickSkuAdd}
-                    />
-                    <TouchableOpacity style={styles.quickSkuBtn} onPress={handleQuickSkuAdd}>
-                      <Ionicons name="add" size={18} color="#fff" />
-                    </TouchableOpacity>
-                  </View>
+                  <Text style={styles.cartBadgeWeb}>{totalItems} mặt hàng</Text>
                 </View>
 
                 {cart.length === 0 ? (
@@ -1274,8 +1254,7 @@ export default function StoreOrderWebScreen() {
                       <Text style={styles.invoiceCardLabel}>Bảng chi tiết hàng hoá:</Text>
                       
                       <View style={styles.invoiceTableHeader}>
-                        <Text style={[styles.thCell, { flex: 2.5 }]}>Tên sản phẩm thực phẩm</Text>
-                        <Text style={[styles.thCell, { flex: 1 }]}>SKU</Text>
+                        <Text style={[styles.thCell, { flex: 3.5 }]}>Tên sản phẩm thực phẩm</Text>
                         <Text style={[styles.thCell, { flex: 0.8, textAlign: 'center' }]}>Số lượng</Text>
                         <Text style={[styles.thCell, { flex: 1.2, textAlign: 'right' }]}>Đơn giá</Text>
                         <Text style={[styles.thCell, { flex: 1.5, textAlign: 'right' }]}>Thành tiền</Text>
@@ -1287,11 +1266,8 @@ export default function StoreOrderWebScreen() {
                           const subTotal = p * item.quantity;
                           return (
                             <View key={item.id || index} style={styles.invoiceTableRow}>
-                              <Text style={[styles.tdCell, { flex: 2.5, fontWeight: '600' }]} numberOfLines={1}>
+                              <Text style={[styles.tdCell, { flex: 3.5, fontWeight: '600' }]} numberOfLines={1}>
                                 {item.product?.name || 'Sản phẩm'}
-                              </Text>
-                              <Text style={[styles.tdCell, { flex: 1, color: ORANGE_THEME.textMuted }]}>
-                                {item.product?.sku || '—'}
                               </Text>
                               <Text style={[styles.tdCell, { flex: 0.8, textAlign: 'center', fontWeight: 'bold' }]}>
                                 {item.quantity}
@@ -1418,12 +1394,12 @@ export default function StoreOrderWebScreen() {
                     <View style={styles.analyticPanelCard}>
                       <View style={styles.statsCardHeadingRowWeb}>
                         <Ionicons name="trophy-outline" size={18} color={ORANGE_THEME.primary} />
-                        <Text style={styles.analyticCardTitle}>Top SKU nhập hàng sỉ nhiều nhất</Text>
+                        <Text style={styles.analyticCardTitle}>Top sản phẩm nhập hàng sỉ nhiều nhất</Text>
                       </View>
 
                       {topProducts.length === 0 ? (
                         <View style={styles.statsEmptyStateWeb}>
-                          <Text style={{ color: ORANGE_THEME.textMuted }}>Không có dữ liệu SKU sỉ nào.</Text>
+                          <Text style={{ color: ORANGE_THEME.textMuted }}>Không có dữ liệu hàng sỉ nào.</Text>
                         </View>
                       ) : (
                         <View style={styles.topProductsListWeb}>
@@ -1499,8 +1475,7 @@ export default function StoreOrderWebScreen() {
 
               <View style={styles.tableWebContainer}>
                 <View style={styles.tableWebHeader}>
-                  <Text style={[styles.thCell, { flex: 3 }]}>Sản phẩm thực phẩm</Text>
-                  <Text style={[styles.thCell, { flex: 2 }]}>Mã SKU</Text>
+                  <Text style={[styles.thCell, { flex: 5 }]}>Sản phẩm thực phẩm</Text>
                   <Text style={[styles.thCell, { flex: 2, textAlign: 'center' }]}>Tần suất tiêu thụ</Text>
                   <Text style={[styles.thCell, { flex: 2, textAlign: 'center' }]}>Tồn kho tại kệ chi nhánh</Text>
                   <Text style={[styles.thCell, { flex: 2, textAlign: 'center' }]}>Dự báo hết hàng</Text>
@@ -1511,8 +1486,7 @@ export default function StoreOrderWebScreen() {
                   const isUrgent = item.stock < 15;
                   return (
                     <View key={idx} style={styles.tableWebRow}>
-                      <Text style={[styles.tdCell, { flex: 3, fontWeight: '900' }]}>{item.name}</Text>
-                      <Text style={[styles.tdCell, { flex: 2, fontFamily: 'monospace' }]}>{item.sku}</Text>
+                      <Text style={[styles.tdCell, { flex: 5, fontWeight: '900' }]}>{item.name}</Text>
                       <Text style={[styles.tdCell, { flex: 2, textAlign: 'center', fontWeight: '700' }]}>{item.salesRate}</Text>
                       <Text style={[styles.tdCell, { flex: 2, textAlign: 'center', fontWeight: '800', color: isUrgent ? '#d32f2f' : '#334155' }]}>
                         {item.stock} {item.unit}
@@ -1620,7 +1594,6 @@ export default function StoreOrderWebScreen() {
                         <View style={styles.productCardInfo}>
                           <Text style={styles.productCategoryLabel}>{product.category}</Text>
                           <Text style={styles.productNameLabel} numberOfLines={2}>{product.name}</Text>
-                          <Text style={styles.productSkuLabel}>SKU: {product.sku}</Text>
                           
                           <View style={styles.productPriceActionRow}>
                             <Text style={styles.productPriceVal}>{product.price.toLocaleString()}đ</Text>
@@ -2164,8 +2137,7 @@ export default function StoreOrderWebScreen() {
                 <View style={styles.paperTableContainer}>
                   <View style={styles.paperTableHeader}>
                     <Text style={[styles.pTh, { flex: 0.5, textAlign: 'center' }]}>STT</Text>
-                    <Text style={[styles.pTh, { flex: 3 }]}>Tên sản phẩm sỉ</Text>
-                    <Text style={[styles.pTh, { flex: 1 }]}>SKU</Text>
+                    <Text style={[styles.pTh, { flex: 4 }]}>Tên sản phẩm sỉ</Text>
                     <Text style={[styles.pTh, { flex: 1, textAlign: 'center' }]}>Đơn vị</Text>
                     <Text style={[styles.pTh, { flex: 1.2, textAlign: 'right' }]}>Đơn giá</Text>
                     <Text style={[styles.pTh, { flex: 1, textAlign: 'center' }]}>Số lượng</Text>
@@ -2175,8 +2147,7 @@ export default function StoreOrderWebScreen() {
                   {cart.map((item, idx) => (
                     <View key={item.product.id} style={styles.paperTableRow}>
                       <Text style={[styles.pTd, { flex: 0.5, textAlign: 'center' }]}>{idx + 1}</Text>
-                      <Text style={[styles.pTd, { flex: 3, fontWeight: '700' }]}>{item.product.name}</Text>
-                      <Text style={[styles.pTd, { flex: 1, fontFamily: 'monospace' }]}>{item.product.sku}</Text>
+                      <Text style={[styles.pTd, { flex: 4, fontWeight: '700' }]}>{item.product.name}</Text>
                       <Text style={[styles.pTd, { flex: 1, textAlign: 'center' }]}>{item.product.unit}</Text>
                       <Text style={[styles.pTd, { flex: 1.2, textAlign: 'right' }]}>{(item.product.price).toLocaleString()}đ</Text>
                       <Text style={[styles.pTd, { flex: 1, textAlign: 'center', fontWeight: 'bold' }]}>{item.qty}</Text>
