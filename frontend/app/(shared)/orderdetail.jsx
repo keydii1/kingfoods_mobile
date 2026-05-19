@@ -19,18 +19,31 @@ import { notifyOrdersRefresh } from '../../utils/ordersRefresh';
 // Timezone date helper for Vietnam (UTC+7)
 const formatVietnamDate = (dateStr) => {
   if (!dateStr) return '—';
-  let normalizedStr = dateStr;
-  if (!dateStr.endsWith('Z') && !dateStr.includes('+') && !dateStr.includes('GMT')) {
-    normalizedStr = dateStr.replace(' ', 'T') + 'Z';
+  const tStr = dateStr.replace(' ', 'T');
+  const match = tStr.match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})/);
+  if (!match) {
+    return dateStr;
   }
-  const date = new Date(normalizedStr);
-  const day = String(date.getDate()).padStart(2, '0');
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const year = date.getFullYear();
-  const hours = String(date.getHours()).padStart(2, '0');
-  const minutes = String(date.getMinutes()).padStart(2, '0');
-  const seconds = String(date.getSeconds()).padStart(2, '0');
-  return `${hours}:${minutes}:${seconds} ${day}/${month}/${year}`;
+  
+  const year = parseInt(match[1], 10);
+  const month = parseInt(match[2], 10) - 1;
+  const day = parseInt(match[3], 10);
+  const hours = parseInt(match[4], 10);
+  const minutes = parseInt(match[5], 10);
+  const seconds = parseInt(match[6], 10);
+  
+  const utcDate = new Date(Date.UTC(year, month, day, hours, minutes, seconds));
+  const vnTimeMs = utcDate.getTime() + (7 * 60 * 60 * 1000);
+  const vnDate = new Date(vnTimeMs);
+  
+  const d = String(vnDate.getUTCDate()).padStart(2, '0');
+  const m = String(vnDate.getUTCMonth() + 1).padStart(2, '0');
+  const y = vnDate.getUTCFullYear();
+  const h = String(vnDate.getUTCHours()).padStart(2, '0');
+  const min = String(vnDate.getUTCMinutes()).padStart(2, '0');
+  const sec = String(vnDate.getUTCSeconds()).padStart(2, '0');
+  
+  return `${h}:${min}:${sec} ${d}/${m}/${y}`;
 };
 
 export default function OrderDetailScreen() {
