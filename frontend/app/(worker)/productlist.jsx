@@ -42,9 +42,12 @@ export default function productListScreen() {
         setProducts(orderTasks.map(t => {
           const prod = t.orderDetail?.product;
           const remaining = (t.quantityToPick ?? 1) - (t.quantityPicked ?? 0);
+          const loc = t.location;
+          const catLoc = t.orderDetail?.product?.category?.location;
           return {
             taskId: t.id,
-            location: t.location?.name || '',
+            location: loc?.name || catLoc?.name || '',
+            locationCode: loc?.code || catLoc?.code || '',
             name: prod?.name || 'Unknown',
             sku: String(prod?.id ?? t.id),
             qty: Math.max(0, remaining),

@@ -127,7 +127,7 @@ export default function PickingFlowScreen() {
       if (isLast) {
         setStep(6);
       } else {
-        setPrevLocation(currentTask?.location || '');
+        setPrevLocation(currentTask?.locationCode || currentTask?.location || '');
         const next = tasks[currentIndex + 1];
         setCurrentIndex(prev => prev + 1);
         setStep(1);
@@ -174,8 +174,8 @@ export default function PickingFlowScreen() {
               </Text>
               <View style={styles.mapCard}>
                 <WarehouseMap
-                  currentLocation={prevLocation || currentTask?.location}
-                  targetLocation={currentTask?.location}
+                  currentLocation={prevLocation || currentTask?.locationCode || currentTask?.location}
+                  targetLocation={currentTask?.locationCode || currentTask?.location}
                   showRoute={true}
                   fromPacking={!prevLocation}
                 />

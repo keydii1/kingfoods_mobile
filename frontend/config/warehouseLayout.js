@@ -82,6 +82,24 @@ function parseShelfCode(locationStr) {
 function getPosFromLocation(locationStr) {
   if (!locationStr) return null;
 
+  // Map real database location codes to zone center positions
+  const CODE_TO_POS = {
+    'FRESH':    [1, 2],   // Zone 1 - A1
+    'DRY':     [1, 5],   // Zone 1 - A3
+    'BEVERAGE': [1, 8],  // Zone 2 - A5
+    'FROZEN':   [4, 8],  // Zone 4 - C5
+  };
+
+  // Check direct location code match (e.g. "FRESH", "DRY")
+  const upper = locationStr.toUpperCase().trim();
+  if (CODE_TO_POS[upper]) return CODE_TO_POS[upper];
+
+  // Check if location name contains known keywords
+  if (locationStr.includes('Thực phẩm tươi') || locationStr.includes('tươi')) return CODE_TO_POS['FRESH'];
+  if (locationStr.includes('Đồ khô') || locationStr.includes('Gia vị')) return CODE_TO_POS['DRY'];
+  if (locationStr.includes('Đồ uống') || locationStr.includes('Nước')) return CODE_TO_POS['BEVERAGE'];
+  if (locationStr.includes('đông lạnh') || locationStr.includes('Đông lạnh')) return CODE_TO_POS['FROZEN'];
+
   // Try old format first: "Kệ A1" → SHELF_POSITIONS["A1"]
   const oldMatch = locationStr.match(/[A-D]\d/);
   if (oldMatch && SHELF_POSITIONS[oldMatch[0]]) {
@@ -89,13 +107,11 @@ function getPosFromLocation(locationStr) {
   }
 
   // Try real format: "14.07.B" or "12.03\n.A"
-  // Extract shelf number and tier letter
   const match = locationStr.match(/(\d+)\.\s*(\d+)\s*\.?\s*([A-D])?/);
   if (match) {
     const shelfNum = parseInt(match[2], 10);
     const tier = match[3];
 
-    // Determine row based on tier letter
     let row;
     if (tier === 'A') row = 1;
     else if (tier === 'B') row = 2;
@@ -103,7 +119,6 @@ function getPosFromLocation(locationStr) {
     else if (tier === 'D') row = 5;
     else row = 1 + (shelfNum % 2 === 0 ? 1 : 0);
 
-    // Column positions available: [2, 3, 5, 6, 8, 9, 11, 12]
     const cols = [2, 3, 5, 6, 8, 9, 11, 12];
     const col = cols[(shelfNum - 1) % 8];
 
