@@ -131,9 +131,8 @@ export const getDashboardStatus = () =>
     request ('GET', '/admin/dashboard/stats');
 export const getCustomers = (page = 1, limit = 50) =>
     request ('GET', `/admin/customers?page=${page}&limit=${limit}`);
-// ── LOCATIONS 
-export const getLocations = () =>
-    request('GET', '/admin/locations');
+export const getLocations = (params = '') =>
+    request('GET', `/admin/locations?limit=1000${params ? `&${params}` : ''}`);
 
 export const getLocationById = (id) =>
     request('GET', `/admin/locations/${id}`);
@@ -147,8 +146,8 @@ export const updateLocation = (id, data) =>
 export const deleteLocation = (id) =>
     request('DELETE', `/admin/locations/${id}`);
 // ── CONTAINERS 
-export const getContainers = () =>
-    request('GET', '/admin/containers');
+export const getContainers = (params = '') =>
+    request('GET', `/admin/containers?limit=1000${params ? `&${params}` : ''}`);
 
 export const getContainerById = (id) =>
     request('GET', `/admin/containers/${id}`);
