@@ -9,9 +9,6 @@ from '../contexts/AuthContext';
 import { StoreCartProvider } from '../contexts/StoreCartContext';
 import { AppAlertProvider } from '../components/AppAlertProvider';
 
-import FloatingAssistiveButton
-from '../components/FloatingAssistiveButton';
-
 function LayoutContent() {
 
     const { isLoggedIn, userRole } = useAuth();
@@ -41,11 +38,6 @@ function LayoutContent() {
                     animationDuration: 200,
                 }}
             />
-
-            {isLoggedIn && !isLoginScreen && !isPickingFlow && userRole === 'staff' && (
-                <FloatingAssistiveButton />
-            )}
-
         </>
 
     );
