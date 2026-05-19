@@ -43,14 +43,50 @@ export default function DashboardScreen() {
 
             // 2. Fetch assigned tasks
             const res = await getAssignedTasks();
-            const mapped = (Array.isArray(res) ? res : []).map(task => ({
-                ...task,
-                orderId: task.orderDetail?.order?.id ?? task.orderId,
-                storeName: task.orderDetail?.order?.branch?.name || '',
-                totalCount: task.quantityToPick ?? task.totalCount ?? 0,
-                pickedCount: task.quantityPicked ?? task.pickedCount ?? 0,
-                createdAt: task.createdAt,
-            }));
+            const rawTasks = Array.isArray(res) ? res : [];
+
+            // Group by Order ID to avoid duplicate order cards on dashboard!
+            const groups = {};
+            rawTasks.forEach(task => {
+                const orderId = task.orderDetail?.order?.id ?? task.orderId;
+                if (!orderId) return;
+
+                if (!groups[orderId]) {
+                    groups[orderId] = {
+                        id: task.id, // pass first task ID so productlist.jsx can fetch the order group
+                        orderId: orderId,
+                        storeName: task.orderDetail?.order?.branch?.name || 'Kingfood Partner',
+                        createdAt: task.createdAt,
+                        tasks: []
+                    };
+                }
+                groups[orderId].tasks.push(task);
+            });
+
+            // Map grouped orders to structure expected by UI
+            const mapped = Object.values(groups).map(group => {
+                const orderTasks = group.tasks;
+                const totalCount = orderTasks.length; // total unique SKUs assigned to this picker for this order
+                const pickedCount = orderTasks.filter(t => t.status === 'completed').length;
+
+                // Determine consolidated order status
+                let status = 'pending';
+                if (orderTasks.every(t => t.status === 'completed')) {
+                    status = 'completed';
+                } else if (orderTasks.some(t => t.status === 'completed' || t.status === 'picking')) {
+                    status = 'in_progress';
+                }
+
+                return {
+                    id: group.id,
+                    orderId: group.orderId,
+                    storeName: group.storeName,
+                    totalCount,
+                    pickedCount,
+                    status,
+                    createdAt: group.createdAt
+                };
+            });
 
             // 3. Filter for TODAY's tasks only
             const todayStr = new Date().toLocaleDateString('en-US'); // e.g. "5/20/2026"
