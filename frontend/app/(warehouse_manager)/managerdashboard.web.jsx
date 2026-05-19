@@ -2989,6 +2989,7 @@ const styles = StyleSheet.create({
 
   workspace: {
     flex: 1,
+    height: 'calc(100vh - 90px)',
     overflow: 'hidden',
   },
 
@@ -3222,6 +3223,8 @@ const styles = StyleSheet.create({
     flex: 6.5,
     backgroundColor: '#fbfcfd',
     flexDirection: 'column',
+    height: '100%',
+    overflow: 'hidden',
   },
   panelTitleRow: {
     padding: 24,
@@ -3333,6 +3336,8 @@ const styles = StyleSheet.create({
     flex: 3.5,
     backgroundColor: '#fff',
     flexDirection: 'column',
+    height: '100%',
+    overflow: 'hidden',
   },
   invoiceWrapper: {
     flex: 1,
