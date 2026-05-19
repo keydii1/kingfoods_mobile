@@ -1,7 +1,6 @@
 import {Text, View, TouchableOpacity, StyleSheet, ScrollView} from 'react-native';
 import {router} from 'expo-router';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import { Ionicons } from '@expo/vector-icons';
 import {COLORS} from '../../constants/colors';
 import StaffBottomNav from '../../components/StaffBottomNav';
 
@@ -40,7 +39,6 @@ const shelves = [
         id: 'k28', label: 'KỆ 28-30', left: 145, top: 160, isTarget: false
     },
 ]
-
 function LegendItem({color, label}){
     return (
         <View style = {styles.legendItem}>
@@ -49,14 +47,13 @@ function LegendItem({color, label}){
         </View>
     );
 }
-
 export default function WarehouseMapScreen(){
     return (
         <SafeAreaView style = {styles.safeArea}>
             {/* Header */}
             <View style = {styles.header}>
                 <TouchableOpacity onPress = {() => router.back()}>
-                    <Ionicons name="chevron-back" size={24} color={COLORS.text} />
+                    <Text style = {styles.backBtn}>‹</Text>
                 </TouchableOpacity>
                 <Text style = {styles.headerTitle}>Bản đồ kho</Text>
                 <View style = {styles.badge}>
@@ -67,7 +64,6 @@ export default function WarehouseMapScreen(){
             <ScrollView style = {styles.scroll}>
                 {/* Alert chỉ đường */}
                 <View style = {styles.alert}>
-                    <Ionicons name="navigate-circle" size={28} color={COLORS.primary} style={{ marginRight: 6 }} />
                     <View style = {styles.alertBody}>
                         <Text style = {styles.alertTitle}>Đang chỉ đường đến kệ 14 .07 .B</Text>
                         <Text style = {styles.alertSub}>Đi thẳng từ cổng vào, rẽ phải ở dãy 12 khoảng 30m.</Text>
@@ -80,19 +76,15 @@ export default function WarehouseMapScreen(){
                         <View
                         key = {shelf.id}
                         style = {[styles.shelf, {left: shelf.left, top: shelf.top},shelf.isTarget && styles.shelfTarget]}>
-                            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 2 }}>
-                                <Text style = {[styles.shelfText, shelf.isTarget && styles.shelfTextTarget]}>{shelf.label}</Text>
-                                {shelf.isTarget && <Ionicons name="location" size={10} color="#fff" />}
-                            </View>
+                        <Text style = {[styles.shelfText, shelf.isTarget && styles.shelfTextTarget]}>{shelf.label} {shelf.isTarget ? '': ' '} </Text>
                         </View>
                     ))}
-
                     {/* Đường đi - Dùng view ngang dọc */}
                     <View style = {styles.routeVertical} />
                     <View style ={styles.routeHorizontal} />
                     {/* Vị trí của nhân viên */}
                     <View style = {styles.meMarker}>
-                        <Ionicons name="pin" size={24} color="#ff1744" />
+                        <Text style = {styles.meIcon}></Text>
                     </View>
                     {/* Label phía dưới bản đồ */}
                     <Text style = {styles.mapLabel}>
@@ -106,10 +98,7 @@ export default function WarehouseMapScreen(){
                 </View>
                 {/* Card và thông tin kệ */}
                 <View style = {styles.card}>
-                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 12 }}>
-                        <Ionicons name="location-outline" size={18} color="#222" />
-                        <Text style = {styles.cardTitle}>Thông tin kệ mục tiêu</Text>
-                    </View>
+                    <Text style = {styles.cardTitle}>Thông tin kệ mục tiêu</Text>
                     <View style ={styles.cardRow}>
                         <View>
                             <Text style = {styles.targetCode}>14. 07. B</Text>
@@ -127,7 +116,6 @@ export default function WarehouseMapScreen(){
         </SafeAreaView>
     );
 }
-
 const styles = StyleSheet.create({
     safeArea: {
         flex: 1,
@@ -198,11 +186,11 @@ const styles = StyleSheet.create({
         borderRadius: 16,
         height: 250,
         marginBottom: 16,
-        position: 'relative',
+        position: 'relative',  // ← bắt buộc để con dùng absolute
         overflow: 'hidden',
     },
     shelf: {
-        position: 'absolute',
+        position: 'absolute',  // ← đặt tại tọa độ cụ thể
         width: 55,
         height: 35,
         backgroundColor: '#37474f',
@@ -248,7 +236,7 @@ const styles = StyleSheet.create({
     meMarker: {
         position: 'absolute',
         left: 18,
-        top: 200,
+        top: 210,
     },
     meIcon: { fontSize: 24 },
 
@@ -296,12 +284,12 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontWeight: '700',
         color: '#222',
+        marginBottom: 12,
     },
     cardRow: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginTop: 12,
     },
     targetCode: {
         fontSize: 24,
@@ -328,4 +316,5 @@ const styles = StyleSheet.create({
         fontSize: 10,
         color: '#888',
     },
+
 });

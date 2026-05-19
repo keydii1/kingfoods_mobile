@@ -1,19 +1,17 @@
 import {Text, View, StyleSheet, TouchableOpacity} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {router} from 'expo-router';
+import {router, useLocalSearchParams} from 'expo-router';
 import {COLORS} from '../../constants/colors';
 import StaffBottomNav from '../../components/StaffBottomNav';
 
 
-// mockdata 1 sản phẩm thay vì nhiều
-const wrongItem ={
-    scannedSKU: 'KF-00789',
-    scannedName:'Mì Hảo Hảo',
-    expectedSKU:'KF-00456',
-    expectedName:'Nước tương chin-su 500ml'
-}
-
 export default function PickingErrorScreen(){
+    const params = useLocalSearchParams();
+    const scannedSKU = params.scannedSKU || '---';
+    const scannedName = params.scannedName || '';
+    const expectedSKU = params.expectedSKU || '---';
+    const expectedName = params.expectedName || '';
+
     return (
         <SafeAreaView style = {styles.safeArea}>
             <View style = {styles.container}>
@@ -48,9 +46,11 @@ export default function PickingErrorScreen(){
                     <Text style = {styles.infoLabel}>
                         Bạn vừa quét: 
                     </Text>
-                    <Text style = {styles.scannedText}>{wrongItem.scannedSKU}:({wrongItem.scannedName})</Text>
-                    <Text style = {styles.expectedText}>Bạn cần lấy:{''}
-                    <Text style = {styles.expectedHighlight}>{wrongItem.expectedSKU} • {wrongItem.expectedName}</Text> </Text>
+                    <Text style = {styles.scannedText}>
+                        {scannedSKU}{scannedName ? ` (${scannedName})` : ''}
+                    </Text>
+                    <Text style = {styles.expectedText}>Bạn cần lấy:{' '}
+                    <Text style = {styles.expectedHighlight}>{expectedSKU}{expectedName ? ` • ${expectedName}` : ''}</Text> </Text>
                 </View>
                 {/* retry button */}
                 <TouchableOpacity 
@@ -61,7 +61,7 @@ export default function PickingErrorScreen(){
                 {/* Report button */}
                 <TouchableOpacity 
                 style = {styles.reportBtn}
-                onPress = {() => router.replace('/reportissue')}>
+                onPress = {() => router.replace('/missingitem')}>
                 <Text style = {styles.reportBtnText}>Báo cáo sự cố</Text>
                 </TouchableOpacity>
             </View>

@@ -1,50 +1,62 @@
-import { router, useFocusEffect } from 'expo-router';
-import {
+import { router } from 'expo-router';
+import { useNavigation } from '@react-navigation/native';
+import{
     View,
     Text,
     TouchableOpacity,
     StyleSheet,
+    Alert,
     ActivityIndicator,
     ScrollView,
+    RefreshControl,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {COLORS} from '../../constants/colors'
-import {useState, useCallback} from 'react'
+import {useState, useEffect, useCallback} from 'react'
 import StaffBottomNav from '../../components/StaffBottomNav'
 import { useAuth } from '../../contexts/AuthContext'
 import {getAssignedTasks} from '../../constants/services/api' 
 
 
 export default function DashboardScreen(){
-    // thêm 1 số components để fetch
+    const navigation = useNavigation();
     const {userName, userRole, assignedZone} = useAuth();
     const [tasks, setTasks] = useState([]);
     const [loading, setLoading] = useState(true);
-    useFocusEffect(useCallback(() => {
-        async function fetchTasks() {
-            try{
-                const res = await getAssignedTasks();
-                console.log('dashboard: getAssignedTasks response', JSON.stringify(res, null, 2));
-                const mapped = (Array.isArray(res) ? res : []).map(task => ({
-                    ...task,
-                    orderId: task.orderDetail?.order?.id ?? task.orderId,
-                    storeName: task.orderDetail?.order?.branch?.name || '',
-                    totalCount: task.quantityToPick ?? task.totalCount ?? 0,
-                    pickedCount: task.quantityPicked ?? task.pickedCount ?? 0,
-                }));
-                setTasks(mapped);
-            }
-            catch (err){
-                console.log('dashboard: fetch error', err.message);
-                setTasks([]);
-            }
-            finally { // dù có fetch thành công hay thất bại thì phải luôn tắt biểu tượng loading
-                setLoading(false);
+    const [refreshing, setRefreshing] = useState(false);
+
+    const loadTasks = useCallback(async (silent = false) => {
+        if (!silent) setLoading(true);
+        try{
+            const res = await getAssignedTasks();
+            const mapped = (Array.isArray(res) ? res : []).map(task => ({
+                ...task,
+                orderId: task.orderDetail?.order?.id ?? task.orderId,
+                storeName: task.orderDetail?.order?.branch?.name || '',
+                totalCount: task.quantityToPick ?? task.totalCount ?? 0,
+                pickedCount: task.quantityPicked ?? task.pickedCount ?? 0,
+            }));
+            setTasks(mapped);
+        }
+        catch (err){
+            if (!silent) {
+                setTasks([
+                    { _id: '1', orderId: 'MOCK-001', storeName: 'Cửa hàng Q.7', totalCount: 5, pickedCount: 2, status: 'in_progress' },
+                    { _id: '2', orderId: 'MOCK-002', storeName: 'Cửa hàng Q.1', totalCount: 3, pickedCount: 0, status: 'pending' },
+                ]);
             }
         }
-        setLoading(true);
-        fetchTasks();
-    }, []));
+        finally {
+            if (!silent) setLoading(false);
+            setRefreshing(false);
+        }
+    }, []);
+
+    useEffect(() => {
+        loadTasks();
+        const unsub = navigation.addListener('focus', () => loadTasks(true));
+        return unsub;
+    }, [navigation, loadTasks]);
     // Tính % task hoàn thành
     const getPct = (task) =>{
         if(!task.totalCount) return 0
@@ -71,7 +83,8 @@ export default function DashboardScreen(){
     }
     return(
        <SafeAreaView style={styles.safeArea}>
-           <ScrollView style={styles.scrollArea} contentContainerStyle={styles.scrollContent}>
+           <ScrollView style={styles.scrollArea} contentContainerStyle={styles.scrollContent}
+             refreshControl={<RefreshControl refreshing={refreshing} onRefresh={loadTasks} />}>
             <View style={styles.banner}>
                 <View style={styles.bannerTop}>
                     <View>

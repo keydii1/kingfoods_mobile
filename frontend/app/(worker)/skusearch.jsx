@@ -1,6 +1,4 @@
-import {Text, View, TouchableOpacity, ScrollView, StyleSheet, FlatList, TextInput, ActivityIndicator} from 'react-native';
-import { Alert } from '../../utils/appAlert';
-import { Ionicons } from '@expo/vector-icons';
+import {Text, View, TouchableOpacity, ScrollView, StyleSheet, FlatList, TextInput, ActivityIndicator, Alert} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {router} from 'expo-router';
 import {COLORS} from '../../constants/colors';
@@ -67,15 +65,16 @@ export default function SkuSearchScreen(){
         setLoading(true);
         try{
             const res = await getProducts(query.trim());
-            const products = Array.isArray(res) ? res : (res?.data || []);
+            const products = Array.isArray(res) ? res : [];
             setResults(products.map(p =>({
-                id: p.id,
+                id: p._id,
                 location: p.location || '-',
                 name: p.name,
-                sku: p.sku || `SKU-${p.id}`,
-                zone: p.zone || p.category?.name || ' ',
-                stock: p.stock ?? 10,
-                stockStatus: (p.stock ?? 10) === 0 ? 'out' : (p.stock ?? 10) < 10 ? 'low' : 'ok',
+                sku: p.sku,
+                zone: p.zone || p.category || ' ',
+                stock: p.stock ?? 0,
+                stockStatus: p.stock === 0 ? 'out' : p.stock < 10 ? 'low' : 'ok',
+
             })));
         } catch(err){
             Alert.alert('Lỗi', 'Không tìm được sản phẩm');
@@ -98,8 +97,6 @@ export default function SkuSearchScreen(){
             </View>
 {/* Ô tìm kiếm */}
 <View style={styles.searchBar}>
-    <Ionicons name="search" size={20} color="#888" style={{ marginRight: 8 }} />
-
     <TextInput
         style={styles.searchInput}
         placeholder="Nhập tên hoặc mã SKU"
@@ -107,20 +104,13 @@ export default function SkuSearchScreen(){
         value={query}
         onChangeText={setQuery}
         autoFocus={true}
-        autoCapitalize="none"
-        autoCorrect={true}
-        spellCheck={false}
     />
 
     {query.length > 0 ? (
         <TouchableOpacity onPress={() => setQuery('')}>
             <Text style={styles.clearBtn}>✕</Text>
         </TouchableOpacity>
-    ) : (
-        <TouchableOpacity>
-            <Ionicons name="camera-outline" size={24} color={COLORS.primary} />
-        </TouchableOpacity>
-    )}
+    ) : null}
 </View>
 
 {/* Số kết quả */}

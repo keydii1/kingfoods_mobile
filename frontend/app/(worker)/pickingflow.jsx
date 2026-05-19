@@ -1,16 +1,15 @@
 import { useState, useRef } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, TextInput, Animated, ScrollView, Modal } from 'react-native';
-import { Alert } from '../../utils/appAlert';
+import { View, Text, TouchableOpacity, StyleSheet, TextInput, Animated, Alert, ScrollView, Modal } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../../constants/colors';
 import StaffBottomNav from '../../components/StaffBottomNav';
 import BarCodeScanner from '../../components/BarcodeScanner';
+import BarcodeView from '../../components/BarcodeView';
+import WarehouseMap from '../../components/WarehouseMap';
 import { packItem } from '../../constants/services/api';
-import { playSound } from '../../utils/soundService';
-
-const STEP_LABELS = ['Map', 'Quét SP', 'SL', 'Quét thùng', 'Xác nhận'];
+import { PACKING_POS } from '../../config/warehouseLayout';
+import { findShortestPath, pathDistance } from '../../utils/pathfinding';
 
 export default function PickingFlowScreen() {
   const params = useLocalSearchParams();
@@ -31,16 +30,47 @@ export default function PickingFlowScreen() {
   const [scannedBinCode, setScannedBinCode] = useState('');
   const [binInput, setBinInput] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [fromPacking, setFromPacking] = useState(false);
+  const [prevLocation, setPrevLocation] = useState('');
 
   const scanAnim = useRef(new Animated.Value(1)).current;
   const flashAnim = useRef(new Animated.Value(0)).current;
 
   const handleArrived = () => setStep(2);
 
+  const handleBack = () => {
+    if (step <= 1) return router.back();
+    const prev = step === 5 ? 3 : step - 1;
+    if (prev === 1) {
+      setBarcode('');
+      setScanned(false);
+      setQuantity(currentTask?.qty || 1);
+    } else if (prev === 2) {
+      setBarcode('');
+      setScanned(false);
+    } else if (prev === 3) {
+      setScannedBinCode('');
+      setBinInput('');
+    }
+    setStep(prev);
+  };
+
   const handleCameraScanned = (data) => {
     setShowCamera(false);
-    playSound('beep'); // Play quick beep on camera scan
     if (cameraMode === 'product') {
+      const expected = currentTask?.sku;
+      if (expected && data !== expected) {
+        router.push({
+          pathname: '/pickingerror',
+          params: {
+            scannedSKU: data,
+            scannedName: '',
+            expectedSKU: expected,
+            expectedName: currentTask?.name || '',
+          },
+        });
+        return;
+      }
       setBarcode(data);
       setScanned(true);
       setStep(3);
@@ -52,17 +82,22 @@ export default function PickingFlowScreen() {
 
   const handleManualScan = () => {
     if (!barcode.trim()) {
-      playSound('error');
       Alert.alert('Lỗi', 'Vui lòng nhập mã barcode');
       return;
     }
     const expected = currentTask?.sku;
     if (expected && barcode.trim() !== expected) {
-      playSound('error'); // Play alert/error sound
-      Alert.alert('❌ Sai sản phẩm', `Mã nhập: ${barcode.trim()}\nMã cần: ${expected}`);
+      router.push({
+        pathname: '/pickingerror',
+        params: {
+          scannedSKU: barcode.trim(),
+          scannedName: '',
+          expectedSKU: expected,
+          expectedName: currentTask?.name || '',
+        },
+      });
       return;
     }
-    playSound('beep'); // Play beep on successful manual barcode scan
     setScanned(true);
     setStep(3);
   };
@@ -74,34 +109,25 @@ export default function PickingFlowScreen() {
 
   const handleManualBinScan = () => {
     if (!binInput.trim()) {
-      playSound('error');
       Alert.alert('Lỗi', 'Vui lòng nhập mã thùng');
       return;
     }
-    playSound('beep'); // Play beep on manual bin scan
     setScannedBinCode(binInput.trim());
     setStep(5);
   };
 
   const handleConfirmBin = async () => {
     if (!currentTask?.taskId) {
-      playSound('error');
       Alert.alert('Lỗi', 'Thiếu thông tin nhiệm vụ');
       return;
     }
     setSubmitting(true);
-    console.log('handleConfirmBin: calling packItem with', {
-      taskId: currentTask.taskId,
-      binCode: scannedBinCode,
-      quantity,
-      currentTaskQty: currentTask?.qty,
-    });
     try {
       await packItem(currentTask.taskId, scannedBinCode, quantity);
-      playSound('success'); // Play happy chime sound on successful item pick and pack
       if (isLast) {
         setStep(6);
       } else {
+        setPrevLocation(currentTask?.location || '');
         const next = tasks[currentIndex + 1];
         setCurrentIndex(prev => prev + 1);
         setStep(1);
@@ -112,7 +138,6 @@ export default function PickingFlowScreen() {
         setBinInput('');
       }
     } catch (err) {
-      playSound('error'); // Play error sound on API failure
       Alert.alert('Lỗi', err.message || 'Không thể xác nhận');
     } finally {
       setSubmitting(false);
@@ -123,35 +148,16 @@ export default function PickingFlowScreen() {
     router.back();
   };
 
-  const renderStepIndicator = () => (
-    <View style={styles.stepRow}>
-      {STEP_LABELS.map((label, i) => {
-        const s = i + 1;
-        return (
-          <View key={s} style={styles.stepItem}>
-            <View style={[styles.stepDot, step >= s && styles.stepActive]}>
-              <Text style={[styles.stepDotText, step >= s && styles.stepDotTextActive]}>{s}</Text>
-            </View>
-            {i < STEP_LABELS.length - 1 && (
-              <View style={[styles.stepLine, step > s && styles.stepLineActive]} />
-            )}
-          </View>
-        );
-      })}
-    </View>
-  );
-
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView style={styles.scrollArea} contentContainerStyle={styles.scrollContent}>
         {step < 6 && (
           <View style={styles.header}>
-            <TouchableOpacity onPress={() => router.back()}>
-              <Ionicons name="chevron-back" size={24} color={COLORS.primary} />
+            <TouchableOpacity onPress={handleBack}>
+              <Text style={styles.backBtn}>‹</Text>
             </TouchableOpacity>
             <View style={styles.headerCenter}>
               <Text style={styles.headerTitle}>Picking</Text>
-              <Text style={styles.headerSub}>Sản phẩm {currentIndex + 1}/{tasks.length}</Text>
             </View>
             <View style={styles.badge}>
               <Text style={styles.badgeText}>{currentTask?.sku}</Text>
@@ -159,39 +165,33 @@ export default function PickingFlowScreen() {
           </View>
         )}
 
-        {step < 6 && renderStepIndicator()}
-
         <View style={styles.content}>
-          {/* Step 1: Map */}
+          {/* Step 1: Map - route to product */}
           {step === 1 && (
             <View style={styles.stepContainer}>
-              <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginBottom: 8 }}>
-                <Ionicons name="map-outline" size={24} color="#222" style={{ marginRight: 6 }} />
-                <Text style={styles.stepTitle}>Di chuyển đến vị trí</Text>
-              </View>
+              <Text style={styles.stepTitle}>
+                {prevLocation ? `Từ ${prevLocation} đến ${currentTask?.location || ''}` : 'Di chuyển đến vị trí'}
+              </Text>
               <View style={styles.mapCard}>
-                <View style={{ alignItems: 'center', marginBottom: 8 }}>
-                  <Ionicons name="location-outline" size={40} color={COLORS.primary} />
-                </View>
-                <Text style={styles.mapLabel}>Vị trí sản phẩm</Text>
-                <View style={styles.mapDest}>
-                  <Ionicons name="flag-outline" size={24} color={COLORS.primary} style={{ marginRight: 6 }} />
-                  <Text style={styles.mapDestLabel}>{currentTask?.location}</Text>
-                </View>
+                <WarehouseMap
+                  currentLocation={prevLocation || currentTask?.location}
+                  targetLocation={currentTask?.location}
+                  showRoute={true}
+                  fromPacking={!prevLocation}
+                />
                 <View style={styles.mapInfo}>
                   <Text style={styles.mapProductName}>{currentTask?.name}</Text>
                   <Text style={styles.mapProductSku}>{currentTask?.sku}</Text>
-                </View>
-                <View style={styles.mapRoute}>
-                  <Ionicons name="arrow-down" size={20} color="#666" style={{ marginRight: 12, width: 30, textAlign: 'center' }} />
-                  <Text style={styles.mapStep}>Đi đến kệ, tìm vị trí {currentTask?.location}</Text>
+                  <View style={styles.mapDivider} />
+                  <View style={styles.mapLocationRow}>
+                    <Text style={styles.mapLocationIcon}>📍</Text>
+                    <Text style={styles.mapLocationLabel}>Vị trí</Text>
+                    <Text style={styles.mapLocationText}>{currentTask?.location || '—'}</Text>
+                  </View>
                 </View>
               </View>
               <TouchableOpacity style={styles.arriveBtn} onPress={handleArrived}>
-                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-                  <Ionicons name="checkmark-circle-outline" size={20} color="#fff" />
-                  <Text style={styles.arriveBtnText}>Tôi đã đến vị trí</Text>
-                </View>
+                <Text style={styles.arriveBtnText}>Tôi đã đến vị trí</Text>
               </TouchableOpacity>
             </View>
           )}
@@ -199,9 +199,14 @@ export default function PickingFlowScreen() {
           {/* Step 2: Scan product */}
           {step === 2 && (
             <View style={styles.stepContainer}>
+              <View style={styles.barcodeCard}>
+                <Text style={styles.targetLabel}>Mã vạch sản phẩm cần quét:</Text>
+                <BarcodeView value={currentTask?.sku || '---'} />
+                <Text style={styles.targetName}>{currentTask?.name || ''}</Text>
+                <Text style={styles.targetQty}>SL: {currentTask?.qty || 0} {currentTask?.unit || ''}</Text>
+              </View>
               <View style={styles.scannerBox}>
                 <Animated.View style={[styles.scanFrame, { opacity: scanAnim }]}>
-                  <Ionicons name="camera-outline" size={60} color="#fff" style={{ marginBottom: 12 }} />
                   <Text style={styles.scanHint}>Đưa mã vạch vào khung</Text>
                   <Animated.View style={[styles.scanLine, { opacity: scanAnim.interpolate({
                     inputRange: [0.3, 1], outputRange: [0.3, 1]
@@ -216,10 +221,7 @@ export default function PickingFlowScreen() {
                     style={styles.scanBtn}
                     onPress={() => { setCameraMode('product'); setShowCamera(true); }}
                   >
-                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, justifyContent: 'center' }}>
-                      <Ionicons name="camera-outline" size={20} color="#fff" />
-                      <Text style={styles.scanBtnText}>Mở camera quét mã</Text>
-                    </View>
+                    <Text style={styles.scanBtnText}>Mở camera quét mã</Text>
                   </TouchableOpacity>
                   <Text style={styles.orText}>— hoặc —</Text>
                   <View style={styles.manualRow}>
@@ -229,12 +231,6 @@ export default function PickingFlowScreen() {
                       placeholderTextColor="#aaa"
                       value={barcode}
                       onChangeText={setBarcode}
-                      autoCapitalize="none"
-                      autoCorrect={false}
-                      spellCheck={false}
-                      autoComplete="off"
-                      importantForAutofill="no"
-                      textContentType="oneTimeCode"
                     />
                     <TouchableOpacity style={styles.manualBtn} onPress={handleManualScan}>
                       <Text style={styles.manualBtnText}>Xác nhận</Text>
@@ -243,7 +239,6 @@ export default function PickingFlowScreen() {
                 </>
               ) : (
                 <View style={styles.scanResult}>
-                  <Ionicons name="checkmark-circle" size={48} color={COLORS.primary} style={{ marginBottom: 8 }} />
                   <Text style={styles.scanSuccessText}>Quét thành công!</Text>
                   <Text style={styles.scanSku}>Mã: {barcode}</Text>
                   <Text style={styles.scanProduct}>{currentTask?.name}</Text>
@@ -256,10 +251,7 @@ export default function PickingFlowScreen() {
           {/* Step 3: Quantity */}
           {step === 3 && (
             <View style={styles.stepContainer}>
-              <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginBottom: 8 }}>
-                <Ionicons name="calculator-outline" size={24} color="#222" style={{ marginRight: 6 }} />
-                <Text style={styles.stepTitle}>Chọn số lượng</Text>
-              </View>
+              <Text style={styles.stepTitle}>Chọn số lượng</Text>
               <Text style={styles.qtyRequired}>Cần lấy: {currentTask?.qty || 0} {currentTask?.unit}</Text>
               <View style={styles.qtyCard}>
                 <Text style={styles.qtyProduct}>{currentTask?.name}</Text>
@@ -283,7 +275,7 @@ export default function PickingFlowScreen() {
                 </TouchableOpacity>
                 </View>
               </View>
-              <TouchableOpacity style={styles.nextBtn} onPress={() => setStep(4)}>
+              <TouchableOpacity style={styles.nextBtn} onPress={() => setStep(5)}>
                 <Text style={styles.nextBtnText}>Quét mã thùng →</Text>
               </TouchableOpacity>
             </View>
@@ -294,7 +286,6 @@ export default function PickingFlowScreen() {
             <View style={styles.stepContainer}>
               <View style={styles.scannerBox}>
                 <Animated.View style={[styles.scanFrame, { opacity: scanAnim }]}>
-                  <Ionicons name="cube-outline" size={60} color="#fff" style={{ marginBottom: 12 }} />
                   <Text style={styles.scanHint}>Đưa mã thùng vào khung</Text>
                   <Animated.View style={[styles.scanLine, { opacity: scanAnim.interpolate({
                     inputRange: [0.3, 1], outputRange: [0.3, 1]
@@ -303,10 +294,7 @@ export default function PickingFlowScreen() {
                 <Animated.View style={[styles.flashOverlay, { opacity: flashAnim }]} />
               </View>
               <TouchableOpacity style={styles.scanBtn} onPress={openBinCamera}>
-                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, justifyContent: 'center' }}>
-                  <Ionicons name="camera-outline" size={20} color="#fff" />
-                  <Text style={styles.scanBtnText}>Quét mã thùng</Text>
-                </View>
+                <Text style={styles.scanBtnText}>Quét mã thùng</Text>
               </TouchableOpacity>
               <Text style={styles.orText}>— hoặc —</Text>
               <View style={styles.manualRow}>
@@ -316,12 +304,6 @@ export default function PickingFlowScreen() {
                   placeholderTextColor="#aaa"
                   value={binInput}
                   onChangeText={setBinInput}
-                  autoCapitalize="none"
-                  autoCorrect={false}
-                  spellCheck={false}
-                  autoComplete="off"
-                  importantForAutofill="no"
-                  textContentType="oneTimeCode"
                 />
                 <TouchableOpacity style={styles.manualBtn} onPress={handleManualBinScan}>
                   <Text style={styles.manualBtnText}>Xác nhận</Text>
@@ -333,10 +315,7 @@ export default function PickingFlowScreen() {
           {/* Step 5: Confirm bin */}
           {step === 5 && (
             <View style={styles.stepContainer}>
-              <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginBottom: 8 }}>
-                <Ionicons name="cube-outline" size={24} color="#222" style={{ marginRight: 6 }} />
-                <Text style={styles.stepTitle}>Xác nhận thùng</Text>
-              </View>
+              <Text style={styles.stepTitle}>Xác nhận thùng</Text>
               <View style={styles.confirmCard}>
                 <Text style={styles.confirmLabel}>Thùng đã quét</Text>
                 <Text style={styles.confirmBinCode}>{scannedBinCode}</Text>
@@ -350,22 +329,16 @@ export default function PickingFlowScreen() {
                   style={styles.rescanBtn}
                   onPress={() => { setCameraMode('bin'); setShowCamera(true); }}
                 >
-                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, justifyContent: 'center' }}>
-                    <Ionicons name="refresh-outline" size={18} color="#666" />
-                    <Text style={styles.rescanBtnText}>Quét lại</Text>
-                  </View>
+                  <Text style={styles.rescanBtnText}>Quét lại</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={[styles.confirmBtn, submitting && { opacity: 0.7 }]}
                   onPress={handleConfirmBin}
                   disabled={submitting}
                 >
-                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, justifyContent: 'center' }}>
-                    <Ionicons name="checkmark-circle-outline" size={20} color="#fff" />
-                    <Text style={styles.confirmBtnText}>
-                      {submitting ? 'Đang xử lý...' : 'Xác nhận đúng thùng'}
-                    </Text>
-                  </View>
+                  <Text style={styles.confirmBtnText}>
+                    {submitting ? 'Đang xử lý...' : 'Xác nhận đúng thùng'}
+                  </Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -374,7 +347,6 @@ export default function PickingFlowScreen() {
           {/* Step 6: Order complete */}
           {step === 6 && (
             <View style={styles.completeContainer}>
-              <Ionicons name="gift-outline" size={64} color={COLORS.primary} style={{ marginBottom: 16 }} />
               <Text style={styles.completeTitle}>Hoàn tất đơn hàng!</Text>
               <Text style={styles.completeSub}>
                 Tất cả {tasks.length} sản phẩm đã được lấy và bỏ vào thùng.
@@ -391,6 +363,7 @@ export default function PickingFlowScreen() {
       <Modal visible={showCamera} animationType="slide">
         <BarCodeScanner
           expectedCode={cameraMode === 'product' ? currentTask?.sku || '' : ''}
+          expectedName={cameraMode === 'product' ? currentTask?.name || '' : ''}
           onScanned={handleCameraScanned}
           onClose={() => setShowCamera(false)}
         />
@@ -417,25 +390,38 @@ const styles = StyleSheet.create({
   },
   badgeText: { fontSize: 11, fontWeight: '600', color: COLORS.primary },
 
-  // Steps
-  stepRow: {
-    flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
-    padding: 12, backgroundColor: '#fff', paddingHorizontal: 8,
-  },
-  stepItem: { flexDirection: 'row', alignItems: 'center' },
-  stepDot: {
-    width: 24, height: 24, borderRadius: 12, backgroundColor: '#e0e0e0',
-    alignItems: 'center', justifyContent: 'center',
-  },
-  stepActive: { backgroundColor: COLORS.primary },
-  stepDotText: { fontSize: 10, fontWeight: '700', color: '#999' },
-  stepDotTextActive: { color: '#fff' },
-  stepLine: { width: 24, height: 2, backgroundColor: '#e0e0e0', marginHorizontal: 3 },
-  stepLineActive: { backgroundColor: COLORS.primary },
-
   content: { flex: 1, padding: 16 },
   stepContainer: { flex: 1, justifyContent: 'center' },
   stepTitle: { fontSize: 18, fontWeight: '700', color: '#222', textAlign: 'center', marginBottom: 8 },
+
+  // Barcode card
+  barcodeCard: {
+    backgroundColor: '#fff',
+    borderRadius: 14,
+    padding: 16,
+    marginBottom: 12,
+    borderWidth: 1.5,
+    borderColor: COLORS.accent,
+    alignItems: 'center',
+  },
+  targetLabel: {
+    fontSize: 11,
+    color: '#888',
+    fontWeight: '600',
+    marginBottom: 4,
+  },
+  targetName: {
+    fontSize: 13,
+    color: '#444',
+    marginTop: 6,
+    textAlign: 'center',
+  },
+  targetQty: {
+    fontSize: 11,
+    color: '#e65100',
+    fontWeight: '700',
+    marginTop: 4,
+  },
 
   // Map
   mapCard: {
@@ -449,6 +435,11 @@ const styles = StyleSheet.create({
   mapInfo: { alignItems: 'center', marginBottom: 16 },
   mapProductName: { fontSize: 15, fontWeight: '600', color: '#222' },
   mapProductSku: { fontSize: 12, color: '#888' },
+  mapDivider: { height: 1, backgroundColor: '#eee', marginVertical: 8 },
+  mapLocationRow: { flexDirection: 'row', alignItems: 'center', gap: 6 },
+  mapLocationIcon: { fontSize: 13 },
+  mapLocationLabel: { fontSize: 11, color: '#999', fontWeight: '600' },
+  mapLocationText: { fontSize: 14, fontWeight: '800', color: '#c62828' },
   mapRoute: {
     flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 12,
     borderTopWidth: 1, borderTopColor: '#eee',

@@ -1,11 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Text, View, TouchableOpacity, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
-import { Alert } from '../../utils/appAlert';
+import { Text, View, TouchableOpacity, StyleSheet, FlatList, Alert, ActivityIndicator, RefreshControl } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Ionicons } from '@expo/vector-icons';
 import {getAssignedTasks} from '../../constants/services/api'
 import { COLORS } from '../../constants/colors';
-import { router, useLocalSearchParams, useFocusEffect } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
+import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../../contexts/AuthContext';
 import StaffBottomNav from '../../components/StaffBottomNav';
 
@@ -20,56 +19,57 @@ const initialProducts = [
 export default function productListScreen() {
   const params = useLocalSearchParams();
   const taskId = params.taskId;
+  const navigation = useNavigation();
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState([]);
   const { userRole } = useAuth();
+  const [refreshing, setRefreshing] = useState(false);
 
   const [taskInfo, setTaskInfo] = useState(null);
-  useFocusEffect(useCallback(() => {
-    async function fetchItem() {
-      try{
-        setLoading(true);
-        const res = await getAssignedTasks();
-        console.log('productlist: getAssignedTasks response', JSON.stringify(res, null, 2));
-        const arr = Array.isArray(res) ? res : [];
-        console.log(`productlist: looking for taskId=${taskId}, type=${typeof taskId}`);
-        console.log(`productlist: available task IDs:`, arr.map(t => ({ id: t.id, type: typeof t.id })));
-        const task = arr.find(t => String(t.id) === String(taskId));
-        console.log('productlist: found task?', !!task);
-        console.log('productlist: found task data', JSON.stringify(task, null, 2));
-        if(task){
-          const orderId = task.orderDetail?.order?.id;
-          const orderTasks = orderId
-            ? arr.filter(t => t.orderDetail?.order?.id === orderId)
-            : [task];
-          setTaskInfo(task);
-          setProducts(orderTasks.map(t => {
-            const prod = t.orderDetail?.product;
-            const remaining = (t.quantityToPick ?? 1) - (t.quantityPicked ?? 0);
-            return {
-              taskId: t.id,
-              location: t.location?.name || '',
-              name: prod?.name || 'Unknown',
-              sku: String(prod?.id ?? t.id),
-              qty: Math.max(0, remaining),
-              unit: 'cái',
-              done: t.status === 'completed' || remaining <= 0,
-            };
-          }));
-        } else {
-          setProducts(initialProducts);
-        }
-      }
-      catch(err){
-        console.log('productlist: fetch error', err.message);
-        setProducts(initialProducts);
-      }
-      finally {
-        setLoading(false);
+
+  const loadItems = useCallback(async (silent = false) => {
+    try{
+      if (!silent) setLoading(true);
+      const res = await getAssignedTasks();
+      const arr = Array.isArray(res) ? res : [];
+      const task = arr.find(t => String(t.id) === String(taskId));
+      if(task){
+        const orderId = task.orderDetail?.order?.id;
+        const orderTasks = orderId
+          ? arr.filter(t => t.orderDetail?.order?.id === orderId)
+          : [task];
+        setTaskInfo(task);
+        setProducts(orderTasks.map(t => {
+          const prod = t.orderDetail?.product;
+          const remaining = (t.quantityToPick ?? 1) - (t.quantityPicked ?? 0);
+          return {
+            taskId: t.id,
+            location: t.location?.name || '',
+            name: prod?.name || 'Unknown',
+            sku: String(prod?.id ?? t.id),
+            qty: Math.max(0, remaining),
+            unit: 'cái',
+            done: t.status === 'completed' || remaining <= 0,
+          };
+        }));
+      } else {
+        if (!silent) setProducts(initialProducts);
       }
     }
-    fetchItem();
-  }, [taskId]));
+    catch(err){
+      if (!silent) setProducts(initialProducts);
+    }
+    finally {
+      if (!silent) setLoading(false);
+      setRefreshing(false);
+    }
+  }, [taskId]);
+
+  useEffect(() => {
+    loadItems();
+    const unsub = navigation.addListener('focus', () => loadItems(true));
+    return unsub;
+  }, [navigation, loadItems]);
 
   const doneCount = products.filter(p => p.done).length;
   const remaining = products.length - doneCount;
@@ -111,14 +111,10 @@ export default function productListScreen() {
           </View>
           <View style={styles.itemInfo}>
             <Text style={styles.itemName}>{item.name}</Text>
-            <Text style={styles.itemSku}>{item.sku}</Text>
+            <Text style={styles.itemSKU}>{item.sku}</Text>
           </View>
           <View style={styles.itemQty}>
-            {item.done ? (
-              <Ionicons name="checkmark-circle" size={24} color={COLORS.primary} />
-            ) : (
-              <Text style={styles.qtyValue}>{item.qty}</Text>
-            )}
+            <Text style={styles.qtyValue}>{item.done ? '✓' : item.qty}</Text>
             <Text style={styles.qtyUnit}>{item.unit}</Text>
           </View>
           <TouchableOpacity
@@ -143,7 +139,7 @@ export default function productListScreen() {
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => router.back()}>
-          <Ionicons name="chevron-back" size={24} color={COLORS.primary} style={{ marginRight: 10 }} />
+          <Text style={styles.backBtn}> ‹ </Text>
         </TouchableOpacity>
         <Text style={styles.headerTitle}>{taskInfo?.orderDetail?.order?.id ? `Đơn hàng #${taskInfo.orderDetail.order.id}` : `Đơn hàng #${taskId}`}</Text>
         <View style={styles.badge}>
@@ -153,7 +149,6 @@ export default function productListScreen() {
 
       {/* Zone Chip */}
       <View style={styles.zoneChip}>
-        <Ionicons name="cube-outline" size={28} color={COLORS.primary} />
         <View style={styles.zoneInfo}>
           <Text style={styles.zoneName}>Khu vực Bánh & Kẹo</Text>
           <Text style={styles.zoneSub}>12 sản phẩm thuộc khu vực của bạn</Text>
@@ -177,6 +172,8 @@ export default function productListScreen() {
         renderItem={renderItem}
         contentContainerStyle={styles.list}
         style={{ flex: 1 }}
+        refreshing={refreshing}
+        onRefresh={loadItems}
       />
         )}
       </View>
@@ -184,19 +181,13 @@ export default function productListScreen() {
       <View style={styles.confirmBar}>
         {allDone ? (
           <>
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, justifyContent: 'center' }}>
-                <Ionicons name="checkmark-circle-outline" size={18} color={COLORS.primary} />
-                <Text style={styles.confirmText}>Đã hoàn thành tất cả sản phẩm</Text>
-            </View>
+            <Text style={styles.confirmText}>Đã hoàn thành tất cả sản phẩm</Text>
             <TouchableOpacity style={styles.confirmBtn} onPress={confirmOrder}>
               <Text style={styles.confirmBtnText}>Xác nhận hoàn thành đơn hàng</Text>
             </TouchableOpacity>
           </>
         ) : (
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, justifyContent: 'center' }}>
-              <Ionicons name="time-outline" size={18} color={COLORS.primary} />
-              <Text style={styles.confirmText}>Còn {remaining} sản phẩm chưa lấy</Text>
-          </View>
+          <Text style={styles.confirmText}>Còn {remaining} sản phẩm chưa lấy</Text>
         )}
       </View>
       </View>

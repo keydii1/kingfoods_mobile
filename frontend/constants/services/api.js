@@ -63,6 +63,8 @@ export const customerLogout = () =>
 // PROFILE 
 export const getProfile = () =>
     request ('GET', '/client/profile');
+export const getMyProfile = () =>
+    request('GET', '/admin/users/me');
 export const updateProfile = (data) =>
     request ('PATCH', '/client/profile', data);
 // PICKING

@@ -1,53 +1,54 @@
-import {Text, View, ScrollView, TouchableOpacity,StyleSheet,Image} from 'react-native';
-import { Alert } from '../../utils/appAlert';
+import {Text, View, ScrollView, TouchableOpacity,StyleSheet,Alert,Image} from 'react-native';
 import {useState} from 'react'
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {router, useLocalSearchParams} from 'expo-router';
-import {Ionicons} from '@expo/vector-icons';
 import {COLORS} from '../../constants/colors';
 import StaffBottomNav from '../../components/StaffBottomNav';
 import {reportIncident} from '../../constants/services/api';
 import * as ImagePicker from 'expo-image-picker';
 
+
 const reasons = [   
     {
-        id: 'empty', icon:'cube-outline' , iconColor: COLORS.primary, label:'Kệ còn trống - hàng chưa được bổ sung'
+        id: 'empty', icon:'' , label:'Kệ còn trống - hàng chưa được bổ sung'
     },
     {
-        id: 'damage', icon:'ban-outline', iconColor: '#e53935', label:'Hàng đã bị hỏng / Không đạt chất lượng tiêu chuẩn'
+        id: 'damage', icon:'', label:'Hàng đã bị hỏng / Không đạt chất lượng tiêu chuẩn'
     },
     {
-        id:'moved', icon:'sync-outline', iconColor: '#ff9800', label: 'Hàng đã rời khỏi vị trí'
+        id:'moved', icon:'',label: 'Hàng đã rời khỏi vị trí'
     }
 ]
 
 export default function MissingItemScreen(){
-    const [photoUri, setPhotoUri] = useState(null);
-    const params = useLocalSearchParams();
-    const itemId = params.itemId;
-    const [submitting, setSubmitting] = useState(false);
-    const [photoTaken, setPhotoTaken] = useState(false);
-    const [reason, setReason] = useState(null);
+        const [photoUri, setPhotoUri] = useState(null);
+        const params = useLocalSearchParams();
+        const itemId = params.itemId;
+        const [submitting, setSubmitting] = useState(false);
+        const [photoTaken, setPhotoTaken] = useState(false);
+        const [reason, setReason] = useState(null);
+const handleTakePhoto = async () => {
+    // Xin quyền camera
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
+    if (status !== 'granted') {
+        Alert.alert('Lỗi', 'Cần quyền camera để chụp ảnh');
+        return;
+    }
 
-    const handleTakePhoto = async () => {
-        const { status } = await ImagePicker.requestCameraPermissionsAsync();
-        if (status !== 'granted') {
-            Alert.alert('Lỗi', 'Cần quyền camera để chụp ảnh');
-            return;
-        }
+    // Mở camera chụp ảnh
+    const result = await ImagePicker.launchCameraAsync({
+        allowsEditing: false,
+        quality: 0.8,
+        // quality: 0.8 = giảm chất lượng 20% để tiết kiệm dung lượng
+    });
 
-        const result = await ImagePicker.launchCameraAsync({
-            allowsEditing: false,
-            quality: 0.8,
-        });
-
-        if (!result.canceled) {
-            setPhotoUri(result.assets[0].uri);
-            setPhotoTaken(true);
-        }
-    };
-
-    async function handleSubmit(){
+    if (!result.canceled) {
+        setPhotoUri(result.assets[0].uri);
+        setPhotoTaken(true);
+        // Lưu URI ảnh để sau này upload lên server
+    }
+};
+       async function handleSubmit(){
         if(!photoTaken){
             Alert.alert('Lỗi!', 'Vui lòng chụp màn hình minh chứng trước');
             return;
@@ -59,8 +60,8 @@ export default function MissingItemScreen(){
         setSubmitting(true);
         try{
             await reportIncident(itemId, reason, photoUri || '');
-            Alert.alert('Thành công!' ,'Báo cáo đã được gửi đi')
-            router.back();
+                Alert.alert('Thành công!' ,'Báo cáo đã được gửi đi')
+                router.back();
         }
         catch(err){
             Alert.alert('Lỗi', err.message || 'Không gửi được báo cáo');
@@ -69,13 +70,12 @@ export default function MissingItemScreen(){
             setSubmitting(false)
         }
     }
-
-    return (
+        return (
         <SafeAreaView style = {styles.safeArea}>
             {/* Header */}
             <View style = {styles.header}>
                 <TouchableOpacity onPress = {() => router.back()}>
-                    <Ionicons name="chevron-back" size={24} color={COLORS.text} />
+                    <Text style = {styles.backBtn}>‹</Text>
                 </TouchableOpacity>
                 <Text style = {styles.headerTitle}>Báo thiếu hàng</Text>
                 <View style = {styles.badge}>
@@ -83,68 +83,60 @@ export default function MissingItemScreen(){
                 </View>
             </View>
             {/* Body */}
-            <ScrollView style = {styles.scroll}>
-                {/* Section chụp ảnh */}
-                <Text style = {styles.sectionLabel}>
-                    CHỤP ẢNH MINH CHỨNG
-                </Text>
-                {/* Khung camera */}
-                {photoTaken ? (
-                    <View style={styles.photoDone}>
-                        {photoUri && (
-                            <Image
-                                source={{ uri: photoUri }}
-                                style={{ width: '100%', height: 160, borderRadius: 12 }}
-                            />
-                        )}
-                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginTop: 8 }}>
-                            <Ionicons name="checkmark-circle" size={18} color="#4caf50" />
-                            <Text style={styles.photoDoneText}>Đã chụp ảnh</Text>
-                        </View>
-                        <TouchableOpacity onPress={handleTakePhoto}>
-                            <Text style={{ color: COLORS.primary, marginTop: 8, fontWeight: '600' }}>Chụp lại</Text>
-                        </TouchableOpacity>
-                    </View>
-                ) : (
-                    <TouchableOpacity
-                        style={styles.cameraBox}
-                        onPress={handleTakePhoto}
-                    >
-                        <View style={styles.cameraInner}>
-                            <Text style={styles.cameraTitle}>Chụp ảnh vị trí trống</Text>
-                            <Text style={styles.cameraSub}>Hướng camera vào kệ hàng đang trống</Text>
-                            <View style={styles.cameraBtn}>
-                                <Ionicons name="camera-outline" size={24} color="#fff" />
-                            </View>
-                        </View>
+            <ScrollView>
+            {/* Section chụp ảnh */}
+            <Text style = {styles.sectionLabel}>
+                CHỤP ẢNH MINH CHỨNG
+            </Text>
+            {/* Khung camera */}
+            {photoTaken ? (
+                <View style={styles.photoDone}>
+                    {photoUri && (
+                        <Image
+                            source={{ uri: photoUri }}
+                            style={{ width: '100%', height: 160, borderRadius: 12 }}
+                        />
+                    )}
+                    <Text style={styles.photoDoneText}>Đã chụp ảnh</Text>
+                    <TouchableOpacity onPress={handleTakePhoto}>
+                        <Text style={{ color: COLORS.primary, marginTop: 8, fontWeight: '600' }}>Chụp lại</Text>
                     </TouchableOpacity>
-                )}
-                {/* Khu vực để chọn lí do */}
-                <Text style = {styles.sectionLabel}>Lí do thiếu hàng:</Text>
-                {/* Danh sách li do thiếu hàng */}
+                </View>
+            ) : (
+                <TouchableOpacity
+                    style={styles.cameraBox}
+                    onPress={handleTakePhoto}
+                >
+                    <View style={styles.cameraInner}>
+                        <Text style={styles.cameraTitle}>Chụp ảnh vị trí trống</Text>
+                        <Text style={styles.cameraSub}>Hướng camera vào kệ hàng đang trống</Text>
+                        <View style={styles.cameraBtn}>
+                        </View>
+                    </View>
+                </TouchableOpacity>
+            )}
+            {/* Khu vực để chọn lí do */}
+            <Text style = {styles.sectionLabel}>Lí do thiếu hàng:</Text>
+            {/* Danh sách li do thiếu hàng, dùng map thay vì flatlist vì chỉ có 3 item */}
                 {reasons.map((item)=> (
                     <TouchableOpacity
-                        key = {item.id}
-                        style = {[styles.reasonOption, reason === item.id && styles.reasonSelected]}
-                        onPress = {() => setReason(item.id)}
-                    >
-                        <Ionicons name={item.icon} size={22} color={reason === item.id ? '#e53935' : item.iconColor} style={{ marginRight: 6 }} />
-                        <Text style = {[styles.reasonLabel  , reason === item.id && styles.reasonLabelSelected]}>{item.label}</Text>
+                    key = {item.id}
+                    style = {[styles.reasonOption, reason === item.id && styles.reasonSelected]}
+                    onPress = {() => setReason(item.id)}>
+                    <Text style = {styles.reasonIcon}>{item.icon}</Text>
+                    <Text style = {[styles.reasonLabel  , reason === item.id && styles.reasonLabelSelected]}>{item.label}</Text>
                     </TouchableOpacity>
                 ))}
-                {/* Nút gửi báo cáo */}
+            {/* Nút gửi báo cáo */}
                 <TouchableOpacity
-                    style={[styles.btnSubmit, submitting && { opacity: 0.7 }]}
-                    onPress={handleSubmit}
-                    disabled={submitting}
-                >
-                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, justifyContent: 'center' }}>
-                        <Ionicons name="alert-circle-outline" size={18} color="#fff" />
+                        style={[styles.btnSubmit, submitting && { opacity: 0.7 }]}
+                        onPress={handleSubmit}
+                        disabled={submitting}
+                    >
                         <Text style={styles.btnSubmitText}>
                             {submitting ? 'Đang gửi...' : 'Gửi báo cáo & Chuyển tiếp'}
                         </Text>
-                    </View>
-                </TouchableOpacity>
+                    </TouchableOpacity>
             </ScrollView>
             <StaffBottomNav />
         </SafeAreaView>
@@ -246,7 +238,7 @@ const styles = StyleSheet.create({
     },
     photoDoneIcon: { fontSize: 40 },
     photoDoneText: {
-        color: '#222',
+        color: '#fff',
         fontSize: 14,
         fontWeight: '600',
     },
@@ -293,4 +285,5 @@ const styles = StyleSheet.create({
         fontSize: 15,
         fontWeight: '800',
     },
+
 });
