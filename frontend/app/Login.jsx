@@ -8,12 +8,14 @@ import {
   TouchableOpacity,
   StyleSheet,
   ScrollView,
+  Platform,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import {login as apiLogin, customerLogin, forgetPassword, verifyOtp, resetPassword} from '../constants/services/api'
 import { COLORS } from '../constants/colors';
 import { useAuth } from '../contexts/AuthContext';
+import { useEffect } from 'react';
 
 const roles = [
   { key: 'admin', label: 'Quản lý kho',      icon: 'cube-outline' },
@@ -22,6 +24,12 @@ const roles = [
 
 export default function LoginScreen() {
   const { login } = useAuth();
+
+  useEffect(() => {
+    if (Platform.OS === 'web') {
+      router.replace('/customer-login');
+    }
+  }, []);
   const [loading, setLoading] = useState(false);
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');

@@ -19,7 +19,9 @@ function LayoutContent() {
     const pathname = usePathname();
 
     const isLoginScreen =
-        pathname === '/Login';
+        pathname === '/Login' ||
+        pathname === '/customer-login' ||
+        pathname === '/admin-login';
 
     const isPickingFlow =
         pathname.includes('pickingflow');
