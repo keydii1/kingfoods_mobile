@@ -2373,7 +2373,6 @@ const styles = StyleSheet.create({
     height: '100vh',
     width: '100vw',
     backgroundColor: '#f4f6f8',
-    overflow: 'hidden',
   },
   
   // Left Sidebar
@@ -2539,7 +2538,6 @@ const styles = StyleSheet.create({
 
   workspace: {
     flex: 1,
-    overflow: 'hidden',
   },
 
   loadingWrapper: {

@@ -6,7 +6,7 @@ export const COLORS = {
 
     // Màu trung tính
     white:          '#ffffff',
-    background:     '#f0f4f1',  // nền app
+    backgroundColor:     '#f0f4f1',  // nền app
     text:           '#222222',  // chữ chính
     textGray:       '#888888',  // chữ phụ
     border:         '#eeeeee',  // viền

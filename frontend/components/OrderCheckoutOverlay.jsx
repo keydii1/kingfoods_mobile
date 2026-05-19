@@ -60,7 +60,7 @@ function SuccessCheckmark({ onDone }) {
   }, [scale, ringScale, ringOpacity, checkOpacity, onDone]);
 
   return (
-    <View style={styles.successCenter} pointerEvents="none">
+    <View style={[styles.successCenter, { pointerEvents: 'none' }]}>
       <Animated.View
         style={[
           styles.successRing,

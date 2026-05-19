@@ -1,17 +1,4 @@
-import Constants from 'expo-constants';
-
 const getBaseUrl = () => {
-    // Dynamically detect local host IP to work on both simulators and physical devices
-    const debuggerHost = Constants.expoConfig?.hostUri || '';
-    const localhost = debuggerHost.split(':')[0];
-    
-    if (__DEV__ && localhost) {
-        return `http://${localhost}:9999/api/v1`;
-    }
-    // Fallback to local host if no debuggerHost
-    if (__DEV__) {
-        return 'http://localhost:9999/api/v1';
-    }
     return 'https://kingfood-wms-backend.onrender.com/api/v1';
 };
 
@@ -20,9 +7,25 @@ console.log('[WMS] Connected to API URL:', BASE_URL);
 
 
 let authToken = null;
+let onUnauthorized = null;
 
-export function setToken(token){authToken = token;}
+// On web, restore token from localStorage
+const storage = typeof window !== 'undefined' && window.localStorage;
+if (storage) {
+  const saved = storage.getItem('authToken');
+  if (saved) authToken = saved;
+}
+
+export function setToken(token){
+  authToken = token;
+  if (storage) {
+    if (token) storage.setItem('authToken', token);
+    else storage.removeItem('authToken');
+  }
+}
 export function getToken(){return authToken;}
+
+export function setOnUnauthorized(cb) { onUnauthorized = cb; }
 
 async function request(method, endpoint, body = null, extraHeaders = {}) {
     const headers = {};
@@ -39,7 +42,12 @@ async function request(method, endpoint, body = null, extraHeaders = {}) {
     const res = await fetch(`${BASE_URL}${endpoint}`, config);
     const json = await res.json();
 
-    if (!res.ok) throw new Error(json.message || 'Lỗi server');
+    if (!res.ok) {
+      if (res.status === 401 && onUnauthorized) {
+        onUnauthorized();
+      }
+      throw new Error(json.message || 'Lỗi server');
+    }
 
     return json.metadata ?? json;
 }

@@ -240,7 +240,6 @@ const styles = StyleSheet.create({
     badgeText: { color: '#7b1fa2', fontSize: 12, fontWeight: '600' },
     scroll: { flex: 1, padding: 16 },
     batchBanner: {
-        background: '#4a0072',
         backgroundColor: '#4a0072',
         borderRadius: 18, padding: 16, marginBottom: 12,
     },
