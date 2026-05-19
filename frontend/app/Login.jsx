@@ -22,6 +22,13 @@ const roles = [
   { key: 'staff',  label: 'Nhân viên kho',     icon: 'construct-outline' },
 ];
 
+const ZONE_MAP = {
+  1: '🥦 Thực phẩm tươi',
+  2: '🥫 Đồ khô & Gia vị',
+  3: '🧴 Hoá mỹ phẩm',
+  4: '❄️ Đồ đông lạnh'
+};
+
 export default function LoginScreen() {
   const { login } = useAuth();
 
@@ -124,7 +131,7 @@ export default function LoginScreen() {
             userData.name || userData.fullName || userData.username,
             userData.id,
             res.accessToken,
-            userData.assignedZone,
+            userData.assignedLocationId ? ZONE_MAP[userData.assignedLocationId] : null,
         );
         router.replace(getDashboardRoute());
     } catch (err) {
