@@ -1147,7 +1147,7 @@ export default function ManagerDashboardWebScreen() {
 
                       <ScrollView style={styles.invoiceTableBody}>
                         {selectedOrder.orderDetails?.map((item, index) => {
-                          const p = parseFloat(item.price) || 0;
+                          const p = parseFloat(item.product?.price || item.price) || 0;
                           return (
                             <View key={item.id || index} style={styles.invoiceTableRow}>
                               <Text style={[styles.tdCell, { flex: 3.5, fontWeight: '700' }]} numberOfLines={1}>

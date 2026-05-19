@@ -67,7 +67,9 @@ export default function StoreStatisticsScreen() {
     if (!silent) setLoading(true);
     try {
       const res = await getClientStatistics(start, end);
-      setOrders(res?.orders || []);
+      const rawOrders = res?.orders || [];
+      const sortedOrders = [...rawOrders].sort((a, b) => b.id - a.id);
+      setOrders(sortedOrders);
       setTopProducts(res?.topProducts || []);
     } catch (err) {
       console.log('Fetch stats error:', err.message);

@@ -245,9 +245,11 @@ export default function StoreOrderWebScreen() {
       if (!silent) setLoadingOrders(true);
       const res = await getClientOrders();
       const fetchedOrders = Array.isArray(res) ? res : [];
-      setOrders(fetchedOrders);
+      // Sort orders descending by ID so that the newest order is displayed on top
+      const sortedOrders = [...fetchedOrders].sort((a, b) => b.id - a.id);
+      setOrders(sortedOrders);
       if (selectedOrder) {
-        const updated = fetchedOrders.find(o => o.id === selectedOrder.id);
+        const updated = sortedOrders.find(o => o.id === selectedOrder.id);
         if (updated) setSelectedOrder(updated);
       }
     } catch (err) {
@@ -1262,7 +1264,7 @@ export default function StoreOrderWebScreen() {
 
                       <ScrollView style={styles.invoiceTableBody}>
                         {selectedOrder.orderDetails?.map((item, index) => {
-                          const p = parseFloat(item.price) || 0;
+                          const p = parseFloat(item.product?.price || item.price) || 0;
                           const subTotal = p * item.quantity;
                           return (
                             <View key={item.id || index} style={styles.invoiceTableRow}>
