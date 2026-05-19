@@ -6,6 +6,14 @@ import StaffBottomNav from '../../components/StaffBottomNav';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, Alert } from 'react-native';
 import { getMyProfile, updateProfile } from '../../constants/services/api';
+
+const ZONE_MAP = {
+    1: '🥦 Thực phẩm tươi',
+    2: '🥫 Đồ khô & Gia vị',
+    3: '🧴 Hoá mỹ phẩm',
+    4: '❄️ Đồ đông lạnh'
+};
+
 // componet tái sử dụng - tránh phải lặp đi lặp lại code vi phạm DRYƯ
 function InfoRow({label, value, valueColor}){
     return(
@@ -119,7 +127,7 @@ const saveEdit = async () => {
                       />
                     ) : (
                       <Text style={styles.badgeText}>
-                          {user?.zone || 'Bánh & Kẹo'}
+                          {user?.assignedLocationId ? ZONE_MAP[user.assignedLocationId] : (user?.zone || 'Chưa phân khu')}
                       </Text>
                     )}
                 </View>
@@ -135,7 +143,7 @@ const saveEdit = async () => {
         <View style={styles.card}>
             <Text style={styles.cardTitle}>Thông tin cá nhân</Text>
             <InfoRow label='Họ và Tên' value={user?.name || 'Phạm Thị Mai'} />
-            <InfoRow label='Khu vực' value={user?.zone || 'Bánh & Kẹo'} />
+            <InfoRow label='Khu vực' value={user?.assignedLocationId ? ZONE_MAP[user.assignedLocationId] : (user?.zone || 'Chưa phân khu')} />
             <InfoRow label='Ngày vào làm'
                 value={user?.startDate
                     ? new Date(user.startDate).toLocaleDateString('vi-VN')
