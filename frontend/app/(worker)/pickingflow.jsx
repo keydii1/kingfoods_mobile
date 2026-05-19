@@ -176,6 +176,7 @@ export default function PickingFlowScreen() {
                 <WarehouseMap
                   currentLocation={prevLocation || currentTask?.locationCode || currentTask?.location}
                   targetLocation={currentTask?.locationCode || currentTask?.location}
+                  targetLocationName={currentTask?.location}
                   showRoute={true}
                   fromPacking={!prevLocation}
                 />

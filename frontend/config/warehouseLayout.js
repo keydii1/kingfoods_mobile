@@ -84,10 +84,10 @@ function getPosFromLocation(locationStr) {
 
   // Map real database location codes to zone center positions
   const CODE_TO_POS = {
-    'FRESH':    [1, 2],   // Zone 1 - A1
-    'DRY':     [1, 5],   // Zone 1 - A3
-    'BEVERAGE': [1, 8],  // Zone 2 - A5
-    'FROZEN':   [4, 8],  // Zone 4 - C5
+    'FRESH':    [1, 2],   // Zone 1 - Thực phẩm tươi
+    'DRY':     [1, 8],   // Zone 2 - Đồ khô & Gia vị
+    'CHEMICAL': [4, 2],  // Zone 3 - Hoá mỹ phẩm
+    'FROZEN':   [4, 8],  // Zone 4 - Đồ đông lạnh
   };
 
   // Check direct location code match (e.g. "FRESH", "DRY")
@@ -97,8 +97,8 @@ function getPosFromLocation(locationStr) {
   // Check if location name contains known keywords
   if (locationStr.includes('Thực phẩm tươi') || locationStr.includes('tươi')) return CODE_TO_POS['FRESH'];
   if (locationStr.includes('Đồ khô') || locationStr.includes('Gia vị')) return CODE_TO_POS['DRY'];
-  if (locationStr.includes('Đồ uống') || locationStr.includes('Nước')) return CODE_TO_POS['BEVERAGE'];
-  if (locationStr.includes('đông lạnh') || locationStr.includes('Đông lạnh')) return CODE_TO_POS['FROZEN'];
+  if (locationStr.includes('Hoá mỹ phẩm') || locationStr.includes('Hoá phẩm') || locationStr.includes('Chemical')) return CODE_TO_POS['CHEMICAL'];
+  if (locationStr.includes('đông lạnh') || locationStr.includes('Đông lạnh') || locationStr.includes('Frozen')) return CODE_TO_POS['FROZEN'];
 
   // Try old format first: "Kệ A1" → SHELF_POSITIONS["A1"]
   const oldMatch = locationStr.match(/[A-D]\d/);

@@ -8,10 +8,10 @@ import {
 import { findShortestPath, pathDistance } from '../utils/pathfinding';
 
 const ZONE = {
-  1: { fill: '#e8f5e9', stroke: '#a5d6a7', text: '#2e7d32', label: 'Bánh kẹo', icon: '🍬' },
-  2: { fill: '#e3f2fd', stroke: '#90caf9', text: '#1565c0', label: 'Đồ uống', icon: '🥤' },
-  3: { fill: '#fce4ec', stroke: '#ef9a9a', text: '#c62828', label: 'Hoá phẩm', icon: '🧴' },
-  4: { fill: '#fff3e0', stroke: '#ffcc80', text: '#e65100', label: 'KM', icon: '🎁' },
+  1: { fill: '#e8f5e9', stroke: '#a5d6a7', text: '#2e7d32', label: 'Thực phẩm tươi', icon: '🥦' },
+  2: { fill: '#e3f2fd', stroke: '#90caf9', text: '#1565c0', label: 'Đồ khô & Gia vị', icon: '🥫' },
+  3: { fill: '#fce4ec', stroke: '#ef9a9a', text: '#c62828', label: 'Hoá mỹ phẩm', icon: '🧴' },
+  4: { fill: '#fff3e0', stroke: '#ffcc80', text: '#e65100', label: 'Đồ đông lạnh', icon: '❄️' },
 };
 
 const GAP = 1;
@@ -44,6 +44,7 @@ function computeArrows(route) {
 export default function WarehouseMap({
   currentLocation,
   targetLocation,
+  targetLocationName,
   showRoute = true,
   fromPacking = false,
 }) {
@@ -304,7 +305,7 @@ export default function WarehouseMap({
             <View style={styles.infoDivider} />
             <View style={styles.infoItem}>
               <Text style={styles.infoLabel}>Đến</Text>
-              <Text style={styles.infoValue}>{targetLocation || 'Khu đóng gói'}</Text>
+              <Text style={styles.infoValue}>{targetLocationName || targetLocation || 'Khu đóng gói'}</Text>
             </View>
           </View>
         )}
