@@ -503,10 +503,7 @@ export default function StoreOrderWebScreen() {
     Alert.alert('Sao chép thành công', `Đã đưa ${order.orderDetails?.length || 0} sản phẩm từ đơn #${order.id} vào giỏ hàng mới.`);
   };
 
-  // Print detailed invoice
-  const handlePrintInvoice = () => {
-    window.print();
-  };
+
 
   // Cancel order request
   const handleCancelOrder = async (order) => {
