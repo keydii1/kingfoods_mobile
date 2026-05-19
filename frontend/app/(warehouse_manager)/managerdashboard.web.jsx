@@ -253,9 +253,9 @@ export default function ManagerDashboardWebScreen() {
   const fetchTeam = async (silent = false) => {
     try {
       if (!silent) setLoadingTeam(true);
+      await fetchLocationsList(true);
       const res = await getUsers();
       setTeamList(Array.isArray(res) ? res : []);
-      fetchLocationsList(true);
     } catch (err) {
       console.log('Team error:', err.message);
     } finally {
@@ -2581,8 +2581,9 @@ export default function ManagerDashboardWebScreen() {
                           <Text style={[styles.tdCell, { flex: 1.5 }]}>{worker.phoneNumber || '—'}</Text>
                           <Text style={[styles.tdCell, { flex: 1.2, textAlign: 'center', fontWeight: '800', color: GREEN_THEME.primary }]}>
                             {(() => {
-                              if (worker.assignedLocationId) {
-                                const loc = locationsList.find(l => Number(l.id) === Number(worker.assignedLocationId));
+                              const locId = worker.assignedLocationId ?? worker.assigned_location_id;
+                              if (locId) {
+                                const loc = locationsList.find(l => Number(l.id) === Number(locId));
                                 if (loc) return loc.name;
                               }
                               return worker.assignedZone || '—';
