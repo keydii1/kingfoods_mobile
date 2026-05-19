@@ -153,3 +153,105 @@
 2026-05-16 13:31:57:3157 [31merror[39m: [31mlisten EADDRINUSE: address already in use 0.0.0.0:9999[39m
 2026-05-16 16:34:23:3423 [31merror[39m: [31mError during server bootstrap:[39m
 2026-05-16 16:34:23:3423 [31merror[39m: [31mlisten EADDRINUSE: address already in use 0.0.0.0:9999[39m
+2026-05-19 21:15:56:1556 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [500] Property "product" was not found in "PickingTask". Make sure your query is correct.[39m
+2026-05-19 21:15:56:1556 [31merror[39m: [31mEntityPropertyNotFoundError: Property "product" was not found in "PickingTask". Make sure your query is correct.[39m
+[31m    at /Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/src/query-builder/SelectQueryBuilder.ts:3995:23[39m
+[31m    at Array.forEach (<anonymous>)[39m
+[31m    at SelectQueryBuilder.buildRelations (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/src/query-builder/SelectQueryBuilder.ts:3987:32)[39m
+[31m    at /Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/src/query-builder/SelectQueryBuilder.ts:4057:26[39m
+[31m    at Array.forEach (<anonymous>)[39m
+[31m    at SelectQueryBuilder.buildRelations (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/src/query-builder/SelectQueryBuilder.ts:3987:32)[39m
+[31m    at SelectQueryBuilder.applyFindOptions (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/src/query-builder/SelectQueryBuilder.ts:3176:22)[39m
+[31m    at SelectQueryBuilder.setFindOptions (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/src/query-builder/SelectQueryBuilder.ts:106:14)[39m
+[31m    at EntityManager.find (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/src/entity-manager/EntityManager.ts:1118:14)[39m
+[31m    at Repository.find (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/src/repository/Repository.ts:573:29)[39m
+2026-05-19 21:16:21:1621 [31merror[39m: [31m[PATCH /api/v1/admin/users/change-password] [400] Old password is incorrect[39m
+2026-05-19 21:18:29:1829 [31merror[39m: [31m[POST /api/v1/admin/users] [400] name is required, email is required[39m
+2026-05-19 21:19:04:194 [31merror[39m: [31m[POST /api/v1/admin/users] [400] name is required, email is required[39m
+2026-05-19 21:22:35:2235 [31merror[39m: [31m[POST /api/v1/admin/users] [500] data and salt arguments required[39m
+2026-05-19 21:22:35:2235 [31merror[39m: [31mError: data and salt arguments required[39m
+[31m    at Object.hash (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/bcrypt/bcrypt.js:133:17)[39m
+[31m    at /Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/bcrypt/promises.js:26:12[39m
+[31m    at new Promise (<anonymous>)[39m
+[31m    at Object.promise (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/bcrypt/promises.js:17:12)[39m
+[31m    at Object.hash (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/bcrypt/bcrypt.js:129:25)[39m
+[31m    at UserService.<anonymous> (/Users/hohoangson/Documents/my_study/Application_v1/backend/src/services/UserService.ts:15:41)[39m
+[31m    at Generator.next (<anonymous>)[39m
+[31m    at fulfilled (/Users/hohoangson/Documents/my_study/Application_v1/backend/src/services/UserService.ts:44:58)[39m
+[31m    at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+2026-05-19 21:27:25:2725 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [500] Property "product" was not found in "PickingTask". Make sure your query is correct.[39m
+2026-05-19 21:27:25:2725 [31merror[39m: [31mEntityPropertyNotFoundError: Property "product" was not found in "PickingTask". Make sure your query is correct.[39m
+[31m    at /Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/src/query-builder/SelectQueryBuilder.ts:3995:23[39m
+[31m    at Array.forEach (<anonymous>)[39m
+[31m    at SelectQueryBuilder.buildRelations (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/src/query-builder/SelectQueryBuilder.ts:3987:32)[39m
+[31m    at /Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/src/query-builder/SelectQueryBuilder.ts:4057:26[39m
+[31m    at Array.forEach (<anonymous>)[39m
+[31m    at SelectQueryBuilder.buildRelations (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/src/query-builder/SelectQueryBuilder.ts:3987:32)[39m
+[31m    at SelectQueryBuilder.applyFindOptions (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/src/query-builder/SelectQueryBuilder.ts:3176:22)[39m
+[31m    at SelectQueryBuilder.setFindOptions (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/src/query-builder/SelectQueryBuilder.ts:106:14)[39m
+[31m    at EntityManager.find (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/src/entity-manager/EntityManager.ts:1118:14)[39m
+[31m    at Repository.find (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/src/repository/Repository.ts:573:29)[39m
+2026-05-19 21:29:17:2917 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [500] Property "product" was not found in "PickingTask". Make sure your query is correct.[39m
+2026-05-19 21:29:17:2917 [31merror[39m: [31mEntityPropertyNotFoundError: Property "product" was not found in "PickingTask". Make sure your query is correct.[39m
+[31m    at /Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/src/query-builder/SelectQueryBuilder.ts:3995:23[39m
+[31m    at Array.forEach (<anonymous>)[39m
+[31m    at SelectQueryBuilder.buildRelations (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/src/query-builder/SelectQueryBuilder.ts:3987:32)[39m
+[31m    at /Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/src/query-builder/SelectQueryBuilder.ts:4057:26[39m
+[31m    at Array.forEach (<anonymous>)[39m
+[31m    at SelectQueryBuilder.buildRelations (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/src/query-builder/SelectQueryBuilder.ts:3987:32)[39m
+[31m    at SelectQueryBuilder.applyFindOptions (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/src/query-builder/SelectQueryBuilder.ts:3176:22)[39m
+[31m    at SelectQueryBuilder.setFindOptions (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/src/query-builder/SelectQueryBuilder.ts:106:14)[39m
+[31m    at EntityManager.find (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/src/entity-manager/EntityManager.ts:1118:14)[39m
+[31m    at Repository.find (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/src/repository/Repository.ts:573:29)[39m
+2026-05-19 21:31:51:3151 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [500] Property "product" was not found in "PickingTask". Make sure your query is correct.[39m
+2026-05-19 21:31:51:3151 [31merror[39m: [31mEntityPropertyNotFoundError: Property "product" was not found in "PickingTask". Make sure your query is correct.[39m
+[31m    at /Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/src/query-builder/SelectQueryBuilder.ts:3995:23[39m
+[31m    at Array.forEach (<anonymous>)[39m
+[31m    at SelectQueryBuilder.buildRelations (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/src/query-builder/SelectQueryBuilder.ts:3987:32)[39m
+[31m    at /Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/src/query-builder/SelectQueryBuilder.ts:4057:26[39m
+[31m    at Array.forEach (<anonymous>)[39m
+[31m    at SelectQueryBuilder.buildRelations (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/src/query-builder/SelectQueryBuilder.ts:3987:32)[39m
+[31m    at SelectQueryBuilder.applyFindOptions (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/src/query-builder/SelectQueryBuilder.ts:3176:22)[39m
+[31m    at SelectQueryBuilder.setFindOptions (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/src/query-builder/SelectQueryBuilder.ts:106:14)[39m
+[31m    at EntityManager.find (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/src/entity-manager/EntityManager.ts:1118:14)[39m
+[31m    at Repository.find (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/src/repository/Repository.ts:573:29)[39m
+2026-05-19 21:44:29:4429 [31merror[39m: [31m[GET /api/v1/admin/dashboard/stats] [401] Invalid or expired token[39m
+2026-05-19 21:44:29:4429 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [401] Invalid or expired token[39m
+2026-05-19 22:24:44:2444 [31merror[39m: [31m[POST /api/v1/auth/user/login] [401] Invalid username or password[39m
+2026-05-19 22:24:46:2446 [31merror[39m: [31m[POST /api/v1/auth/user/login] [401] Invalid username or password[39m
+2026-05-19 22:39:20:3920 [31merror[39m: [31m[GET /api/v1/admin/dashboard/stats] [401] Invalid or expired token[39m
+2026-05-19 22:39:20:3920 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [401] Invalid or expired token[39m
+2026-05-19 22:41:30:4130 [31merror[39m: [31m[GET /api/v1/admin/users] [401] Invalid or expired token[39m
+2026-05-19 22:41:30:4130 [31merror[39m: [31m[GET /api/v1/admin/locations] [401] Invalid or expired token[39m
+2026-05-19 22:41:30:4130 [31merror[39m: [31m[GET /api/v1/admin/dashboard/stats] [401] Invalid or expired token[39m
+2026-05-19 22:44:39:4439 [31merror[39m: [31m[GET /api/v1/admin/users] [401] No token provided[39m
+2026-05-19 22:44:55:4455 [31merror[39m: [31m[GET /api/v1/admin/users] [401] Invalid or expired token[39m
+2026-05-19 22:44:55:4455 [31merror[39m: [31m[GET /api/v1/admin/locations] [401] Invalid or expired token[39m
+2026-05-19 22:44:55:4455 [31merror[39m: [31m[GET /api/v1/admin/dashboard/stats] [401] Invalid or expired token[39m
+2026-05-19 23:05:24:524 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [401] Invalid or expired token[39m
+2026-05-19 23:38:31:3831 [31merror[39m: [31m[GET /api/v1/admin/users] [401] Invalid or expired token[39m
+2026-05-19 23:38:31:3831 [31merror[39m: [31m[GET /api/v1/admin/locations] [401] Invalid or expired token[39m
+2026-05-19 23:38:31:3831 [31merror[39m: [31m[GET /api/v1/admin/dashboard/stats] [401] Invalid or expired token[39m
+2026-05-19 23:44:52:4452 [31merror[39m: [31m[GET /api/v1/admin/users] [401] Invalid or expired token[39m
+2026-05-19 23:44:52:4452 [31merror[39m: [31m[GET /api/v1/admin/locations] [401] Invalid or expired token[39m
+2026-05-19 23:44:52:4452 [31merror[39m: [31m[GET /api/v1/admin/dashboard/stats] [401] Invalid or expired token[39m
+2026-05-19 23:44:56:4456 [31merror[39m: [31m[GET /api/v1/admin/orders] [401] Invalid or expired token[39m
+2026-05-19 23:44:56:4456 [31merror[39m: [31m[GET /api/v1/admin/customers?page=1&limit=200] [401] Invalid or expired token[39m
+2026-05-19 23:45:17:4517 [31merror[39m: [31m[GET /api/v1/admin/users] [401] Invalid or expired token[39m
+2026-05-19 23:45:17:4517 [31merror[39m: [31m[GET /api/v1/admin/locations] [401] Invalid or expired token[39m
+2026-05-19 23:45:17:4517 [31merror[39m: [31m[GET /api/v1/admin/dashboard/stats] [401] Invalid or expired token[39m
+2026-05-19 23:45:21:4521 [31merror[39m: [31m[GET /api/v1/admin/customers?page=1&limit=200] [401] Invalid or expired token[39m
+2026-05-19 23:45:21:4521 [31merror[39m: [31m[GET /api/v1/admin/orders] [401] Invalid or expired token[39m
+2026-05-19 23:45:25:4525 [31merror[39m: [31m[GET /api/v1/admin/customers?page=1&limit=200] [401] Invalid or expired token[39m
+2026-05-19 23:45:25:4525 [31merror[39m: [31m[GET /api/v1/admin/orders] [401] Invalid or expired token[39m
+2026-05-19 23:45:48:4548 [31merror[39m: [31m[GET /api/v1/admin/customers?page=1&limit=200] [401] Invalid or expired token[39m
+2026-05-19 23:45:48:4548 [31merror[39m: [31m[GET /api/v1/admin/orders] [401] Invalid or expired token[39m
+2026-05-19 23:53:32:5332 [31merror[39m: [31m[POST /api/v1/auth/customer/login] [401] Invalid email or password[39m
+2026-05-20 00:12:19:1219 [31merror[39m: [31m[GET /api/v1/admin/users] [401] Invalid or expired token[39m
+2026-05-20 00:12:19:1219 [31merror[39m: [31m[GET /api/v1/admin/locations] [401] Invalid or expired token[39m
+2026-05-20 00:12:19:1219 [31merror[39m: [31m[GET /api/v1/admin/dashboard/stats] [401] Invalid or expired token[39m
+2026-05-20 00:12:26:1226 [31merror[39m: [31m[GET /api/v1/admin/customers?page=1&limit=200] [401] Invalid or expired token[39m
+2026-05-20 00:12:26:1226 [31merror[39m: [31m[GET /api/v1/admin/orders] [401] Invalid or expired token[39m
+2026-05-20 00:12:56:1256 [31merror[39m: [31m[GET /api/v1/admin/users] [401] Invalid or expired token[39m
+2026-05-20 00:12:56:1256 [31merror[39m: [31m[GET /api/v1/admin/locations] [401] Invalid or expired token[39m
+2026-05-20 00:12:56:1256 [31merror[39m: [31m[GET /api/v1/admin/dashboard/stats] [401] Invalid or expired token[39m

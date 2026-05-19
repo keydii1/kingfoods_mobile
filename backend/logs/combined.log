@@ -1181,3 +1181,475 @@
 [32m    [39m
 2026-05-16 16:34:23:3423 [31merror[39m: [31mError during server bootstrap:[39m
 2026-05-16 16:34:23:3423 [31merror[39m: [31mlisten EADDRINUSE: address already in use 0.0.0.0:9999[39m
+2026-05-19 21:14:13:1413 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 21:14:13 19/5/2026[39m
+[32m      * URL: http://localhost:9999[39m
+[32m      * Port: 9999[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-19 21:15:19:1519 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 379ms[39m
+2026-05-19 21:15:56:1556 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 200 - 36392ms[39m
+2026-05-19 21:15:56:1556 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [500] Property "product" was not found in "PickingTask". Make sure your query is correct.[39m
+2026-05-19 21:15:56:1556 [31merror[39m: [31mEntityPropertyNotFoundError: Property "product" was not found in "PickingTask". Make sure your query is correct.[39m
+[31m    at /Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/src/query-builder/SelectQueryBuilder.ts:3995:23[39m
+[31m    at Array.forEach (<anonymous>)[39m
+[31m    at SelectQueryBuilder.buildRelations (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/src/query-builder/SelectQueryBuilder.ts:3987:32)[39m
+[31m    at /Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/src/query-builder/SelectQueryBuilder.ts:4057:26[39m
+[31m    at Array.forEach (<anonymous>)[39m
+[31m    at SelectQueryBuilder.buildRelations (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/src/query-builder/SelectQueryBuilder.ts:3987:32)[39m
+[31m    at SelectQueryBuilder.applyFindOptions (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/src/query-builder/SelectQueryBuilder.ts:3176:22)[39m
+[31m    at SelectQueryBuilder.setFindOptions (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/src/query-builder/SelectQueryBuilder.ts:106:14)[39m
+[31m    at EntityManager.find (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/src/entity-manager/EntityManager.ts:1118:14)[39m
+[31m    at Repository.find (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/src/repository/Repository.ts:573:29)[39m
+2026-05-19 21:15:56:1556 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 500 - 33ms[39m
+2026-05-19 21:16:21:1621 [31merror[39m: [31m[PATCH /api/v1/admin/users/change-password] [400] Old password is incorrect[39m
+2026-05-19 21:16:21:1621 [32minfo[39m: [32mPATCH /api/v1/admin/users/change-password 400 - 316ms[39m
+2026-05-19 21:16:31:1631 [32minfo[39m: [32mPATCH /api/v1/admin/users/change-password 200 - 1439ms[39m
+2026-05-19 21:16:36:1636 [32minfo[39m: [32mGET /api/v1/admin/users 200 - 214ms[39m
+2026-05-19 21:18:29:1829 [31merror[39m: [31m[POST /api/v1/admin/users] [400] name is required, email is required[39m
+2026-05-19 21:18:29:1829 [32minfo[39m: [32mPOST /api/v1/admin/users 400 - 7ms[39m
+2026-05-19 21:19:04:194 [31merror[39m: [31m[POST /api/v1/admin/users] [400] name is required, email is required[39m
+2026-05-19 21:19:04:194 [32minfo[39m: [32mPOST /api/v1/admin/users 400 - 6ms[39m
+2026-05-19 21:19:40:1940 [32minfo[39m: [32mGET /api/v1/admin/users 200 - 217ms[39m
+2026-05-19 21:22:35:2235 [31merror[39m: [31m[POST /api/v1/admin/users] [500] data and salt arguments required[39m
+2026-05-19 21:22:35:2235 [31merror[39m: [31mError: data and salt arguments required[39m
+[31m    at Object.hash (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/bcrypt/bcrypt.js:133:17)[39m
+[31m    at /Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/bcrypt/promises.js:26:12[39m
+[31m    at new Promise (<anonymous>)[39m
+[31m    at Object.promise (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/bcrypt/promises.js:17:12)[39m
+[31m    at Object.hash (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/bcrypt/bcrypt.js:129:25)[39m
+[31m    at UserService.<anonymous> (/Users/hohoangson/Documents/my_study/Application_v1/backend/src/services/UserService.ts:15:41)[39m
+[31m    at Generator.next (<anonymous>)[39m
+[31m    at fulfilled (/Users/hohoangson/Documents/my_study/Application_v1/backend/src/services/UserService.ts:44:58)[39m
+[31m    at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+2026-05-19 21:22:35:2235 [32minfo[39m: [32mPOST /api/v1/admin/users 500 - 271ms[39m
+2026-05-19 21:23:29:2329 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 21:23:29 19/5/2026[39m
+[32m      * URL: http://localhost:9999[39m
+[32m      * Port: 9999[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-19 21:24:07:247 [32minfo[39m: [32mPOST /api/v1/admin/users 201 - 1168ms[39m
+2026-05-19 21:26:24:2624 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 21:26:24 19/5/2026[39m
+[32m      * URL: http://localhost:9999[39m
+[32m      * Port: 9999[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-19 21:26:30:2630 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 21:26:30 19/5/2026[39m
+[32m      * URL: http://localhost:9999[39m
+[32m      * Port: 9999[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-19 21:27:04:274 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 352ms[39m
+2026-05-19 21:27:25:2725 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 200 - 21042ms[39m
+2026-05-19 21:27:25:2725 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [500] Property "product" was not found in "PickingTask". Make sure your query is correct.[39m
+2026-05-19 21:27:25:2725 [31merror[39m: [31mEntityPropertyNotFoundError: Property "product" was not found in "PickingTask". Make sure your query is correct.[39m
+[31m    at /Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/src/query-builder/SelectQueryBuilder.ts:3995:23[39m
+[31m    at Array.forEach (<anonymous>)[39m
+[31m    at SelectQueryBuilder.buildRelations (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/src/query-builder/SelectQueryBuilder.ts:3987:32)[39m
+[31m    at /Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/src/query-builder/SelectQueryBuilder.ts:4057:26[39m
+[31m    at Array.forEach (<anonymous>)[39m
+[31m    at SelectQueryBuilder.buildRelations (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/src/query-builder/SelectQueryBuilder.ts:3987:32)[39m
+[31m    at SelectQueryBuilder.applyFindOptions (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/src/query-builder/SelectQueryBuilder.ts:3176:22)[39m
+[31m    at SelectQueryBuilder.setFindOptions (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/src/query-builder/SelectQueryBuilder.ts:106:14)[39m
+[31m    at EntityManager.find (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/src/entity-manager/EntityManager.ts:1118:14)[39m
+[31m    at Repository.find (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/src/repository/Repository.ts:573:29)[39m
+2026-05-19 21:27:25:2725 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 500 - 25ms[39m
+2026-05-19 21:27:41:2741 [32minfo[39m: [32mGET /api/v1/admin/locations 200 - 242ms[39m
+2026-05-19 21:28:58:2858 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 352ms[39m
+2026-05-19 21:29:16:2916 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 200 - 18402ms[39m
+2026-05-19 21:29:17:2917 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [500] Property "product" was not found in "PickingTask". Make sure your query is correct.[39m
+2026-05-19 21:29:17:2917 [31merror[39m: [31mEntityPropertyNotFoundError: Property "product" was not found in "PickingTask". Make sure your query is correct.[39m
+[31m    at /Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/src/query-builder/SelectQueryBuilder.ts:3995:23[39m
+[31m    at Array.forEach (<anonymous>)[39m
+[31m    at SelectQueryBuilder.buildRelations (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/src/query-builder/SelectQueryBuilder.ts:3987:32)[39m
+[31m    at /Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/src/query-builder/SelectQueryBuilder.ts:4057:26[39m
+[31m    at Array.forEach (<anonymous>)[39m
+[31m    at SelectQueryBuilder.buildRelations (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/src/query-builder/SelectQueryBuilder.ts:3987:32)[39m
+[31m    at SelectQueryBuilder.applyFindOptions (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/src/query-builder/SelectQueryBuilder.ts:3176:22)[39m
+[31m    at SelectQueryBuilder.setFindOptions (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/src/query-builder/SelectQueryBuilder.ts:106:14)[39m
+[31m    at EntityManager.find (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/src/entity-manager/EntityManager.ts:1118:14)[39m
+[31m    at Repository.find (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/src/repository/Repository.ts:573:29)[39m
+2026-05-19 21:29:17:2917 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 500 - 9ms[39m
+2026-05-19 21:29:36:2936 [32minfo[39m: [32mGET /api/v1/admin/locations 200 - 242ms[39m
+2026-05-19 21:30:34:3034 [32minfo[39m: [32mGET /api/v1/admin/locations 304 - 229ms[39m
+2026-05-19 21:30:40:3040 [32minfo[39m: [32mGET /api/v1/admin/locations 304 - 226ms[39m
+2026-05-19 21:31:26:3126 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 326ms[39m
+2026-05-19 21:31:50:3150 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 23583ms[39m
+2026-05-19 21:31:51:3151 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [500] Property "product" was not found in "PickingTask". Make sure your query is correct.[39m
+2026-05-19 21:31:51:3151 [31merror[39m: [31mEntityPropertyNotFoundError: Property "product" was not found in "PickingTask". Make sure your query is correct.[39m
+[31m    at /Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/src/query-builder/SelectQueryBuilder.ts:3995:23[39m
+[31m    at Array.forEach (<anonymous>)[39m
+[31m    at SelectQueryBuilder.buildRelations (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/src/query-builder/SelectQueryBuilder.ts:3987:32)[39m
+[31m    at /Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/src/query-builder/SelectQueryBuilder.ts:4057:26[39m
+[31m    at Array.forEach (<anonymous>)[39m
+[31m    at SelectQueryBuilder.buildRelations (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/src/query-builder/SelectQueryBuilder.ts:3987:32)[39m
+[31m    at SelectQueryBuilder.applyFindOptions (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/src/query-builder/SelectQueryBuilder.ts:3176:22)[39m
+[31m    at SelectQueryBuilder.setFindOptions (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/src/query-builder/SelectQueryBuilder.ts:106:14)[39m
+[31m    at EntityManager.find (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/src/entity-manager/EntityManager.ts:1118:14)[39m
+[31m    at Repository.find (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/src/repository/Repository.ts:573:29)[39m
+2026-05-19 21:31:51:3151 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 500 - 2ms[39m
+2026-05-19 21:32:09:329 [32minfo[39m: [32mGET /api/v1/admin/locations 304 - 228ms[39m
+2026-05-19 21:32:48:3248 [32minfo[39m: [32mPOST /api/v1/admin/users 201 - 1252ms[39m
+2026-05-19 21:35:15:3515 [32minfo[39m: [32mGET /api/v1/admin/locations 304 - 227ms[39m
+2026-05-19 21:35:20:3520 [32minfo[39m: [32mGET /api/v1/admin/locations 304 - 223ms[39m
+2026-05-19 21:37:49:3749 [32minfo[39m: [32mGET /api/v1/admin/locations 304 - 232ms[39m
+2026-05-19 21:41:37:4137 [32minfo[39m: [32mGET /api/v1/admin/users 200 - 261ms[39m
+2026-05-19 21:44:25:4425 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 21:44:25 19/5/2026[39m
+[32m      * URL: http://localhost:9999[39m
+[32m      * Port: 9999[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-19 21:44:29:4429 [31merror[39m: [31m[GET /api/v1/admin/dashboard/stats] [401] Invalid or expired token[39m
+2026-05-19 21:44:29:4429 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [401] Invalid or expired token[39m
+2026-05-19 21:47:41:4741 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 350ms[39m
+2026-05-19 21:47:58:4758 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 200 - 16557ms[39m
+2026-05-19 21:47:58:4758 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 200 - 283ms[39m
+2026-05-19 21:48:19:4819 [32minfo[39m: [32mGET /api/v1/admin/users 304 - 218ms[39m
+2026-05-19 21:48:24:4824 [32minfo[39m: [32mGET /api/v1/admin/customers?page=1&limit=200 200 - 1011ms[39m
+2026-05-19 21:50:00:500 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 21:50:00 19/5/2026[39m
+[32m      * URL: http://localhost:9999[39m
+[32m      * Port: 9999[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-19 21:51:26:5126 [32minfo[39m: [32mGET /api/v1/admin/users 304 - 222ms[39m
+2026-05-19 21:51:54:5154 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 322ms[39m
+2026-05-19 21:52:10:5210 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 200 - 15532ms[39m
+2026-05-19 21:52:10:5210 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 215ms[39m
+2026-05-19 22:00:05:05 [32minfo[39m: [32mGET /api/v1/admin/users 304 - 236ms[39m
+2026-05-19 22:00:09:09 [32minfo[39m: [32mGET /api/v1/admin/customers?page=1&limit=200 304 - 850ms[39m
+2026-05-19 22:06:43:643 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 316ms[39m
+2026-05-19 22:06:59:659 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 15488ms[39m
+2026-05-19 22:07:00:70 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 214ms[39m
+2026-05-19 22:09:04:94 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 19656ms[39m
+2026-05-19 22:09:04:94 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 210ms[39m
+2026-05-19 22:11:38:1138 [32minfo[39m: [32mGET /api/v1/admin/users 304 - 213ms[39m
+2026-05-19 22:16:55:1655 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 17320ms[39m
+2026-05-19 22:16:56:1656 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 212ms[39m
+2026-05-19 22:17:07:177 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 314ms[39m
+2026-05-19 22:17:30:1730 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 23291ms[39m
+2026-05-19 22:17:31:1731 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 209ms[39m
+2026-05-19 22:18:21:1821 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 16603ms[39m
+2026-05-19 22:18:21:1821 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 207ms[39m
+2026-05-19 22:18:52:1852 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 315ms[39m
+2026-05-19 22:19:08:198 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 15695ms[39m
+2026-05-19 22:19:08:198 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 209ms[39m
+2026-05-19 22:19:57:1957 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 15564ms[39m
+2026-05-19 22:19:58:1958 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 209ms[39m
+2026-05-19 22:20:46:2046 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 311ms[39m
+2026-05-19 22:21:02:212 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 15525ms[39m
+2026-05-19 22:21:03:213 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 209ms[39m
+2026-05-19 22:21:30:2130 [32minfo[39m: [32mGET /api/v1/admin/users 304 - 214ms[39m
+2026-05-19 22:23:46:2346 [32minfo[39m: [32mGET /api/v1/admin/users 304 - 206ms[39m
+2026-05-19 22:23:47:2347 [32minfo[39m: [32mGET /api/v1/admin/locations 304 - 214ms[39m
+2026-05-19 22:24:08:248 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 20824ms[39m
+2026-05-19 22:24:44:2444 [31merror[39m: [31m[POST /api/v1/auth/user/login] [401] Invalid username or password[39m
+2026-05-19 22:24:44:2444 [32minfo[39m: [32mPOST /api/v1/auth/user/login 401 - 315ms[39m
+2026-05-19 22:24:46:2446 [31merror[39m: [31m[POST /api/v1/auth/user/login] [401] Invalid username or password[39m
+2026-05-19 22:24:46:2446 [32minfo[39m: [32mPOST /api/v1/auth/user/login 401 - 308ms[39m
+2026-05-19 22:24:57:2457 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 309ms[39m
+2026-05-19 22:25:14:2514 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 200 - 16659ms[39m
+2026-05-19 22:25:14:2514 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 200 - 214ms[39m
+2026-05-19 22:25:20:2520 [32minfo[39m: [32mGET /api/v1/admin/users 200 - 213ms[39m
+2026-05-19 22:25:20:2520 [32minfo[39m: [32mGET /api/v1/admin/locations 304 - 209ms[39m
+2026-05-19 22:25:35:2535 [32minfo[39m: [32mGET /api/v1/admin/customers?page=1&limit=200 200 - 854ms[39m
+2026-05-19 22:25:38:2538 [32minfo[39m: [32mGET /api/v1/admin/users 304 - 214ms[39m
+2026-05-19 22:25:38:2538 [32minfo[39m: [32mGET /api/v1/admin/locations 304 - 210ms[39m
+2026-05-19 22:25:44:2544 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 24225ms[39m
+2026-05-19 22:26:00:260 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 21716ms[39m
+2026-05-19 22:26:29:2629 [32minfo[39m: [32mPATCH /api/v1/admin/users/2 200 - 1746ms[39m
+2026-05-19 22:26:41:2641 [32minfo[39m: [32mPATCH /api/v1/admin/users/3 200 - 1354ms[39m
+2026-05-19 22:28:29:2829 [32minfo[39m: [32mGET /api/v1/admin/locations 304 - 210ms[39m
+2026-05-19 22:28:29:2829 [32minfo[39m: [32mGET /api/v1/admin/users 200 - 234ms[39m
+2026-05-19 22:28:34:2834 [32minfo[39m: [32mGET /api/v1/admin/customers?page=1&limit=200 304 - 914ms[39m
+2026-05-19 22:28:43:2843 [32minfo[39m: [32mGET /api/v1/admin/orders 200 - 6192ms[39m
+2026-05-19 22:28:44:2844 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 200 - 16019ms[39m
+2026-05-19 22:28:49:2849 [32minfo[39m: [32mGET /api/v1/admin/users 304 - 212ms[39m
+2026-05-19 22:28:49:2849 [32minfo[39m: [32mGET /api/v1/admin/locations 304 - 225ms[39m
+2026-05-19 22:29:10:2910 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 20743ms[39m
+2026-05-19 22:30:52:3052 [32minfo[39m: [32mGET /api/v1/admin/users 304 - 210ms[39m
+2026-05-19 22:30:52:3052 [32minfo[39m: [32mGET /api/v1/admin/locations 304 - 228ms[39m
+2026-05-19 22:30:54:3054 [32minfo[39m: [32mGET /api/v1/admin/customers?page=1&limit=200 304 - 910ms[39m
+2026-05-19 22:34:43:3443 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 22:34:43 19/5/2026[39m
+[32m      * URL: http://localhost:9999[39m
+[32m      * Port: 9999[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-19 22:34:45:3445 [32minfo[39m: [32mGET /api/v1/admin/users 200 - 244ms[39m
+2026-05-19 22:34:45:3445 [32minfo[39m: [32mGET /api/v1/admin/locations 304 - 208ms[39m
+2026-05-19 22:34:55:3455 [32minfo[39m: [32mGET /api/v1/admin/users 304 - 216ms[39m
+2026-05-19 22:34:56:3456 [32minfo[39m: [32mGET /api/v1/admin/locations 304 - 216ms[39m
+2026-05-19 22:35:05:355 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 200 - 20245ms[39m
+2026-05-19 22:35:06:356 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 200 - 18961ms[39m
+2026-05-19 22:35:07:357 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 207ms[39m
+2026-05-19 22:35:12:3512 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 200 - 16023ms[39m
+2026-05-19 22:39:20:3920 [31merror[39m: [31m[GET /api/v1/admin/dashboard/stats] [401] Invalid or expired token[39m
+2026-05-19 22:39:20:3920 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [401] Invalid or expired token[39m
+2026-05-19 22:41:30:4130 [31merror[39m: [31m[GET /api/v1/admin/users] [401] Invalid or expired token[39m
+2026-05-19 22:41:30:4130 [31merror[39m: [31m[GET /api/v1/admin/locations] [401] Invalid or expired token[39m
+2026-05-19 22:41:30:4130 [31merror[39m: [31m[GET /api/v1/admin/dashboard/stats] [401] Invalid or expired token[39m
+2026-05-19 22:44:39:4439 [31merror[39m: [31m[GET /api/v1/admin/users] [401] No token provided[39m
+2026-05-19 22:44:55:4455 [31merror[39m: [31m[GET /api/v1/admin/users] [401] Invalid or expired token[39m
+2026-05-19 22:44:55:4455 [31merror[39m: [31m[GET /api/v1/admin/locations] [401] Invalid or expired token[39m
+2026-05-19 22:44:55:4455 [31merror[39m: [31m[GET /api/v1/admin/dashboard/stats] [401] Invalid or expired token[39m
+2026-05-19 22:47:30:4730 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 385ms[39m
+2026-05-19 22:47:46:4746 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 200 - 16005ms[39m
+2026-05-19 22:47:47:4747 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 242ms[39m
+2026-05-19 22:47:52:4752 [32minfo[39m: [32mGET /api/v1/admin/locations 304 - 200ms[39m
+2026-05-19 22:47:52:4752 [32minfo[39m: [32mGET /api/v1/admin/users 304 - 215ms[39m
+2026-05-19 22:48:13:4813 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 20702ms[39m
+2026-05-19 22:48:27:4827 [32minfo[39m: [32mGET /api/v1/admin/users 304 - 213ms[39m
+2026-05-19 22:48:27:4827 [32minfo[39m: [32mGET /api/v1/admin/locations 304 - 215ms[39m
+2026-05-19 22:48:29:4829 [32minfo[39m: [32mGET /api/v1/admin/customers?page=1&limit=200 304 - 888ms[39m
+2026-05-19 22:48:34:4834 [32minfo[39m: [32mGET /api/v1/admin/orders 200 - 2310ms[39m
+2026-05-19 22:48:48:4848 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 21069ms[39m
+2026-05-19 22:49:01:491 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 442ms[39m
+2026-05-19 22:49:24:4924 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 200 - 23040ms[39m
+2026-05-19 22:49:24:4924 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 200 - 208ms[39m
+2026-05-19 22:49:33:4933 [32minfo[39m: [32mGET /api/v1/admin/orders 200 - 2386ms[39m
+2026-05-19 22:49:45:4945 [32minfo[39m: [32mGET /api/v1/admin/customers?page=1&limit=200 304 - 848ms[39m
+2026-05-19 22:49:52:4952 [32minfo[39m: [32mGET /api/v1/admin/orders 200 - 24318ms[39m
+2026-05-19 22:50:53:5053 [32minfo[39m: [32mGET /api/v1/admin/users 304 - 201ms[39m
+2026-05-19 22:50:54:5054 [32minfo[39m: [32mGET /api/v1/admin/locations 304 - 215ms[39m
+2026-05-19 22:51:08:518 [32minfo[39m: [32mGET /api/v1/admin/customers?page=1&limit=200 304 - 1697ms[39m
+2026-05-19 22:51:11:5111 [32minfo[39m: [32mGET /api/v1/admin/orders 200 - 4455ms[39m
+2026-05-19 22:51:13:5113 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 19791ms[39m
+2026-05-19 22:51:14:5114 [32minfo[39m: [32mGET /api/v1/admin/customers?page=1&limit=200 304 - 1687ms[39m
+2026-05-19 22:51:16:5116 [32minfo[39m: [32mGET /api/v1/admin/orders 200 - 4083ms[39m
+2026-05-19 22:51:37:5137 [32minfo[39m: [32mGET /api/v1/admin/orders 200 - 5925ms[39m
+2026-05-19 22:51:54:5154 [32minfo[39m: [32mGET /api/v1/admin/orders 200 - 7533ms[39m
+2026-05-19 22:53:31:5331 [32minfo[39m: [32mGET /api/v1/admin/orders 200 - 8972ms[39m
+2026-05-19 22:55:20:5520 [32minfo[39m: [32mGET /api/v1/admin/orders 200 - 21046ms[39m
+2026-05-19 22:55:28:5528 [32minfo[39m: [32mPATCH /api/v1/admin/orders/1019 200 - 1409ms[39m
+2026-05-19 22:55:42:5542 [32minfo[39m: [32mPATCH /api/v1/admin/orders/1018 200 - 1184ms[39m
+2026-05-19 22:55:42:5542 [32minfo[39m: [32mPATCH /api/v1/admin/orders/1018 200 - 425ms[39m
+2026-05-19 22:56:01:561 [32minfo[39m: [32mPATCH /api/v1/admin/orders/1007 200 - 1263ms[39m
+2026-05-19 22:56:48:5648 [32minfo[39m: [32mGET /api/v1/admin/orders 200 - 12096ms[39m
+2026-05-19 22:56:55:5655 [32minfo[39m: [32mPATCH /api/v1/admin/orders/1017 200 - 1257ms[39m
+2026-05-19 22:57:02:572 [32minfo[39m: [32mPATCH /api/v1/admin/orders/1016 200 - 1256ms[39m
+2026-05-19 22:57:03:573 [32minfo[39m: [32mPATCH /api/v1/admin/orders/1016 200 - 419ms[39m
+2026-05-19 22:57:24:5724 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 226ms[39m
+2026-05-19 22:58:49:5849 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 249ms[39m
+2026-05-19 23:05:24:524 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [401] Invalid or expired token[39m
+2026-05-19 23:14:05:145 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 341ms[39m
+2026-05-19 23:14:23:1423 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 200 - 18456ms[39m
+2026-05-19 23:14:24:1424 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 200 - 226ms[39m
+2026-05-19 23:14:26:1426 [32minfo[39m: [32mGET /api/v1/admin/customers?page=1&limit=200 304 - 802ms[39m
+2026-05-19 23:14:28:1428 [32minfo[39m: [32mGET /api/v1/admin/orders 200 - 2445ms[39m
+2026-05-19 23:14:32:1432 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 223ms[39m
+2026-05-19 23:15:13:1513 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 200 - 223ms[39m
+2026-05-19 23:16:15:1615 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 224ms[39m
+2026-05-19 23:17:12:1712 [32minfo[39m: [32mPOST /api/v1/admin/picking/incident/1/resolve 200 - 1283ms[39m
+2026-05-19 23:17:21:1721 [32minfo[39m: [32mPOST /api/v1/admin/picking/incident/2/resolve 200 - 1571ms[39m
+2026-05-19 23:18:20:1820 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 200 - 285ms[39m
+2026-05-19 23:18:29:1829 [32minfo[39m: [32mGET /api/v1/admin/locations 200 - 223ms[39m
+2026-05-19 23:20:03:203 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 200 - 25704ms[39m
+2026-05-19 23:20:04:204 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 312ms[39m
+2026-05-19 23:23:11:2311 [32minfo[39m: [32mGET /api/v1/admin/locations 304 - 216ms[39m
+2026-05-19 23:23:12:2312 [32minfo[39m: [32mGET /api/v1/admin/users 200 - 1390ms[39m
+2026-05-19 23:23:14:2314 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 26175ms[39m
+2026-05-19 23:23:14:2314 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 220ms[39m
+2026-05-19 23:23:38:2338 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 27068ms[39m
+2026-05-19 23:25:45:2545 [32minfo[39m: [32mGET /api/v1/admin/customers?page=1&limit=200 304 - 1067ms[39m
+2026-05-19 23:25:52:2552 [32minfo[39m: [32mGET /api/v1/admin/orders 200 - 7434ms[39m
+2026-05-19 23:27:48:2748 [32minfo[39m: [32mGET /api/v1/admin/users 304 - 217ms[39m
+2026-05-19 23:27:48:2748 [32minfo[39m: [32mGET /api/v1/admin/locations 304 - 220ms[39m
+2026-05-19 23:28:06:286 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 18147ms[39m
+2026-05-19 23:38:31:3831 [31merror[39m: [31m[GET /api/v1/admin/users] [401] Invalid or expired token[39m
+2026-05-19 23:38:31:3831 [31merror[39m: [31m[GET /api/v1/admin/locations] [401] Invalid or expired token[39m
+2026-05-19 23:38:31:3831 [31merror[39m: [31m[GET /api/v1/admin/dashboard/stats] [401] Invalid or expired token[39m
+2026-05-19 23:44:36:4436 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 299ms[39m
+2026-05-19 23:44:52:4452 [31merror[39m: [31m[GET /api/v1/admin/users] [401] Invalid or expired token[39m
+2026-05-19 23:44:52:4452 [31merror[39m: [31m[GET /api/v1/admin/locations] [401] Invalid or expired token[39m
+2026-05-19 23:44:52:4452 [31merror[39m: [31m[GET /api/v1/admin/dashboard/stats] [401] Invalid or expired token[39m
+2026-05-19 23:44:56:4456 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 200 - 18976ms[39m
+2026-05-19 23:44:56:4456 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 200 - 209ms[39m
+2026-05-19 23:44:56:4456 [31merror[39m: [31m[GET /api/v1/admin/orders] [401] Invalid or expired token[39m
+2026-05-19 23:44:56:4456 [31merror[39m: [31m[GET /api/v1/admin/customers?page=1&limit=200] [401] Invalid or expired token[39m
+2026-05-19 23:45:05:455 [32minfo[39m: [32mGET /api/v1/admin/users 304 - 204ms[39m
+2026-05-19 23:45:05:455 [32minfo[39m: [32mGET /api/v1/admin/locations 304 - 213ms[39m
+2026-05-19 23:45:17:4517 [31merror[39m: [31m[GET /api/v1/admin/users] [401] Invalid or expired token[39m
+2026-05-19 23:45:17:4517 [31merror[39m: [31m[GET /api/v1/admin/locations] [401] Invalid or expired token[39m
+2026-05-19 23:45:17:4517 [31merror[39m: [31m[GET /api/v1/admin/dashboard/stats] [401] Invalid or expired token[39m
+2026-05-19 23:45:21:4521 [31merror[39m: [31m[GET /api/v1/admin/customers?page=1&limit=200] [401] Invalid or expired token[39m
+2026-05-19 23:45:21:4521 [31merror[39m: [31m[GET /api/v1/admin/orders] [401] Invalid or expired token[39m
+2026-05-19 23:45:23:4523 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 17741ms[39m
+2026-05-19 23:45:25:4525 [31merror[39m: [31m[GET /api/v1/admin/customers?page=1&limit=200] [401] Invalid or expired token[39m
+2026-05-19 23:45:25:4525 [31merror[39m: [31m[GET /api/v1/admin/orders] [401] Invalid or expired token[39m
+2026-05-19 23:45:48:4548 [31merror[39m: [31m[GET /api/v1/admin/customers?page=1&limit=200] [401] Invalid or expired token[39m
+2026-05-19 23:45:48:4548 [31merror[39m: [31m[GET /api/v1/admin/orders] [401] Invalid or expired token[39m
+2026-05-19 23:46:10:4610 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 389ms[39m
+2026-05-19 23:46:16:4616 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 309ms[39m
+2026-05-19 23:46:34:4634 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 23101ms[39m
+2026-05-19 23:46:34:4634 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 220ms[39m
+2026-05-19 23:46:38:4638 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 200 - 22615ms[39m
+2026-05-19 23:46:39:4639 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 217ms[39m
+2026-05-19 23:46:43:4643 [32minfo[39m: [32mGET /api/v1/admin/locations 200 - 213ms[39m
+2026-05-19 23:46:43:4643 [32minfo[39m: [32mGET /api/v1/admin/users 200 - 219ms[39m
+2026-05-19 23:46:51:4651 [32minfo[39m: [32mGET /api/v1/admin/users 304 - 214ms[39m
+2026-05-19 23:46:51:4651 [32minfo[39m: [32mGET /api/v1/admin/locations 304 - 214ms[39m
+2026-05-19 23:46:51:4651 [32minfo[39m: [32mGET /api/v1/admin/users 304 - 216ms[39m
+2026-05-19 23:46:51:4651 [32minfo[39m: [32mGET /api/v1/admin/locations 304 - 210ms[39m
+2026-05-19 23:46:58:4658 [32minfo[39m: [32mGET /api/v1/admin/users 304 - 215ms[39m
+2026-05-19 23:46:58:4658 [32minfo[39m: [32mGET /api/v1/admin/locations 304 - 215ms[39m
+2026-05-19 23:46:59:4659 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 16698ms[39m
+2026-05-19 23:47:08:478 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 17251ms[39m
+2026-05-19 23:47:08:478 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 16609ms[39m
+2026-05-19 23:47:14:4714 [32minfo[39m: [32mGET /api/v1/admin/customers?page=1&limit=200 304 - 881ms[39m
+2026-05-19 23:47:17:4717 [32minfo[39m: [32mGET /api/v1/admin/orders 200 - 4833ms[39m
+2026-05-19 23:47:20:4720 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 22051ms[39m
+2026-05-19 23:47:37:4737 [32minfo[39m: [32mGET /api/v1/admin/customers?page=1&limit=200 304 - 856ms[39m
+2026-05-19 23:47:38:4738 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 218ms[39m
+2026-05-19 23:47:39:4739 [32minfo[39m: [32mGET /api/v1/admin/orders 200 - 3020ms[39m
+2026-05-19 23:47:51:4751 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 220ms[39m
+2026-05-19 23:47:57:4757 [32minfo[39m: [32mGET /api/v1/admin/customers?page=1&limit=200 304 - 858ms[39m
+2026-05-19 23:47:59:4759 [32minfo[39m: [32mGET /api/v1/admin/orders 200 - 3152ms[39m
+2026-05-19 23:48:01:481 [32minfo[39m: [32mGET /api/v1/admin/users 304 - 212ms[39m
+2026-05-19 23:48:01:481 [32minfo[39m: [32mGET /api/v1/admin/locations 304 - 210ms[39m
+2026-05-19 23:48:03:483 [32minfo[39m: [32mGET /api/v1/admin/locations 304 - 209ms[39m
+2026-05-19 23:48:03:483 [32minfo[39m: [32mGET /api/v1/admin/users 304 - 213ms[39m
+2026-05-19 23:48:05:485 [32minfo[39m: [32mGET /api/v1/admin/customers?page=1&limit=200 304 - 848ms[39m
+2026-05-19 23:48:07:487 [32minfo[39m: [32mGET /api/v1/admin/orders 200 - 2748ms[39m
+2026-05-19 23:48:11:4811 [32minfo[39m: [32mGET /api/v1/admin/users 304 - 211ms[39m
+2026-05-19 23:48:11:4811 [32minfo[39m: [32mGET /api/v1/admin/locations 304 - 210ms[39m
+2026-05-19 23:48:22:4822 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 21072ms[39m
+2026-05-19 23:48:22:4822 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 19052ms[39m
+2026-05-19 23:48:27:4827 [32minfo[39m: [32mGET /api/v1/admin/locations 304 - 200ms[39m
+2026-05-19 23:48:27:4827 [32minfo[39m: [32mGET /api/v1/admin/users 304 - 221ms[39m
+2026-05-19 23:48:33:4833 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 22482ms[39m
+2026-05-19 23:48:35:4835 [32minfo[39m: [32mGET /api/v1/admin/customers?page=1&limit=200 304 - 847ms[39m
+2026-05-19 23:48:44:4844 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 17843ms[39m
+2026-05-19 23:48:56:4856 [32minfo[39m: [32mGET /api/v1/admin/orders 200 - 22306ms[39m
+2026-05-19 23:49:05:495 [32minfo[39m: [32mGET /api/v1/admin/orders 200 - 4156ms[39m
+2026-05-19 23:49:11:4911 [32minfo[39m: [32mGET /api/v1/admin/orders 200 - 5085ms[39m
+2026-05-19 23:49:17:4917 [32minfo[39m: [32mGET /api/v1/admin/orders 200 - 4458ms[39m
+2026-05-19 23:49:25:4925 [32minfo[39m: [32mPATCH /api/v1/admin/orders/1015 200 - 1371ms[39m
+2026-05-19 23:49:25:4925 [32minfo[39m: [32mPATCH /api/v1/admin/orders/1015 200 - 424ms[39m
+2026-05-19 23:49:50:4950 [32minfo[39m: [32mGET /api/v1/admin/orders 200 - 13669ms[39m
+2026-05-19 23:50:03:503 [32minfo[39m: [32mGET /api/v1/admin/locations 304 - 214ms[39m
+2026-05-19 23:50:14:5014 [32minfo[39m: [32mGET /api/v1/admin/users 304 - 215ms[39m
+2026-05-19 23:50:14:5014 [32minfo[39m: [32mGET /api/v1/admin/locations 304 - 221ms[39m
+2026-05-19 23:50:23:5023 [32minfo[39m: [32mGET /api/v1/admin/customers?page=1&limit=200 304 - 884ms[39m
+2026-05-19 23:50:29:5029 [32minfo[39m: [32mGET /api/v1/admin/orders 200 - 7103ms[39m
+2026-05-19 23:50:32:5032 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 200 - 17678ms[39m
+2026-05-19 23:52:14:5214 [32minfo[39m: [32mPOST /api/v1/auth/customer/login 200 - 334ms[39m
+2026-05-19 23:52:15:5215 [32minfo[39m: [32mGET /api/v1/public/products?limit=100 200 - 1102ms[39m
+2026-05-19 23:52:19:5219 [32minfo[39m: [32mGET /api/v1/client/orders 200 - 436ms[39m
+2026-05-19 23:52:39:5239 [32minfo[39m: [32mGET /api/v1/client/orders 304 - 434ms[39m
+2026-05-19 23:52:41:5241 [32minfo[39m: [32mGET /api/v1/client/orders/statistics?startDate=2026-05-01&endDate=2026-05-19 200 - 615ms[39m
+2026-05-19 23:52:44:5244 [32minfo[39m: [32mGET /api/v1/client/orders/statistics?startDate=2026-05-01&endDate=2026-05-19 304 - 623ms[39m
+2026-05-19 23:52:47:5247 [32minfo[39m: [32mGET /api/v1/client/orders 304 - 441ms[39m
+2026-05-19 23:53:03:533 [32minfo[39m: [32mPOST /api/v1/auth/user/logout 200 - 3ms[39m
+2026-05-19 23:53:09:539 [32minfo[39m: [32mGET /api/v1/client/profile 200 - 457ms[39m
+2026-05-19 23:53:32:5332 [31merror[39m: [31m[POST /api/v1/auth/customer/login] [401] Invalid email or password[39m
+2026-05-19 23:53:32:5332 [32minfo[39m: [32mPOST /api/v1/auth/customer/login 401 - 308ms[39m
+2026-05-19 23:53:54:5354 [32minfo[39m: [32mPOST /api/v1/auth/customer/login 200 - 390ms[39m
+2026-05-19 23:53:55:5355 [32minfo[39m: [32mGET /api/v1/public/products?limit=100 200 - 857ms[39m
+2026-05-19 23:54:01:541 [32minfo[39m: [32mGET /api/v1/client/orders 304 - 435ms[39m
+2026-05-19 23:54:02:542 [32minfo[39m: [32mGET /api/v1/client/orders/statistics?startDate=2026-05-01&endDate=2026-05-19 304 - 449ms[39m
+2026-05-19 23:54:09:549 [32minfo[39m: [32mGET /api/v1/client/profile 304 - 425ms[39m
+2026-05-19 23:54:10:5410 [32minfo[39m: [32mGET /api/v1/client/profile 200 - 424ms[39m
+2026-05-19 23:54:17:5417 [32minfo[39m: [32mGET /api/v1/client/orders/statistics?startDate=2026-05-01&endDate=2026-05-19 200 - 449ms[39m
+2026-05-19 23:54:19:5419 [32minfo[39m: [32mGET /api/v1/public/products?limit=100 200 - 1125ms[39m
+2026-05-19 23:54:20:5420 [32minfo[39m: [32mGET /api/v1/client/orders/statistics?startDate=2026-05-01&endDate=2026-05-19 304 - 434ms[39m
+2026-05-19 23:54:26:5426 [32minfo[39m: [32mGET /api/v1/client/orders/statistics?startDate=2026-05-19&endDate=2026-05-19 200 - 432ms[39m
+2026-05-19 23:54:26:5426 [32minfo[39m: [32mGET /api/v1/client/orders/statistics?startDate=2026-05-19&endDate=2026-05-19 200 - 433ms[39m
+2026-05-19 23:54:30:5430 [32minfo[39m: [32mGET /api/v1/client/orders/statistics?startDate=2026-05-12&endDate=2026-05-19 200 - 431ms[39m
+2026-05-19 23:54:30:5430 [32minfo[39m: [32mGET /api/v1/client/orders/statistics?startDate=2026-05-12&endDate=2026-05-19 200 - 428ms[39m
+2026-05-19 23:54:32:5432 [32minfo[39m: [32mGET /api/v1/client/orders/statistics?startDate=2026-05-01&endDate=2026-05-19 200 - 464ms[39m
+2026-05-19 23:54:33:5433 [32minfo[39m: [32mGET /api/v1/client/orders/statistics?startDate=2026-05-01&endDate=2026-05-19 200 - 1508ms[39m
+2026-05-19 23:54:41:5441 [32minfo[39m: [32mGET /api/v1/client/profile 304 - 564ms[39m
+2026-05-19 23:54:46:5446 [32minfo[39m: [32mGET /api/v1/public/products?limit=100 200 - 868ms[39m
+2026-05-19 23:55:08:558 [32minfo[39m: [32mPOST /api/v1/client/orders 201 - 4417ms[39m
+2026-05-19 23:55:15:5515 [32minfo[39m: [32mGET /api/v1/client/orders/statistics?startDate=2026-05-01&endDate=2026-05-19 200 - 514ms[39m
+2026-05-19 23:55:19:5519 [32minfo[39m: [32mGET /api/v1/client/orders/detail/1021 200 - 513ms[39m
+2026-05-19 23:55:36:5536 [32minfo[39m: [32mGET /api/v1/client/orders/statistics?startDate=2026-05-01&endDate=2026-05-19 304 - 475ms[39m
+2026-05-19 23:55:38:5538 [32minfo[39m: [32mGET /api/v1/client/orders/detail/1021 304 - 608ms[39m
+2026-05-19 23:55:41:5541 [32minfo[39m: [32mGET /api/v1/client/orders/statistics?startDate=2026-05-01&endDate=2026-05-19 304 - 432ms[39m
+2026-05-19 23:55:41:5541 [32minfo[39m: [32mGET /api/v1/client/orders/detail/1021 304 - 470ms[39m
+2026-05-19 23:55:43:5543 [32minfo[39m: [32mGET /api/v1/client/orders/statistics?startDate=2026-05-01&endDate=2026-05-19 304 - 434ms[39m
+2026-05-19 23:55:44:5544 [32minfo[39m: [32mGET /api/v1/client/orders/detail/1021 304 - 430ms[39m
+2026-05-19 23:55:48:5548 [32minfo[39m: [32mGET /api/v1/client/orders/statistics?startDate=2026-05-01&endDate=2026-05-19 304 - 428ms[39m
+2026-05-19 23:55:51:5551 [32minfo[39m: [32mGET /api/v1/admin/users 304 - 213ms[39m
+2026-05-19 23:55:51:5551 [32minfo[39m: [32mGET /api/v1/admin/locations 304 - 214ms[39m
+2026-05-19 23:55:54:5554 [32minfo[39m: [32mGET /api/v1/admin/customers?page=1&limit=200 200 - 854ms[39m
+2026-05-19 23:56:02:562 [32minfo[39m: [32mGET /api/v1/client/profile 304 - 842ms[39m
+2026-05-19 23:56:04:564 [32minfo[39m: [32mGET /api/v1/admin/orders 200 - 10522ms[39m
+2026-05-19 23:56:15:5615 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 200 - 24481ms[39m
+2026-05-19 23:56:33:5633 [32minfo[39m: [32mGET /api/v1/client/orders/statistics?startDate=2026-05-01&endDate=2026-05-19 304 - 434ms[39m
+2026-05-19 23:56:35:5635 [32minfo[39m: [32mGET /api/v1/admin/orders 200 - 19725ms[39m
+2026-05-19 23:56:44:5644 [32minfo[39m: [32mPATCH /api/v1/admin/orders/1021 200 - 1594ms[39m
+2026-05-19 23:56:59:5659 [32minfo[39m: [32mGET /api/v1/client/profile 304 - 532ms[39m
+2026-05-19 23:57:38:5738 [32minfo[39m: [32mGET /api/v1/admin/orders 200 - 12130ms[39m
+2026-05-20 00:12:19:1219 [31merror[39m: [31m[GET /api/v1/admin/users] [401] Invalid or expired token[39m
+2026-05-20 00:12:19:1219 [31merror[39m: [31m[GET /api/v1/admin/locations] [401] Invalid or expired token[39m
+2026-05-20 00:12:19:1219 [31merror[39m: [31m[GET /api/v1/admin/dashboard/stats] [401] Invalid or expired token[39m
+2026-05-20 00:12:26:1226 [31merror[39m: [31m[GET /api/v1/admin/customers?page=1&limit=200] [401] Invalid or expired token[39m
+2026-05-20 00:12:26:1226 [31merror[39m: [31m[GET /api/v1/admin/orders] [401] Invalid or expired token[39m
+2026-05-20 00:12:56:1256 [31merror[39m: [31m[GET /api/v1/admin/users] [401] Invalid or expired token[39m
+2026-05-20 00:12:56:1256 [31merror[39m: [31m[GET /api/v1/admin/locations] [401] Invalid or expired token[39m
+2026-05-20 00:12:56:1256 [31merror[39m: [31m[GET /api/v1/admin/dashboard/stats] [401] Invalid or expired token[39m
+2026-05-20 00:13:20:1320 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 440ms[39m
+2026-05-20 00:13:39:1339 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 200 - 19011ms[39m
+2026-05-20 00:13:40:1340 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 234ms[39m
+2026-05-20 00:14:54:1454 [32minfo[39m: [32mGET /api/v1/admin/locations 200 - 234ms[39m
+2026-05-20 00:14:54:1454 [32minfo[39m: [32mGET /api/v1/admin/users 200 - 247ms[39m
+2026-05-20 00:15:14:1514 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 20264ms[39m
+2026-05-20 00:15:19:1519 [32minfo[39m: [32mGET /api/v1/admin/customers?page=1&limit=200 200 - 868ms[39m
+2026-05-20 00:15:30:1530 [32minfo[39m: [32mGET /api/v1/admin/orders 200 - 12488ms[39m
+2026-05-20 00:15:55:1555 [32minfo[39m: [32mGET /api/v1/admin/locations 304 - 227ms[39m
+2026-05-20 00:16:02:162 [32minfo[39m: [32mGET /api/v1/admin/locations 304 - 221ms[39m
+2026-05-20 00:16:07:167 [32minfo[39m: [32mPOST /api/v1/auth/user/logout 200 - 3ms[39m
+2026-05-20 00:16:49:1649 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 333ms[39m
+2026-05-20 00:16:54:1654 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 4010ms[39m
+2026-05-20 00:16:58:1658 [32minfo[39m: [32mGET /api/v1/admin/locations 304 - 212ms[39m
+2026-05-20 00:16:58:1658 [32minfo[39m: [32mGET /api/v1/admin/users 304 - 222ms[39m
+2026-05-20 00:17:01:171 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 2431ms[39m
+2026-05-20 00:17:14:1714 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 16874ms[39m
+2026-05-20 00:17:57:1757 [32minfo[39m: [32mGET /api/v1/admin/users 304 - 216ms[39m
+2026-05-20 00:17:57:1757 [32minfo[39m: [32mGET /api/v1/admin/locations 304 - 222ms[39m
+2026-05-20 00:18:00:180 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1998ms[39m
+2026-05-20 00:18:15:1815 [32minfo[39m: [32mGET /api/v1/admin/locations 304 - 212ms[39m
+2026-05-20 00:18:15:1815 [32minfo[39m: [32mGET /api/v1/admin/users 304 - 222ms[39m
+2026-05-20 00:18:19:1819 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 22611ms[39m
+2026-05-20 00:18:21:1821 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1558ms[39m
+2026-05-20 00:18:27:1827 [32minfo[39m: [32mGET /api/v1/client/profile 200 - 441ms[39m
+2026-05-20 00:18:32:1832 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 17077ms[39m
+2026-05-20 00:18:33:1833 [32minfo[39m: [32mGET /api/v1/admin/users 304 - 198ms[39m
+2026-05-20 00:18:33:1833 [32minfo[39m: [32mGET /api/v1/admin/locations 304 - 211ms[39m
+2026-05-20 00:18:37:1837 [32minfo[39m: [32mGET /api/v1/admin/orders 200 - 6430ms[39m
+2026-05-20 00:18:45:1845 [32minfo[39m: [32mGET /api/v1/admin/orders 200 - 24288ms[39m
+2026-05-20 00:18:54:1854 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 20923ms[39m
+2026-05-20 00:19:34:1934 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 2101ms[39m
+2026-05-20 00:19:56:1956 [32minfo[39m: [32mGET /api/v1/admin/users 304 - 216ms[39m
+2026-05-20 00:19:56:1956 [32minfo[39m: [32mGET /api/v1/admin/locations 304 - 217ms[39m
+2026-05-20 00:20:01:201 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 3396ms[39m
+2026-05-20 00:20:14:2014 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 18399ms[39m
+2026-05-20 00:25:51:2551 [32minfo[39m: [32mPOST /api/v1/auth/customer/login 200 - 362ms[39m
+2026-05-20 00:25:52:2552 [32minfo[39m: [32mGET /api/v1/public/products?limit=100 304 - 968ms[39m
