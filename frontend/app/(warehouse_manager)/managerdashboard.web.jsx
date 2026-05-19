@@ -110,7 +110,7 @@ export default function ManagerDashboardWebScreen() {
   // C. Products Inventory states
   const [productsList, setProductsList] = useState([]);
   const [loadingProducts, setLoadingProducts] = useState(false);
-  const [productForm, setProductForm] = useState({ name: '', sku: '', category: 'Bánh Kẹo', price: '', unit: 'Hộp', image: '' });
+  const [productForm, setProductForm] = useState({ name: '', sku: '', categoryId: 1, price: '', unit: 'Hộp', image: '' });
   const [submittingProduct, setSubmittingProduct] = useState(false);
 
   // D. Picking Dispatch states
@@ -468,11 +468,18 @@ export default function ManagerDashboardWebScreen() {
     setSubmittingProduct(true);
     try {
       await createProduct({
-        ...productForm,
+        name: productForm.name.trim(),
+        sku: productForm.sku.trim(),
         price: parseFloat(productForm.price),
+        discount: 0,
+        categoryId: parseInt(productForm.categoryId || 1),
+        image: productForm.image || '',
+        description: `Sản phẩm hàng sỉ phân phối khu vực kệ`,
+        status: 'active',
+        unit: productForm.unit || 'Hộp'
       });
       Alert.alert('Thành công', `Đã cấu hình mặt hàng sỉ mới "${productForm.name}" thành công.`);
-      setProductForm({ name: '', sku: '', category: 'Bánh Kẹo', price: '', unit: 'Hộp', image: '' });
+      setProductForm({ name: '', sku: '', categoryId: 1, price: '', unit: 'Hộp', image: '' });
       fetchProductsList();
     } catch (err) {
       Alert.alert('Lỗi', err.message || 'Không thể tạo sản phẩm');
@@ -1784,6 +1791,34 @@ export default function ManagerDashboardWebScreen() {
                       value={productForm.sku}
                       onChangeText={t => setProductForm(f => ({ ...f, sku: t }))}
                     />
+                  </View>
+
+                  <View style={styles.profileFormGroup}>
+                    <Text style={styles.profileInputLabel}>Phân khu hàng sỉ (Zone / Category): *</Text>
+                    <select
+                      value={productForm.categoryId}
+                      onChange={e => {
+                        const val = e.target.value;
+                        setProductForm(f => ({ ...f, categoryId: val }));
+                      }}
+                      style={{
+                        backgroundColor: '#fff',
+                        border: '1.5px solid #cbd5e1',
+                        borderRadius: '10px',
+                        padding: '12px 16px',
+                        fontSize: '14px',
+                        color: '#1e293b',
+                        outline: 'none',
+                        cursor: 'pointer',
+                        fontWeight: '600',
+                        width: '100%'
+                      }}
+                    >
+                      <option value="1">🥦 Thực phẩm tươi (Zone 1)</option>
+                      <option value="2">🥫 Đồ khô & Gia vị (Zone 2)</option>
+                      <option value="3">🧴 Hoá mỹ phẩm (Zone 3)</option>
+                      <option value="4">❄️ Đồ đông lạnh (Zone 4)</option>
+                    </select>
                   </View>
 
                   <View style={styles.profileFormGroup}>
