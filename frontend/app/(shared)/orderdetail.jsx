@@ -16,6 +16,23 @@ import { getClientOrderDetail, cancelClientOrder } from '../../constants/service
 import { getOrderStatusMeta, canCustomerCancelOrder } from '../../constants/orderStatus';
 import { notifyOrdersRefresh } from '../../utils/ordersRefresh';
 
+// Timezone date helper for Vietnam (UTC+7)
+const formatVietnamDate = (dateStr) => {
+  if (!dateStr) return '—';
+  let normalizedStr = dateStr;
+  if (!dateStr.endsWith('Z') && !dateStr.includes('+') && !dateStr.includes('GMT')) {
+    normalizedStr = dateStr.replace(' ', 'T') + 'Z';
+  }
+  const date = new Date(normalizedStr);
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const year = date.getFullYear();
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  const seconds = String(date.getSeconds()).padStart(2, '0');
+  return `${hours}:${minutes}:${seconds} ${day}/${month}/${year}`;
+};
+
 export default function OrderDetailScreen() {
   const { orderId } = useLocalSearchParams();
   const [order, setOrder] = useState(null);
@@ -91,9 +108,7 @@ export default function OrderDetailScreen() {
               </Text>
             </View>
             <Text style={styles.dateText}>
-              {order?.createdAt
-                ? new Date(order.createdAt).toLocaleString('vi-VN')
-                : '—'}
+              {formatVietnamDate(order?.createdAt)}
             </Text>
             <Text style={styles.totalText}>
               {(parseFloat(order?.totalPrice) || 0).toLocaleString()}đ

@@ -9,6 +9,20 @@ import { getClientStatistics, cancelClientOrder } from '../../constants/services
 import { getOrderStatusMeta, canCustomerCancelOrder } from '../../constants/orderStatus';
 import { subscribeOrdersRefresh, notifyOrdersRefresh } from '../../utils/ordersRefresh';
 
+// Timezone date helper for Vietnam (UTC+7)
+const formatVietnamDateOnly = (dateStr) => {
+  if (!dateStr) return '';
+  let normalizedStr = dateStr;
+  if (!dateStr.endsWith('Z') && !dateStr.includes('+') && !dateStr.includes('GMT')) {
+    normalizedStr = dateStr.replace(' ', 'T') + 'Z';
+  }
+  const date = new Date(normalizedStr);
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const year = date.getFullYear();
+  return `${day}/${month}/${year}`;
+};
+
 const defaultKpis = [
   { icon: 'cube-outline', value: '0', label: 'Đơn đã đặt', color: '#e8f5e9', textColor: COLORS.primary },
   { icon: 'checkmark-circle-outline', value: '0', label: 'Đã giao', color: '#e3f2fd', textColor: '#1565c0' },
@@ -264,9 +278,7 @@ export default function StoreStatisticsScreen() {
                 const cancellable = canCustomerCancelOrder(o.status);
                 const itemCount = o.orderDetails?.length || 0;
                 const total = `${(parseFloat(o.totalPrice) || 0).toLocaleString()}đ`;
-                const date = o.createdAt
-                  ? new Date(o.createdAt).toLocaleDateString('vi-VN')
-                  : '';
+                const date = formatVietnamDateOnly(o.createdAt);
 
                 return (
                   <TouchableOpacity
