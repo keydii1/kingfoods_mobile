@@ -315,10 +315,10 @@ export default function StoreOrderWebScreen() {
     const vat = totalAmount * 0.08;
     const total = totalAmount * 1.08;
 
-    printWindow.document.write(\`
+    printWindow.document.write(`
       <html>
         <head>
-          <title>Hóa đơn kiểm tra \${draftInvoiceNumber}</title>
+          <title>Hóa đơn kiểm tra ${draftInvoiceNumber}</title>
           <style>
             body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; color: #0f172a; padding: 40px; margin: 0; background: #fff; }
             .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
@@ -358,8 +358,8 @@ export default function StoreOrderWebScreen() {
             </div>
             <div style="text-align: right;">
               <div class="stamp">HÓA ĐƠN NHÁP KIỂM TRA</div>
-              <div class="meta-label">Số hóa đơn: <b>\${draftInvoiceNumber}</b></div>
-              <div class="meta-label">Ngày lập: <b>\${draftInvoiceDate}</b></div>
+              <div class="meta-label">Số hóa đơn: <b>${draftInvoiceNumber}</b></div>
+              <div class="meta-label">Ngày lập: <b>${draftInvoiceDate}</b></div>
             </div>
           </div>
           <div style="border-top: 1.5px solid #0f172a; border-bottom: 1px solid #cbd5e1; height: 3px; margin-bottom: 15px;"></div>
@@ -377,8 +377,8 @@ export default function StoreOrderWebScreen() {
             <div class="details-block">
               <div class="block-title">ĐƠN VỊ MUA HÀNG (BUYER):</div>
               <div class="details-text"><b>CHI NHÁNH SIÊU THỊ KINGFOOD MARKET</b></div>
-              <div class="details-text">Người nhận đại diện: Quản lý \${userName}</div>
-              <div class="details-text">Ghi chú giao nhận: \${deliveryAddress || 'Giao nhận tiêu chuẩn WMS chặng cuối'}</div>
+              <div class="details-text">Người nhận đại diện: Quản lý ${userName}</div>
+              <div class="details-text">Ghi chú giao nhận: ${deliveryAddress || 'Giao nhận tiêu chuẩn WMS chặng cuối'}</div>
             </div>
           </div>
 
@@ -395,7 +395,7 @@ export default function StoreOrderWebScreen() {
               </tr>
             </thead>
             <tbody>
-              \${itemsHtml}
+              ${itemsHtml}
             </tbody>
           </table>
 
@@ -410,15 +410,15 @@ export default function StoreOrderWebScreen() {
             <div class="calcs">
               <div class="calc-row">
                 <span>Cộng tiền hàng (Subtotal):</span>
-                <b>\${subtotal.toLocaleString()}đ</b>
+                <b>${subtotal.toLocaleString()}đ</b>
               </div>
               <div class="calc-row">
                 <span>Thuế suất giá trị gia tăng (VAT 8%):</span>
-                <b>\${vat.toLocaleString()}đ</b>
+                <b>${vat.toLocaleString()}đ</b>
               </div>
               <div class="calc-row-total">
                 <span>TỔNG CỘNG TIỀN THANH TOÁN (TOTAL):</span>
-                <span style="color: #F26522;">\${total.toLocaleString()}đ</span>
+                <span style="color: #F26522;">${total.toLocaleString()}đ</span>
               </div>
             </div>
           </div>
@@ -448,12 +448,12 @@ export default function StoreOrderWebScreen() {
               <div class="sign-role">Người Nhận Hàng</div>
               <div class="sign-hint">(Ký, ghi rõ họ tên)</div>
               <div class="sign-gap"></div>
-              <div class="sign-name">Quản lý \${userName}</div>
+              <div class="sign-name">Quản lý ${userName}</div>
             </div>
           </div>
         </body>
       </html>
-    \`);
+    `);
     printWindow.document.close();
     printWindow.focus();
     setTimeout(() => {
