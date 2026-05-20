@@ -146,15 +146,20 @@ export class PickingController {
     const reporterId = req.decodeUser.id;
     const { taskId, photoUrl, reason } = body;
 
-    let finalPhotoUrl = photoUrl || "";
-    if (photoUrl && photoUrl.startsWith("data:image/")) {
-      try {
-        const uploadResult = await cloudinary.uploader.upload(photoUrl, {
-          folder: "kingfoods/incidents",
-        });
-        finalPhotoUrl = uploadResult.secure_url;
-      } catch (err) {
-        console.error("Cloudinary upload failed", err);
+    let finalPhotoUrl = "";
+    if (photoUrl) {
+      if (photoUrl.startsWith("data:image/")) {
+        try {
+          const uploadResult = await cloudinary.uploader.upload(photoUrl, {
+            folder: "kingfoods/incidents",
+          });
+          finalPhotoUrl = uploadResult.secure_url;
+        } catch (err) {
+          console.error("Cloudinary upload failed", err);
+          finalPhotoUrl = ""; // Failsafe fallback
+        }
+      } else {
+        finalPhotoUrl = photoUrl;
       }
     }
 
