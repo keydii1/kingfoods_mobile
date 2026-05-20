@@ -470,5 +470,6 @@ const styles = StyleSheet.create({
         color: '#ef4444',
         fontSize: 13,
         fontWeight: '700',
-    }
+    },
 });
+// Metro cache reload trigger
