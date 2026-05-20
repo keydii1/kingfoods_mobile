@@ -18,10 +18,10 @@ import { useAuth } from '../../contexts/AuthContext';
 import { getAssignedTasks, getMyProfile } from '../../constants/services/api';
 
 const ZONE_MAP = {
-    1: '🥦 Thực phẩm tươi',
-    2: '🥫 Đồ khô & Gia vị',
-    3: '🧴 Hoá mỹ phẩm',
-    4: '❄️ Đồ đông lạnh'
+    1: 'Thực phẩm tươi',
+    2: 'Đồ khô & Gia vị',
+    3: 'Hoá mỹ phẩm',
+    4: 'Đồ đông lạnh'
 };
 
 export default function DashboardScreen() {
@@ -162,7 +162,7 @@ export default function DashboardScreen() {
                                 </Text>
                             </View>
                             <View style={styles.profileInfo}>
-                                <Text style={styles.greeting}>Xin chào 👋</Text>
+                                <Text style={styles.greeting}>Xin chào</Text>
                                 <Text style={styles.name}>{userName || 'Nhân viên'}</Text>
                                 <View style={styles.zoneBadge}>
                                     <Ionicons name="location-sharp" size={12} color="#fff" />

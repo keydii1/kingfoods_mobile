@@ -7,6 +7,7 @@ import { PickingService } from "../../services/PickingService";
 import { UserRole } from "../../Entity/User";
 import { IncidentReport, IncidentStatus } from "../../Entity/IncidentReport";
 import { Forbidden } from "../../core/ErrorResponse";
+import { v2 as cloudinary } from "cloudinary";
 import {
   AssignTasksDto,
   PackItemDto,
@@ -145,10 +146,22 @@ export class PickingController {
     const reporterId = req.decodeUser.id;
     const { taskId, photoUrl, reason } = body;
 
+    let finalPhotoUrl = photoUrl || "";
+    if (photoUrl && photoUrl.startsWith("data:image/")) {
+      try {
+        const uploadResult = await cloudinary.uploader.upload(photoUrl, {
+          folder: "kingfoods/incidents",
+        });
+        finalPhotoUrl = uploadResult.secure_url;
+      } catch (err) {
+        console.error("Cloudinary upload failed", err);
+      }
+    }
+
     const incident = await IncidentReport.createAndSave({
       taskId,
       reporterId,
-      photoUrl,
+      photoUrl: finalPhotoUrl,
       reason,
       status: IncidentStatus.PENDING
     });
@@ -159,11 +172,13 @@ export class PickingController {
   @Get("/incidents")
   @Summary("Quản lý: Xem danh sách sự cố thiếu hàng tại kệ (Incident Center)")
   async getIncidents(@Req() req: any, @Res() res: Response) {
+    const where: any = {};
     if (req.decodeUser.role !== UserRole.ADMIN) {
-      throw new Forbidden("Chỉ quản lý mới có quyền truy cập trung tâm sự cố");
+      where.reporterId = req.decodeUser.id;
     }
 
     const incidents = await IncidentReport.find({
+      where,
       relations: [
         "reporter",
         "task",

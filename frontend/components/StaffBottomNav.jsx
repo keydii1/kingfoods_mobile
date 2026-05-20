@@ -5,9 +5,8 @@ import { COLORS } from '../constants/colors';
 
 const tabs = [
   { key: 'dashboard', icon: 'home', iconOutline: 'home-outline', label: 'Trang chủ', route: '/dashboard' },
-  { key: 'team', icon: 'people', iconOutline: 'people-outline', label: 'Nhóm', route: '/team' },
-  { key: 'search', icon: 'search', iconOutline: 'search-outline', label: 'Tìm kiếm', route: '/ordersearch' },
-  { key: 'setting', icon: 'construct', iconOutline: 'construct-outline', label: 'Tiện ích', route: '/setting' },
+  { key: 'search', icon: 'cube', iconOutline: 'cube-outline', label: 'Soạn hàng', route: '/ordersearch' },
+  { key: 'incident', icon: 'alert-circle', iconOutline: 'alert-circle-outline', label: 'Sự cố', route: '/incidentreport' },
   { key: 'profile', icon: 'person-circle', iconOutline: 'person-circle-outline', label: 'Tài khoản', route: '/profile' },
 ];
 
@@ -24,11 +23,12 @@ export default function StaffBottomNav({ active }) {
             style={styles.navItem}
             disabled={isActive}
             onPress={() => router.navigate(tab.route)}
+            activeOpacity={0.8}
           >
             <Ionicons
               name={isActive ? tab.icon : tab.iconOutline}
               size={22}
-              color={isActive ? COLORS.primary : '#999'}
+              color={isActive ? COLORS.primary : '#94a3b8'}
               style={{ marginBottom: 2 }}
             />
             <Text style={[styles.navLabel, isActive && styles.navActive]}>
@@ -47,11 +47,16 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
     borderTopWidth: 1,
-    borderTopColor: '#eee',
+    borderTopColor: '#f1f5f9',
     paddingVertical: 10,
     backgroundColor: '#fff',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: -4 },
+    shadowOpacity: 0.02,
+    shadowRadius: 10,
+    elevation: 4,
   },
-  navItem: { alignItems: 'center' },
-  navLabel: { fontSize: 11, color: '#999', fontWeight: '500' },
-  navActive: { color: COLORS.primary, fontWeight: '700' },
+  navItem: { alignItems: 'center', flex: 1 },
+  navLabel: { fontSize: 10, color: '#94a3b8', fontWeight: '600' },
+  navActive: { color: COLORS.primary, fontWeight: '800' },
 });

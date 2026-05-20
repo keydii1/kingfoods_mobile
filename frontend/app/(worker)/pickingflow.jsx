@@ -8,6 +8,7 @@ import BarCodeScanner from '../../components/BarcodeScanner';
 import BarcodeView from '../../components/BarcodeView';
 import WarehouseMap from '../../components/WarehouseMap';
 import { packItem } from '../../constants/services/api';
+import { Ionicons } from '@expo/vector-icons';
 import { PACKING_POS } from '../../config/warehouseLayout';
 import { findShortestPath, pathDistance } from '../../utils/pathfinding';
 
@@ -189,7 +190,7 @@ export default function PickingFlowScreen() {
                   <Text style={styles.mapProductSku}>{currentTask?.sku}</Text>
                   <View style={styles.mapDivider} />
                   <View style={styles.mapLocationRow}>
-                    <Text style={styles.mapLocationIcon}>📍</Text>
+                    <Ionicons name="location-outline" size={13} color="#c62828" style={{ marginRight: 4 }} />
                     <Text style={styles.mapLocationLabel}>Vị trí</Text>
                     <Text style={styles.mapLocationText}>{currentTask?.location || '—'}</Text>
                   </View>

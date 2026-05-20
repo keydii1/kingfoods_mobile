@@ -1,66 +1,136 @@
 import { useState, useEffect } from 'react';
-import { View, Text, TextInput, FlatList, TouchableOpacity, StyleSheet, ActivityIndicator, Alert } from 'react-native';
+import { View, Text, TextInput, FlatList, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../../constants/colors';
-import { getOrders } from '../../constants/services/api';
+import { Alert } from '../../utils/appAlert';
+import { getAssignedTasks } from '../../constants/services/api';
 import StaffBottomNav from '../../components/StaffBottomNav';
 
 const statusConfig = {
-  pending: { label: 'Chờ duyệt', color: '#fff3e0', textColor: '#e65100' },
-  processing: { label: 'Đang xử lý', color: '#e3f2fd', textColor: '#1565c0' },
-  shipped: { label: 'Đã giao', color: '#e8f5e9', textColor: '#2e7d32' },
-  delivered: { label: 'Hoàn thành', color: '#e8f5e9', textColor: COLORS.primary },
-  cancelled: { label: 'Đã hủy', color: '#ffebee', textColor: '#c62828' },
+  pending: { label: 'Chờ lấy', color: '#ffeebf', textColor: '#b78103' },
+  picking: { label: 'Đang lấy', color: '#e3f2fd', textColor: '#1565c0' },
+  completed: { label: 'Hoàn thành', color: '#e8f5e9', textColor: COLORS.primary },
 };
 
+const FILTER_TABS = [
+  { key: 'all', label: 'Tất cả' },
+  { key: 'pending', label: 'Chờ lấy' },
+  { key: 'picking', label: 'Đang lấy' },
+  { key: 'completed', label: 'Hoàn tất' },
+];
+
 export default function OrderSearchScreen() {
-  const [orders, setOrders] = useState([]);
+  const [tasks, setTasks] = useState([]);
   const [query, setQuery] = useState('');
   const [loading, setLoading] = useState(true);
+  const [statusFilter, setStatusFilter] = useState('all');
 
   useEffect(() => {
-    fetchOrders();
+    fetchTasks();
   }, []);
 
-  const fetchOrders = async () => {
+  const fetchTasks = async () => {
     try {
-      const res = await getOrders();
-      setOrders(Array.isArray(res) ? res : []);
+      setLoading(true);
+      const res = await getAssignedTasks();
+      setTasks(Array.isArray(res) ? res : []);
     } catch (err) {
-      Alert.alert('Lỗi', 'Không thể tải đơn hàng');
+      Alert.alert('Lỗi', 'Không thể tải danh sách nhiệm vụ');
     } finally {
       setLoading(false);
     }
   };
 
-  const filtered = query.trim()
-    ? orders.filter(o => {
-        const id = String(o.id);
-        const branchName = (o.branch?.name || '').toLowerCase();
-        const q = query.toLowerCase();
-        return id.includes(q) || branchName.includes(q);
-      })
-    : orders;
+  const isToday = (dateString) => {
+    if (!dateString) return false;
+    const d = new Date(dateString);
+    const today = new Date();
+    return d.getDate() === today.getDate() &&
+           d.getMonth() === today.getMonth() &&
+           d.getFullYear() === today.getFullYear();
+  };
+
+  const filtered = tasks.filter(t => {
+    // 1. Chỉ hiển thị task trong ngày hôm nay
+    if (!isToday(t.createdAt)) return false;
+
+    // 2. Lọc theo trạng thái picking task
+    if (statusFilter !== 'all' && t.status !== statusFilter) return false;
+
+    // 3. Lọc theo thanh tìm kiếm (Mã đơn, Tên sản phẩm, Tên cửa hàng)
+    if (query.trim()) {
+      const q = query.toLowerCase();
+      const orderId = String(t.orderDetail?.orderId || '');
+      const productName = (t.orderDetail?.product?.name || '').toLowerCase();
+      const branchName = (t.orderDetail?.order?.branch?.name || '').toLowerCase();
+      const taskId = String(t.id || '');
+
+      return orderId.includes(q) || productName.includes(q) || branchName.includes(q) || taskId.includes(q);
+    }
+    return true;
+  });
+
+  const handleTaskPress = (task) => {
+    if (task.status === 'completed') {
+      Alert.alert('Nhiệm vụ', 'Nhiệm vụ này đã hoàn tất!');
+      return;
+    }
+    router.push({
+      pathname: '/pickingflow',
+      params: { taskId: task.id }
+    });
+  };
 
   const renderItem = ({ item }) => {
     const st = statusConfig[item.status] || { label: item.status, color: '#f5f5f5', textColor: '#888' };
+    const productName = item.orderDetail?.product?.name || 'Sản phẩm không xác định';
+    const branchName = item.orderDetail?.order?.branch?.name || 'Chi nhánh Kingfood';
+    const orderId = item.orderDetail?.orderId || '';
+    const locName = item.location?.name || 'Chưa phân khu';
+    const progressText = `${item.quantityPicked}/${item.quantityToPick}`;
+
     return (
-      <TouchableOpacity style={styles.orderCard}>
-        <View style={styles.orderHead}>
-          <Text style={styles.orderId}>#{item.id}</Text>
+      <TouchableOpacity 
+        style={styles.taskCard} 
+        onPress={() => handleTaskPress(item)}
+        activeOpacity={0.85}
+      >
+        <View style={styles.cardHeader}>
+          <Text style={styles.taskId}>Nhiệm vụ #{item.id} <Text style={styles.orderLabel}>· Đơn #{orderId}</Text></Text>
           <View style={[styles.statusTag, { backgroundColor: st.color }]}>
             <Text style={[styles.statusText, { color: st.textColor }]}>{st.label}</Text>
           </View>
         </View>
-        <Text style={styles.branchName}>{item.branch?.name || 'Không có tên cửa hàng'}</Text>
-        <View style={styles.orderFooter}>
-          <Text style={styles.orderTotal}>
-            {item.totalPrice ? item.totalPrice.toLocaleString() : '0'}đ
-          </Text>
-          <Text style={styles.orderDate}>
-            {item.createdAt ? new Date(item.createdAt).toLocaleDateString('vi-VN') : ''}
-          </Text>
+
+        <Text style={styles.productName} numberOfLines={2}>{productName}</Text>
+        <Text style={styles.branchName}>{branchName}</Text>
+
+        <View style={styles.cardFooter}>
+          <View style={styles.metaCol}>
+            <Text style={styles.metaLabel}>Vị trí kệ</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 2 }}>
+              <Ionicons name="location-outline" size={13} color="#64748b" style={{ marginRight: 2 }} />
+              <Text style={styles.metaVal}>{locName}</Text>
+            </View>
+          </View>
+          <View style={styles.metaCol}>
+            <Text style={styles.metaLabel}>Tiến độ</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 2 }}>
+              <Ionicons name="cube-outline" size={13} color={COLORS.primary} style={{ marginRight: 2 }} />
+              <Text style={[styles.metaVal, { color: COLORS.primary }]}>{progressText} sp</Text>
+            </View>
+          </View>
+          <View style={styles.metaCol}>
+            <Text style={styles.metaLabel}>Thời gian nhận</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 2 }}>
+              <Ionicons name="time-outline" size={13} color="#64748b" style={{ marginRight: 2 }} />
+              <Text style={styles.metaVal}>
+                {item.createdAt ? new Date(item.createdAt).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) : ''}
+              </Text>
+            </View>
+          </View>
         </View>
       </TouchableOpacity>
     );
@@ -68,15 +138,17 @@ export default function OrderSearchScreen() {
 
   return (
     <SafeAreaView style={styles.safeArea}>
+      {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>Tìm kiếm đơn hàng</Text>
+        <Text style={styles.headerTitle}>Tìm kiếm nhiệm vụ hôm nay</Text>
         <Text style={styles.count}>{filtered.length}</Text>
       </View>
 
+      {/* Search Bar */}
       <View style={styles.searchBar}>
         <TextInput
           style={styles.searchInput}
-          placeholder="Tìm theo mã đơn hoặc tên cửa hàng"
+          placeholder="Tìm theo sản phẩm, mã đơn hoặc chi nhánh..."
           placeholderTextColor="#aaa"
           value={query}
           onChangeText={setQuery}
@@ -89,8 +161,30 @@ export default function OrderSearchScreen() {
         )}
       </View>
 
+      {/* Status Filters */}
+      <View style={styles.filterRow}>
+        {FILTER_TABS.map((tab) => {
+          const isActive = statusFilter === tab.key;
+          return (
+            <TouchableOpacity
+              key={tab.key}
+              style={[styles.filterTab, isActive && styles.filterTabActive]}
+              onPress={() => setStatusFilter(tab.key)}
+              activeOpacity={0.8}
+            >
+              <Text style={[styles.filterTabText, isActive && styles.filterTabTextActive]}>
+                {tab.label}
+              </Text>
+            </TouchableOpacity>
+          );
+        })}
+      </View>
+
+      {/* Task List */}
       {loading ? (
-        <View style={styles.center}><ActivityIndicator size="large" color={COLORS.primary} /></View>
+        <View style={styles.center}>
+          <ActivityIndicator size="large" color={COLORS.primary} />
+        </View>
       ) : (
         <FlatList
           data={filtered}
@@ -100,7 +194,7 @@ export default function OrderSearchScreen() {
           ItemSeparatorComponent={() => <View style={styles.separator} />}
           ListEmptyComponent={
             <View style={styles.center}>
-              <Text style={styles.emptyText}>Không tìm thấy đơn hàng</Text>
+              <Text style={styles.emptyText}>Không tìm thấy nhiệm vụ nào trong hôm nay</Text>
             </View>
           }
         />
@@ -112,42 +206,98 @@ export default function OrderSearchScreen() {
 }
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: '#fff' },
-  center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  safeArea: { flex: 1, backgroundColor: '#f9fafb' },
+  center: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 24 },
   header: {
     flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
-    paddingHorizontal: 16, paddingVertical: 14,
-    borderBottomWidth: 1, borderBottomColor: '#eee',
+    paddingHorizontal: 16, paddingVertical: 16,
+    backgroundColor: '#fff',
+    borderBottomWidth: 1, borderBottomColor: '#f1f5f9',
   },
-  headerTitle: { fontSize: 18, fontWeight: '700', color: COLORS.text },
-  count: { fontSize: 14, fontWeight: '600', color: COLORS.primary },
+  headerTitle: { fontSize: 16, fontWeight: '700', color: COLORS.text },
+  count: { fontSize: 14, fontWeight: '700', color: COLORS.primary },
+  
   searchBar: {
-    flexDirection: 'row', alignItems: 'center', backgroundColor: '#f3f4f6',
-    marginHorizontal: 16, marginTop: 14, borderRadius: 14,
-    paddingHorizontal: 12, height: 52,
+    flexDirection: 'row', alignItems: 'center', backgroundColor: '#f1f5f9',
+    marginHorizontal: 16, marginTop: 12, borderRadius: 12,
+    paddingHorizontal: 14, height: 48,
   },
-  searchIcon: { fontSize: 18, marginRight: 8 },
-  searchInput: { flex: 1, fontSize: 16, color: COLORS.text },
-  clearBtn: { fontSize: 18, color: '#888', paddingHorizontal: 4 },
-  list: { padding: 16, paddingBottom: 80 },
-  orderCard: {
-    backgroundColor: '#fff', borderRadius: 16, padding: 16,
-    shadowColor: '#000', shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.06, shadowRadius: 8, elevation: 2,
+  searchInput: { flex: 1, fontSize: 14, color: COLORS.text, fontWeight: '500' },
+  clearBtn: { fontSize: 16, color: '#94a3b8', paddingHorizontal: 4 },
+  
+  filterRow: {
+    flexDirection: 'row',
+    paddingHorizontal: 16,
+    marginTop: 12,
+    marginBottom: 8,
+    gap: 8,
   },
-  orderHead: {
-    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6,
+  filterTab: {
+    flex: 1,
+    paddingVertical: 8,
+    borderRadius: 20,
+    backgroundColor: '#f1f5f9',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: '#e2e8f0',
   },
-  orderId: { fontSize: 14, fontWeight: '700', color: '#222' },
+  filterTabActive: {
+    backgroundColor: COLORS.primary,
+    borderColor: COLORS.primary,
+  },
+  filterTabText: {
+    fontSize: 12,
+    color: '#64748b',
+    fontWeight: '600',
+  },
+  filterTabTextActive: {
+    color: '#fff',
+    fontWeight: '700',
+  },
+  
+  list: { padding: 16, paddingBottom: 100 },
+  taskCard: {
+    backgroundColor: '#fff', 
+    borderRadius: 16, 
+    padding: 16,
+    borderWidth: 1,
+    borderColor: '#f1f5f9',
+    shadowColor: '#0f172a',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.03,
+    shadowRadius: 10,
+    elevation: 2,
+  },
+  cardHeader: {
+    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10,
+  },
+  taskId: { fontSize: 13, fontWeight: '700', color: '#1e293b' },
+  orderLabel: { fontWeight: 'normal', color: '#64748b', fontSize: 12 },
   statusTag: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 20 },
-  statusText: { fontSize: 12, fontWeight: '600' },
-  branchName: { fontSize: 12, color: '#888', marginBottom: 8 },
-  orderFooter: {
+  statusText: { fontSize: 11, fontWeight: '700' },
+  
+  productName: { fontSize: 14, fontWeight: '700', color: '#0f172a', marginBottom: 4, lineHeight: 20 },
+  branchName: { fontSize: 12, color: '#64748b', marginBottom: 12, fontWeight: '500' },
+  
+  cardFooter: {
     flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
-    borderTopWidth: 0.5, borderTopColor: '#eee', paddingTop: 8,
+    borderTopWidth: 1, borderTopColor: '#f1f5f9', paddingTop: 10,
   },
-  orderTotal: { fontSize: 13, fontWeight: '600', color: COLORS.primary },
-  orderDate: { fontSize: 11, color: '#aaa' },
-  separator: { height: 8 },
-  emptyText: { fontSize: 14, color: '#888' },
+  metaCol: {
+    flex: 1,
+  },
+  metaLabel: {
+    fontSize: 10,
+    color: '#94a3b8',
+    fontWeight: '600',
+    marginBottom: 2,
+  },
+  metaVal: {
+    fontSize: 11,
+    fontWeight: '600',
+    color: '#334155',
+  },
+  separator: { height: 12 },
+  emptyText: { fontSize: 13, color: '#64748b', textAlign: 'center', fontWeight: '500' },
 });

@@ -3,11 +3,20 @@ import {
     Redirect,
     usePathname,
 } from 'expo-router';
+import { useEffect } from 'react';
+import { useFonts } from 'expo-font';
+import * as SplashScreen from 'expo-splash-screen';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 import { AuthProvider, useAuth }
 from '../contexts/AuthContext';
 import { StoreCartProvider } from '../contexts/StoreCartContext';
 import { AppAlertProvider } from '../components/AppAlertProvider';
+
+// Prevent the splash screen from auto-hiding before asset loading is complete.
+SplashScreen.preventAutoHideAsync();
+
 
 function LayoutContent() {
 
@@ -44,6 +53,20 @@ function LayoutContent() {
 }
 
 export default function Layout() {
+    const [loaded, error] = useFonts({
+        ...Ionicons.font,
+        ...MaterialIcons.font,
+    });
+
+    useEffect(() => {
+        if (loaded || error) {
+            SplashScreen.hideAsync();
+        }
+    }, [loaded, error]);
+
+    if (!loaded && !error) {
+        return null;
+    }
 
     return (
 

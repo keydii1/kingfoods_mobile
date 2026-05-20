@@ -74,15 +74,8 @@ export const packItem = (taskId, containerCode, quantity) =>
     request ('POST', '/admin/picking/pack', {taskId, containerCode, quantity});
 export const moveItem = (productId, oldContainerCode, newContainerCode, quantity = 1) =>
     request ('POST', '/admin/picking/move', {productId, oldContainerCode, newContainerCode, quantity});
-export const reportIncident = (taskId, reason, photoUri) => {
-    const body = { taskId, reason, photoUrl: photoUri || '' };
-    if (photoUri) {
-        const formData = new FormData();
-        formData.append('file', { uri: photoUri, type: 'image/jpeg', name: 'incident.jpg' });
-        formData.append('taskId', String(taskId));
-        formData.append('reason', reason);
-        return request('POST', '/admin/picking/incident', formData);
-    }
+export const reportIncident = (taskId, reason, photoUrl) => {
+    const body = { taskId, reason, photoUrl: photoUrl || '' };
     return request('POST', '/admin/picking/incident', body);
 };
 export const handoverTask = (taskId, nextStaffId) =>
