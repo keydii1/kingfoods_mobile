@@ -90,6 +90,9 @@ export default function OrderSearchScreen() {
     const orderId = item.orderDetail?.orderId || '';
     const locName = item.location?.name || 'Chưa phân khu';
     const progressText = `${item.quantityPicked}/${item.quantityToPick}`;
+    const timeStr = item.createdAt
+      ? new Date(item.createdAt).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })
+      : '';
 
     return (
       <TouchableOpacity 
@@ -97,40 +100,38 @@ export default function OrderSearchScreen() {
         onPress={() => handleTaskPress(item)}
         activeOpacity={0.85}
       >
+        {/* Header row: task ID + status */}
         <View style={styles.cardHeader}>
-          <Text style={styles.taskId}>Nhiệm vụ #{item.id} <Text style={styles.orderLabel}>· Đơn #{orderId}</Text></Text>
+          <View style={{ flex: 1, marginRight: 8 }}>
+            <Text style={styles.taskId} numberOfLines={1}>
+              #{item.id} <Text style={styles.orderLabel}>· Đơn #{orderId}</Text>
+            </Text>
+          </View>
           <View style={[styles.statusTag, { backgroundColor: st.color }]}>
             <Text style={[styles.statusText, { color: st.textColor }]}>{st.label}</Text>
           </View>
         </View>
 
+        {/* Product name */}
         <Text style={styles.productName} numberOfLines={2}>{productName}</Text>
-        <Text style={styles.branchName}>{branchName}</Text>
+        <Text style={styles.branchName} numberOfLines={1}>{branchName}</Text>
 
+        {/* Footer: clean tag chips in a wrapping row */}
         <View style={styles.cardFooter}>
-          <View style={styles.metaCol}>
-            <Text style={styles.metaLabel}>Vị trí kệ</Text>
-            <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 2 }}>
-              <Ionicons name="location-outline" size={13} color="#64748b" style={{ marginRight: 2 }} />
-              <Text style={styles.metaVal}>{locName}</Text>
-            </View>
+          <View style={styles.chipTag}>
+            <Ionicons name="location-outline" size={12} color="#64748b" />
+            <Text style={styles.chipText} numberOfLines={1}>{locName}</Text>
           </View>
-          <View style={styles.metaCol}>
-            <Text style={styles.metaLabel}>Tiến độ</Text>
-            <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 2 }}>
-              <Ionicons name="cube-outline" size={13} color={COLORS.primary} style={{ marginRight: 2 }} />
-              <Text style={[styles.metaVal, { color: COLORS.primary }]}>{progressText} sp</Text>
-            </View>
+          <View style={[styles.chipTag, styles.chipProgress]}>
+            <Ionicons name="cube-outline" size={12} color={COLORS.primary} />
+            <Text style={[styles.chipText, { color: COLORS.primary, fontWeight: '700' }]}>{progressText} sp</Text>
           </View>
-          <View style={styles.metaCol}>
-            <Text style={styles.metaLabel}>Thời gian nhận</Text>
-            <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 2 }}>
-              <Ionicons name="time-outline" size={13} color="#64748b" style={{ marginRight: 2 }} />
-              <Text style={styles.metaVal}>
-                {item.createdAt ? new Date(item.createdAt).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) : ''}
-              </Text>
+          {timeStr ? (
+            <View style={styles.chipTag}>
+              <Ionicons name="time-outline" size={12} color="#64748b" />
+              <Text style={styles.chipText}>{timeStr}</Text>
             </View>
-          </View>
+          ) : null}
         </View>
       </TouchableOpacity>
     );
@@ -152,7 +153,7 @@ export default function OrderSearchScreen() {
           placeholderTextColor="#aaa"
           value={query}
           onChangeText={setQuery}
-          autoFocus={true}
+          autoFocus={false}
         />
         {query.length > 0 && (
           <TouchableOpacity onPress={() => setQuery('')}>
@@ -281,22 +282,26 @@ const styles = StyleSheet.create({
   branchName: { fontSize: 12, color: '#64748b', marginBottom: 12, fontWeight: '500' },
   
   cardFooter: {
-    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
+    flexDirection: 'row', flexWrap: 'wrap',
     borderTopWidth: 1, borderTopColor: '#f1f5f9', paddingTop: 10,
+    gap: 6,
   },
-  metaCol: {
-    flex: 1,
+  chipTag: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#f1f5f9',
+    paddingHorizontal: 8,
+    paddingVertical: 5,
+    borderRadius: 8,
+    gap: 4,
   },
-  metaLabel: {
-    fontSize: 10,
-    color: '#94a3b8',
-    fontWeight: '600',
-    marginBottom: 2,
+  chipProgress: {
+    backgroundColor: '#e8f5e9',
   },
-  metaVal: {
+  chipText: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#334155',
+    color: '#475569',
   },
   separator: { height: 12 },
   emptyText: { fontSize: 13, color: '#64748b', textAlign: 'center', fontWeight: '500' },

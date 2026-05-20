@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo, memo } from 'react';
 import { View, Text, StyleSheet, useWindowDimensions } from 'react-native';
 import Svg, { Rect, Circle, Polyline, G, Text as SvgText } from 'react-native-svg';
 import {
@@ -18,6 +18,7 @@ const GAP = 1;
 const PAD_X = 36;
 const PAD_Y = 28;
 
+// Pre-compute shelf position lookup (module-level, runs once)
 const posToShelf = {};
 Object.entries(SHELF_POSITIONS).forEach(([code, [r, c]]) => {
   posToShelf[`${r},${c}`] = code;
@@ -41,7 +42,226 @@ function computeArrows(route) {
   return arrows;
 }
 
-export default function WarehouseMap({
+// Memoized static grid cells - never change so render once
+const StaticGrid = memo(function StaticGrid({ CELL, STEP, toX, toY, cx, cy }) {
+  return (
+    <>
+      {GRID.map((row, r) =>
+        row.map((cell, c) => {
+          const x = toX(c);
+          const y = toY(r);
+          const w = CELL;
+          const h = CELL;
+
+          if (cell === 0) {
+            return (
+              <Rect key={`${r},${c}`} x={x} y={y} width={w} height={h} fill="#f8f8f8" rx={1} />
+            );
+          }
+
+          if (cell >= 1 && cell <= 4) {
+            const z = ZONE[cell];
+            const code = posToShelf[`${r},${c}`];
+            return (
+              <G key={`${r},${c}`}>
+                <Rect x={x} y={y} width={w} height={h} fill={z.fill} stroke={z.stroke} strokeWidth={1} rx={3} />
+                <Rect x={x} y={y} width={w} height={h} fill="rgba(255,255,255,0.15)" rx={3} />
+                {code && (
+                  <SvgText
+                    x={cx(c)}
+                    y={cy(r) + 1}
+                    fill={z.text}
+                    fontSize={8}
+                    fontWeight="800"
+                    textAnchor="middle"
+                    alignmentBaseline="central"
+                  >
+                    {code}
+                  </SvgText>
+                )}
+              </G>
+            );
+          }
+
+          if (cell === 5) {
+            return (
+              <Rect key={`${r},${c}`} x={x} y={y} width={w} height={h} fill="#e0e0e0" stroke="#ccc" strokeWidth={0.5} rx={1} />
+            );
+          }
+
+          if (cell === 6) {
+            return (
+              <Rect key={`${r},${c}`} x={x} y={y} width={w} height={h} fill="#c8e6c9" stroke="#a5d6a7" strokeWidth={0.5} rx={1} />
+            );
+          }
+
+          return null;
+        })
+      )}
+    </>
+  );
+});
+
+// Memoized column and row labels - never change
+const GridLabels = memo(function GridLabels({ cx, cy }) {
+  return (
+    <>
+      {/* Column labels */}
+      {colLabels.map((label, c) => (
+        <SvgText
+          key={`col-${c}`}
+          x={cx(c)}
+          y={12}
+          fill="#999"
+          fontSize={9}
+          fontWeight="600"
+          textAnchor="middle"
+        >
+          {label}
+        </SvgText>
+      ))}
+
+      {/* Row labels */}
+      {GRID.map((_, r) => (
+        <SvgText
+          key={`row-${r}`}
+          x={14}
+          y={cy(r) + 3}
+          fill="#999"
+          fontSize={9}
+          fontWeight="600"
+          textAnchor="middle"
+        >
+          {r + 1}
+        </SvgText>
+      ))}
+    </>
+  );
+});
+
+// Memoized static decorations (packing label, entrance)
+const StaticDecorations = memo(function StaticDecorations({ cx, cy, toY, CELL }) {
+  return (
+    <>
+      {/* Packing label */}
+      <SvgText x={cx(7)} y={cy(7) + 1} fill="#888" fontSize={9} fontWeight="700" textAnchor="middle" alignmentBaseline="central">
+        📦
+      </SvgText>
+      <SvgText x={cx(7)} y={toY(8) + CELL + 8} fill="#888" fontSize={8} fontWeight="600" textAnchor="middle">
+        Khu đóng gói
+      </SvgText>
+
+      {/* Entrance label */}
+      {GRID[0][2] === 6 && (
+        <SvgText x={cx(2)} y={cy(0) + 1} fill="#388e3c" fontSize={10} textAnchor="middle" alignmentBaseline="central">
+          🚪
+        </SvgText>
+      )}
+    </>
+  );
+});
+
+// Route overlay - only re-renders when route changes
+const RouteOverlay = memo(function RouteOverlay({ route, routePoints, arrows, cx, cy }) {
+  if (!route || route.length <= 1) return null;
+  return (
+    <>
+      <Polyline
+        points={routePoints}
+        fill="none"
+        stroke="#d32f2f"
+        strokeWidth={5}
+        strokeLinejoin="round"
+        strokeLinecap="round"
+      />
+      <Polyline
+        points={routePoints}
+        fill="none"
+        stroke="#ef5350"
+        strokeWidth={10}
+        strokeLinejoin="round"
+        strokeLinecap="round"
+        opacity={0.2}
+      />
+
+      {/* Route dots */}
+      {route.map(([r, c], i) =>
+        i > 0 && i < route.length - 1 ? (
+          <Circle key={i} cx={cx(c)} cy={cy(r)} r={2.5} fill="#fff" stroke="#d32f2f" strokeWidth={1.5} />
+        ) : null
+      )}
+
+      {/* Direction arrows at turns */}
+      {arrows.map((a, i) => (
+        <SvgText
+          key={`arrow-${i}`}
+          x={cx(a.c)}
+          y={cy(a.r) + 1}
+          fill="#d32f2f"
+          fontSize={11}
+          fontWeight="900"
+          textAnchor="middle"
+          alignmentBaseline="central"
+        >
+          ▶
+        </SvgText>
+      ))}
+    </>
+  );
+});
+
+// Markers overlay - start and target
+const MarkersOverlay = memo(function MarkersOverlay({ startPos, targetPos, targetShelfCode, cx, cy, toX, toY, CELL }) {
+  return (
+    <>
+      {/* Start marker */}
+      {startPos && (
+        <G>
+          <Circle cx={cx(startPos[1])} cy={cy(startPos[0])} r={CELL / 2.2} fill="#2e7d32" opacity={0.12} />
+          <Circle cx={cx(startPos[1])} cy={cy(startPos[0])} r={7} fill="#4caf50" stroke="#fff" strokeWidth={2} />
+          <SvgText x={cx(startPos[1])} y={cy(startPos[0]) + 1} fill="#fff" fontSize={8} textAnchor="middle" alignmentBaseline="central">
+            🧑
+          </SvgText>
+        </G>
+      )}
+
+      {/* Target cell highlight */}
+      {targetPos && (
+        <G>
+          <Rect
+            x={toX(targetPos[1]) - 2} y={toY(targetPos[0]) - 2}
+            width={CELL + 4} height={CELL + 4}
+            fill="none" stroke="#ef5350" strokeWidth={4} rx={5}
+            opacity={0.9}
+          />
+          <Rect
+            x={toX(targetPos[1]) - 4} y={toY(targetPos[0]) - 4}
+            width={CELL + 8} height={CELL + 8}
+            fill="none" stroke="#ef5350" strokeWidth={1.5} rx={7}
+            opacity={0.4}
+          />
+          <Circle cx={cx(targetPos[1])} cy={cy(targetPos[0])} r={CELL / 1.8} fill="#ef5350" opacity={0.15} />
+          <Circle cx={cx(targetPos[1])} cy={cy(targetPos[0])} r={10} fill="#ef5350" stroke="#fff" strokeWidth={3} />
+          <SvgText
+            x={cx(targetPos[1])}
+            y={cy(targetPos[0]) - 18}
+            fill="#c62828"
+            fontSize={11}
+            fontWeight="900"
+            textAnchor="middle"
+          >
+            {targetShelfCode || `[${targetPos[0]+1},${targetPos[1]+1}]`}
+          </SvgText>
+          <SvgText x={cx(targetPos[1])} y={cy(targetPos[0]) + 1} fill="#fff" fontSize={9} textAnchor="middle" alignmentBaseline="central">
+            🎯
+          </SvgText>
+        </G>
+      )}
+    </>
+  );
+});
+
+function WarehouseMap({
   currentLocation,
   targetLocation,
   targetLocationName,
@@ -49,45 +269,62 @@ export default function WarehouseMap({
   fromPacking = false,
 }) {
   const { width: screenWidth } = useWindowDimensions();
-  const CELL = Math.floor((screenWidth - 2 * PAD_X - COLS * GAP) / COLS);
-  const STEP = CELL + GAP;
-  const toX = (c) => PAD_X + c * STEP;
-  const toY = (r) => PAD_Y + r * STEP;
-  const cx = (c) => toX(c) + CELL / 2;
-  const cy = (r) => toY(r) + CELL / 2;
 
-  const startPos = fromPacking
-    ? PACKING_POS
-    : (currentLocation
-        ? getPosFromLocation(currentLocation) || ENTRANCE_POS
-        : ENTRANCE_POS);
+  // Memoize layout calculations - only recompute when screen width changes
+  const layout = useMemo(() => {
+    const CELL = Math.floor((screenWidth - 2 * PAD_X - COLS * GAP) / COLS);
+    const STEP = CELL + GAP;
+    const _toX = (c) => PAD_X + c * STEP;
+    const _toY = (r) => PAD_Y + r * STEP;
+    const _cx = (c) => _toX(c) + CELL / 2;
+    const _cy = (r) => _toY(r) + CELL / 2;
+    const svgWidth = PAD_X * 2 + COLS * STEP;
+    const svgHeight = PAD_Y * 2 + ROWS * STEP;
+    return { CELL, STEP, toX: _toX, toY: _toY, cx: _cx, cy: _cy, svgWidth, svgHeight };
+  }, [screenWidth]);
 
-  const targetPos = targetLocation
-    ? getPosFromLocation(targetLocation)
-    : PACKING_POS;
-
-  const route = showRoute && startPos && targetPos
-    ? findShortestPath(startPos, targetPos)
-    : null;
-
-  const distance = route ? pathDistance(route) : 0;
-  const arrows = computeArrows(route);
-
-  const routePoints = route
-    ? route.map(([r, c]) => `${cx(c)},${cy(r)}`).join(' ')
-    : '';
-
-  const svgWidth = PAD_X * 2 + COLS * STEP;
-  const svgHeight = PAD_Y * 2 + ROWS * STEP;
+  const { CELL, toX, toY, cx, cy, svgWidth, svgHeight } = layout;
   const viewBox = `0 0 ${svgWidth} ${svgHeight}`;
 
-  const targetShelfCode = targetLocation && targetPos
-    ? posToShelf[`${targetPos[0]},${targetPos[1]}`] || null
-    : null;
+  // Memoize position calculations - only recompute when locations change
+  const startPos = useMemo(() => {
+    return fromPacking
+      ? PACKING_POS
+      : (currentLocation
+          ? getPosFromLocation(currentLocation) || ENTRANCE_POS
+          : ENTRANCE_POS);
+  }, [currentLocation, fromPacking]);
 
-  const startLabel = fromPacking
-    ? 'Khu ĐG'
-    : (currentLocation && startPos ? posToShelf[`${startPos[0]},${startPos[1]}`] || currentLocation : 'Cửa vào');
+  const targetPos = useMemo(() => {
+    return targetLocation
+      ? getPosFromLocation(targetLocation)
+      : PACKING_POS;
+  }, [targetLocation]);
+
+  // Memoize pathfinding - the heavy computation, only when positions change
+  const { route, arrows, routePoints, distance } = useMemo(() => {
+    const _route = showRoute && startPos && targetPos
+      ? findShortestPath(startPos, targetPos)
+      : null;
+    const _arrows = computeArrows(_route);
+    const _routePoints = _route
+      ? _route.map(([r, c]) => `${cx(c)},${cy(r)}`).join(' ')
+      : '';
+    const _distance = _route ? pathDistance(_route) : 0;
+    return { route: _route, arrows: _arrows, routePoints: _routePoints, distance: _distance };
+  }, [startPos, targetPos, showRoute, cx, cy]);
+
+  const targetShelfCode = useMemo(() => {
+    return targetLocation && targetPos
+      ? posToShelf[`${targetPos[0]},${targetPos[1]}`] || null
+      : null;
+  }, [targetLocation, targetPos]);
+
+  const startLabel = useMemo(() => {
+    return fromPacking
+      ? 'Khu ĐG'
+      : (currentLocation && startPos ? posToShelf[`${startPos[0]},${startPos[1]}`] || currentLocation : 'Cửa vào');
+  }, [fromPacking, currentLocation, startPos]);
 
   return (
     <View style={styles.wrapper}>
@@ -103,196 +340,25 @@ export default function WarehouseMap({
           {/* Floor */}
           <Rect x={0} y={0} width={svgWidth} height={svgHeight} fill="#e8e8e8" rx={6} />
 
-          {/* Column labels */}
-          {colLabels.map((label, c) => (
-            <SvgText
-              key={`col-${c}`}
-              x={cx(c)}
-              y={12}
-              fill="#999"
-              fontSize={9}
-              fontWeight="600"
-              textAnchor="middle"
-            >
-              {label}
-            </SvgText>
-          ))}
+          {/* Labels - memoized */}
+          <GridLabels cx={cx} cy={cy} />
 
-          {/* Row labels */}
-          {GRID.map((_, r) => (
-            <SvgText
-              key={`row-${r}`}
-              x={14}
-              y={cy(r) + 3}
-              fill="#999"
-              fontSize={9}
-              fontWeight="600"
-              textAnchor="middle"
-            >
-              {r + 1}
-            </SvgText>
-          ))}
+          {/* Static grid cells - memoized, no re-render when route changes */}
+          <StaticGrid CELL={CELL} STEP={layout.STEP} toX={toX} toY={toY} cx={cx} cy={cy} />
 
-          {/* Cells */}
-          {GRID.map((row, r) =>
-            row.map((cell, c) => {
-              const x = toX(c);
-              const y = toY(r);
-              const w = CELL;
-              const h = CELL;
+          {/* Static decorations - memoized */}
+          <StaticDecorations cx={cx} cy={cy} toY={toY} CELL={CELL} />
 
-              if (cell === 0) {
-                return (
-                  <Rect key={`${r},${c}`} x={x} y={y} width={w} height={h} fill="#f8f8f8" rx={1} />
-                );
-              }
+          {/* Route path - only re-renders when route changes */}
+          <RouteOverlay route={route} routePoints={routePoints} arrows={arrows} cx={cx} cy={cy} />
 
-              if (cell >= 1 && cell <= 4) {
-                const z = ZONE[cell];
-                const code = posToShelf[`${r},${c}`];
-                return (
-                  <G key={`${r},${c}`}>
-                    <Rect x={x} y={y} width={w} height={h} fill={z.fill} stroke={z.stroke} strokeWidth={1} rx={3} />
-                    <Rect x={x} y={y} width={w} height={h} fill="rgba(255,255,255,0.15)" rx={3} />
-                    {code && (
-                      <SvgText
-                        x={cx(c)}
-                        y={cy(r) + 1}
-                        fill={z.text}
-                        fontSize={8}
-                        fontWeight="800"
-                        textAnchor="middle"
-                        alignmentBaseline="central"
-                      >
-                        {code}
-                      </SvgText>
-                    )}
-                  </G>
-                );
-              }
-
-              if (cell === 5) {
-                return (
-                  <Rect key={`${r},${c}`} x={x} y={y} width={w} height={h} fill="#e0e0e0" stroke="#ccc" strokeWidth={0.5} rx={1} />
-                );
-              }
-
-              if (cell === 6) {
-                return (
-                  <Rect key={`${r},${c}`} x={x} y={y} width={w} height={h} fill="#c8e6c9" stroke="#a5d6a7" strokeWidth={0.5} rx={1} />
-                );
-              }
-
-              return null;
-            })
-          )}
-
-          {/* Packing label */}
-          <SvgText x={cx(7)} y={cy(7) + 1} fill="#888" fontSize={9} fontWeight="700" textAnchor="middle" alignmentBaseline="central">
-            📦
-          </SvgText>
-          <SvgText x={cx(7)} y={toY(8) + CELL + 8} fill="#888" fontSize={8} fontWeight="600" textAnchor="middle">
-            Khu đóng gói
-          </SvgText>
-
-          {/* Entrance label */}
-          {GRID[0][2] === 6 && (
-            <SvgText x={cx(2)} y={cy(0) + 1} fill="#388e3c" fontSize={10} textAnchor="middle" alignmentBaseline="central">
-              🚪
-            </SvgText>
-          )}
-
-
-
-          {/* Route path - RED line as user requested */}
-          {route && route.length > 1 && (
-            <>
-              <Polyline
-                points={routePoints}
-                fill="none"
-                stroke="#d32f2f"
-                strokeWidth={5}
-                strokeLinejoin="round"
-                strokeLinecap="round"
-              />
-              <Polyline
-                points={routePoints}
-                fill="none"
-                stroke="#ef5350"
-                strokeWidth={10}
-                strokeLinejoin="round"
-                strokeLinecap="round"
-                opacity={0.2}
-              />
-            </>
-          )}
-
-          {/* Route dots at each step */}
-          {route && route.map(([r, c], i) =>
-            i > 0 && i < route.length - 1 ? (
-              <Circle key={i} cx={cx(c)} cy={cy(r)} r={2.5} fill="#fff" stroke="#d32f2f" strokeWidth={1.5} />
-            ) : null
-          )}
-
-          {/* Direction arrows at turns */}
-          {arrows.map((a, i) => (
-            <SvgText
-              key={`arrow-${i}`}
-              x={cx(a.c)}
-              y={cy(a.r) + 1}
-              fill="#d32f2f"
-              fontSize={11}
-              fontWeight="900"
-              textAnchor="middle"
-              alignmentBaseline="central"
-            >
-              ▶
-            </SvgText>
-          ))}
-
-          {/* Start marker */}
-          {startPos && (
-            <G>
-              <Circle cx={cx(startPos[1])} cy={cy(startPos[0])} r={CELL / 2.2} fill="#2e7d32" opacity={0.12} />
-              <Circle cx={cx(startPos[1])} cy={cy(startPos[0])} r={7} fill="#4caf50" stroke="#fff" strokeWidth={2} />
-              <SvgText x={cx(startPos[1])} y={cy(startPos[0]) + 1} fill="#fff" fontSize={8} textAnchor="middle" alignmentBaseline="central">
-                🧑
-              </SvgText>
-            </G>
-          )}
-
-          {/* Target cell highlight - full cell overlay */}
-          {targetPos && (
-            <G>
-              <Rect
-                x={toX(targetPos[1]) - 2} y={toY(targetPos[0]) - 2}
-                width={CELL + 4} height={CELL + 4}
-                fill="none" stroke="#ef5350" strokeWidth={4} rx={5}
-                opacity={0.9}
-              />
-              <Rect
-                x={toX(targetPos[1]) - 4} y={toY(targetPos[0]) - 4}
-                width={CELL + 8} height={CELL + 8}
-                fill="none" stroke="#ef5350" strokeWidth={1.5} rx={7}
-                opacity={0.4}
-              />
-              <Circle cx={cx(targetPos[1])} cy={cy(targetPos[0])} r={CELL / 1.8} fill="#ef5350" opacity={0.15} />
-              <Circle cx={cx(targetPos[1])} cy={cy(targetPos[0])} r={10} fill="#ef5350" stroke="#fff" strokeWidth={3} />
-              <SvgText
-                x={cx(targetPos[1])}
-                y={cy(targetPos[0]) - 18}
-                fill="#c62828"
-                fontSize={11}
-                fontWeight="900"
-                textAnchor="middle"
-              >
-                {targetShelfCode || `[${targetPos[0]+1},${targetPos[1]+1}]`}
-              </SvgText>
-              <SvgText x={cx(targetPos[1])} y={cy(targetPos[0]) + 1} fill="#fff" fontSize={9} textAnchor="middle" alignmentBaseline="central">
-                🎯
-              </SvgText>
-            </G>
-          )}
+          {/* Start & Target markers - only re-renders when positions change */}
+          <MarkersOverlay
+            startPos={startPos}
+            targetPos={targetPos}
+            targetShelfCode={targetShelfCode}
+            cx={cx} cy={cy} toX={toX} toY={toY} CELL={CELL}
+          />
         </Svg>
 
         {/* Info bar */}
@@ -312,6 +378,9 @@ export default function WarehouseMap({
     </View>
   );
 }
+
+// Wrap with React.memo to skip re-renders when props haven't changed
+export default memo(WarehouseMap);
 
 const styles = StyleSheet.create({
   wrapper: {

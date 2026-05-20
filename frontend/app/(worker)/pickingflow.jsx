@@ -1,5 +1,6 @@
-import { useState, useRef } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, TextInput, Animated, ScrollView, Modal } from 'react-native';
+import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, TextInput, Animated, ScrollView, Modal, InteractionManager } from 'react-native';
+import { unstable_batchedUpdates } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
 import { COLORS } from '../../constants/colors';
@@ -12,9 +13,11 @@ import { Ionicons } from '@expo/vector-icons';
 import { PACKING_POS } from '../../config/warehouseLayout';
 import { findShortestPath, pathDistance } from '../../utils/pathfinding';
 import { Alert } from '../../utils/appAlert';
+import { useAuth } from '../../contexts/AuthContext';
 
 export default function PickingFlowScreen() {
   const params = useLocalSearchParams();
+  const { userRole } = useAuth();
   const tasks = JSON.parse(params.tasksJson || '[]');
   const startIndex = parseInt(params.startIndex || '0', 10);
 
@@ -34,6 +37,10 @@ export default function PickingFlowScreen() {
   const [submitting, setSubmitting] = useState(false);
   const [fromPacking, setFromPacking] = useState(false);
   const [prevLocation, setPrevLocation] = useState('');
+  const [mapReady, setMapReady] = useState(true);
+  const completeScaleAnim = useRef(new Animated.Value(0)).current;
+  const completeOpacityAnim = useRef(new Animated.Value(0)).current;
+  const stepFadeAnim = useRef(new Animated.Value(1)).current;
 
   const scanAnim = useRef(new Animated.Value(1)).current;
   const flashAnim = useRef(new Animated.Value(0)).current;
@@ -57,7 +64,7 @@ export default function PickingFlowScreen() {
     setStep(prev);
   };
 
-  const handleConfirmBin = async (binCodeOverride) => {
+  const handleConfirmBin = useCallback(async (binCodeOverride) => {
     const finalBinCode = binCodeOverride !== undefined ? binCodeOverride : scannedBinCode;
     if (!currentTask?.taskId) {
       Alert.alert('Lỗi', 'Thiếu thông tin nhiệm vụ');
@@ -69,22 +76,46 @@ export default function PickingFlowScreen() {
       if (isLast) {
         setStep(6);
       } else {
-        setPrevLocation(currentTask?.locationCode || currentTask?.location || '');
-        const next = tasks[currentIndex + 1];
-        setCurrentIndex(prev => prev + 1);
-        setStep(1);
-        setBarcode('');
-        setScanned(false);
-        setQuantity(next?.qty || 1);
-        setScannedBinCode('');
-        setBinInput('');
+        // Fade out current step first
+        Animated.timing(stepFadeAnim, {
+          toValue: 0,
+          duration: 120,
+          useNativeDriver: true,
+        }).start(() => {
+          // Hide map during transition to avoid heavy re-render
+          setMapReady(false);
+
+          // Batch all state updates together to trigger only ONE re-render
+          unstable_batchedUpdates(() => {
+            setPrevLocation(currentTask?.locationCode || currentTask?.location || '');
+            const next = tasks[currentIndex + 1];
+            setCurrentIndex(prev => prev + 1);
+            setStep(1);
+            setBarcode('');
+            setScanned(false);
+            setQuantity(next?.qty || 1);
+            setScannedBinCode('');
+            setBinInput('');
+          });
+
+          // Defer map rendering until after the layout settles
+          InteractionManager.runAfterInteractions(() => {
+            setMapReady(true);
+            // Fade in new step
+            Animated.timing(stepFadeAnim, {
+              toValue: 1,
+              duration: 200,
+              useNativeDriver: true,
+            }).start();
+          });
+        });
       }
     } catch (err) {
       Alert.alert('Lỗi', err.message || 'Không thể xác nhận');
     } finally {
       setSubmitting(false);
     }
-  };
+  }, [scannedBinCode, currentTask, quantity, isLast, currentIndex, tasks, stepFadeAnim]);
 
   const handleCameraScanned = (data) => {
     setShowCamera(false);
@@ -151,8 +182,31 @@ export default function PickingFlowScreen() {
   };
 
   const handleCompleteOrder = () => {
-    router.back();
+    const dest = userRole === 'admin' ? '/managerdashboard' : '/dashboard';
+    router.replace(dest);
   };
+
+  // Animate completion screen entrance
+  useEffect(() => {
+    if (step === 6) {
+      Animated.parallel([
+        Animated.spring(completeScaleAnim, {
+          toValue: 1,
+          friction: 5,
+          tension: 80,
+          useNativeDriver: true,
+        }),
+        Animated.timing(completeOpacityAnim, {
+          toValue: 1,
+          duration: 400,
+          useNativeDriver: true,
+        }),
+      ]).start();
+    } else {
+      completeScaleAnim.setValue(0);
+      completeOpacityAnim.setValue(0);
+    }
+  }, [step]);
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -171,7 +225,7 @@ export default function PickingFlowScreen() {
           </View>
         )}
 
-        <View style={styles.content}>
+        <Animated.View style={[styles.content, { opacity: stepFadeAnim }]}>
           {/* Step 1: Map - route to product */}
           {step === 1 && (
             <View style={styles.stepContainer}>
@@ -179,13 +233,19 @@ export default function PickingFlowScreen() {
                 {prevLocation ? `Từ ${prevLocation} đến ${currentTask?.location || ''}` : 'Di chuyển đến vị trí'}
               </Text>
               <View style={styles.mapCard}>
-                <WarehouseMap
-                  currentLocation={prevLocation || currentTask?.locationCode || currentTask?.location}
-                  targetLocation={currentTask?.locationCode || currentTask?.location}
-                  targetLocationName={currentTask?.location}
-                  showRoute={true}
-                  fromPacking={!prevLocation}
-                />
+                {mapReady ? (
+                  <WarehouseMap
+                    currentLocation={prevLocation || currentTask?.locationCode || currentTask?.location}
+                    targetLocation={currentTask?.locationCode || currentTask?.location}
+                    targetLocationName={currentTask?.location}
+                    showRoute={true}
+                    fromPacking={!prevLocation}
+                  />
+                ) : (
+                  <View style={styles.mapPlaceholder}>
+                    <Text style={styles.mapPlaceholderText}>Đang tải bản đồ...</Text>
+                  </View>
+                )}
                 <View style={styles.mapInfo}>
                   <Text style={styles.mapProductName}>{currentTask?.name}</Text>
                   <Text style={styles.mapProductSku}>{currentTask?.sku}</Text>
@@ -353,18 +413,30 @@ export default function PickingFlowScreen() {
 
           {/* Step 6: Order complete */}
           {step === 6 && (
-            <View style={styles.completeContainer}>
-              <Text style={styles.completeTitle}>Hoàn tất đơn hàng!</Text>
+            <Animated.View style={[
+              styles.completeContainer,
+              {
+                opacity: completeOpacityAnim,
+                transform: [{ scale: completeScaleAnim.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [0.8, 1],
+                }) }],
+              }
+            ]}>
+              <View style={styles.completeIconCircle}>
+                <Ionicons name="checkmark-circle" size={72} color={COLORS.primary} />
+              </View>
+              <Text style={styles.completeTitle}>Hoàn tất đơn hàng! 🎉</Text>
               <Text style={styles.completeSub}>
-                Tất cả {tasks.length} sản phẩm đã được lấy và bỏ vào thùng.
-                Hãy xác nhận hoàn tất đơn hàng tại màn hình danh sách.
+                Tất cả {tasks.length} sản phẩm đã được lấy và bỏ vào thùng thành công.
               </Text>
               <TouchableOpacity style={styles.completeBtn} onPress={handleCompleteOrder}>
-                <Text style={styles.completeBtnText}>Về danh sách sản phẩm</Text>
+                <Ionicons name="home-outline" size={18} color="#fff" style={{ marginRight: 8 }} />
+                <Text style={styles.completeBtnText}>Về trang chủ</Text>
               </TouchableOpacity>
-            </View>
+            </Animated.View>
           )}
-        </View>
+        </Animated.View>
       </ScrollView>
 
       <Modal visible={showCamera} animationType="slide">
@@ -400,6 +472,13 @@ const styles = StyleSheet.create({
   content: { flex: 1, padding: 16 },
   stepContainer: { flex: 1, justifyContent: 'center' },
   stepTitle: { fontSize: 18, fontWeight: '700', color: '#222', textAlign: 'center', marginBottom: 8 },
+  mapPlaceholder: {
+    height: 280, backgroundColor: '#f0f0f0', borderRadius: 12,
+    justifyContent: 'center', alignItems: 'center',
+  },
+  mapPlaceholderText: {
+    fontSize: 13, color: '#999', fontWeight: '500',
+  },
 
   // Barcode card
   barcodeCard: {
@@ -541,11 +620,16 @@ const styles = StyleSheet.create({
   completeContainer: {
     flex: 1, justifyContent: 'center', alignItems: 'center', padding: 32,
   },
-  completeIcon: { fontSize: 64, marginBottom: 16 },
+  completeIconCircle: {
+    width: 100, height: 100, borderRadius: 50,
+    backgroundColor: '#e8f5e9', alignItems: 'center', justifyContent: 'center',
+    marginBottom: 20,
+  },
   completeTitle: { fontSize: 24, fontWeight: '900', color: '#222', textAlign: 'center', marginBottom: 8 },
   completeSub: { fontSize: 14, color: '#888', textAlign: 'center', lineHeight: 20, marginBottom: 32 },
   completeBtn: {
     backgroundColor: COLORS.primary, borderRadius: 14, paddingHorizontal: 48, paddingVertical: 16,
+    flexDirection: 'row', alignItems: 'center',
   },
   completeBtnText: { color: '#fff', fontSize: 16, fontWeight: '800' },
 

@@ -26,7 +26,7 @@ function InfoRow({ label, value, valueColor }) {
 }
 
 export default function ProfileScreen() {
-    const { logout } = useAuth();
+    const { logout, updateName } = useAuth();
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
     const [editing, setEditing] = useState(false);
@@ -86,6 +86,7 @@ export default function ProfileScreen() {
                 ...updatePayload,
                 fullName: updatePayload.name,
             }));
+            updateName(updatePayload.name);
             setEditing(false);
             Alert.alert('Thành công', 'Cập nhật hồ sơ thành công');
         } catch (err) {

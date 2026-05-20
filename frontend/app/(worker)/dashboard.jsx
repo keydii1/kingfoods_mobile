@@ -600,7 +600,7 @@ const styles = StyleSheet.create({
     pctText: {
         fontSize: 11,
         fontWeight: '800',
-        width: 32,
+        width: 40,
         textAlign: 'right',
     },
     actionArrow: {

@@ -60,7 +60,7 @@ export default function productListScreen() {
           ? arr.filter(t => t.orderDetail?.order?.id === orderId)
           : [task];
         setTaskInfo(task);
-        setProducts(orderTasks.map(t => {
+        const newProducts = orderTasks.map(t => {
           const prod = t.orderDetail?.product;
           const remaining = (t.quantityToPick ?? 1) - (t.quantityPicked ?? 0);
           const loc = t.location;
@@ -75,7 +75,13 @@ export default function productListScreen() {
             unit: 'cái',
             done: t.status === 'completed' || remaining <= 0,
           };
-        }));
+        });
+        // Only update state if data actually changed (avoid unnecessary re-renders)
+        setProducts(prev => {
+          const hasChanged = prev.length !== newProducts.length ||
+            newProducts.some((np, i) => np.taskId !== prev[i]?.taskId || np.done !== prev[i]?.done || np.qty !== prev[i]?.qty);
+          return hasChanged ? newProducts : prev;
+        });
       } else {
         if (!silent) setProducts(initialProducts);
       }

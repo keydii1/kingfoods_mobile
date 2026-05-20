@@ -1653,3 +1653,1931 @@
 2026-05-20 00:20:14:2014 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 18399ms[39m
 2026-05-20 00:25:51:2551 [32minfo[39m: [32mPOST /api/v1/auth/customer/login 200 - 362ms[39m
 2026-05-20 00:25:52:2552 [32minfo[39m: [32mGET /api/v1/public/products?limit=100 304 - 968ms[39m
+2026-05-20 00:59:51:5951 [31merror[39m: [31m[POST /api/v1/auth/customer/login] [401] Invalid email or password[39m
+2026-05-20 00:59:51:5951 [32minfo[39m: [32mPOST /api/v1/auth/customer/login 401 - 383ms[39m
+2026-05-20 01:00:06:06 [32minfo[39m: [32mPOST /api/v1/auth/customer/login 200 - 422ms[39m
+2026-05-20 01:00:07:07 [32minfo[39m: [32mGET /api/v1/public/products?limit=100 304 - 964ms[39m
+2026-05-20 01:00:09:09 [32minfo[39m: [32mGET /api/v1/client/orders 200 - 773ms[39m
+2026-05-20 01:00:20:020 [32minfo[39m: [32mGET /api/v1/client/profile 304 - 551ms[39m
+2026-05-20 01:00:45:045 [31merror[39m: [31m[POST /api/v1/auth/user/login] [401] Invalid username or password[39m
+2026-05-20 01:00:45:045 [32minfo[39m: [32mPOST /api/v1/auth/user/login 401 - 243ms[39m
+2026-05-20 01:00:49:049 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 398ms[39m
+2026-05-20 01:00:49:049 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [403] Chỉ quản lý mới có quyền truy cập trung tâm sự cố[39m
+2026-05-20 01:00:49:049 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 403 - 4ms[39m
+2026-05-20 01:00:50:050 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1153ms[39m
+2026-05-20 01:00:52:052 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 2402ms[39m
+2026-05-20 01:00:56:056 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1371ms[39m
+2026-05-20 01:00:57:057 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1912ms[39m
+2026-05-20 01:01:25:125 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [403] Chỉ quản lý mới có quyền truy cập trung tâm sự cố[39m
+2026-05-20 01:01:25:125 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 403 - 4ms[39m
+2026-05-20 01:01:25:125 [32minfo[39m: [32mGET /api/v1/admin/users 304 - 214ms[39m
+2026-05-20 01:01:25:125 [32minfo[39m: [32mGET /api/v1/admin/locations 304 - 223ms[39m
+2026-05-20 01:01:46:146 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 200 - 21091ms[39m
+2026-05-20 01:01:56:156 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [403] Chỉ quản lý mới có quyền truy cập trung tâm sự cố[39m
+2026-05-20 01:01:56:156 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 403 - 1ms[39m
+2026-05-20 01:01:57:157 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1130ms[39m
+2026-05-20 01:01:58:158 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1272ms[39m
+2026-05-20 01:02:24:224 [32minfo[39m: [32mGET /api/v1/client/orders/statistics?startDate=2026-05-01&endDate=2026-05-20 200 - 738ms[39m
+2026-05-20 01:02:25:225 [32minfo[39m: [32mGET /api/v1/client/orders 304 - 434ms[39m
+2026-05-20 01:02:40:240 [32minfo[39m: [32mGET /api/v1/client/orders 304 - 639ms[39m
+2026-05-20 01:03:07:37 [32minfo[39m: [32mGET /api/v1/client/orders/statistics?startDate=2026-05-01&endDate=2026-05-20 304 - 735ms[39m
+2026-05-20 01:03:09:39 [32minfo[39m: [32mGET /api/v1/client/orders/statistics?startDate=2026-05-01&endDate=2026-05-20 304 - 680ms[39m
+2026-05-20 01:03:10:310 [32minfo[39m: [32mGET /api/v1/client/orders 304 - 748ms[39m
+2026-05-20 01:03:41:341 [32minfo[39m: [32mGET /api/v1/client/orders 304 - 688ms[39m
+2026-05-20 01:03:48:348 [32minfo[39m: [32mGET /api/v1/client/orders 304 - 930ms[39m
+2026-05-20 01:04:06:46 [32minfo[39m: [32mGET /api/v1/admin/locations 304 - 212ms[39m
+2026-05-20 01:04:06:46 [32minfo[39m: [32mGET /api/v1/admin/users 304 - 223ms[39m
+2026-05-20 01:04:09:49 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1137ms[39m
+2026-05-20 01:04:27:427 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 20877ms[39m
+2026-05-20 01:04:38:438 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1143ms[39m
+2026-05-20 01:04:38:438 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1435ms[39m
+2026-05-20 01:04:43:443 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1077ms[39m
+2026-05-20 01:04:44:444 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1076ms[39m
+2026-05-20 01:04:44:444 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1130ms[39m
+2026-05-20 01:04:45:445 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1112ms[39m
+2026-05-20 01:04:49:449 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1080ms[39m
+2026-05-20 01:04:49:449 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1102ms[39m
+2026-05-20 01:06:54:654 [32minfo[39m: [32mGET /api/v1/client/orders 304 - 708ms[39m
+2026-05-20 01:07:21:721 [32minfo[39m: [32mPATCH /api/v1/client/orders/1011 200 - 1561ms[39m
+2026-05-20 01:07:22:722 [32minfo[39m: [32mGET /api/v1/client/orders 200 - 958ms[39m
+2026-05-20 01:08:22:822 [32minfo[39m: [32mPOST /api/v1/auth/customer/login 200 - 395ms[39m
+2026-05-20 01:08:23:823 [32minfo[39m: [32mGET /api/v1/public/products?limit=100 304 - 1117ms[39m
+2026-05-20 01:08:28:828 [32minfo[39m: [32mGET /api/v1/client/orders 304 - 753ms[39m
+2026-05-20 01:08:30:830 [32minfo[39m: [32mGET /api/v1/client/orders/statistics?startDate=2026-05-01&endDate=2026-05-20 200 - 741ms[39m
+2026-05-20 01:08:31:831 [32minfo[39m: [32mGET /api/v1/client/orders 304 - 273ms[39m
+2026-05-20 01:08:36:836 [32minfo[39m: [32mGET /api/v1/client/orders 304 - 661ms[39m
+2026-05-20 01:08:39:839 [32minfo[39m: [32mGET /api/v1/client/orders 304 - 675ms[39m
+2026-05-20 01:08:40:840 [32minfo[39m: [32mGET /api/v1/client/orders/statistics?startDate=2026-05-01&endDate=2026-05-20 304 - 641ms[39m
+2026-05-20 01:08:50:850 [32minfo[39m: [32mGET /api/v1/client/profile 304 - 430ms[39m
+2026-05-20 01:09:23:923 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 347ms[39m
+2026-05-20 01:09:33:933 [32minfo[39m: [32mGET /api/v1/admin/orders 200 - 5492ms[39m
+2026-05-20 01:09:39:939 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 200 - 16469ms[39m
+2026-05-20 01:09:40:940 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 200 - 311ms[39m
+2026-05-20 01:10:06:106 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 387ms[39m
+2026-05-20 01:10:06:106 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [403] Chỉ quản lý mới có quyền truy cập trung tâm sự cố[39m
+2026-05-20 01:10:06:106 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 403 - 1ms[39m
+2026-05-20 01:10:07:107 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1085ms[39m
+2026-05-20 01:10:07:107 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1117ms[39m
+2026-05-20 01:10:19:1019 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1071ms[39m
+2026-05-20 01:10:19:1019 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1107ms[39m
+2026-05-20 01:10:26:1026 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [403] Chỉ quản lý mới có quyền truy cập trung tâm sự cố[39m
+2026-05-20 01:10:26:1026 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 403 - 2ms[39m
+2026-05-20 01:10:27:1027 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1125ms[39m
+2026-05-20 01:10:28:1028 [32minfo[39m: [32mGET /api/v1/admin/locations 304 - 215ms[39m
+2026-05-20 01:10:28:1028 [32minfo[39m: [32mGET /api/v1/admin/users 304 - 223ms[39m
+2026-05-20 01:10:47:1047 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 200 - 19053ms[39m
+2026-05-20 01:10:49:1049 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 874ms[39m
+2026-05-20 01:14:13:1413 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 391ms[39m
+2026-05-20 01:14:14:1414 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [403] Chỉ quản lý mới có quyền truy cập trung tâm sự cố[39m
+2026-05-20 01:14:14:1414 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 403 - 1ms[39m
+2026-05-20 01:14:15:1415 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 1079ms[39m
+2026-05-20 01:14:15:1415 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 1115ms[39m
+2026-05-20 01:16:24:1624 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1096ms[39m
+2026-05-20 01:16:24:1624 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1121ms[39m
+2026-05-20 01:18:20:1820 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [403] Chỉ quản lý mới có quyền truy cập trung tâm sự cố[39m
+2026-05-20 01:18:20:1820 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 403 - 5ms[39m
+2026-05-20 01:18:21:1821 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1279ms[39m
+2026-05-20 01:18:29:1829 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [403] Chỉ quản lý mới có quyền truy cập trung tâm sự cố[39m
+2026-05-20 01:18:29:1829 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 403 - 3ms[39m
+2026-05-20 01:18:49:1849 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [403] Chỉ quản lý mới có quyền truy cập trung tâm sự cố[39m
+2026-05-20 01:18:49:1849 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 403 - 3ms[39m
+2026-05-20 01:18:50:1850 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1131ms[39m
+2026-05-20 01:18:50:1850 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1093ms[39m
+2026-05-20 01:18:50:1850 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1109ms[39m
+2026-05-20 01:18:53:1853 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1172ms[39m
+2026-05-20 01:19:25:1925 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1186ms[39m
+2026-05-20 01:19:34:1934 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1075ms[39m
+2026-05-20 01:19:34:1934 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1085ms[39m
+2026-05-20 01:19:35:1935 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 966ms[39m
+2026-05-20 01:19:36:1936 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 866ms[39m
+2026-05-20 01:19:37:1937 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1067ms[39m
+2026-05-20 01:19:49:1949 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1083ms[39m
+2026-05-20 01:19:49:1949 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1096ms[39m
+2026-05-20 01:19:52:1952 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1084ms[39m
+2026-05-20 01:19:52:1952 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1094ms[39m
+2026-05-20 01:19:56:1956 [32minfo[39m: [32mGET /api/v1/admin/locations 200 - 216ms[39m
+2026-05-20 01:19:56:1956 [32minfo[39m: [32mGET /api/v1/admin/users 200 - 220ms[39m
+2026-05-20 01:20:01:201 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1075ms[39m
+2026-05-20 01:20:03:203 [32minfo[39m: [32mGET /api/v1/admin/orders 200 - 2562ms[39m
+2026-05-20 01:20:14:2014 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 200 - 18074ms[39m
+2026-05-20 01:22:48:2248 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [403] Chỉ quản lý mới có quyền truy cập trung tâm sự cố[39m
+2026-05-20 01:22:48:2248 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 403 - 14ms[39m
+2026-05-20 01:22:49:2249 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1247ms[39m
+2026-05-20 01:22:52:2252 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1984ms[39m
+2026-05-20 01:22:59:2259 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1085ms[39m
+2026-05-20 01:22:59:2259 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1104ms[39m
+2026-05-20 01:23:06:236 [32minfo[39m: [32mGET /api/v1/admin/orders 200 - 11476ms[39m
+2026-05-20 01:26:05:265 [31merror[39m: [31m[GET /api/v1/admin/users] [401] Invalid or expired token[39m
+2026-05-20 01:26:05:265 [31merror[39m: [31m[GET /api/v1/admin/locations] [401] Invalid or expired token[39m
+2026-05-20 01:26:05:265 [31merror[39m: [31m[GET /api/v1/admin/dashboard/stats] [401] Invalid or expired token[39m
+2026-05-20 01:26:07:267 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 01:29:34:2934 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 328ms[39m
+2026-05-20 01:29:34:2934 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [403] Chỉ quản lý mới có quyền truy cập trung tâm sự cố[39m
+2026-05-20 01:29:34:2934 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 403 - 5ms[39m
+2026-05-20 01:29:36:2936 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1110ms[39m
+2026-05-20 01:29:36:2936 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1123ms[39m
+2026-05-20 01:29:40:2940 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1079ms[39m
+2026-05-20 01:29:40:2940 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1119ms[39m
+2026-05-20 01:29:43:2943 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1077ms[39m
+2026-05-20 01:29:43:2943 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1160ms[39m
+2026-05-20 01:29:45:2945 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 689ms[39m
+2026-05-20 01:29:46:2946 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 476ms[39m
+2026-05-20 01:29:48:2948 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 669ms[39m
+2026-05-20 01:29:48:2948 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1076ms[39m
+2026-05-20 01:33:15:3315 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [403] Chỉ quản lý mới có quyền truy cập trung tâm sự cố[39m
+2026-05-20 01:33:15:3315 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 403 - 3ms[39m
+2026-05-20 01:33:16:3316 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1103ms[39m
+2026-05-20 01:33:17:3317 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 454ms[39m
+2026-05-20 01:33:25:3325 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1091ms[39m
+2026-05-20 01:36:54:3654 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1091ms[39m
+2026-05-20 01:36:54:3654 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1113ms[39m
+2026-05-20 01:37:19:3719 [32minfo[39m: [32mPOST /api/v1/admin/picking/pack 200 - 3560ms[39m
+2026-05-20 01:37:21:3721 [31merror[39m: [31m[POST /api/v1/admin/picking/pack] [400] Nhiệm vụ này đã hoàn thành trước đó[39m
+2026-05-20 01:37:21:3721 [32minfo[39m: [32mPOST /api/v1/admin/picking/pack 400 - 882ms[39m
+2026-05-20 01:37:24:3724 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [403] Chỉ quản lý mới có quyền truy cập trung tâm sự cố[39m
+2026-05-20 01:37:24:3724 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 403 - 2ms[39m
+2026-05-20 01:37:25:3725 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 1174ms[39m
+2026-05-20 01:37:26:3726 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 1119ms[39m
+2026-05-20 01:37:26:3726 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 1127ms[39m
+2026-05-20 01:37:31:3731 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1081ms[39m
+2026-05-20 01:37:31:3731 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1110ms[39m
+2026-05-20 01:37:36:3736 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 01:37:41:3741 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [401] Invalid or expired token[39m
+2026-05-20 01:37:42:3742 [32minfo[39m: [32mPOST /api/v1/admin/picking/pack 200 - 2765ms[39m
+2026-05-20 01:37:50:3750 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [403] Chỉ quản lý mới có quyền truy cập trung tâm sự cố[39m
+2026-05-20 01:37:50:3750 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 403 - 5ms[39m
+2026-05-20 01:37:51:3751 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 1102ms[39m
+2026-05-20 01:37:51:3751 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 1098ms[39m
+2026-05-20 01:37:55:3755 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1071ms[39m
+2026-05-20 01:37:59:3759 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 01:38:00:380 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 01:38:02:382 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 01:38:36:3836 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 319ms[39m
+2026-05-20 01:38:36:3836 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [403] Chỉ quản lý mới có quyền truy cập trung tâm sự cố[39m
+2026-05-20 01:38:36:3836 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 403 - 2ms[39m
+2026-05-20 01:38:37:3837 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1098ms[39m
+2026-05-20 01:38:37:3837 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1107ms[39m
+2026-05-20 01:39:31:3931 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 315ms[39m
+2026-05-20 01:39:32:3932 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [403] Chỉ quản lý mới có quyền truy cập trung tâm sự cố[39m
+2026-05-20 01:39:32:3932 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 403 - 3ms[39m
+2026-05-20 01:39:33:3933 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1087ms[39m
+2026-05-20 01:39:33:3933 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1095ms[39m
+2026-05-20 01:39:37:3937 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1081ms[39m
+2026-05-20 01:40:12:4012 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 01:40:13:4013 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 01:40:15:4015 [31merror[39m: [31m[GET /api/v1/admin/users] [401] Invalid or expired token[39m
+2026-05-20 01:40:15:4015 [31merror[39m: [31m[GET /api/v1/admin/locations] [401] Invalid or expired token[39m
+2026-05-20 01:40:15:4015 [31merror[39m: [31m[GET /api/v1/admin/dashboard/stats] [401] Invalid or expired token[39m
+2026-05-20 01:40:17:4017 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 01:40:18:4018 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 01:40:18:4018 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 01:40:21:4021 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 01:40:38:4038 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1090ms[39m
+2026-05-20 01:41:03:413 [32minfo[39m: [32mPOST /api/v1/auth/customer/login 200 - 293ms[39m
+2026-05-20 01:41:04:414 [32minfo[39m: [32mGET /api/v1/public/products?limit=100 304 - 968ms[39m
+2026-05-20 01:41:27:4127 [32minfo[39m: [32mPOST /api/v1/auth/customer/login 200 - 328ms[39m
+2026-05-20 01:41:28:4128 [32minfo[39m: [32mGET /api/v1/public/products?limit=100 304 - 997ms[39m
+2026-05-20 01:41:31:4131 [32minfo[39m: [32mGET /api/v1/client/orders 304 - 643ms[39m
+2026-05-20 01:41:32:4132 [32minfo[39m: [32mGET /api/v1/client/orders/statistics?startDate=2026-05-01&endDate=2026-05-20 304 - 678ms[39m
+2026-05-20 01:41:33:4133 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 01:41:33:4133 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 01:41:33:4133 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 01:41:33:4133 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 01:41:33:4133 [32minfo[39m: [32mGET /api/v1/admin/users/me 200 - 4ms[39m
+2026-05-20 01:41:35:4135 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1252ms[39m
+2026-05-20 01:41:35:4135 [32minfo[39m: [32mGET /api/v1/client/orders/statistics?startDate=2026-05-01&endDate=2026-05-20 304 - 644ms[39m
+2026-05-20 01:41:37:4137 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 3ms[39m
+2026-05-20 01:41:39:4139 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1088ms[39m
+2026-05-20 01:41:49:4149 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 01:41:49:4149 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 01:41:51:4151 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 01:41:51:4151 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 01:41:53:4153 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 01:41:53:4153 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 01:41:55:4155 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 01:41:55:4155 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 01:42:31:4231 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 01:42:31:4231 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 01:42:40:4240 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 01:42:40:4240 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 01:42:45:4245 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 01:42:45:4245 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [401] Invalid or expired token[39m
+2026-05-20 01:42:46:4246 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 01:42:46:4246 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 01:42:58:4258 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 01:42:58:4258 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 01:42:59:4259 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 01:42:59:4259 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 01:43:02:432 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 01:43:02:432 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 01:43:04:434 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 01:43:04:434 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 01:44:11:4411 [31merror[39m: [31m[GET /api/v1/admin/users] [401] Invalid or expired token[39m
+2026-05-20 01:44:11:4411 [31merror[39m: [31m[GET /api/v1/admin/locations] [401] Invalid or expired token[39m
+2026-05-20 01:44:11:4411 [31merror[39m: [31m[GET /api/v1/admin/dashboard/stats] [401] Invalid or expired token[39m
+2026-05-20 01:44:13:4413 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 01:44:13:4413 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 01:45:22:4522 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 5ms[39m
+2026-05-20 01:45:23:4523 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1090ms[39m
+2026-05-20 01:45:23:4523 [32minfo[39m: [32mGET /api/v1/admin/users 304 - 223ms[39m
+2026-05-20 01:45:23:4523 [32minfo[39m: [32mGET /api/v1/admin/locations 304 - 222ms[39m
+2026-05-20 01:45:27:4527 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 0ms[39m
+2026-05-20 01:45:28:4528 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1131ms[39m
+2026-05-20 01:45:40:4540 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 200 - 16896ms[39m
+2026-05-20 01:45:40:4540 [31merror[39m: [31m[GET /api/v1/admin/orders] [401] Invalid or expired token[39m
+2026-05-20 01:45:43:4543 [31merror[39m: [31m[GET /api/v1/admin/users] [401] Invalid or expired token[39m
+2026-05-20 01:45:43:4543 [31merror[39m: [31m[GET /api/v1/admin/locations] [401] Invalid or expired token[39m
+2026-05-20 01:45:43:4543 [31merror[39m: [31m[GET /api/v1/admin/dashboard/stats] [401] Invalid or expired token[39m
+2026-05-20 01:45:50:4550 [31merror[39m: [31m[GET /api/v1/admin/users] [401] Invalid or expired token[39m
+2026-05-20 01:45:50:4550 [31merror[39m: [31m[GET /api/v1/admin/locations] [401] Invalid or expired token[39m
+2026-05-20 01:45:50:4550 [31merror[39m: [31m[GET /api/v1/admin/dashboard/stats] [401] Invalid or expired token[39m
+2026-05-20 01:46:00:460 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 01:46:02:462 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 297ms[39m
+2026-05-20 01:46:04:464 [32minfo[39m: [32mGET /api/v1/admin/users/me 200 - 1ms[39m
+2026-05-20 01:46:39:4639 [31merror[39m: [31m[GET /api/v1/admin/users] [401] Invalid or expired token[39m
+2026-05-20 01:46:39:4639 [31merror[39m: [31m[GET /api/v1/admin/locations] [401] Invalid or expired token[39m
+2026-05-20 01:46:39:4639 [31merror[39m: [31m[GET /api/v1/admin/dashboard/stats] [401] Invalid or expired token[39m
+2026-05-20 01:47:12:4712 [31merror[39m: [31m[GET /api/v1/admin/users] [401] Invalid or expired token[39m
+2026-05-20 01:47:12:4712 [31merror[39m: [31m[GET /api/v1/admin/locations] [401] Invalid or expired token[39m
+2026-05-20 01:47:12:4712 [31merror[39m: [31m[GET /api/v1/admin/dashboard/stats] [401] Invalid or expired token[39m
+2026-05-20 01:48:28:4828 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 01:48:28:4828 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 01:48:28:4828 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 01:48:28:4828 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 01:48:43:4843 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 01:48:50:4850 [32minfo[39m: [32mPOST /api/v1/auth/user/logout 200 - 4ms[39m
+2026-05-20 01:48:58:4858 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 313ms[39m
+2026-05-20 01:48:58:4858 [32minfo[39m: [32mGET /api/v1/admin/users/me 200 - 1ms[39m
+2026-05-20 01:48:58:4858 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [403] Chỉ quản lý mới có quyền truy cập trung tâm sự cố[39m
+2026-05-20 01:48:58:4858 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 403 - 1ms[39m
+2026-05-20 01:48:58:4858 [32minfo[39m: [32mGET /api/v1/admin/users/me 200 - 1ms[39m
+2026-05-20 01:49:00:490 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 1085ms[39m
+2026-05-20 01:49:00:490 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 1115ms[39m
+2026-05-20 01:49:06:496 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 01:49:11:4911 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 4533ms[39m
+2026-05-20 01:51:58:5158 [32minfo[39m: [32mGET /api/v1/admin/locations 200 - 216ms[39m
+2026-05-20 01:51:58:5158 [32minfo[39m: [32mGET /api/v1/admin/users 200 - 223ms[39m
+2026-05-20 01:51:59:5159 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 01:52:00:520 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1134ms[39m
+2026-05-20 01:52:15:5215 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 200 - 17418ms[39m
+2026-05-20 01:53:11:5311 [32minfo[39m: [32mGET /api/v1/admin/users 304 - 217ms[39m
+2026-05-20 01:53:11:5311 [32minfo[39m: [32mGET /api/v1/admin/locations 304 - 226ms[39m
+2026-05-20 01:53:15:5315 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 01:53:16:5316 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1131ms[39m
+2026-05-20 01:53:35:5335 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 24295ms[39m
+2026-05-20 01:53:56:5356 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 314ms[39m
+2026-05-20 01:54:19:5419 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 200 - 22588ms[39m
+2026-05-20 01:54:20:5420 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 222ms[39m
+2026-05-20 01:57:17:5717 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 200 - 18435ms[39m
+2026-05-20 01:57:17:5717 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 224ms[39m
+2026-05-20 01:57:35:5735 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 17834ms[39m
+2026-05-20 01:57:35:5735 [32minfo[39m: [32mGET /api/v1/admin/orders 200 - 2437ms[39m
+2026-05-20 01:57:35:5735 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 214ms[39m
+2026-05-20 01:57:39:5739 [32minfo[39m: [32mGET /api/v1/admin/users 200 - 213ms[39m
+2026-05-20 01:57:40:5740 [32minfo[39m: [32mGET /api/v1/admin/locations 200 - 218ms[39m
+2026-05-20 01:57:46:5746 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 200 - 17205ms[39m
+2026-05-20 01:57:46:5746 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 224ms[39m
+2026-05-20 01:57:49:5749 [32minfo[39m: [32mGET /api/v1/admin/orders 304 - 9716ms[39m
+2026-05-20 01:57:50:5750 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 15130ms[39m
+2026-05-20 01:57:51:5751 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 212ms[39m
+2026-05-20 01:57:55:5755 [32minfo[39m: [32mGET /api/v1/public/products?limit=100 304 - 848ms[39m
+2026-05-20 01:57:56:5756 [32minfo[39m: [32mGET /api/v1/admin/users 304 - 221ms[39m
+2026-05-20 01:57:56:5756 [32minfo[39m: [32mGET /api/v1/admin/locations 304 - 217ms[39m
+2026-05-20 01:57:58:5758 [32minfo[39m: [32mGET /api/v1/admin/orders 304 - 2802ms[39m
+2026-05-20 01:58:10:5810 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 19766ms[39m
+2026-05-20 01:58:11:5811 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 239ms[39m
+2026-05-20 01:58:47:5847 [32minfo[39m: [32mPOST /api/v1/admin/picking/assign 200 - 2510ms[39m
+2026-05-20 01:58:50:5850 [32minfo[39m: [32mGET /api/v1/admin/orders 304 - 2636ms[39m
+2026-05-20 01:58:54:5854 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 01:58:55:5855 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 1067ms[39m
+2026-05-20 01:59:09:599 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 21641ms[39m
+2026-05-20 01:59:09:599 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 219ms[39m
+2026-05-20 02:00:22:022 [32minfo[39m: [32mGET /api/v1/public/products?limit=100 304 - 917ms[39m
+2026-05-20 02:00:39:039 [32minfo[39m: [32mGET /api/v1/admin/orders 304 - 16640ms[39m
+2026-05-20 02:00:50:050 [32minfo[39m: [32mGET /api/v1/admin/orders 200 - 3492ms[39m
+2026-05-20 02:01:00:10 [32minfo[39m: [32mPATCH /api/v1/admin/orders/1025 200 - 1492ms[39m
+2026-05-20 02:01:03:13 [32minfo[39m: [32mGET /api/v1/admin/orders 200 - 2450ms[39m
+2026-05-20 02:01:06:16 [32minfo[39m: [32mGET /api/v1/admin/users 304 - 224ms[39m
+2026-05-20 02:01:06:16 [32minfo[39m: [32mGET /api/v1/admin/locations 304 - 218ms[39m
+2026-05-20 02:01:07:17 [32minfo[39m: [32mGET /api/v1/admin/orders 304 - 2004ms[39m
+2026-05-20 02:01:19:119 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 200 - 18355ms[39m
+2026-05-20 02:01:20:120 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 218ms[39m
+2026-05-20 02:01:23:123 [32minfo[39m: [32mPOST /api/v1/admin/picking/assign 200 - 2423ms[39m
+2026-05-20 02:01:26:126 [32minfo[39m: [32mGET /api/v1/admin/orders 304 - 2220ms[39m
+2026-05-20 02:01:36:136 [32minfo[39m: [32mGET /api/v1/admin/users 304 - 215ms[39m
+2026-05-20 02:01:36:136 [32minfo[39m: [32mGET /api/v1/admin/locations 304 - 644ms[39m
+2026-05-20 02:01:37:137 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 02:01:41:141 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 3524ms[39m
+2026-05-20 02:01:43:143 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 19411ms[39m
+2026-05-20 02:01:43:143 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 215ms[39m
+2026-05-20 02:01:48:148 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1293ms[39m
+2026-05-20 02:01:51:151 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 3943ms[39m
+2026-05-20 02:01:56:156 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 2422ms[39m
+2026-05-20 02:01:57:157 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 200 - 20949ms[39m
+2026-05-20 02:02:10:210 [32minfo[39m: [32mPOST /api/v1/admin/picking/assign 200 - 2647ms[39m
+2026-05-20 02:02:17:217 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 3ms[39m
+2026-05-20 02:02:18:218 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 1303ms[39m
+2026-05-20 02:02:19:219 [32minfo[39m: [32mGET /api/v1/admin/orders 304 - 8833ms[39m
+2026-05-20 02:02:29:229 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 19085ms[39m
+2026-05-20 02:02:29:229 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 216ms[39m
+2026-05-20 02:02:30:230 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 02:02:30:230 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 02:02:31:231 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 02:02:31:231 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 02:02:32:232 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 02:02:32:232 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 02:02:33:233 [31merror[39m: [31m[GET /api/v1/admin/users] [401] Invalid or expired token[39m
+2026-05-20 02:02:33:233 [31merror[39m: [31m[GET /api/v1/admin/locations] [401] Invalid or expired token[39m
+2026-05-20 02:02:33:233 [31merror[39m: [31m[GET /api/v1/admin/dashboard/stats] [401] Invalid or expired token[39m
+2026-05-20 02:02:34:234 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 02:02:34:234 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 02:02:34:234 [31merror[39m: [31m[GET /api/v1/admin/users] [401] Invalid or expired token[39m
+2026-05-20 02:02:34:234 [31merror[39m: [31m[GET /api/v1/admin/locations] [401] Invalid or expired token[39m
+2026-05-20 02:02:34:234 [31merror[39m: [31m[GET /api/v1/admin/dashboard/stats] [401] Invalid or expired token[39m
+2026-05-20 02:02:36:236 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 02:02:36:236 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 02:02:36:236 [31merror[39m: [31m[GET /api/v1/admin/orders] [401] Invalid or expired token[39m
+2026-05-20 02:02:40:240 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 02:02:40:240 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 02:03:00:30 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 313ms[39m
+2026-05-20 02:03:01:31 [32minfo[39m: [32mGET /api/v1/admin/users/me 200 - 2ms[39m
+2026-05-20 02:03:01:31 [32minfo[39m: [32mGET /api/v1/admin/users/me 200 - 1ms[39m
+2026-05-20 02:03:02:32 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 1146ms[39m
+2026-05-20 02:03:03:33 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 1500ms[39m
+2026-05-20 02:03:06:36 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1127ms[39m
+2026-05-20 02:03:06:36 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1500ms[39m
+2026-05-20 02:03:16:316 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1126ms[39m
+2026-05-20 02:03:16:316 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1274ms[39m
+2026-05-20 02:04:48:448 [32minfo[39m: [32mPOST /api/v1/admin/picking/pack 200 - 3079ms[39m
+2026-05-20 02:05:36:536 [32minfo[39m: [32mPOST /api/v1/admin/picking/pack 200 - 2744ms[39m
+2026-05-20 02:05:39:539 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 1727ms[39m
+2026-05-20 02:05:40:540 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 1171ms[39m
+2026-05-20 02:05:43:543 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 02:05:43:543 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 02:05:44:544 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1288ms[39m
+2026-05-20 02:05:44:544 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1107ms[39m
+2026-05-20 02:05:58:558 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 02:05:58:558 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 02:05:58:558 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 02:05:58:558 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 02:06:03:63 [31merror[39m: [31m[GET /api/v1/admin/users] [401] Invalid or expired token[39m
+2026-05-20 02:06:03:63 [31merror[39m: [31m[GET /api/v1/admin/locations] [401] Invalid or expired token[39m
+2026-05-20 02:06:03:63 [31merror[39m: [31m[GET /api/v1/admin/dashboard/stats] [401] Invalid or expired token[39m
+2026-05-20 02:06:05:65 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 02:06:05:65 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 02:06:13:613 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 02:06:16:616 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 02:06:16:616 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 02:06:20:620 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 02:06:22:622 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 02:06:22:622 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 02:06:25:625 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 02:06:26:626 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 02:06:42:642 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 4ms[39m
+2026-05-20 02:06:43:643 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1169ms[39m
+2026-05-20 02:06:44:644 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1301ms[39m
+2026-05-20 02:06:44:644 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1314ms[39m
+2026-05-20 02:06:47:647 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 02:06:49:649 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1323ms[39m
+2026-05-20 02:06:49:649 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 0ms[39m
+2026-05-20 02:06:50:650 [32minfo[39m: [32mGET /api/v1/admin/users 200 - 216ms[39m
+2026-05-20 02:06:50:650 [32minfo[39m: [32mGET /api/v1/admin/locations 200 - 219ms[39m
+2026-05-20 02:06:50:650 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1328ms[39m
+2026-05-20 02:07:17:717 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 200 - 27314ms[39m
+2026-05-20 02:07:30:730 [31merror[39m: [31m[GET /api/v1/admin/dashboard/stats] [401] Invalid or expired token[39m
+2026-05-20 02:07:36:736 [32minfo[39m: [32mPOST /api/v1/auth/customer/login 200 - 296ms[39m
+2026-05-20 02:07:37:737 [32minfo[39m: [32mGET /api/v1/public/products?limit=100 304 - 871ms[39m
+2026-05-20 02:07:39:739 [32minfo[39m: [32mGET /api/v1/client/orders 200 - 648ms[39m
+2026-05-20 02:07:40:740 [32minfo[39m: [32mGET /api/v1/client/orders 304 - 434ms[39m
+2026-05-20 02:07:47:747 [32minfo[39m: [32mGET /api/v1/client/profile 200 - 519ms[39m
+2026-05-20 02:09:02:92 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 334ms[39m
+2026-05-20 02:09:02:92 [32minfo[39m: [32mGET /api/v1/admin/users/me 200 - 0ms[39m
+2026-05-20 02:09:02:92 [32minfo[39m: [32mGET /api/v1/admin/users/me 200 - 0ms[39m
+2026-05-20 02:09:04:94 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 1399ms[39m
+2026-05-20 02:09:05:95 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 2435ms[39m
+2026-05-20 02:09:07:97 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 02:09:09:99 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1498ms[39m
+2026-05-20 02:09:59:959 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1305ms[39m
+2026-05-20 02:09:59:959 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1542ms[39m
+2026-05-20 02:10:04:104 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 3ms[39m
+2026-05-20 02:10:06:106 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1686ms[39m
+2026-05-20 02:12:00:120 [32minfo[39m: [32mGET /api/v1/admin/locations 200 - 218ms[39m
+2026-05-20 02:12:00:120 [32minfo[39m: [32mGET /api/v1/admin/users 200 - 222ms[39m
+2026-05-20 02:12:02:122 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 02:12:03:123 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1294ms[39m
+2026-05-20 02:12:06:126 [32minfo[39m: [32mGET /api/v1/admin/users 304 - 212ms[39m
+2026-05-20 02:12:06:126 [32minfo[39m: [32mGET /api/v1/admin/locations 304 - 210ms[39m
+2026-05-20 02:12:09:129 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 02:12:09:129 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 02:12:10:1210 [32minfo[39m: [32mGET /api/v1/admin/orders 200 - 6419ms[39m
+2026-05-20 02:12:11:1211 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1288ms[39m
+2026-05-20 02:12:11:1211 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1301ms[39m
+2026-05-20 02:12:19:1219 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1078ms[39m
+2026-05-20 02:12:19:1219 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1296ms[39m
+2026-05-20 02:12:21:1221 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 200 - 20802ms[39m
+2026-05-20 02:12:21:1221 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 3ms[39m
+2026-05-20 02:12:22:1222 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 200 - 16480ms[39m
+2026-05-20 02:12:23:1223 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1338ms[39m
+2026-05-20 02:12:24:1224 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1293ms[39m
+2026-05-20 02:12:24:1224 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1387ms[39m
+2026-05-20 02:12:33:1233 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 02:12:35:1235 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1408ms[39m
+2026-05-20 02:12:44:1244 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1093ms[39m
+2026-05-20 02:12:44:1244 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1394ms[39m
+2026-05-20 02:12:46:1246 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 02:12:47:1247 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1201ms[39m
+2026-05-20 02:12:48:1248 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 619ms[39m
+2026-05-20 02:12:49:1249 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1140ms[39m
+2026-05-20 02:12:50:1250 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 02:12:52:1252 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1373ms[39m
+2026-05-20 02:14:27:1427 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 02:14:27:1427 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 02:14:29:1429 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1019ms[39m
+2026-05-20 02:14:29:1429 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1085ms[39m
+2026-05-20 02:14:44:1444 [32minfo[39m: [32mPOST /api/v1/auth/user/logout 200 - 3ms[39m
+2026-05-20 02:14:54:1454 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 323ms[39m
+2026-05-20 02:15:00:150 [32minfo[39m: [32mGET /api/v1/admin/orders 304 - 4408ms[39m
+2026-05-20 02:15:13:1513 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 200 - 18520ms[39m
+2026-05-20 02:15:13:1513 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 219ms[39m
+2026-05-20 02:15:25:1525 [32minfo[39m: [32mGET /api/v1/admin/users 304 - 201ms[39m
+2026-05-20 02:15:25:1525 [32minfo[39m: [32mGET /api/v1/admin/orders 304 - 10551ms[39m
+2026-05-20 02:15:25:1525 [32minfo[39m: [32mGET /api/v1/admin/locations 304 - 292ms[39m
+2026-05-20 02:15:28:1528 [32minfo[39m: [32mGET /api/v1/admin/orders 304 - 2289ms[39m
+2026-05-20 02:15:29:1529 [32minfo[39m: [32mGET /api/v1/admin/orders 304 - 1301ms[39m
+2026-05-20 02:15:31:1531 [32minfo[39m: [32mGET /api/v1/admin/orders 304 - 1091ms[39m
+2026-05-20 02:15:32:1532 [32minfo[39m: [32mGET /api/v1/admin/orders 304 - 896ms[39m
+2026-05-20 02:16:25:1625 [32minfo[39m: [32mGET /api/v1/public/products?limit=100 304 - 817ms[39m
+2026-05-20 02:16:58:1658 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 14768ms[39m
+2026-05-20 02:16:58:1658 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 208ms[39m
+2026-05-20 02:18:30:1830 [32minfo[39m: [32mGET /api/v1/admin/locations 304 - 205ms[39m
+2026-05-20 02:18:32:1832 [32minfo[39m: [32mGET /api/v1/admin/containers 200 - 410ms[39m
+2026-05-20 02:18:34:1834 [32minfo[39m: [32mGET /api/v1/admin/containers 304 - 397ms[39m
+2026-05-20 02:18:40:1840 [32minfo[39m: [32mGET /api/v1/admin/users 304 - 217ms[39m
+2026-05-20 02:18:41:1841 [32minfo[39m: [32mGET /api/v1/admin/locations 304 - 210ms[39m
+2026-05-20 02:18:42:1842 [32minfo[39m: [32mGET /api/v1/admin/orders 304 - 1883ms[39m
+2026-05-20 02:18:42:1842 [32minfo[39m: [32mGET /api/v1/public/products?limit=100 304 - 856ms[39m
+2026-05-20 02:18:44:1844 [32minfo[39m: [32mGET /api/v1/admin/users 304 - 202ms[39m
+2026-05-20 02:18:44:1844 [32minfo[39m: [32mGET /api/v1/admin/locations 304 - 194ms[39m
+2026-05-20 02:18:47:1847 [32minfo[39m: [32mGET /api/v1/admin/orders 304 - 3884ms[39m
+2026-05-20 02:18:50:1850 [32minfo[39m: [32mGET /api/v1/public/products?limit=100 304 - 943ms[39m
+2026-05-20 02:19:47:1947 [32minfo[39m: [32mGET /api/v1/admin/locations 304 - 241ms[39m
+2026-05-20 02:19:49:1949 [32minfo[39m: [32mGET /api/v1/admin/containers 304 - 527ms[39m
+2026-05-20 02:19:49:1949 [32minfo[39m: [32mGET /api/v1/admin/locations 304 - 251ms[39m
+2026-05-20 02:19:53:1953 [32minfo[39m: [32mGET /api/v1/admin/containers 304 - 422ms[39m
+2026-05-20 02:19:54:1954 [32minfo[39m: [32mGET /api/v1/admin/locations 304 - 213ms[39m
+2026-05-20 02:20:40:2040 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 23953ms[39m
+2026-05-20 02:20:40:2040 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 204ms[39m
+2026-05-20 02:20:58:2058 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 18346ms[39m
+2026-05-20 02:20:59:2059 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 215ms[39m
+2026-05-20 02:21:04:214 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 200 - 14925ms[39m
+2026-05-20 02:21:04:214 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 204ms[39m
+2026-05-20 02:21:42:2142 [32minfo[39m: [32mGET /api/v1/admin/users 304 - 219ms[39m
+2026-05-20 02:21:43:2143 [32minfo[39m: [32mGET /api/v1/admin/orders 304 - 10447ms[39m
+2026-05-20 02:21:43:2143 [32minfo[39m: [32mGET /api/v1/admin/locations 304 - 272ms[39m
+2026-05-20 02:21:47:2147 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 14947ms[39m
+2026-05-20 02:21:48:2148 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 210ms[39m
+2026-05-20 02:21:48:2148 [32minfo[39m: [32mGET /api/v1/admin/orders 304 - 5168ms[39m
+2026-05-20 02:21:49:2149 [32minfo[39m: [32mGET /api/v1/public/products?limit=100 304 - 596ms[39m
+2026-05-20 02:21:51:2151 [32minfo[39m: [32mGET /api/v1/admin/orders 304 - 2056ms[39m
+2026-05-20 02:22:12:2212 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 17907ms[39m
+2026-05-20 02:22:12:2212 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 204ms[39m
+2026-05-20 02:22:28:2228 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 16690ms[39m
+2026-05-20 02:22:29:2229 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 222ms[39m
+2026-05-20 02:22:31:2231 [32minfo[39m: [32mGET /api/v1/admin/orders 304 - 2153ms[39m
+2026-05-20 02:22:40:2240 [32minfo[39m: [32mGET /api/v1/admin/users 304 - 223ms[39m
+2026-05-20 02:22:41:2241 [32minfo[39m: [32mGET /api/v1/admin/locations 304 - 218ms[39m
+2026-05-20 02:22:42:2242 [32minfo[39m: [32mGET /api/v1/admin/orders 304 - 2035ms[39m
+2026-05-20 02:22:46:2246 [32minfo[39m: [32mGET /api/v1/public/products?limit=100 304 - 790ms[39m
+2026-05-20 02:23:28:2328 [32minfo[39m: [32mPOST /api/v1/admin/products 201 - 819ms[39m
+2026-05-20 02:23:30:2330 [32minfo[39m: [32mGET /api/v1/public/products?limit=100 200 - 2236ms[39m
+2026-05-20 02:24:16:2416 [32minfo[39m: [32mGET /api/v1/admin/locations 304 - 210ms[39m
+2026-05-20 02:24:18:2418 [32minfo[39m: [32mGET /api/v1/admin/containers 304 - 397ms[39m
+2026-05-20 02:24:22:2422 [32minfo[39m: [32mGET /api/v1/admin/containers 304 - 405ms[39m
+2026-05-20 02:24:23:2423 [32minfo[39m: [32mGET /api/v1/admin/containers 304 - 397ms[39m
+2026-05-20 02:24:26:2426 [32minfo[39m: [32mGET /api/v1/admin/users 304 - 229ms[39m
+2026-05-20 02:24:27:2427 [32minfo[39m: [32mGET /api/v1/admin/locations 304 - 219ms[39m
+2026-05-20 02:24:29:2429 [32minfo[39m: [32mGET /api/v1/public/products?limit=100 304 - 900ms[39m
+2026-05-20 02:24:29:2429 [32minfo[39m: [32mGET /api/v1/admin/orders 304 - 2884ms[39m
+2026-05-20 02:24:41:2441 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 200 - 17528ms[39m
+2026-05-20 02:24:42:2442 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 217ms[39m
+2026-05-20 02:24:43:2443 [32minfo[39m: [32mGET /api/v1/admin/locations 304 - 213ms[39m
+2026-05-20 02:24:46:2446 [32minfo[39m: [32mGET /api/v1/admin/containers 304 - 423ms[39m
+2026-05-20 02:24:58:2458 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 16485ms[39m
+2026-05-20 02:24:58:2458 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 201ms[39m
+2026-05-20 02:26:00:260 [32minfo[39m: [32mGET /api/v1/admin/containers 304 - 407ms[39m
+2026-05-20 02:26:17:2617 [32minfo[39m: [32mGET /api/v1/admin/users 304 - 223ms[39m
+2026-05-20 02:26:17:2617 [32minfo[39m: [32mGET /api/v1/admin/locations 304 - 240ms[39m
+2026-05-20 02:26:19:2619 [32minfo[39m: [32mGET /api/v1/admin/locations 304 - 219ms[39m
+2026-05-20 02:26:20:2620 [32minfo[39m: [32mGET /api/v1/public/products?limit=100 304 - 887ms[39m
+2026-05-20 02:26:24:2624 [32minfo[39m: [32mGET /api/v1/admin/orders 304 - 11858ms[39m
+2026-05-20 02:26:26:2626 [32minfo[39m: [32mDELETE /api/v1/admin/products/104 200 - 1279ms[39m
+2026-05-20 02:26:27:2627 [32minfo[39m: [32mGET /api/v1/public/products?limit=100 200 - 951ms[39m
+2026-05-20 02:26:33:2633 [32minfo[39m: [32mGET /api/v1/admin/orders 304 - 8610ms[39m
+2026-05-20 02:26:35:2635 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 20618ms[39m
+2026-05-20 02:26:35:2635 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 215ms[39m
+2026-05-20 02:26:37:2637 [32minfo[39m: [32mGET /api/v1/admin/orders 304 - 3426ms[39m
+2026-05-20 02:26:39:2639 [32minfo[39m: [32mGET /api/v1/admin/locations 304 - 198ms[39m
+2026-05-20 02:26:41:2641 [32minfo[39m: [32mGET /api/v1/admin/containers 304 - 390ms[39m
+2026-05-20 02:26:50:2650 [32minfo[39m: [32mGET /api/v1/admin/users 304 - 223ms[39m
+2026-05-20 02:26:50:2650 [32minfo[39m: [32mGET /api/v1/admin/locations 304 - 219ms[39m
+2026-05-20 02:26:51:2651 [32minfo[39m: [32mGET /api/v1/public/products?limit=100 304 - 847ms[39m
+2026-05-20 02:26:52:2652 [32minfo[39m: [32mGET /api/v1/admin/locations 304 - 210ms[39m
+2026-05-20 02:26:53:2653 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 200 - 18190ms[39m
+2026-05-20 02:26:53:2653 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 214ms[39m
+2026-05-20 02:26:57:2657 [32minfo[39m: [32mGET /api/v1/admin/containers 304 - 421ms[39m
+2026-05-20 02:27:00:270 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 200 - 14797ms[39m
+2026-05-20 02:27:00:270 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 199ms[39m
+2026-05-20 02:27:01:271 [32minfo[39m: [32mGET /api/v1/admin/picking/trace/BIN-401 200 - 406ms[39m
+2026-05-20 02:27:02:272 [32minfo[39m: [32mGET /api/v1/admin/orders 304 - 12466ms[39m
+2026-05-20 02:27:05:275 [32minfo[39m: [32mGET /api/v1/admin/picking/trace/9 200 - 428ms[39m
+2026-05-20 02:27:06:276 [32minfo[39m: [32mGET /api/v1/admin/picking/trace/BIN-701 200 - 428ms[39m
+2026-05-20 02:27:11:2711 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 17447ms[39m
+2026-05-20 02:27:11:2711 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 216ms[39m
+2026-05-20 02:27:18:2718 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 200 - 16929ms[39m
+2026-05-20 02:27:19:2719 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 216ms[39m
+2026-05-20 02:27:50:2750 [32minfo[39m: [32mGET /api/v1/admin/containers 304 - 573ms[39m
+2026-05-20 02:28:54:2854 [32minfo[39m: [32mGET /api/v1/admin/containers 304 - 426ms[39m
+2026-05-20 02:29:42:2942 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 227ms[39m
+2026-05-20 02:29:45:2945 [32minfo[39m: [32mGET /api/v1/admin/customers?page=1&limit=50 200 - 922ms[39m
+2026-05-20 02:29:47:2947 [32minfo[39m: [32mGET /api/v1/admin/users 304 - 1447ms[39m
+2026-05-20 02:29:48:2948 [32minfo[39m: [32mGET /api/v1/admin/locations 304 - 209ms[39m
+2026-05-20 02:29:49:2949 [32minfo[39m: [32mGET /api/v1/admin/users 304 - 260ms[39m
+2026-05-20 02:29:50:2950 [32minfo[39m: [32mGET /api/v1/admin/locations 304 - 210ms[39m
+2026-05-20 02:29:59:2959 [31merror[39m: [31m[GET /api/v1/admin/dashboard/stats] [401] Invalid or expired token[39m
+2026-05-20 02:30:10:3010 [31merror[39m: [31m[GET /api/v1/admin/dashboard/stats] [401] Invalid or expired token[39m
+2026-05-20 02:30:16:3016 [31merror[39m: [31m[GET /api/v1/admin/dashboard/stats] [401] Invalid or expired token[39m
+2026-05-20 02:30:44:3044 [31merror[39m: [31m[GET /api/v1/admin/containers] [401] Invalid or expired token[39m
+2026-05-20 02:31:08:318 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 314ms[39m
+2026-05-20 02:31:10:3110 [32minfo[39m: [32mGET /api/v1/admin/containers 304 - 426ms[39m
+2026-05-20 02:31:29:3129 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 21306ms[39m
+2026-05-20 02:31:30:3130 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 250ms[39m
+2026-05-20 02:32:27:3227 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 299ms[39m
+2026-05-20 02:32:29:3229 [32minfo[39m: [32mGET /api/v1/public/products?limit=100 304 - 854ms[39m
+2026-05-20 02:32:29:3229 [32minfo[39m: [32mGET /api/v1/admin/locations?limit=1000 200 - 212ms[39m
+2026-05-20 02:32:30:3230 [32minfo[39m: [32mGET /api/v1/admin/containers?limit=1000 200 - 650ms[39m
+2026-05-20 02:32:45:3245 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 18117ms[39m
+2026-05-20 02:32:46:3246 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 218ms[39m
+2026-05-20 02:33:12:3312 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 230ms[39m
+2026-05-20 02:33:15:3315 [32minfo[39m: [32mGET /api/v1/admin/customers?page=1&limit=50 304 - 917ms[39m
+2026-05-20 02:33:53:3353 [32minfo[39m: [32mGET /api/v1/admin/users 304 - 216ms[39m
+2026-05-20 02:33:54:3354 [32minfo[39m: [32mGET /api/v1/admin/users 304 - 212ms[39m
+2026-05-20 02:33:54:3354 [32minfo[39m: [32mGET /api/v1/admin/locations?limit=1000 304 - 211ms[39m
+2026-05-20 02:33:54:3354 [32minfo[39m: [32mGET /api/v1/admin/locations?limit=1000 304 - 237ms[39m
+2026-05-20 02:34:54:3454 [32minfo[39m: [32mGET /api/v1/admin/users 304 - 218ms[39m
+2026-05-20 02:34:55:3455 [32minfo[39m: [32mGET /api/v1/admin/locations?limit=1000 304 - 213ms[39m
+2026-05-20 02:35:02:352 [32minfo[39m: [32mGET /api/v1/admin/users 304 - 311ms[39m
+2026-05-20 02:35:02:352 [32minfo[39m: [32mGET /api/v1/admin/locations?limit=1000 304 - 217ms[39m
+2026-05-20 02:35:53:3553 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 17658ms[39m
+2026-05-20 02:35:53:3553 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 217ms[39m
+2026-05-20 02:36:10:3610 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 17523ms[39m
+2026-05-20 02:36:11:3611 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 217ms[39m
+2026-05-20 02:36:20:3620 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 352ms[39m
+2026-05-20 02:36:23:3623 [32minfo[39m: [32mGET /api/v1/admin/customers?page=1&limit=1000 200 - 872ms[39m
+2026-05-20 02:36:32:3632 [32minfo[39m: [32mGET /api/v1/admin/users 304 - 213ms[39m
+2026-05-20 02:36:33:3633 [32minfo[39m: [32mGET /api/v1/admin/locations?limit=1000 304 - 210ms[39m
+2026-05-20 02:36:39:3639 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 18468ms[39m
+2026-05-20 02:36:39:3639 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 224ms[39m
+2026-05-20 02:38:51:3851 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 17664ms[39m
+2026-05-20 02:38:51:3851 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 216ms[39m
+2026-05-20 02:38:59:3859 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 307ms[39m
+2026-05-20 02:39:01:391 [32minfo[39m: [32mGET /api/v1/admin/locations?limit=1000 304 - 211ms[39m
+2026-05-20 02:39:02:392 [32minfo[39m: [32mGET /api/v1/admin/users 304 - 213ms[39m
+2026-05-20 02:39:22:3922 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 200 - 22200ms[39m
+2026-05-20 02:39:22:3922 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 215ms[39m
+2026-05-20 02:39:55:3955 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 02:39:55 20/5/2026[39m
+[32m      * URL: http://localhost:9999[39m
+[32m      * Port: 9999[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-20 02:40:00:400 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 02:40:00 20/5/2026[39m
+[32m      * URL: http://localhost:9999[39m
+[32m      * Port: 9999[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-20 02:40:11:4011 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 02:40:11 20/5/2026[39m
+[32m      * URL: http://localhost:9999[39m
+[32m      * Port: 9999[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-20 02:40:37:4037 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 21297ms[39m
+2026-05-20 02:40:38:4038 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 241ms[39m
+2026-05-20 02:41:44:4144 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 360ms[39m
+2026-05-20 02:41:46:4146 [32minfo[39m: [32mGET /api/v1/admin/locations?limit=1000 304 - 220ms[39m
+2026-05-20 02:41:46:4146 [32minfo[39m: [32mGET /api/v1/admin/users 200 - 282ms[39m
+2026-05-20 02:42:04:424 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 19683ms[39m
+2026-05-20 02:42:04:424 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 279ms[39m
+2026-05-20 02:42:16:4216 [32minfo[39m: [32mGET /api/v1/public/products?limit=100 304 - 1156ms[39m
+2026-05-20 02:42:17:4217 [32minfo[39m: [32mGET /api/v1/admin/locations?limit=1000 304 - 230ms[39m
+2026-05-20 02:42:18:4218 [32minfo[39m: [32mGET /api/v1/public/products?limit=100 304 - 993ms[39m
+2026-05-20 02:42:27:4227 [32minfo[39m: [32mGET /api/v1/admin/containers?limit=1000 304 - 913ms[39m
+2026-05-20 02:42:46:4246 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 18196ms[39m
+2026-05-20 02:42:47:4247 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 260ms[39m
+2026-05-20 20:39:19:3919 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 729ms[39m
+2026-05-20 20:39:20:3920 [32minfo[39m: [32mGET /api/v1/admin/users/me 200 - 6ms[39m
+2026-05-20 20:39:20:3920 [32minfo[39m: [32mGET /api/v1/admin/users/me 200 - 1ms[39m
+2026-05-20 20:39:20:3920 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 666ms[39m
+2026-05-20 20:39:21:3921 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 642ms[39m
+2026-05-20 20:42:04:424 [32minfo[39m: [32mGET /api/v1/admin/users 200 - 126ms[39m
+2026-05-20 20:42:04:424 [32minfo[39m: [32mGET /api/v1/admin/locations?limit=1000 200 - 165ms[39m
+2026-05-20 20:42:16:4216 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 200 - 11626ms[39m
+2026-05-20 20:43:36:4336 [31merror[39m: [31m[POST /api/v1/auth/user/login] [401] Invalid username or password[39m
+2026-05-20 20:43:36:4336 [32minfo[39m: [32mPOST /api/v1/auth/user/login 401 - 259ms[39m
+2026-05-20 20:43:40:4340 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 532ms[39m
+2026-05-20 20:43:40:4340 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 20:43:40:4340 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 20:43:41:4341 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 847ms[39m
+2026-05-20 20:43:42:4342 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 2010ms[39m
+2026-05-20 20:43:48:4348 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 749ms[39m
+2026-05-20 20:43:49:4349 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1455ms[39m
+2026-05-20 20:43:51:4351 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 20:43:52:4352 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1478ms[39m
+2026-05-20 20:43:52:4352 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 20:44:15:4415 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 20:44:16:4416 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 590ms[39m
+2026-05-20 20:45:09:459 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 205ms[39m
+2026-05-20 20:45:09:459 [32minfo[39m: [32mGET /api/v1/admin/users/me 200 - 2ms[39m
+2026-05-20 20:45:10:4510 [32minfo[39m: [32mGET /api/v1/admin/users/me 200 - 1ms[39m
+2026-05-20 20:45:10:4510 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 578ms[39m
+2026-05-20 20:45:11:4511 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 881ms[39m
+2026-05-20 20:45:14:4514 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 20:45:14:4514 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 20:45:15:4515 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 716ms[39m
+2026-05-20 20:45:39:4539 [32minfo[39m: [32mPATCH /api/v1/client/profile 200 - 919ms[39m
+2026-05-20 20:46:34:4634 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 20:46:34:4634 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 20:46:34:4634 [32minfo[39m: [32mGET /api/v1/admin/orders 200 - 5565ms[39m
+2026-05-20 20:46:35:4635 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 579ms[39m
+2026-05-20 20:46:35:4635 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 796ms[39m
+2026-05-20 20:46:38:4638 [32minfo[39m: [32mGET /api/v1/admin/locations?limit=1000 200 - 116ms[39m
+2026-05-20 20:46:38:4638 [32minfo[39m: [32mGET /api/v1/admin/users 200 - 121ms[39m
+2026-05-20 20:46:46:4646 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 20:46:47:4647 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 200 - 9736ms[39m
+2026-05-20 20:47:23:4723 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 20:47:23:4723 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 20:47:25:4725 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 645ms[39m
+2026-05-20 20:47:58:4758 [32minfo[39m: [32mPATCH /api/v1/client/profile 200 - 697ms[39m
+2026-05-20 20:48:49:4849 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 20:48:49:4849 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 0ms[39m
+2026-05-20 20:48:50:4850 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 640ms[39m
+2026-05-20 20:48:50:4850 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 646ms[39m
+2026-05-20 20:48:50:4850 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 0ms[39m
+2026-05-20 20:48:54:4854 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 3ms[39m
+2026-05-20 20:50:14:5014 [32minfo[39m: [32mGET /api/v1/admin/orders 200 - 6272ms[39m
+2026-05-20 20:53:13:5313 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 20:53:13:5313 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 20:53:13:5313 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 0ms[39m
+2026-05-20 20:53:18:5318 [32minfo[39m: [32mGET /api/v1/admin/users 304 - 165ms[39m
+2026-05-20 20:53:18:5318 [32minfo[39m: [32mGET /api/v1/admin/locations?limit=1000 304 - 184ms[39m
+2026-05-20 20:53:20:5320 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 0ms[39m
+2026-05-20 20:53:20:5320 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 0ms[39m
+2026-05-20 20:53:21:5321 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 0ms[39m
+2026-05-20 20:53:21:5321 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 20:53:21:5321 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 20:53:21:5321 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 669ms[39m
+2026-05-20 20:53:21:5321 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 808ms[39m
+2026-05-20 20:53:29:5329 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 11149ms[39m
+2026-05-20 20:53:37:5337 [32minfo[39m: [32mGET /api/v1/admin/orders 200 - 8286ms[39m
+2026-05-20 20:53:37:5337 [32minfo[39m: [32mGET /api/v1/admin/locations?limit=1000 304 - 111ms[39m
+2026-05-20 20:53:37:5337 [32minfo[39m: [32mGET /api/v1/admin/users 304 - 112ms[39m
+2026-05-20 20:53:43:5343 [32minfo[39m: [32mGET /api/v1/admin/locations?limit=1000 304 - 149ms[39m
+2026-05-20 20:53:43:5343 [32minfo[39m: [32mGET /api/v1/admin/users 304 - 182ms[39m
+2026-05-20 20:53:52:5352 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 20:53:52:5352 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 20:53:53:5353 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 729ms[39m
+2026-05-20 20:53:53:5353 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 830ms[39m
+2026-05-20 20:53:53:5353 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 10054ms[39m
+2026-05-20 20:53:54:5354 [32minfo[39m: [32mGET /api/v1/admin/locations?limit=1000 304 - 118ms[39m
+2026-05-20 20:53:54:5354 [32minfo[39m: [32mGET /api/v1/admin/users 304 - 122ms[39m
+2026-05-20 20:53:57:5357 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 20123ms[39m
+2026-05-20 20:54:04:544 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 10009ms[39m
+2026-05-20 20:54:08:548 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 20:54:09:549 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 675ms[39m
+2026-05-20 20:54:09:549 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 20:54:20:5420 [32minfo[39m: [32mPATCH /api/v1/admin/users/4 200 - 988ms[39m
+2026-05-20 20:55:04:554 [32minfo[39m: [32mPATCH /api/v1/admin/users/change-password 200 - 933ms[39m
+2026-05-20 20:55:12:5512 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 671ms[39m
+2026-05-20 20:55:17:5517 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 848ms[39m
+2026-05-20 20:55:41:5541 [32minfo[39m: [32mGET /api/v1/admin/users/me 200 - 2ms[39m
+2026-05-20 20:55:41:5541 [32minfo[39m: [32mGET /api/v1/admin/users/me 200 - 2ms[39m
+2026-05-20 20:55:43:5543 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1675ms[39m
+2026-05-20 20:55:44:5544 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 2134ms[39m
+2026-05-20 20:56:04:564 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 20:56:04:564 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 902ms[39m
+2026-05-20 20:56:05:565 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1352ms[39m
+2026-05-20 20:56:05:565 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 811ms[39m
+2026-05-20 20:56:05:565 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1076ms[39m
+2026-05-20 20:56:05:565 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 885ms[39m
+2026-05-20 20:56:09:569 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 20:56:10:5610 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 838ms[39m
+2026-05-20 20:56:11:5611 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 781ms[39m
+2026-05-20 20:56:57:5657 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 271ms[39m
+2026-05-20 20:56:57:5657 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 20:56:57:5657 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 20:56:58:5658 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 692ms[39m
+2026-05-20 20:56:58:5658 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 690ms[39m
+2026-05-20 20:57:13:5713 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 209ms[39m
+2026-05-20 20:57:13:5713 [32minfo[39m: [32mGET /api/v1/admin/users/me 200 - 1ms[39m
+2026-05-20 20:57:13:5713 [32minfo[39m: [32mGET /api/v1/admin/users/me 200 - 7ms[39m
+2026-05-20 20:57:14:5714 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 744ms[39m
+2026-05-20 20:57:14:5714 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1115ms[39m
+2026-05-20 20:57:22:5722 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 863ms[39m
+2026-05-20 20:57:24:5724 [32minfo[39m: [32mGET /api/v1/admin/locations?limit=1000 304 - 116ms[39m
+2026-05-20 20:57:24:5724 [32minfo[39m: [32mGET /api/v1/admin/users 200 - 121ms[39m
+2026-05-20 20:57:33:5733 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 20:57:33:5733 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 20:57:33:5733 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 684ms[39m
+2026-05-20 20:57:33:5733 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 733ms[39m
+2026-05-20 20:57:37:5737 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 200 - 12429ms[39m
+2026-05-20 20:58:58:5858 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 20:58:59:5859 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 936ms[39m
+2026-05-20 20:59:05:595 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 20:59:06:596 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 20:59:07:597 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 854ms[39m
+2026-05-20 20:59:07:597 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 986ms[39m
+2026-05-20 20:59:52:5952 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 20:59:52:5952 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 20:59:52:5952 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 20:59:53:5953 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1087ms[39m
+2026-05-20 20:59:53:5953 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1213ms[39m
+2026-05-20 20:59:53:5953 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 878ms[39m
+2026-05-20 20:59:57:5957 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 0ms[39m
+2026-05-20 20:59:57:5957 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 20:59:57:5957 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 0ms[39m
+2026-05-20 20:59:58:5958 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 816ms[39m
+2026-05-20 20:59:58:5958 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 872ms[39m
+2026-05-20 20:59:59:5959 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1239ms[39m
+2026-05-20 21:00:13:013 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1282ms[39m
+2026-05-20 21:00:13:013 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1197ms[39m
+2026-05-20 21:00:17:017 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 660ms[39m
+2026-05-20 21:00:17:017 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 760ms[39m
+2026-05-20 21:01:19:119 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 654ms[39m
+2026-05-20 21:01:21:121 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 21:01:21:121 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 0ms[39m
+2026-05-20 21:01:22:122 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 588ms[39m
+2026-05-20 21:01:22:122 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 599ms[39m
+2026-05-20 21:01:23:123 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [403] Chỉ quản lý mới có quyền truy cập trung tâm sự cố[39m
+2026-05-20 21:01:23:123 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 403 - 6ms[39m
+2026-05-20 21:01:25:125 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 21:01:25:125 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 21:01:26:126 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 592ms[39m
+2026-05-20 21:01:26:126 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 744ms[39m
+2026-05-20 21:01:27:127 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [403] Chỉ quản lý mới có quyền truy cập trung tâm sự cố[39m
+2026-05-20 21:01:27:127 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 403 - 4ms[39m
+2026-05-20 21:01:42:142 [32minfo[39m: [32mPOST /api/v1/admin/picking/incident 200 - 573ms[39m
+2026-05-20 21:01:42:142 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [403] Chỉ quản lý mới có quyền truy cập trung tâm sự cố[39m
+2026-05-20 21:01:42:142 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 403 - 4ms[39m
+2026-05-20 21:03:43:343 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 21:03:43 20/5/2026[39m
+[32m      * URL: http://localhost:9999[39m
+[32m      * Port: 9999[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-20 21:03:55:355 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 200 - 140ms[39m
+2026-05-20 21:03:57:357 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 200 - 347ms[39m
+2026-05-20 21:05:05:55 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 4ms[39m
+2026-05-20 21:05:09:59 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1491ms[39m
+2026-05-20 21:05:10:510 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 21:05:10:510 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 6ms[39m
+2026-05-20 21:05:11:511 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 632ms[39m
+2026-05-20 21:05:12:512 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1837ms[39m
+2026-05-20 21:05:29:529 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 21:05:29 20/5/2026[39m
+[32m      * URL: http://localhost:9999[39m
+[32m      * Port: 9999[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-20 21:05:33:533 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 21:05:33 20/5/2026[39m
+[32m      * URL: http://localhost:9999[39m
+[32m      * Port: 9999[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-20 21:06:41:641 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 302ms[39m
+2026-05-20 21:06:42:642 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 4ms[39m
+2026-05-20 21:06:42:642 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 3ms[39m
+2026-05-20 21:06:43:643 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 791ms[39m
+2026-05-20 21:06:43:643 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 748ms[39m
+2026-05-20 21:06:46:646 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 691ms[39m
+2026-05-20 21:06:46:646 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 902ms[39m
+2026-05-20 21:06:48:648 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 3ms[39m
+2026-05-20 21:06:50:650 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 986ms[39m
+2026-05-20 21:06:51:651 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1825ms[39m
+2026-05-20 21:07:04:74 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 126ms[39m
+2026-05-20 21:07:06:76 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 3ms[39m
+2026-05-20 21:07:06:76 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 5ms[39m
+2026-05-20 21:07:06:76 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 653ms[39m
+2026-05-20 21:07:07:77 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 675ms[39m
+2026-05-20 21:07:13:713 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 21:07:17:717 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 261ms[39m
+2026-05-20 21:10:09:109 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 314ms[39m
+2026-05-20 21:10:10:1010 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 21:10:10:1010 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 21:10:11:1011 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1342ms[39m
+2026-05-20 21:10:12:1012 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 2000ms[39m
+2026-05-20 21:10:14:1014 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 772ms[39m
+2026-05-20 21:10:15:1015 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 134ms[39m
+2026-05-20 21:11:06:116 [31merror[39m: [31m[POST /api/v1/admin/picking/incident] [413] request entity too large[39m
+2026-05-20 21:11:21:1121 [31merror[39m: [31m[POST /api/v1/admin/picking/incident] [413] request entity too large[39m
+2026-05-20 21:11:59:1159 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 21:11:59 20/5/2026[39m
+[32m      * URL: http://localhost:9999[39m
+[32m      * Port: 9999[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-20 21:12:47:1247 [31merror[39m: [31m[POST /api/v1/admin/picking/incident] [500] Data too long for column 'photo_url' at row 1[39m
+2026-05-20 21:12:47:1247 [31merror[39m: [31mQueryFailedError: Data too long for column 'photo_url' at row 1[39m
+[31m    at Query.onResult (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/typeorm/src/driver/mysql/MysqlQueryRunner.ts:248:33)[39m
+[31m    at Query.execute (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/commands/command.js:36:14)[39m
+[31m    at PoolConnection.handlePacket (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/base/connection.js:552:34)[39m
+[31m    at PacketParser.onPacket (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/base/connection.js:102:12)[39m
+[31m    at PacketParser.executeStart (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/packet_parser.js:75:16)[39m
+[31m    at Socket.<anonymous> (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/base/connection.js:109:25)[39m
+[31m    at Socket.emit (node:events:519:28)[39m
+[31m    at Socket.emit (node:domain:489:12)[39m
+[31m    at addChunk (node:internal/streams/readable:561:12)[39m
+[31m    at readableAddChunkPushByteMode (node:internal/streams/readable:512:3)[39m
+2026-05-20 21:12:47:1247 [32minfo[39m: [32mPOST /api/v1/admin/picking/incident 500 - 3734ms[39m
+2026-05-20 21:13:18:1318 [31merror[39m: [31m[POST /api/v1/admin/picking/incident] [500] Data too long for column 'photo_url' at row 1[39m
+2026-05-20 21:13:18:1318 [31merror[39m: [31mQueryFailedError: Data too long for column 'photo_url' at row 1[39m
+[31m    at Query.onResult (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/typeorm/src/driver/mysql/MysqlQueryRunner.ts:248:33)[39m
+[31m    at Query.execute (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/commands/command.js:36:14)[39m
+[31m    at PoolConnection.handlePacket (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/base/connection.js:552:34)[39m
+[31m    at PacketParser.onPacket (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/base/connection.js:102:12)[39m
+[31m    at PacketParser.executeStart (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/packet_parser.js:75:16)[39m
+[31m    at Socket.<anonymous> (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/base/connection.js:109:25)[39m
+[31m    at Socket.emit (node:events:519:28)[39m
+[31m    at Socket.emit (node:domain:489:12)[39m
+[31m    at addChunk (node:internal/streams/readable:561:12)[39m
+[31m    at readableAddChunkPushByteMode (node:internal/streams/readable:512:3)[39m
+2026-05-20 21:13:18:1318 [32minfo[39m: [32mPOST /api/v1/admin/picking/incident 500 - 3175ms[39m
+2026-05-20 21:13:48:1348 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 431ms[39m
+2026-05-20 21:13:49:1349 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 21:13:50:1350 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 21:13:51:1351 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1955ms[39m
+2026-05-20 21:13:53:1353 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 2494ms[39m
+2026-05-20 21:14:01:141 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 365ms[39m
+2026-05-20 21:14:02:142 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 4ms[39m
+2026-05-20 21:14:02:142 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 21:14:03:143 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 1078ms[39m
+2026-05-20 21:14:04:144 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 1273ms[39m
+2026-05-20 21:14:04:144 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 267ms[39m
+2026-05-20 21:14:26:1426 [31merror[39m: [31m[POST /api/v1/admin/picking/incident] [500] Data too long for column 'photo_url' at row 1[39m
+2026-05-20 21:14:26:1426 [31merror[39m: [31mQueryFailedError: Data too long for column 'photo_url' at row 1[39m
+[31m    at Query.onResult (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/typeorm/src/driver/mysql/MysqlQueryRunner.ts:248:33)[39m
+[31m    at Query.execute (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/commands/command.js:36:14)[39m
+[31m    at PoolConnection.handlePacket (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/base/connection.js:552:34)[39m
+[31m    at PacketParser.onPacket (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/base/connection.js:102:12)[39m
+[31m    at PacketParser.executeStart (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/packet_parser.js:75:16)[39m
+[31m    at Socket.<anonymous> (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/base/connection.js:109:25)[39m
+[31m    at Socket.emit (node:events:519:28)[39m
+[31m    at Socket.emit (node:domain:489:12)[39m
+[31m    at addChunk (node:internal/streams/readable:561:12)[39m
+[31m    at readableAddChunkPushByteMode (node:internal/streams/readable:512:3)[39m
+2026-05-20 21:14:26:1426 [32minfo[39m: [32mPOST /api/v1/admin/picking/incident 500 - 1266ms[39m
+2026-05-20 21:15:29:1529 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 21:15:29 20/5/2026[39m
+[32m      * URL: http://localhost:9999[39m
+[32m      * Port: 9999[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-20 21:15:48:1548 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 21:15:48 20/5/2026[39m
+[32m      * URL: http://localhost:9999[39m
+[32m      * Port: 9999[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-20 21:16:01:161 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 21:16:01 20/5/2026[39m
+[32m      * URL: http://localhost:9999[39m
+[32m      * Port: 9999[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-20 21:16:11:1611 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 21:16:11 20/5/2026[39m
+[32m      * URL: http://localhost:9999[39m
+[32m      * Port: 9999[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-20 21:16:22:1622 [32minfo[39m: [32mPOST /api/v1/admin/picking/incident 200 - 1055ms[39m
+2026-05-20 21:16:23:1623 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 200 - 269ms[39m
+2026-05-20 21:16:26:1626 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 21:16:40:1640 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 273ms[39m
+2026-05-20 21:17:18:1718 [32minfo[39m: [32mPOST /api/v1/admin/picking/incident 200 - 1285ms[39m
+2026-05-20 21:17:18:1718 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 200 - 271ms[39m
+2026-05-20 21:19:56:1956 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 200 - 258ms[39m
+2026-05-20 21:20:00:200 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 21:20:00 20/5/2026[39m
+[32m      * URL: http://localhost:9999[39m
+[32m      * Port: 9999[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-20 21:20:12:2012 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 21:20:12 20/5/2026[39m
+[32m      * URL: http://localhost:9999[39m
+[32m      * Port: 9999[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-20 21:20:30:2030 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 21:20:30 20/5/2026[39m
+[32m      * URL: http://localhost:9999[39m
+[32m      * Port: 9999[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-20 21:20:35:2035 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 21:20:35 20/5/2026[39m
+[32m      * URL: http://localhost:9999[39m
+[32m      * Port: 9999[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-20 21:21:32:2132 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 300ms[39m
+2026-05-20 21:21:32:2132 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 4ms[39m
+2026-05-20 21:21:33:2133 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 0ms[39m
+2026-05-20 21:21:33:2133 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 940ms[39m
+2026-05-20 21:21:34:2134 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 953ms[39m
+2026-05-20 21:21:36:2136 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 199ms[39m
+2026-05-20 21:22:03:223 [32minfo[39m: [32mPOST /api/v1/admin/picking/incident 200 - 5587ms[39m
+2026-05-20 21:22:03:223 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 200 - 179ms[39m
+2026-05-20 21:22:35:2235 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 262ms[39m
+2026-05-20 21:22:35:2235 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 6ms[39m
+2026-05-20 21:22:35:2235 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 21:22:36:2236 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 864ms[39m
+2026-05-20 21:22:37:2237 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 875ms[39m
+2026-05-20 21:22:38:2238 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 200 - 172ms[39m
+2026-05-20 21:23:23:2323 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 827ms[39m
+2026-05-20 21:23:26:2326 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 21:23:26:2326 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 21:23:28:2328 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 888ms[39m
+2026-05-20 21:23:28:2328 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1124ms[39m
+2026-05-20 21:23:32:2332 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 891ms[39m
+2026-05-20 21:23:38:2338 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 21:23:38:2338 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 21:23:40:2340 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 745ms[39m
+2026-05-20 21:23:40:2340 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 784ms[39m
+2026-05-20 21:23:40:2340 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 337ms[39m
+2026-05-20 21:24:05:245 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 21:24:05 20/5/2026[39m
+[32m      * URL: http://localhost:9999[39m
+[32m      * Port: 9999[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-20 21:24:20:2420 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 162ms[39m
+2026-05-20 21:24:28:2428 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 21:24:28 20/5/2026[39m
+[32m      * URL: http://localhost:9999[39m
+[32m      * Port: 9999[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-20 21:24:45:2445 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 21:24:45 20/5/2026[39m
+[32m      * URL: http://localhost:9999[39m
+[32m      * Port: 9999[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-20 21:25:15:2515 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 21:25:15 20/5/2026[39m
+[32m      * URL: http://localhost:9999[39m
+[32m      * Port: 9999[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-20 21:25:48:2548 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 21:25:48 20/5/2026[39m
+[32m      * URL: http://localhost:9999[39m
+[32m      * Port: 9999[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-20 21:26:07:267 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 21:26:07 20/5/2026[39m
+[32m      * URL: http://localhost:9999[39m
+[32m      * Port: 9999[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-20 21:30:23:3023 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 254ms[39m
+2026-05-20 21:30:23:3023 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 3ms[39m
+2026-05-20 21:30:24:3024 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 3ms[39m
+2026-05-20 21:30:24:3024 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 652ms[39m
+2026-05-20 21:30:25:3025 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 715ms[39m
+2026-05-20 21:30:27:3027 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 157ms[39m
+2026-05-20 21:30:42:3042 [32minfo[39m: [32mPOST /api/v1/admin/picking/incident 200 - 4847ms[39m
+2026-05-20 21:30:43:3043 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 200 - 233ms[39m
+2026-05-20 21:31:23:3123 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 879ms[39m
+2026-05-20 21:31:26:3126 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 21:31:27:3127 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 200 - 143ms[39m
+2026-05-20 21:31:39:3139 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 298ms[39m
+2026-05-20 21:31:39:3139 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 3ms[39m
+2026-05-20 21:31:39:3139 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 21:31:41:3141 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1073ms[39m
+2026-05-20 21:31:41:3141 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1077ms[39m
+2026-05-20 21:31:41:3141 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 200 - 186ms[39m
+2026-05-20 21:32:31:3231 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 21:32:31 20/5/2026[39m
+[32m      * URL: http://localhost:9999[39m
+[32m      * Port: 9999[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-20 21:32:46:3246 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 21:32:46 20/5/2026[39m
+[32m      * URL: http://localhost:9999[39m
+[32m      * Port: 9999[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-20 21:32:53:3253 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 3ms[39m
+2026-05-20 21:32:53:3253 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 21:32:54:3254 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1058ms[39m
+2026-05-20 21:32:55:3255 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1037ms[39m
+2026-05-20 21:32:57:3257 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 659ms[39m
+2026-05-20 21:32:58:3258 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1657ms[39m
+2026-05-20 21:33:46:3346 [32minfo[39m: [32mPOST /api/v1/admin/picking/pack 200 - 2127ms[39m
+2026-05-20 21:33:49:3349 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 1059ms[39m
+2026-05-20 21:33:53:3353 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 4ms[39m
+2026-05-20 21:33:53:3353 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 21:33:55:3355 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 843ms[39m
+2026-05-20 21:33:55:3355 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 696ms[39m
+2026-05-20 21:33:58:3358 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 200 - 225ms[39m
+2026-05-20 21:34:58:3458 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 4ms[39m
+2026-05-20 21:34:58:3458 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 21:34:59:3459 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1115ms[39m
+2026-05-20 21:35:00:350 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1284ms[39m
+2026-05-20 21:35:04:354 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1407ms[39m
+2026-05-20 21:35:04:354 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 21:35:05:355 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 485ms[39m
+2026-05-20 21:35:06:356 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 308ms[39m
+2026-05-20 21:35:08:358 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 21:36:27:3627 [31merror[39m: [31m[POST /api/v1/auth/user/login] [401] Invalid username or password[39m
+2026-05-20 21:36:27:3627 [32minfo[39m: [32mPOST /api/v1/auth/user/login 401 - 345ms[39m
+2026-05-20 21:36:36:3636 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 474ms[39m
+2026-05-20 21:36:37:3637 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 21:36:37:3637 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 21:36:38:3638 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 995ms[39m
+2026-05-20 21:36:38:3638 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1429ms[39m
+2026-05-20 21:36:40:3640 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 853ms[39m
+2026-05-20 21:36:40:3640 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 864ms[39m
+2026-05-20 21:36:42:3642 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 21:36:42:3642 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 0ms[39m
+2026-05-20 21:36:44:3644 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1222ms[39m
+2026-05-20 21:36:44:3644 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1290ms[39m
+2026-05-20 21:36:46:3646 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 3ms[39m
+2026-05-20 21:36:47:3647 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1080ms[39m
+2026-05-20 21:36:59:3659 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1418ms[39m
+2026-05-20 21:36:59:3659 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 21:37:00:370 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 21:37:01:371 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 962ms[39m
+2026-05-20 21:37:02:372 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 940ms[39m
+2026-05-20 21:37:16:3716 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 4ms[39m
+2026-05-20 21:37:28:3728 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 164ms[39m
+2026-05-20 21:38:20:3820 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 331ms[39m
+2026-05-20 21:38:20:3820 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 21:38:20:3820 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 21:38:21:3821 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 903ms[39m
+2026-05-20 21:38:21:3821 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 948ms[39m
+2026-05-20 21:38:52:3852 [32minfo[39m: [32mPOST /api/v1/admin/picking/incident 200 - 40953ms[39m
+2026-05-20 21:38:53:3853 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 200 - 991ms[39m
+2026-05-20 21:40:21:4021 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 795ms[39m
+2026-05-20 21:40:32:4032 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 21:40:32:4032 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 21:40:33:4033 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 791ms[39m
+2026-05-20 21:40:33:4033 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 817ms[39m
+2026-05-20 21:41:08:418 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 21:41:08 20/5/2026[39m
+[32m      * URL: http://localhost:9999[39m
+[32m      * Port: 9999[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-20 21:41:11:4111 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 21:41:16:4116 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 21:41:19:4119 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 351ms[39m
+2026-05-20 21:41:30:4130 [32minfo[39m: [32mGET /api/v1/admin/orders 304 - 9003ms[39m
+2026-05-20 21:41:38:4138 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 4ms[39m
+2026-05-20 21:41:38:4138 [32minfo[39m: [32mGET /api/v1/admin/orders 304 - 8179ms[39m
+2026-05-20 21:41:42:4142 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 200 - 22739ms[39m
+2026-05-20 21:41:42:4142 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 200 - 181ms[39m
+2026-05-20 21:42:03:423 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 20949ms[39m
+2026-05-20 21:42:04:424 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 326ms[39m
+2026-05-20 21:42:27:4227 [32minfo[39m: [32mGET /api/v1/admin/locations?limit=1000 304 - 335ms[39m
+2026-05-20 21:42:28:4228 [32minfo[39m: [32mGET /api/v1/admin/users 200 - 154ms[39m
+2026-05-20 21:42:41:4241 [32minfo[39m: [32mGET /api/v1/admin/orders 304 - 14149ms[39m
+2026-05-20 21:42:42:4242 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 21:47:48:4748 [32minfo[39m: [32mGET /api/v1/admin/orders 304 - 10597ms[39m
+2026-05-20 21:47:55:4755 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 14120ms[39m
+2026-05-20 21:47:55:4755 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 157ms[39m
+2026-05-20 21:49:02:492 [32minfo[39m: [32mGET /api/v1/admin/locations?limit=1000 304 - 239ms[39m
+2026-05-20 21:49:02:492 [32minfo[39m: [32mGET /api/v1/admin/users 304 - 236ms[39m
+2026-05-20 21:49:04:494 [32minfo[39m: [32mGET /api/v1/admin/orders 304 - 11325ms[39m
+2026-05-20 21:49:04:494 [32minfo[39m: [32mGET /api/v1/public/products?limit=100 304 - 1399ms[39m
+2026-05-20 21:49:06:496 [32minfo[39m: [32mGET /api/v1/admin/locations?limit=1000 304 - 316ms[39m
+2026-05-20 21:49:07:497 [32minfo[39m: [32mGET /api/v1/admin/users 304 - 275ms[39m
+2026-05-20 21:49:14:4914 [32minfo[39m: [32mGET /api/v1/admin/orders 304 - 10023ms[39m
+2026-05-20 21:49:25:4925 [32minfo[39m: [32mGET /api/v1/admin/orders 304 - 10245ms[39m
+2026-05-20 21:49:53:4953 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 785ms[39m
+2026-05-20 21:49:56:4956 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 200 - 155ms[39m
+2026-05-20 21:50:02:502 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 3ms[39m
+2026-05-20 21:50:02:502 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 21:50:03:503 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 817ms[39m
+2026-05-20 21:50:04:504 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1514ms[39m
+2026-05-20 21:50:51:5051 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 21:50:53:5053 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1352ms[39m
+2026-05-20 21:51:03:513 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1227ms[39m
+2026-05-20 21:51:04:514 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 21:51:06:516 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 21:51:06:516 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 182ms[39m
+2026-05-20 21:51:07:517 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 214ms[39m
+2026-05-20 21:51:07:517 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 810ms[39m
+2026-05-20 21:51:07:517 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1438ms[39m
+2026-05-20 21:51:10:5110 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1323ms[39m
+2026-05-20 21:51:11:5111 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 21:51:17:5117 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1321ms[39m
+2026-05-20 21:51:20:5120 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 5ms[39m
+2026-05-20 21:51:20:5120 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 21:51:21:5121 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 761ms[39m
+2026-05-20 21:51:22:5122 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1402ms[39m
+2026-05-20 21:51:53:5153 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 495ms[39m
+2026-05-20 21:52:15:5215 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 21930ms[39m
+2026-05-20 21:52:16:5216 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 299ms[39m
+2026-05-20 21:52:29:5229 [32minfo[39m: [32mGET /api/v1/admin/locations?limit=1000 304 - 153ms[39m
+2026-05-20 21:52:29:5229 [32minfo[39m: [32mGET /api/v1/admin/users 304 - 157ms[39m
+2026-05-20 21:52:38:5238 [32minfo[39m: [32mGET /api/v1/admin/orders 304 - 14964ms[39m
+2026-05-20 21:52:46:5246 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 311ms[39m
+2026-05-20 21:52:48:5248 [32minfo[39m: [32mGET /api/v1/admin/locations?limit=1000 304 - 145ms[39m
+2026-05-20 21:52:49:5249 [32minfo[39m: [32mGET /api/v1/admin/users 304 - 256ms[39m
+2026-05-20 21:52:56:5256 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1501ms[39m
+2026-05-20 21:52:57:5257 [32minfo[39m: [32mGET /api/v1/admin/orders 200 - 9259ms[39m
+2026-05-20 21:53:01:531 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 15018ms[39m
+2026-05-20 21:53:02:532 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 129ms[39m
+2026-05-20 21:53:13:5313 [32minfo[39m: [32mPOST /api/v1/admin/picking/assign 200 - 2821ms[39m
+2026-05-20 21:53:22:5322 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 21:53:22:5322 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 21:53:24:5324 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 21:53:24:5324 [32minfo[39m: [32mGET /api/v1/admin/orders 304 - 10958ms[39m
+2026-05-20 21:53:27:5327 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 21:53:27:5327 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 21:53:27:5327 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 21:53:27:5327 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 21:53:29:5329 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 21:53:29:5329 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 21:53:30:5330 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 16823ms[39m
+2026-05-20 21:53:30:5330 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 238ms[39m
+2026-05-20 21:53:35:5335 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 21:53:35:5335 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 21:53:36:5336 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 21:53:36:5336 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 21:53:46:5346 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 21:53:50:5350 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 21:53:50:5350 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 21:53:50:5350 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 21:53:53:5353 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 21:53:53:5353 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 21:54:11:5411 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 21:54:11:5411 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 21:54:11:5411 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 21:54:11:5411 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 21:54:12:5412 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 21:55:04:554 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 21:55:04:554 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 21:55:05:555 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 21:55:05:555 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 21:55:05:555 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 21:56:33:5633 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 21:58:37:5837 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 21:58:37 20/5/2026[39m
+[32m      * URL: http://localhost:9999[39m
+[32m      * Port: 9999[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-20 21:59:03:593 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 22:00:11:011 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 22:00:11:011 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 22:00:26:026 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 234ms[39m
+2026-05-20 22:00:27:027 [32minfo[39m: [32mGET /api/v1/admin/users/me 200 - 2ms[39m
+2026-05-20 22:00:28:028 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 820ms[39m
+2026-05-20 22:00:28:028 [32minfo[39m: [32mGET /api/v1/admin/users/me 200 - 1ms[39m
+2026-05-20 22:00:29:029 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1491ms[39m
+2026-05-20 22:00:38:038 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 409ms[39m
+2026-05-20 22:00:38:038 [32minfo[39m: [32mGET /api/v1/admin/users/me 200 - 3ms[39m
+2026-05-20 22:00:38:038 [32minfo[39m: [32mGET /api/v1/admin/users/me 200 - 2ms[39m
+2026-05-20 22:00:39:039 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 929ms[39m
+2026-05-20 22:00:40:040 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 1347ms[39m
+2026-05-20 22:00:46:046 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 838ms[39m
+2026-05-20 22:00:46:046 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1298ms[39m
+2026-05-20 22:01:52:152 [32minfo[39m: [32mPOST /api/v1/admin/picking/pack 200 - 4205ms[39m
+2026-05-20 22:01:59:159 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 5070ms[39m
+2026-05-20 22:02:13:213 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 22:02:13:213 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 22:02:15:215 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1603ms[39m
+2026-05-20 22:02:16:216 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 2948ms[39m
+2026-05-20 22:03:35:335 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 2687ms[39m
+2026-05-20 22:06:23:623 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 3ms[39m
+2026-05-20 22:06:23:623 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 22:06:26:626 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 2818ms[39m
+2026-05-20 22:06:28:628 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 4028ms[39m
+2026-05-20 22:06:39:639 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 200 - 11818ms[39m
+2026-05-20 22:06:39:639 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 204ms[39m
+2026-05-20 22:06:56:656 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 12575ms[39m
+2026-05-20 22:06:56:656 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 164ms[39m
+2026-05-20 22:07:15:715 [32minfo[39m: [32mGET /api/v1/admin/orders 304 - 7825ms[39m
+2026-05-20 22:08:35:835 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 22:08:36:836 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 945ms[39m
+2026-05-20 22:08:51:851 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 218ms[39m
+2026-05-20 22:08:52:852 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 22:08:52:852 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 22:08:53:853 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 717ms[39m
+2026-05-20 22:08:54:854 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1883ms[39m
+2026-05-20 22:09:28:928 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 436ms[39m
+2026-05-20 22:09:31:931 [32minfo[39m: [32mGET /api/v1/admin/locations?limit=1000 304 - 264ms[39m
+2026-05-20 22:09:32:932 [32minfo[39m: [32mGET /api/v1/admin/users 304 - 298ms[39m
+2026-05-20 22:09:35:935 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1325ms[39m
+2026-05-20 22:09:36:936 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 22:09:38:938 [32minfo[39m: [32mGET /api/v1/admin/orders 304 - 7937ms[39m
+2026-05-20 22:09:38:938 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1377ms[39m
+2026-05-20 22:09:39:939 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 846ms[39m
+2026-05-20 22:09:41:941 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 3ms[39m
+2026-05-20 22:09:42:942 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 815ms[39m
+2026-05-20 22:09:49:949 [32minfo[39m: [32mPOST /api/v1/admin/picking/assign 200 - 1584ms[39m
+2026-05-20 22:09:51:951 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 22515ms[39m
+2026-05-20 22:09:51:951 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 261ms[39m
+2026-05-20 22:09:56:956 [32minfo[39m: [32mGET /api/v1/admin/orders 304 - 7652ms[39m
+2026-05-20 22:09:58:958 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 22:09:59:959 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 745ms[39m
+2026-05-20 22:10:03:103 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 921ms[39m
+2026-05-20 22:10:04:104 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1317ms[39m
+2026-05-20 22:10:13:1013 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 21329ms[39m
+2026-05-20 22:10:13:1013 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 349ms[39m
+2026-05-20 22:10:44:1044 [32minfo[39m: [32mPOST /api/v1/admin/picking/pack 200 - 4006ms[39m
+2026-05-20 22:10:54:1054 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 1467ms[39m
+2026-05-20 22:10:56:1056 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 884ms[39m
+2026-05-20 22:10:58:1058 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 22:10:58:1058 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 22:11:01:111 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1973ms[39m
+2026-05-20 22:11:01:111 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1983ms[39m
+2026-05-20 22:12:04:124 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 383ms[39m
+2026-05-20 22:12:04:124 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 22:12:04:124 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 22:12:07:127 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 1782ms[39m
+2026-05-20 22:12:07:127 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 1779ms[39m
+2026-05-20 22:12:16:1216 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1596ms[39m
+2026-05-20 22:12:16:1216 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 292ms[39m
+2026-05-20 22:12:26:1226 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 22:12:26:1226 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 22:12:28:1228 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1857ms[39m
+2026-05-20 22:12:28:1228 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 2090ms[39m
+2026-05-20 22:12:31:1231 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 244ms[39m
+2026-05-20 22:12:34:1234 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 22:12:34:1234 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1449ms[39m
+2026-05-20 22:14:02:142 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 22:14:02:142 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 22:14:02:142 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1387ms[39m
+2026-05-20 22:14:03:143 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 815ms[39m
+2026-05-20 22:14:04:144 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1634ms[39m
+2026-05-20 22:15:00:150 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 22:15:00:150 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 22:15:01:151 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1135ms[39m
+2026-05-20 22:15:01:151 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 2309ms[39m
+2026-05-20 22:15:02:152 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1771ms[39m
+2026-05-20 22:15:12:1512 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1696ms[39m
+2026-05-20 22:16:19:1619 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 4ms[39m
+2026-05-20 22:16:19:1619 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 22:16:20:1620 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1539ms[39m
+2026-05-20 22:16:20:1620 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1549ms[39m
+2026-05-20 22:19:05:195 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 4ms[39m
+2026-05-20 22:19:08:198 [32minfo[39m: [32mPOST /api/v1/auth/user/logout 200 - 3ms[39m
+2026-05-20 22:19:34:1934 [31merror[39m: [31m[POST /api/v1/auth/customer/login] [401] Invalid email or password[39m
+2026-05-20 22:19:34:1934 [32minfo[39m: [32mPOST /api/v1/auth/customer/login 401 - 412ms[39m
+2026-05-20 22:19:39:1939 [31merror[39m: [31m[POST /api/v1/auth/customer/login] [401] Invalid email or password[39m
+2026-05-20 22:19:39:1939 [32minfo[39m: [32mPOST /api/v1/auth/customer/login 401 - 352ms[39m
+2026-05-20 22:19:52:1952 [32minfo[39m: [32mPOST /api/v1/auth/customer/login 200 - 484ms[39m
+2026-05-20 22:19:54:1954 [32minfo[39m: [32mGET /api/v1/public/products?limit=100 200 - 1570ms[39m
+2026-05-20 22:19:57:1957 [32minfo[39m: [32mPOST /api/v1/auth/user/logout 200 - 1ms[39m
+2026-05-20 22:20:02:202 [31merror[39m: [31m[POST /api/v1/auth/customer/login] [401] Invalid email or password[39m
+2026-05-20 22:20:02:202 [32minfo[39m: [32mPOST /api/v1/auth/customer/login 401 - 345ms[39m
+2026-05-20 22:20:16:2016 [31merror[39m: [31m[POST /api/v1/auth/customer/login] [400] email must be a valid email[39m
+2026-05-20 22:20:16:2016 [32minfo[39m: [32mPOST /api/v1/auth/customer/login 400 - 5ms[39m
+2026-05-20 22:20:30:2030 [32minfo[39m: [32mPOST /api/v1/auth/customer/login 200 - 394ms[39m
+2026-05-20 22:20:31:2031 [32minfo[39m: [32mGET /api/v1/public/products?limit=100 304 - 1299ms[39m
+2026-05-20 22:21:48:2148 [32minfo[39m: [32mPOST /api/v1/client/orders 201 - 4752ms[39m
+2026-05-20 22:22:05:225 [32minfo[39m: [32mPOST /api/v1/client/orders 201 - 5408ms[39m
+2026-05-20 22:22:10:2210 [32minfo[39m: [32mGET /api/v1/client/orders/statistics?startDate=2026-05-01&endDate=2026-05-20 200 - 1214ms[39m
+2026-05-20 22:22:13:2213 [32minfo[39m: [32mGET /api/v1/client/orders/statistics?startDate=2026-05-20&endDate=2026-05-20 200 - 418ms[39m
+2026-05-20 22:22:13:2213 [32minfo[39m: [32mGET /api/v1/client/orders/statistics?startDate=2026-05-20&endDate=2026-05-20 200 - 441ms[39m
+2026-05-20 22:22:15:2215 [32minfo[39m: [32mGET /api/v1/client/orders/statistics?startDate=2026-05-13&endDate=2026-05-20 200 - 871ms[39m
+2026-05-20 22:22:15:2215 [32minfo[39m: [32mGET /api/v1/client/orders/statistics?startDate=2026-05-13&endDate=2026-05-20 200 - 826ms[39m
+2026-05-20 22:22:15:2215 [32minfo[39m: [32mGET /api/v1/client/orders/statistics?startDate=2026-05-01&endDate=2026-05-20 304 - 650ms[39m
+2026-05-20 22:22:15:2215 [32minfo[39m: [32mGET /api/v1/client/orders/statistics?startDate=2026-05-01&endDate=2026-05-20 304 - 440ms[39m
+2026-05-20 22:22:34:2234 [32minfo[39m: [32mPOST /api/v1/client/orders 201 - 4171ms[39m
+2026-05-20 22:22:35:2235 [32minfo[39m: [32mGET /api/v1/client/orders 200 - 567ms[39m
+2026-05-20 22:22:39:2239 [32minfo[39m: [32mGET /api/v1/client/orders/statistics?startDate=2026-05-01&endDate=2026-05-20 200 - 812ms[39m
+2026-05-20 22:22:45:2245 [32minfo[39m: [32mPOST /api/v1/auth/user/logout 200 - 2ms[39m
+2026-05-20 22:22:54:2254 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 196ms[39m
+2026-05-20 22:23:05:235 [32minfo[39m: [32mGET /api/v1/admin/orders 200 - 8468ms[39m
+2026-05-20 22:23:06:236 [32minfo[39m: [32mGET /api/v1/client/profile 200 - 351ms[39m
+2026-05-20 22:23:07:237 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 200 - 12619ms[39m
+2026-05-20 22:23:07:237 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 165ms[39m
+2026-05-20 22:23:11:2311 [32minfo[39m: [32mPOST /api/v1/auth/user/logout 200 - 6ms[39m
+2026-05-20 22:23:24:2324 [31merror[39m: [31m[POST /api/v1/auth/user/login] [401] Invalid username or password[39m
+2026-05-20 22:23:24:2324 [32minfo[39m: [32mPOST /api/v1/auth/user/login 401 - 282ms[39m
+2026-05-20 22:23:32:2332 [31merror[39m: [31m[POST /api/v1/auth/user/login] [401] Invalid username or password[39m
+2026-05-20 22:23:32:2332 [32minfo[39m: [32mPOST /api/v1/auth/user/login 401 - 279ms[39m
+2026-05-20 22:23:40:2340 [31merror[39m: [31m[POST /api/v1/auth/user/login] [401] Invalid username or password[39m
+2026-05-20 22:23:40:2340 [32minfo[39m: [32mPOST /api/v1/auth/user/login 401 - 350ms[39m
+2026-05-20 22:23:42:2342 [31merror[39m: [31m[POST /api/v1/auth/user/login] [401] Invalid username or password[39m
+2026-05-20 22:23:42:2342 [32minfo[39m: [32mPOST /api/v1/auth/user/login 401 - 352ms[39m
+2026-05-20 22:23:47:2347 [32minfo[39m: [32mGET /api/v1/admin/locations?limit=1000 304 - 262ms[39m
+2026-05-20 22:23:47:2347 [32minfo[39m: [32mGET /api/v1/admin/users 304 - 164ms[39m
+2026-05-20 22:23:49:2349 [32minfo[39m: [32mGET /api/v1/public/products?limit=100 304 - 933ms[39m
+2026-05-20 22:23:57:2357 [32minfo[39m: [32mGET /api/v1/admin/orders 304 - 10305ms[39m
+2026-05-20 22:24:00:240 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 291ms[39m
+2026-05-20 22:24:00:240 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 22:24:00:240 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 22:24:02:242 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 1094ms[39m
+2026-05-20 22:24:02:242 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 1336ms[39m
+2026-05-20 22:24:06:246 [32minfo[39m: [32mGET /api/v1/admin/locations?limit=1000 304 - 301ms[39m
+2026-05-20 22:24:06:246 [32minfo[39m: [32mGET /api/v1/admin/users 304 - 154ms[39m
+2026-05-20 22:24:15:2415 [32minfo[39m: [32mGET /api/v1/admin/orders 304 - 8955ms[39m
+2026-05-20 22:25:03:253 [32minfo[39m: [32mPOST /api/v1/admin/picking/assign 200 - 4895ms[39m
+2026-05-20 22:25:12:2512 [32minfo[39m: [32mGET /api/v1/admin/orders 304 - 8327ms[39m
+2026-05-20 22:25:14:2514 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 3ms[39m
+2026-05-20 22:25:15:2515 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 783ms[39m
+2026-05-20 22:25:16:2516 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 13115ms[39m
+2026-05-20 22:25:17:2517 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 191ms[39m
+2026-05-20 22:25:19:2519 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 733ms[39m
+2026-05-20 22:25:19:2519 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 854ms[39m
+2026-05-20 22:26:37:2637 [32minfo[39m: [32mPOST /api/v1/admin/picking/pack 200 - 2205ms[39m
+2026-05-20 22:27:27:2727 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 22:27:31:2731 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [401] Invalid or expired token[39m
+2026-05-20 22:27:36:2736 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 22:27:42:2742 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 3ms[39m
+2026-05-20 22:27:42:2742 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 22:27:43:2743 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 750ms[39m
+2026-05-20 22:27:43:2743 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 1004ms[39m
+2026-05-20 22:27:47:2747 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 825ms[39m
+2026-05-20 22:27:47:2747 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1126ms[39m
+2026-05-20 22:27:49:2749 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 22:27:51:2751 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 880ms[39m
+2026-05-20 22:27:52:2752 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 22:27:52:2752 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 22:27:52:2752 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 22:27:52:2752 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 22:27:55:2755 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 22:28:27:2827 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 5ms[39m
+2026-05-20 22:28:28:2828 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 843ms[39m
+2026-05-20 22:28:29:2829 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1049ms[39m
+2026-05-20 22:28:55:2855 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 22:28:55:2855 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 22:28:55:2855 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 22:28:55:2855 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 22:29:09:299 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 22:32:14:3214 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 312ms[39m
+2026-05-20 22:32:14:3214 [32minfo[39m: [32mGET /api/v1/admin/users/me 200 - 2ms[39m
+2026-05-20 22:32:14:3214 [32minfo[39m: [32mGET /api/v1/admin/users/me 200 - 1ms[39m
+2026-05-20 22:32:15:3215 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 979ms[39m
+2026-05-20 22:32:15:3215 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 1411ms[39m
+2026-05-20 22:32:20:3220 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 22:32:20:3220 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1854ms[39m
+2026-05-20 22:32:20:3220 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 22:32:21:3221 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 920ms[39m
+2026-05-20 22:32:22:3222 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1617ms[39m
+2026-05-20 22:35:45:3545 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 22:35:45:3545 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 22:35:46:3546 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1621ms[39m
+2026-05-20 22:35:47:3547 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 820ms[39m
+2026-05-20 22:35:47:3547 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1286ms[39m
+2026-05-20 22:35:51:3551 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 950ms[39m
+2026-05-20 22:35:51:3551 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1398ms[39m
+2026-05-20 22:35:52:3552 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 22:35:54:3554 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1418ms[39m
+2026-05-20 22:35:54:3554 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 947ms[39m
+2026-05-20 22:35:55:3555 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1570ms[39m
+2026-05-20 22:35:56:3556 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 22:35:58:3558 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1563ms[39m
+2026-05-20 22:36:00:360 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 858ms[39m
+2026-05-20 22:36:00:360 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 838ms[39m
+2026-05-20 22:36:01:361 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 22:36:01:361 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 650ms[39m
+2026-05-20 22:36:02:362 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 575ms[39m
+2026-05-20 22:36:02:362 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 767ms[39m
+2026-05-20 22:36:03:363 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 22:36:05:365 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1085ms[39m
+2026-05-20 22:36:06:366 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 783ms[39m
+2026-05-20 22:36:19:3619 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 3ms[39m
+2026-05-20 22:36:19:3619 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 22:36:20:3620 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1072ms[39m
+2026-05-20 22:36:21:3621 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 2033ms[39m
+2026-05-20 22:36:22:3622 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1207ms[39m
+2026-05-20 22:36:22:3622 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 0ms[39m
+2026-05-20 22:36:22:3622 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 22:36:23:3623 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1009ms[39m
+2026-05-20 22:36:24:3624 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1454ms[39m
+2026-05-20 22:37:56:3756 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 351ms[39m
+2026-05-20 22:37:56:3756 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 22:37:56:3756 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 0ms[39m
+2026-05-20 22:37:57:3757 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1107ms[39m
+2026-05-20 22:37:58:3758 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1369ms[39m
+2026-05-20 22:38:11:3811 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 343ms[39m
+2026-05-20 22:38:11:3811 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 22:38:11:3811 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 11ms[39m
+2026-05-20 22:38:13:3813 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1121ms[39m
+2026-05-20 22:38:13:3813 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1498ms[39m
+2026-05-20 22:38:17:3817 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 22:38:17:3817 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1408ms[39m
+2026-05-20 22:38:18:3818 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 870ms[39m
+2026-05-20 22:38:24:3824 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 22:38:25:3825 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 881ms[39m
+2026-05-20 22:38:26:3826 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1082ms[39m
+2026-05-20 22:38:42:3842 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1589ms[39m
+2026-05-20 22:38:45:3845 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 22:38:45:3845 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 200 - 159ms[39m
+2026-05-20 22:38:47:3847 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1704ms[39m
+2026-05-20 22:38:52:3852 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 22:39:22:3922 [32minfo[39m: [32mPATCH /api/v1/admin/users/4 200 - 1836ms[39m
+2026-05-20 22:39:31:3931 [32minfo[39m: [32mGET /api/v1/admin/users/me 200 - 2ms[39m
+2026-05-20 22:39:31:3931 [32minfo[39m: [32mGET /api/v1/admin/users/me 200 - 0ms[39m
+2026-05-20 22:39:32:3932 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 794ms[39m
+2026-05-20 22:39:33:3933 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1521ms[39m
+2026-05-20 22:39:41:3941 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 3ms[39m
+2026-05-20 22:39:41:3941 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1315ms[39m
+2026-05-20 22:39:42:3942 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 894ms[39m
+2026-05-20 22:39:46:3946 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1308ms[39m
+2026-05-20 22:41:06:416 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1207ms[39m
+2026-05-20 22:41:07:417 [32minfo[39m: [32mGET /api/v1/admin/users/me 200 - 2ms[39m
+2026-05-20 22:41:07:417 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1824ms[39m
+2026-05-20 22:41:08:418 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 957ms[39m
+2026-05-20 22:41:48:4148 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 22:42:19:4219 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 0ms[39m
+2026-05-20 22:42:19:4219 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 22:42:21:4221 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1157ms[39m
+2026-05-20 22:42:21:4221 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1449ms[39m
+2026-05-20 22:43:16:4316 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1472ms[39m
+2026-05-20 22:43:16:4316 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 22:43:16:4316 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 2072ms[39m
+2026-05-20 22:43:18:4318 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 793ms[39m
+2026-05-20 22:43:18:4318 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 512ms[39m
+2026-05-20 22:43:19:4319 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1271ms[39m
+2026-05-20 22:43:27:4327 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 22:43:27:4327 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 22:43:29:4329 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1792ms[39m
+2026-05-20 22:43:30:4330 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 949ms[39m
+2026-05-20 22:43:34:4334 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1352ms[39m
+2026-05-20 22:43:35:4335 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1456ms[39m
+2026-05-20 22:44:24:4424 [32minfo[39m: [32mPOST /api/v1/admin/picking/pack 200 - 4281ms[39m
+2026-05-20 22:52:09:529 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 22:52:09:529 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 22:52:09:529 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 1526ms[39m
+2026-05-20 22:52:11:5211 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 1593ms[39m
+2026-05-20 22:52:11:5211 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 1799ms[39m
+2026-05-20 22:52:34:5234 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 22:52:34:5234 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 22:52:34:5234 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1115ms[39m
+2026-05-20 22:52:35:5235 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1272ms[39m
+2026-05-20 22:52:35:5235 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1513ms[39m
+2026-05-20 22:52:40:5240 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 22:52:40:5240 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 22:52:42:5242 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 1120ms[39m
+2026-05-20 22:52:42:5242 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 1490ms[39m
+2026-05-20 22:53:13:5313 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 22:53:14:5314 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 22:53:17:5317 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 22:53:20:5320 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 22:53:20:5320 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 22:53:20:5320 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 22:53:20:5320 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 22:54:37:5437 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 22:54:41:5441 [32minfo[39m: [32mPOST /api/v1/auth/user/logout 200 - 3ms[39m
+2026-05-20 22:55:10:5510 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 22:55:10:5510 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 22:55:13:5513 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 22:55:13:5513 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 22:55:15:5515 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 22:55:15:5515 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 22:55:16:5516 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 22:55:17:5517 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 22:55:20:5520 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 22:55:22:5522 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 22:55:22:5522 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 22:55:22:5522 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 22:55:22:5522 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 22:55:23:5523 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [401] Invalid or expired token[39m
+2026-05-20 22:55:25:5525 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 22:55:26:5526 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [401] Invalid or expired token[39m
+2026-05-20 22:55:27:5527 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 22:55:43:5543 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 22:55:43:5543 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 22:55:43:5543 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 22:55:43:5543 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 22:56:03:563 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 405ms[39m
+2026-05-20 22:56:28:5628 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 200 - 24340ms[39m
+2026-05-20 22:56:29:5629 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 200 - 376ms[39m
+2026-05-20 22:56:32:5632 [32minfo[39m: [32mGET /api/v1/admin/locations?limit=1000 200 - 159ms[39m
+2026-05-20 22:56:32:5632 [32minfo[39m: [32mGET /api/v1/admin/users 200 - 254ms[39m
+2026-05-20 22:56:43:5643 [32minfo[39m: [32mGET /api/v1/admin/customers?page=1&limit=200 200 - 1119ms[39m
+2026-05-20 22:56:45:5645 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 12566ms[39m
+2026-05-20 22:56:45:5645 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 260ms[39m
+2026-05-20 22:56:47:5647 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 262ms[39m
+2026-05-20 22:56:51:5651 [32minfo[39m: [32mGET /api/v1/admin/orders 200 - 8861ms[39m
+2026-05-20 22:56:51:5651 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 1320ms[39m
+2026-05-20 22:56:53:5653 [32minfo[39m: [32mGET /api/v1/admin/users/me 200 - 2ms[39m
+2026-05-20 22:56:53:5653 [32minfo[39m: [32mGET /api/v1/admin/users/me 200 - 1ms[39m
+2026-05-20 22:56:54:5654 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 884ms[39m
+2026-05-20 22:56:54:5654 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1017ms[39m
+2026-05-20 22:57:04:574 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1352ms[39m
+2026-05-20 22:57:05:575 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1777ms[39m
+2026-05-20 22:57:34:5734 [32minfo[39m: [32mPOST /api/v1/admin/picking/pack 200 - 4035ms[39m
+2026-05-20 22:58:08:588 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 200 - 31976ms[39m
+2026-05-20 22:58:10:5810 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 287ms[39m
+2026-05-20 22:58:15:5815 [32minfo[39m: [32mGET /api/v1/admin/locations?limit=1000 304 - 144ms[39m
+2026-05-20 22:58:15:5815 [32minfo[39m: [32mGET /api/v1/admin/users 304 - 261ms[39m
+2026-05-20 22:58:18:5818 [32minfo[39m: [32mGET /api/v1/admin/customers?page=1&limit=200 304 - 1081ms[39m
+2026-05-20 22:58:26:5826 [32minfo[39m: [32mGET /api/v1/admin/orders 200 - 9447ms[39m
+2026-05-20 22:58:27:5827 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 22:58:28:5828 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 13115ms[39m
+2026-05-20 22:58:30:5830 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 22:58:30:5830 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 22:58:30:5830 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 22:58:30:5830 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 22:58:32:5832 [32minfo[39m: [32mPOST /api/v1/auth/user/logout 200 - 2ms[39m
+2026-05-20 22:58:43:5843 [31merror[39m: [31m[POST /api/v1/auth/user/login] [401] Invalid username or password[39m
+2026-05-20 22:58:43:5843 [32minfo[39m: [32mPOST /api/v1/auth/user/login 401 - 202ms[39m
+2026-05-20 22:58:45:5845 [31merror[39m: [31m[POST /api/v1/auth/user/login] [401] Invalid username or password[39m
+2026-05-20 22:58:45:5845 [32minfo[39m: [32mPOST /api/v1/auth/user/login 401 - 250ms[39m
+2026-05-20 22:58:47:5847 [31merror[39m: [31m[POST /api/v1/auth/user/login] [401] Invalid username or password[39m
+2026-05-20 22:58:47:5847 [32minfo[39m: [32mPOST /api/v1/auth/user/login 401 - 213ms[39m
+2026-05-20 22:58:53:5853 [31merror[39m: [31m[POST /api/v1/auth/user/login] [401] Invalid username or password[39m
+2026-05-20 22:58:53:5853 [32minfo[39m: [32mPOST /api/v1/auth/user/login 401 - 220ms[39m
+2026-05-20 22:59:03:593 [31merror[39m: [31m[POST /api/v1/auth/user/login] [401] Invalid username or password[39m
+2026-05-20 22:59:03:593 [32minfo[39m: [32mPOST /api/v1/auth/user/login 401 - 220ms[39m
+2026-05-20 22:59:05:595 [31merror[39m: [31m[POST /api/v1/auth/user/login] [401] Invalid username or password[39m
+2026-05-20 22:59:05:595 [32minfo[39m: [32mPOST /api/v1/auth/user/login 401 - 227ms[39m
+2026-05-20 22:59:20:5920 [31merror[39m: [31m[POST /api/v1/auth/user/login] [401] Invalid username or password[39m
+2026-05-20 22:59:20:5920 [32minfo[39m: [32mPOST /api/v1/auth/user/login 401 - 485ms[39m
+2026-05-20 22:59:25:5925 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 22:59:27:5927 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 22:59:27:5927 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 22:59:28:5928 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 22:59:28:5928 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 22:59:40:5940 [31merror[39m: [31m[POST /api/v1/auth/user/login] [401] Invalid username or password[39m
+2026-05-20 22:59:40:5940 [32minfo[39m: [32mPOST /api/v1/auth/user/login 401 - 207ms[39m
+2026-05-20 22:59:46:5946 [31merror[39m: [31m[POST /api/v1/auth/user/login] [401] Invalid username or password[39m
+2026-05-20 22:59:46:5946 [32minfo[39m: [32mPOST /api/v1/auth/user/login 401 - 263ms[39m
+2026-05-20 23:00:00:00 [31merror[39m: [31m[POST /api/v1/auth/user/login] [401] Invalid username or password[39m
+2026-05-20 23:00:00:00 [32minfo[39m: [32mPOST /api/v1/auth/user/login 401 - 222ms[39m
+2026-05-20 23:00:26:026 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 222ms[39m
+2026-05-20 23:00:27:027 [32minfo[39m: [32mGET /api/v1/admin/users/me 200 - 2ms[39m
+2026-05-20 23:00:27:027 [32minfo[39m: [32mGET /api/v1/admin/users/me 200 - 1ms[39m
+2026-05-20 23:00:28:028 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 1156ms[39m
+2026-05-20 23:00:28:028 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 1155ms[39m
+2026-05-20 23:01:18:118 [31merror[39m: [31m[POST /api/v1/auth/user/login] [401] Invalid username or password[39m
+2026-05-20 23:01:18:118 [32minfo[39m: [32mPOST /api/v1/auth/user/login 401 - 116ms[39m
+2026-05-20 23:01:23:123 [31merror[39m: [31m[POST /api/v1/auth/user/login] [401] Invalid username or password[39m
+2026-05-20 23:01:23:123 [32minfo[39m: [32mPOST /api/v1/auth/user/login 401 - 215ms[39m
+2026-05-20 23:01:41:141 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 224ms[39m
+2026-05-20 23:01:42:142 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 23:01:42:142 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 0ms[39m
+2026-05-20 23:01:43:143 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 1068ms[39m
+2026-05-20 23:01:43:143 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 1285ms[39m
+2026-05-20 23:01:50:150 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 919ms[39m
+2026-05-20 23:02:05:25 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 206ms[39m
+2026-05-20 23:02:05:25 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 0ms[39m
+2026-05-20 23:02:05:25 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 0ms[39m
+2026-05-20 23:02:06:26 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 758ms[39m
+2026-05-20 23:02:06:26 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 773ms[39m
+2026-05-20 23:02:09:29 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 691ms[39m
+2026-05-20 23:02:10:210 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 23:02:10:210 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 23:02:11:211 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 983ms[39m
+2026-05-20 23:02:11:211 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1074ms[39m
+2026-05-20 23:03:37:337 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 649ms[39m
+2026-05-20 23:04:17:417 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 3ms[39m
+2026-05-20 23:04:17:417 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 11ms[39m
+2026-05-20 23:04:19:419 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 914ms[39m
+2026-05-20 23:04:19:419 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1106ms[39m
+2026-05-20 23:04:20:420 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 2093ms[39m
+2026-05-20 23:04:25:425 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 23:05:00:50 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 348ms[39m
+2026-05-20 23:05:01:51 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-20 23:05:01:51 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 9ms[39m
+2026-05-20 23:05:02:52 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 981ms[39m
+2026-05-20 23:05:02:52 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1448ms[39m
+2026-05-20 23:05:08:58 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1972ms[39m
+2026-05-20 23:05:10:510 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 3ms[39m
+2026-05-20 23:05:10:510 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 0ms[39m
+2026-05-20 23:05:11:511 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1010ms[39m
+2026-05-20 23:05:11:511 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1309ms[39m
+2026-05-20 23:05:12:512 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 575ms[39m
+2026-05-20 23:05:25:525 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 261ms[39m
+2026-05-20 23:05:25:525 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 23:05:25:525 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 0ms[39m
+2026-05-20 23:05:26:526 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1146ms[39m
+2026-05-20 23:05:27:527 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1506ms[39m
+2026-05-20 23:05:29:529 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1403ms[39m
+2026-05-20 23:07:37:737 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 5531ms[39m
+2026-05-20 23:07:37:737 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 5547ms[39m
+2026-05-20 23:07:37:737 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 5753ms[39m
+2026-05-20 23:07:56:756 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 732ms[39m
+2026-05-20 23:07:57:757 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1270ms[39m
+2026-05-20 23:07:57:757 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1087ms[39m
+2026-05-20 23:08:25:825 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 224ms[39m
+2026-05-20 23:08:26:826 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1176ms[39m
+2026-05-20 23:08:32:832 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 139ms[39m
+2026-05-20 23:08:52:852 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 4ms[39m
+2026-05-20 23:08:52:852 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 23:08:54:854 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1366ms[39m
+2026-05-20 23:08:54:854 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1391ms[39m
+2026-05-20 23:09:07:97 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 3ms[39m
+2026-05-20 23:09:07:97 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 0ms[39m
+2026-05-20 23:09:09:99 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1486ms[39m
+2026-05-20 23:09:09:99 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1695ms[39m
+2026-05-20 23:10:00:100 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 23:10:00:100 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 23:10:00:100 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 0ms[39m
+2026-05-20 23:10:01:101 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-20 23:10:01:101 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 0ms[39m
+2026-05-20 23:10:01:101 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 935ms[39m
+2026-05-20 23:10:01:101 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 832ms[39m
+2026-05-20 23:10:02:102 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1290ms[39m
+2026-05-20 23:10:02:102 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1274ms[39m
+2026-05-20 23:10:02:102 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 855ms[39m
+2026-05-20 23:27:08:278 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 23:27:10:2710 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 23:27:10:2710 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 23:27:10:2710 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 23:27:10:2710 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 23:27:13:2713 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [401] Invalid or expired token[39m
+2026-05-21 00:08:36:836 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-21 00:10:31:1031 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-21 00:10:31:1031 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-21 00:10:31:1031 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-21 00:10:31:1031 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-21 00:11:13:1113 [31merror[39m: [31m[POST /api/v1/auth/user/login] [500] read ETIMEDOUT[39m
+2026-05-21 00:11:13:1113 [31merror[39m: [31mQueryFailedError: read ETIMEDOUT[39m
+[31m    at Query.onResult (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/typeorm/src/driver/mysql/MysqlQueryRunner.ts:248:33)[39m
+[31m    at PoolConnection._notifyError (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/base/connection.js:267:21)[39m
+[31m    at PoolConnection._handleFatalError (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/base/connection.js:222:10)[39m
+[31m    at PoolConnection._handleNetworkError (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/base/connection.js:235:10)[39m
+[31m    at Socket.emit (node:events:519:28)[39m
+[31m    at Socket.emit (node:domain:489:12)[39m
+[31m    at emitErrorNT (node:internal/streams/destroy:170:8)[39m
+[31m    at emitErrorCloseNT (node:internal/streams/destroy:129:3)[39m
+[31m    at processTicksAndRejections (node:internal/process/task_queues:90:21)[39m
+2026-05-21 00:13:41:1341 [31merror[39m: [31m[POST /api/v1/auth/user/login] [500] read ETIMEDOUT[39m
+2026-05-21 00:13:41:1341 [31merror[39m: [31mQueryFailedError: read ETIMEDOUT[39m
+[31m    at Query.onResult (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/typeorm/src/driver/mysql/MysqlQueryRunner.ts:248:33)[39m
+[31m    at PoolConnection._notifyError (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/base/connection.js:267:21)[39m
+[31m    at PoolConnection._handleFatalError (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/base/connection.js:222:10)[39m
+[31m    at PoolConnection._handleNetworkError (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/base/connection.js:235:10)[39m
+[31m    at Socket.emit (node:events:519:28)[39m
+[31m    at Socket.emit (node:domain:489:12)[39m
+[31m    at emitErrorNT (node:internal/streams/destroy:170:8)[39m
+[31m    at emitErrorCloseNT (node:internal/streams/destroy:129:3)[39m
+[31m    at processTicksAndRejections (node:internal/process/task_queues:90:21)[39m
+2026-05-21 00:14:50:1450 [31merror[39m: [31m[POST /api/v1/auth/user/login] [500] read ETIMEDOUT[39m
+2026-05-21 00:14:50:1450 [31merror[39m: [31mQueryFailedError: read ETIMEDOUT[39m
+[31m    at Query.onResult (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/typeorm/src/driver/mysql/MysqlQueryRunner.ts:248:33)[39m
+[31m    at PoolConnection._notifyError (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/base/connection.js:267:21)[39m
+[31m    at PoolConnection._handleFatalError (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/base/connection.js:222:10)[39m
+[31m    at PoolConnection._handleNetworkError (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/base/connection.js:235:10)[39m
+[31m    at Socket.emit (node:events:519:28)[39m
+[31m    at Socket.emit (node:domain:489:12)[39m
+[31m    at emitErrorNT (node:internal/streams/destroy:170:8)[39m
+[31m    at emitErrorCloseNT (node:internal/streams/destroy:129:3)[39m
+[31m    at processTicksAndRejections (node:internal/process/task_queues:90:21)[39m
+2026-05-21 00:14:50:1450 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 625ms[39m
+2026-05-21 00:14:50:1450 [32minfo[39m: [32mGET /api/v1/admin/users/me 200 - 2ms[39m
+2026-05-21 00:14:51:1451 [32minfo[39m: [32mGET /api/v1/admin/users/me 200 - 2ms[39m
+2026-05-21 00:14:51:1451 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 669ms[39m
+2026-05-21 00:14:52:1452 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 602ms[39m
+2026-05-21 00:14:54:1454 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-21 00:14:55:1455 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 591ms[39m
+2026-05-21 00:14:56:1456 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 488ms[39m
+2026-05-21 00:14:57:1457 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-21 00:14:59:1459 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1048ms[39m
+2026-05-21 00:15:02:152 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-21 00:15:04:154 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 200 - 124ms[39m
+2026-05-21 00:15:06:156 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 603ms[39m
+2026-05-21 00:15:08:158 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-21 00:15:08:158 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-21 00:15:09:159 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 686ms[39m
+2026-05-21 00:15:09:159 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 580ms[39m
+2026-05-21 00:15:30:1530 [31merror[39m: [31m[POST /api/v1/auth/user/login] [500] read ETIMEDOUT[39m
+2026-05-21 00:15:30:1530 [31merror[39m: [31mQueryFailedError: read ETIMEDOUT[39m
+[31m    at Query.onResult (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/typeorm/src/driver/mysql/MysqlQueryRunner.ts:248:33)[39m
+[31m    at PoolConnection._notifyError (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/base/connection.js:267:21)[39m
+[31m    at PoolConnection._handleFatalError (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/base/connection.js:222:10)[39m
+[31m    at PoolConnection._handleNetworkError (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/base/connection.js:235:10)[39m
+[31m    at Socket.emit (node:events:519:28)[39m
+[31m    at Socket.emit (node:domain:489:12)[39m
+[31m    at emitErrorNT (node:internal/streams/destroy:170:8)[39m
+[31m    at emitErrorCloseNT (node:internal/streams/destroy:129:3)[39m
+[31m    at processTicksAndRejections (node:internal/process/task_queues:90:21)[39m
+2026-05-21 00:15:30:1530 [32minfo[39m: [32mPOST /api/v1/auth/user/login 500 - 120497ms[39m
+2026-05-21 00:15:56:1556 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 214ms[39m
+2026-05-21 00:15:59:1559 [32minfo[39m: [32mGET /api/v1/admin/locations?limit=1000 304 - 135ms[39m
+2026-05-21 00:15:59:1559 [32minfo[39m: [32mGET /api/v1/admin/users 200 - 146ms[39m
+2026-05-21 00:16:02:162 [32minfo[39m: [32mGET /api/v1/admin/orders 304 - 4022ms[39m
+2026-05-21 00:16:05:165 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 200 - 8735ms[39m
+2026-05-21 00:16:05:165 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 200 - 122ms[39m
+2026-05-21 00:16:28:1628 [32minfo[39m: [32mPOST /api/v1/admin/picking/assign 200 - 3970ms[39m
+2026-05-21 00:16:32:1632 [32minfo[39m: [32mGET /api/v1/admin/orders 304 - 3733ms[39m
+2026-05-21 00:16:37:1637 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 8767ms[39m
+2026-05-21 00:16:37:1637 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 115ms[39m
+2026-05-21 00:16:51:1651 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 216ms[39m
+2026-05-21 00:16:51:1651 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-21 00:16:51:1651 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 0ms[39m
+2026-05-21 00:16:52:1652 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 599ms[39m
+2026-05-21 00:16:52:1652 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 598ms[39m
+2026-05-21 00:16:55:1655 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 580ms[39m
+2026-05-21 00:16:55:1655 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 591ms[39m
+2026-05-21 00:17:05:175 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-21 00:17:06:176 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 597ms[39m
+2026-05-21 00:17:12:1712 [31merror[39m: [31m[POST /api/v1/auth/user/login] [500] read ETIMEDOUT[39m
+2026-05-21 00:17:12:1712 [31merror[39m: [31mQueryFailedError: read ETIMEDOUT[39m
+[31m    at Query.onResult (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/typeorm/src/driver/mysql/MysqlQueryRunner.ts:248:33)[39m
+[31m    at PoolConnection._notifyError (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/base/connection.js:267:21)[39m
+[31m    at PoolConnection._handleFatalError (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/base/connection.js:222:10)[39m
+[31m    at PoolConnection._handleNetworkError (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/base/connection.js:235:10)[39m
+[31m    at Socket.emit (node:events:519:28)[39m
+[31m    at Socket.emit (node:domain:489:12)[39m
+[31m    at emitErrorNT (node:internal/streams/destroy:170:8)[39m
+[31m    at emitErrorCloseNT (node:internal/streams/destroy:129:3)[39m
+[31m    at processTicksAndRejections (node:internal/process/task_queues:90:21)[39m
+2026-05-21 00:17:53:1753 [32minfo[39m: [32mPOST /api/v1/admin/picking/assign 200 - 5971ms[39m
+2026-05-21 00:17:56:1756 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-21 00:17:57:1757 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 736ms[39m
+2026-05-21 00:17:57:1757 [32minfo[39m: [32mGET /api/v1/admin/orders 304 - 4043ms[39m
+2026-05-21 00:18:02:182 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 8828ms[39m
+2026-05-21 00:18:02:182 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 119ms[39m
+2026-05-21 00:18:06:186 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 599ms[39m
+2026-05-21 00:18:12:1812 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 3ms[39m
+2026-05-21 00:18:12:1812 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-21 00:18:13:1813 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 573ms[39m
+2026-05-21 00:18:13:1813 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 581ms[39m
+2026-05-21 00:18:15:1815 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 580ms[39m
+2026-05-21 00:18:15:1815 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 598ms[39m
+2026-05-21 00:18:20:1820 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-21 00:18:20:1820 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-21 00:18:21:1821 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 631ms[39m
+2026-05-21 00:18:22:1822 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 759ms[39m
+2026-05-21 00:18:22:1822 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 367ms[39m
+2026-05-21 00:18:37:1837 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-21 00:18:38:1838 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 7ms[39m
+2026-05-21 00:18:38:1838 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 590ms[39m
+2026-05-21 00:18:39:1839 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 574ms[39m
+2026-05-21 00:18:41:1841 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 3ms[39m
+2026-05-21 00:19:34:1934 [32minfo[39m: [32mPATCH /api/v1/admin/users/4 200 - 702ms[39m
+2026-05-21 00:19:41:1941 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 200 - 127ms[39m
+2026-05-21 00:19:56:1956 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 589ms[39m
+2026-05-21 00:20:00:200 [32minfo[39m: [32mGET /api/v1/admin/users/me 200 - 2ms[39m
+2026-05-21 00:20:00:200 [32minfo[39m: [32mGET /api/v1/admin/users/me 200 - 1ms[39m
+2026-05-21 00:20:00:200 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 592ms[39m
+2026-05-21 00:20:01:201 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 600ms[39m
+2026-05-21 00:20:03:203 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 600ms[39m
+2026-05-21 00:20:03:203 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 611ms[39m
+2026-05-21 00:20:06:206 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-21 00:20:07:207 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 600ms[39m
+2026-05-21 00:20:07:207 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 565ms[39m
+2026-05-21 00:20:07:207 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 698ms[39m
+2026-05-21 00:20:09:209 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-21 00:20:10:2010 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 584ms[39m
+2026-05-21 00:20:10:2010 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 789ms[39m
+2026-05-21 00:20:11:2011 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-21 00:20:11:2011 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-21 00:20:12:2012 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 693ms[39m
+2026-05-21 00:20:14:2014 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 2104ms[39m
+2026-05-21 00:21:05:215 [32minfo[39m: [32mPOST /api/v1/admin/picking/assign 200 - 3813ms[39m
+2026-05-21 00:21:08:218 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-21 00:21:09:219 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 599ms[39m
+2026-05-21 00:21:10:2110 [32minfo[39m: [32mGET /api/v1/admin/orders 304 - 4386ms[39m
+2026-05-21 00:21:13:2113 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 3ms[39m
+2026-05-21 00:21:14:2114 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-21 00:21:14:2114 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 679ms[39m
+2026-05-21 00:21:14:2114 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 591ms[39m
+2026-05-21 00:21:14:2114 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 291ms[39m
+2026-05-21 00:21:15:2115 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 200 - 9694ms[39m
+2026-05-21 00:21:15:2115 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 200 - 122ms[39m
+2026-05-21 00:21:44:2144 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 3ms[39m
+2026-05-21 00:21:44:2144 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-21 00:21:44:2144 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 929ms[39m
+2026-05-21 00:21:44:2144 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 579ms[39m
+2026-05-21 00:21:44:2144 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 673ms[39m
+2026-05-21 00:22:15:2215 [32minfo[39m: [32mPOST /api/v1/admin/picking/assign 200 - 3720ms[39m
+2026-05-21 00:22:20:2220 [32minfo[39m: [32mGET /api/v1/admin/orders 304 - 4534ms[39m
+2026-05-21 00:22:21:2221 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 376ms[39m
+2026-05-21 00:22:21:2221 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-21 00:22:21:2221 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-21 00:22:22:2222 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 389ms[39m
+2026-05-21 00:22:22:2222 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 845ms[39m
+2026-05-21 00:22:25:2225 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-21 00:22:26:2226 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 10208ms[39m
+2026-05-21 00:22:26:2226 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 142ms[39m
+2026-05-21 00:22:28:2228 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 3ms[39m
+2026-05-21 00:22:28:2228 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-21 00:22:29:2229 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 796ms[39m
+2026-05-21 00:22:29:2229 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 809ms[39m
+2026-05-21 00:22:39:2239 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 682ms[39m
+2026-05-21 00:22:40:2240 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 783ms[39m
+2026-05-21 00:24:24:2424 [32minfo[39m: [32mGET /api/v1/admin/users/me 200 - 6ms[39m
+2026-05-21 00:24:24:2424 [32minfo[39m: [32mGET /api/v1/admin/users/me 200 - 1ms[39m
+2026-05-21 00:24:25:2425 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 733ms[39m
+2026-05-21 00:24:25:2425 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 854ms[39m
+2026-05-21 00:24:27:2427 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 705ms[39m
+2026-05-21 00:24:27:2427 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 703ms[39m
+2026-05-21 00:25:19:2519 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-21 00:25:19:2519 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-21 00:25:20:2520 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 684ms[39m
+2026-05-21 00:25:20:2520 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 705ms[39m
+2026-05-21 00:27:20:2720 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 251ms[39m
+2026-05-21 00:27:20:2720 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-21 00:27:20:2720 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-21 00:27:21:2721 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 610ms[39m
+2026-05-21 00:27:21:2721 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 679ms[39m
+2026-05-21 00:27:25:2725 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 705ms[39m
+2026-05-21 00:27:30:2730 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-21 00:27:30:2730 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-21 00:27:31:2731 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 588ms[39m
+2026-05-21 00:27:31:2731 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 601ms[39m
+2026-05-21 00:27:36:2736 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 588ms[39m
+2026-05-21 00:27:36:2736 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 681ms[39m
+2026-05-21 00:27:43:2743 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-21 00:27:43:2743 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-21 00:27:43:2743 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 578ms[39m
+2026-05-21 00:27:43:2743 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 671ms[39m
+2026-05-21 00:28:14:2814 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 691ms[39m
+2026-05-21 00:28:17:2817 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 200 - 137ms[39m
+2026-05-21 00:28:21:2821 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-21 00:28:24:2824 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-21 00:28:24:2824 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 0ms[39m
+2026-05-21 00:28:25:2825 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 577ms[39m
+2026-05-21 00:28:25:2825 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 810ms[39m

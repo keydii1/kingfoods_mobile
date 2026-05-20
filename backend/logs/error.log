@@ -255,3 +255,348 @@
 2026-05-20 00:12:56:1256 [31merror[39m: [31m[GET /api/v1/admin/users] [401] Invalid or expired token[39m
 2026-05-20 00:12:56:1256 [31merror[39m: [31m[GET /api/v1/admin/locations] [401] Invalid or expired token[39m
 2026-05-20 00:12:56:1256 [31merror[39m: [31m[GET /api/v1/admin/dashboard/stats] [401] Invalid or expired token[39m
+2026-05-20 00:59:51:5951 [31merror[39m: [31m[POST /api/v1/auth/customer/login] [401] Invalid email or password[39m
+2026-05-20 01:00:45:045 [31merror[39m: [31m[POST /api/v1/auth/user/login] [401] Invalid username or password[39m
+2026-05-20 01:00:49:049 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [403] Chỉ quản lý mới có quyền truy cập trung tâm sự cố[39m
+2026-05-20 01:01:25:125 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [403] Chỉ quản lý mới có quyền truy cập trung tâm sự cố[39m
+2026-05-20 01:01:56:156 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [403] Chỉ quản lý mới có quyền truy cập trung tâm sự cố[39m
+2026-05-20 01:10:06:106 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [403] Chỉ quản lý mới có quyền truy cập trung tâm sự cố[39m
+2026-05-20 01:10:26:1026 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [403] Chỉ quản lý mới có quyền truy cập trung tâm sự cố[39m
+2026-05-20 01:14:14:1414 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [403] Chỉ quản lý mới có quyền truy cập trung tâm sự cố[39m
+2026-05-20 01:18:20:1820 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [403] Chỉ quản lý mới có quyền truy cập trung tâm sự cố[39m
+2026-05-20 01:18:29:1829 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [403] Chỉ quản lý mới có quyền truy cập trung tâm sự cố[39m
+2026-05-20 01:18:49:1849 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [403] Chỉ quản lý mới có quyền truy cập trung tâm sự cố[39m
+2026-05-20 01:22:48:2248 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [403] Chỉ quản lý mới có quyền truy cập trung tâm sự cố[39m
+2026-05-20 01:26:05:265 [31merror[39m: [31m[GET /api/v1/admin/users] [401] Invalid or expired token[39m
+2026-05-20 01:26:05:265 [31merror[39m: [31m[GET /api/v1/admin/locations] [401] Invalid or expired token[39m
+2026-05-20 01:26:05:265 [31merror[39m: [31m[GET /api/v1/admin/dashboard/stats] [401] Invalid or expired token[39m
+2026-05-20 01:26:07:267 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 01:29:34:2934 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [403] Chỉ quản lý mới có quyền truy cập trung tâm sự cố[39m
+2026-05-20 01:33:15:3315 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [403] Chỉ quản lý mới có quyền truy cập trung tâm sự cố[39m
+2026-05-20 01:37:21:3721 [31merror[39m: [31m[POST /api/v1/admin/picking/pack] [400] Nhiệm vụ này đã hoàn thành trước đó[39m
+2026-05-20 01:37:24:3724 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [403] Chỉ quản lý mới có quyền truy cập trung tâm sự cố[39m
+2026-05-20 01:37:36:3736 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 01:37:41:3741 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [401] Invalid or expired token[39m
+2026-05-20 01:37:50:3750 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [403] Chỉ quản lý mới có quyền truy cập trung tâm sự cố[39m
+2026-05-20 01:37:59:3759 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 01:38:00:380 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 01:38:02:382 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 01:38:36:3836 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [403] Chỉ quản lý mới có quyền truy cập trung tâm sự cố[39m
+2026-05-20 01:39:32:3932 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [403] Chỉ quản lý mới có quyền truy cập trung tâm sự cố[39m
+2026-05-20 01:40:12:4012 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 01:40:13:4013 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 01:40:15:4015 [31merror[39m: [31m[GET /api/v1/admin/users] [401] Invalid or expired token[39m
+2026-05-20 01:40:15:4015 [31merror[39m: [31m[GET /api/v1/admin/locations] [401] Invalid or expired token[39m
+2026-05-20 01:40:15:4015 [31merror[39m: [31m[GET /api/v1/admin/dashboard/stats] [401] Invalid or expired token[39m
+2026-05-20 01:40:17:4017 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 01:40:18:4018 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 01:40:18:4018 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 01:40:21:4021 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 01:41:33:4133 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 01:41:33:4133 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 01:41:33:4133 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 01:41:33:4133 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 01:41:49:4149 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 01:41:49:4149 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 01:41:51:4151 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 01:41:51:4151 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 01:41:53:4153 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 01:41:53:4153 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 01:41:55:4155 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 01:41:55:4155 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 01:42:31:4231 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 01:42:31:4231 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 01:42:40:4240 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 01:42:40:4240 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 01:42:45:4245 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 01:42:45:4245 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [401] Invalid or expired token[39m
+2026-05-20 01:42:46:4246 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 01:42:46:4246 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 01:42:58:4258 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 01:42:58:4258 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 01:42:59:4259 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 01:42:59:4259 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 01:43:02:432 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 01:43:02:432 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 01:43:04:434 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 01:43:04:434 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 01:44:11:4411 [31merror[39m: [31m[GET /api/v1/admin/users] [401] Invalid or expired token[39m
+2026-05-20 01:44:11:4411 [31merror[39m: [31m[GET /api/v1/admin/locations] [401] Invalid or expired token[39m
+2026-05-20 01:44:11:4411 [31merror[39m: [31m[GET /api/v1/admin/dashboard/stats] [401] Invalid or expired token[39m
+2026-05-20 01:44:13:4413 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 01:44:13:4413 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 01:45:40:4540 [31merror[39m: [31m[GET /api/v1/admin/orders] [401] Invalid or expired token[39m
+2026-05-20 01:45:43:4543 [31merror[39m: [31m[GET /api/v1/admin/users] [401] Invalid or expired token[39m
+2026-05-20 01:45:43:4543 [31merror[39m: [31m[GET /api/v1/admin/locations] [401] Invalid or expired token[39m
+2026-05-20 01:45:43:4543 [31merror[39m: [31m[GET /api/v1/admin/dashboard/stats] [401] Invalid or expired token[39m
+2026-05-20 01:45:50:4550 [31merror[39m: [31m[GET /api/v1/admin/users] [401] Invalid or expired token[39m
+2026-05-20 01:45:50:4550 [31merror[39m: [31m[GET /api/v1/admin/locations] [401] Invalid or expired token[39m
+2026-05-20 01:45:50:4550 [31merror[39m: [31m[GET /api/v1/admin/dashboard/stats] [401] Invalid or expired token[39m
+2026-05-20 01:46:00:460 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 01:46:39:4639 [31merror[39m: [31m[GET /api/v1/admin/users] [401] Invalid or expired token[39m
+2026-05-20 01:46:39:4639 [31merror[39m: [31m[GET /api/v1/admin/locations] [401] Invalid or expired token[39m
+2026-05-20 01:46:39:4639 [31merror[39m: [31m[GET /api/v1/admin/dashboard/stats] [401] Invalid or expired token[39m
+2026-05-20 01:47:12:4712 [31merror[39m: [31m[GET /api/v1/admin/users] [401] Invalid or expired token[39m
+2026-05-20 01:47:12:4712 [31merror[39m: [31m[GET /api/v1/admin/locations] [401] Invalid or expired token[39m
+2026-05-20 01:47:12:4712 [31merror[39m: [31m[GET /api/v1/admin/dashboard/stats] [401] Invalid or expired token[39m
+2026-05-20 01:48:28:4828 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 01:48:28:4828 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 01:48:28:4828 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 01:48:28:4828 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 01:48:43:4843 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 01:48:58:4858 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [403] Chỉ quản lý mới có quyền truy cập trung tâm sự cố[39m
+2026-05-20 02:02:30:230 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 02:02:30:230 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 02:02:31:231 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 02:02:31:231 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 02:02:32:232 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 02:02:32:232 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 02:02:33:233 [31merror[39m: [31m[GET /api/v1/admin/users] [401] Invalid or expired token[39m
+2026-05-20 02:02:33:233 [31merror[39m: [31m[GET /api/v1/admin/locations] [401] Invalid or expired token[39m
+2026-05-20 02:02:33:233 [31merror[39m: [31m[GET /api/v1/admin/dashboard/stats] [401] Invalid or expired token[39m
+2026-05-20 02:02:34:234 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 02:02:34:234 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 02:02:34:234 [31merror[39m: [31m[GET /api/v1/admin/users] [401] Invalid or expired token[39m
+2026-05-20 02:02:34:234 [31merror[39m: [31m[GET /api/v1/admin/locations] [401] Invalid or expired token[39m
+2026-05-20 02:02:34:234 [31merror[39m: [31m[GET /api/v1/admin/dashboard/stats] [401] Invalid or expired token[39m
+2026-05-20 02:02:36:236 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 02:02:36:236 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 02:02:36:236 [31merror[39m: [31m[GET /api/v1/admin/orders] [401] Invalid or expired token[39m
+2026-05-20 02:02:40:240 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 02:02:40:240 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 02:05:58:558 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 02:05:58:558 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 02:05:58:558 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 02:05:58:558 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 02:06:03:63 [31merror[39m: [31m[GET /api/v1/admin/users] [401] Invalid or expired token[39m
+2026-05-20 02:06:03:63 [31merror[39m: [31m[GET /api/v1/admin/locations] [401] Invalid or expired token[39m
+2026-05-20 02:06:03:63 [31merror[39m: [31m[GET /api/v1/admin/dashboard/stats] [401] Invalid or expired token[39m
+2026-05-20 02:06:05:65 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 02:06:05:65 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 02:06:13:613 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 02:06:16:616 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 02:06:16:616 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 02:06:20:620 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 02:06:22:622 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 02:06:22:622 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 02:06:25:625 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 02:06:26:626 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 02:07:30:730 [31merror[39m: [31m[GET /api/v1/admin/dashboard/stats] [401] Invalid or expired token[39m
+2026-05-20 02:29:59:2959 [31merror[39m: [31m[GET /api/v1/admin/dashboard/stats] [401] Invalid or expired token[39m
+2026-05-20 02:30:10:3010 [31merror[39m: [31m[GET /api/v1/admin/dashboard/stats] [401] Invalid or expired token[39m
+2026-05-20 02:30:16:3016 [31merror[39m: [31m[GET /api/v1/admin/dashboard/stats] [401] Invalid or expired token[39m
+2026-05-20 02:30:44:3044 [31merror[39m: [31m[GET /api/v1/admin/containers] [401] Invalid or expired token[39m
+2026-05-20 20:43:36:4336 [31merror[39m: [31m[POST /api/v1/auth/user/login] [401] Invalid username or password[39m
+2026-05-20 21:01:23:123 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [403] Chỉ quản lý mới có quyền truy cập trung tâm sự cố[39m
+2026-05-20 21:01:27:127 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [403] Chỉ quản lý mới có quyền truy cập trung tâm sự cố[39m
+2026-05-20 21:01:42:142 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [403] Chỉ quản lý mới có quyền truy cập trung tâm sự cố[39m
+2026-05-20 21:11:06:116 [31merror[39m: [31m[POST /api/v1/admin/picking/incident] [413] request entity too large[39m
+2026-05-20 21:11:21:1121 [31merror[39m: [31m[POST /api/v1/admin/picking/incident] [413] request entity too large[39m
+2026-05-20 21:12:47:1247 [31merror[39m: [31m[POST /api/v1/admin/picking/incident] [500] Data too long for column 'photo_url' at row 1[39m
+2026-05-20 21:12:47:1247 [31merror[39m: [31mQueryFailedError: Data too long for column 'photo_url' at row 1[39m
+[31m    at Query.onResult (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/typeorm/src/driver/mysql/MysqlQueryRunner.ts:248:33)[39m
+[31m    at Query.execute (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/commands/command.js:36:14)[39m
+[31m    at PoolConnection.handlePacket (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/base/connection.js:552:34)[39m
+[31m    at PacketParser.onPacket (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/base/connection.js:102:12)[39m
+[31m    at PacketParser.executeStart (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/packet_parser.js:75:16)[39m
+[31m    at Socket.<anonymous> (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/base/connection.js:109:25)[39m
+[31m    at Socket.emit (node:events:519:28)[39m
+[31m    at Socket.emit (node:domain:489:12)[39m
+[31m    at addChunk (node:internal/streams/readable:561:12)[39m
+[31m    at readableAddChunkPushByteMode (node:internal/streams/readable:512:3)[39m
+2026-05-20 21:13:18:1318 [31merror[39m: [31m[POST /api/v1/admin/picking/incident] [500] Data too long for column 'photo_url' at row 1[39m
+2026-05-20 21:13:18:1318 [31merror[39m: [31mQueryFailedError: Data too long for column 'photo_url' at row 1[39m
+[31m    at Query.onResult (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/typeorm/src/driver/mysql/MysqlQueryRunner.ts:248:33)[39m
+[31m    at Query.execute (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/commands/command.js:36:14)[39m
+[31m    at PoolConnection.handlePacket (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/base/connection.js:552:34)[39m
+[31m    at PacketParser.onPacket (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/base/connection.js:102:12)[39m
+[31m    at PacketParser.executeStart (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/packet_parser.js:75:16)[39m
+[31m    at Socket.<anonymous> (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/base/connection.js:109:25)[39m
+[31m    at Socket.emit (node:events:519:28)[39m
+[31m    at Socket.emit (node:domain:489:12)[39m
+[31m    at addChunk (node:internal/streams/readable:561:12)[39m
+[31m    at readableAddChunkPushByteMode (node:internal/streams/readable:512:3)[39m
+2026-05-20 21:14:26:1426 [31merror[39m: [31m[POST /api/v1/admin/picking/incident] [500] Data too long for column 'photo_url' at row 1[39m
+2026-05-20 21:14:26:1426 [31merror[39m: [31mQueryFailedError: Data too long for column 'photo_url' at row 1[39m
+[31m    at Query.onResult (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/typeorm/src/driver/mysql/MysqlQueryRunner.ts:248:33)[39m
+[31m    at Query.execute (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/commands/command.js:36:14)[39m
+[31m    at PoolConnection.handlePacket (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/base/connection.js:552:34)[39m
+[31m    at PacketParser.onPacket (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/base/connection.js:102:12)[39m
+[31m    at PacketParser.executeStart (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/packet_parser.js:75:16)[39m
+[31m    at Socket.<anonymous> (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/base/connection.js:109:25)[39m
+[31m    at Socket.emit (node:events:519:28)[39m
+[31m    at Socket.emit (node:domain:489:12)[39m
+[31m    at addChunk (node:internal/streams/readable:561:12)[39m
+[31m    at readableAddChunkPushByteMode (node:internal/streams/readable:512:3)[39m
+2026-05-20 21:36:27:3627 [31merror[39m: [31m[POST /api/v1/auth/user/login] [401] Invalid username or password[39m
+2026-05-20 21:53:22:5322 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 21:53:22:5322 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 21:53:24:5324 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 21:53:27:5327 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 21:53:27:5327 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 21:53:27:5327 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 21:53:27:5327 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 21:53:29:5329 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 21:53:29:5329 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 21:53:35:5335 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 21:53:35:5335 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 21:53:36:5336 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 21:53:36:5336 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 21:53:46:5346 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 21:53:50:5350 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 21:53:50:5350 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 21:53:50:5350 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 21:53:53:5353 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 21:53:53:5353 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 21:54:11:5411 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 21:54:11:5411 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 21:54:11:5411 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 21:54:11:5411 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 21:54:12:5412 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 21:55:04:554 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 21:55:04:554 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 21:55:05:555 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 21:55:05:555 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 21:55:05:555 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 21:56:33:5633 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 21:59:03:593 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 22:00:11:011 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 22:00:11:011 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 22:19:34:1934 [31merror[39m: [31m[POST /api/v1/auth/customer/login] [401] Invalid email or password[39m
+2026-05-20 22:19:39:1939 [31merror[39m: [31m[POST /api/v1/auth/customer/login] [401] Invalid email or password[39m
+2026-05-20 22:20:02:202 [31merror[39m: [31m[POST /api/v1/auth/customer/login] [401] Invalid email or password[39m
+2026-05-20 22:20:16:2016 [31merror[39m: [31m[POST /api/v1/auth/customer/login] [400] email must be a valid email[39m
+2026-05-20 22:23:24:2324 [31merror[39m: [31m[POST /api/v1/auth/user/login] [401] Invalid username or password[39m
+2026-05-20 22:23:32:2332 [31merror[39m: [31m[POST /api/v1/auth/user/login] [401] Invalid username or password[39m
+2026-05-20 22:23:40:2340 [31merror[39m: [31m[POST /api/v1/auth/user/login] [401] Invalid username or password[39m
+2026-05-20 22:23:42:2342 [31merror[39m: [31m[POST /api/v1/auth/user/login] [401] Invalid username or password[39m
+2026-05-20 22:27:27:2727 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 22:27:31:2731 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [401] Invalid or expired token[39m
+2026-05-20 22:27:36:2736 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 22:27:52:2752 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 22:27:52:2752 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 22:27:52:2752 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 22:27:52:2752 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 22:27:55:2755 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 22:28:55:2855 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 22:28:55:2855 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 22:28:55:2855 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 22:28:55:2855 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 22:29:09:299 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 22:53:13:5313 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 22:53:14:5314 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 22:53:17:5317 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 22:53:20:5320 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 22:53:20:5320 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 22:53:20:5320 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 22:53:20:5320 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 22:54:37:5437 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 22:55:10:5510 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 22:55:10:5510 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 22:55:13:5513 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 22:55:13:5513 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 22:55:15:5515 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 22:55:15:5515 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 22:55:16:5516 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 22:55:17:5517 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 22:55:20:5520 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 22:55:22:5522 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 22:55:22:5522 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 22:55:22:5522 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 22:55:22:5522 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 22:55:23:5523 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [401] Invalid or expired token[39m
+2026-05-20 22:55:25:5525 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 22:55:26:5526 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [401] Invalid or expired token[39m
+2026-05-20 22:55:27:5527 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 22:55:43:5543 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 22:55:43:5543 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 22:55:43:5543 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 22:55:43:5543 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 22:58:27:5827 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 22:58:30:5830 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 22:58:30:5830 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 22:58:30:5830 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 22:58:30:5830 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 22:58:43:5843 [31merror[39m: [31m[POST /api/v1/auth/user/login] [401] Invalid username or password[39m
+2026-05-20 22:58:45:5845 [31merror[39m: [31m[POST /api/v1/auth/user/login] [401] Invalid username or password[39m
+2026-05-20 22:58:47:5847 [31merror[39m: [31m[POST /api/v1/auth/user/login] [401] Invalid username or password[39m
+2026-05-20 22:58:53:5853 [31merror[39m: [31m[POST /api/v1/auth/user/login] [401] Invalid username or password[39m
+2026-05-20 22:59:03:593 [31merror[39m: [31m[POST /api/v1/auth/user/login] [401] Invalid username or password[39m
+2026-05-20 22:59:05:595 [31merror[39m: [31m[POST /api/v1/auth/user/login] [401] Invalid username or password[39m
+2026-05-20 22:59:20:5920 [31merror[39m: [31m[POST /api/v1/auth/user/login] [401] Invalid username or password[39m
+2026-05-20 22:59:25:5925 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 22:59:27:5927 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 22:59:27:5927 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 22:59:28:5928 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 22:59:28:5928 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 22:59:40:5940 [31merror[39m: [31m[POST /api/v1/auth/user/login] [401] Invalid username or password[39m
+2026-05-20 22:59:46:5946 [31merror[39m: [31m[POST /api/v1/auth/user/login] [401] Invalid username or password[39m
+2026-05-20 23:00:00:00 [31merror[39m: [31m[POST /api/v1/auth/user/login] [401] Invalid username or password[39m
+2026-05-20 23:01:18:118 [31merror[39m: [31m[POST /api/v1/auth/user/login] [401] Invalid username or password[39m
+2026-05-20 23:01:23:123 [31merror[39m: [31m[POST /api/v1/auth/user/login] [401] Invalid username or password[39m
+2026-05-20 23:27:08:278 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 23:27:10:2710 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 23:27:10:2710 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-20 23:27:10:2710 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 23:27:10:2710 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-20 23:27:13:2713 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [401] Invalid or expired token[39m
+2026-05-21 00:08:36:836 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-21 00:10:31:1031 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-21 00:10:31:1031 [31merror[39m: [31m[GET /api/v1/admin/users/me] [401] Invalid or expired token[39m
+2026-05-21 00:10:31:1031 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-21 00:10:31:1031 [31merror[39m: [31m[GET /api/v1/admin/picking/assigned] [401] Invalid or expired token[39m
+2026-05-21 00:11:13:1113 [31merror[39m: [31m[POST /api/v1/auth/user/login] [500] read ETIMEDOUT[39m
+2026-05-21 00:11:13:1113 [31merror[39m: [31mQueryFailedError: read ETIMEDOUT[39m
+[31m    at Query.onResult (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/typeorm/src/driver/mysql/MysqlQueryRunner.ts:248:33)[39m
+[31m    at PoolConnection._notifyError (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/base/connection.js:267:21)[39m
+[31m    at PoolConnection._handleFatalError (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/base/connection.js:222:10)[39m
+[31m    at PoolConnection._handleNetworkError (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/base/connection.js:235:10)[39m
+[31m    at Socket.emit (node:events:519:28)[39m
+[31m    at Socket.emit (node:domain:489:12)[39m
+[31m    at emitErrorNT (node:internal/streams/destroy:170:8)[39m
+[31m    at emitErrorCloseNT (node:internal/streams/destroy:129:3)[39m
+[31m    at processTicksAndRejections (node:internal/process/task_queues:90:21)[39m
+2026-05-21 00:13:41:1341 [31merror[39m: [31m[POST /api/v1/auth/user/login] [500] read ETIMEDOUT[39m
+2026-05-21 00:13:41:1341 [31merror[39m: [31mQueryFailedError: read ETIMEDOUT[39m
+[31m    at Query.onResult (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/typeorm/src/driver/mysql/MysqlQueryRunner.ts:248:33)[39m
+[31m    at PoolConnection._notifyError (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/base/connection.js:267:21)[39m
+[31m    at PoolConnection._handleFatalError (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/base/connection.js:222:10)[39m
+[31m    at PoolConnection._handleNetworkError (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/base/connection.js:235:10)[39m
+[31m    at Socket.emit (node:events:519:28)[39m
+[31m    at Socket.emit (node:domain:489:12)[39m
+[31m    at emitErrorNT (node:internal/streams/destroy:170:8)[39m
+[31m    at emitErrorCloseNT (node:internal/streams/destroy:129:3)[39m
+[31m    at processTicksAndRejections (node:internal/process/task_queues:90:21)[39m
+2026-05-21 00:14:50:1450 [31merror[39m: [31m[POST /api/v1/auth/user/login] [500] read ETIMEDOUT[39m
+2026-05-21 00:14:50:1450 [31merror[39m: [31mQueryFailedError: read ETIMEDOUT[39m
+[31m    at Query.onResult (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/typeorm/src/driver/mysql/MysqlQueryRunner.ts:248:33)[39m
+[31m    at PoolConnection._notifyError (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/base/connection.js:267:21)[39m
+[31m    at PoolConnection._handleFatalError (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/base/connection.js:222:10)[39m
+[31m    at PoolConnection._handleNetworkError (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/base/connection.js:235:10)[39m
+[31m    at Socket.emit (node:events:519:28)[39m
+[31m    at Socket.emit (node:domain:489:12)[39m
+[31m    at emitErrorNT (node:internal/streams/destroy:170:8)[39m
+[31m    at emitErrorCloseNT (node:internal/streams/destroy:129:3)[39m
+[31m    at processTicksAndRejections (node:internal/process/task_queues:90:21)[39m
+2026-05-21 00:15:30:1530 [31merror[39m: [31m[POST /api/v1/auth/user/login] [500] read ETIMEDOUT[39m
+2026-05-21 00:15:30:1530 [31merror[39m: [31mQueryFailedError: read ETIMEDOUT[39m
+[31m    at Query.onResult (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/typeorm/src/driver/mysql/MysqlQueryRunner.ts:248:33)[39m
+[31m    at PoolConnection._notifyError (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/base/connection.js:267:21)[39m
+[31m    at PoolConnection._handleFatalError (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/base/connection.js:222:10)[39m
+[31m    at PoolConnection._handleNetworkError (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/base/connection.js:235:10)[39m
+[31m    at Socket.emit (node:events:519:28)[39m
+[31m    at Socket.emit (node:domain:489:12)[39m
+[31m    at emitErrorNT (node:internal/streams/destroy:170:8)[39m
+[31m    at emitErrorCloseNT (node:internal/streams/destroy:129:3)[39m
+[31m    at processTicksAndRejections (node:internal/process/task_queues:90:21)[39m
+2026-05-21 00:17:12:1712 [31merror[39m: [31m[POST /api/v1/auth/user/login] [500] read ETIMEDOUT[39m
+2026-05-21 00:17:12:1712 [31merror[39m: [31mQueryFailedError: read ETIMEDOUT[39m
+[31m    at Query.onResult (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/typeorm/src/driver/mysql/MysqlQueryRunner.ts:248:33)[39m
+[31m    at PoolConnection._notifyError (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/base/connection.js:267:21)[39m
+[31m    at PoolConnection._handleFatalError (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/base/connection.js:222:10)[39m
+[31m    at PoolConnection._handleNetworkError (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/base/connection.js:235:10)[39m
+[31m    at Socket.emit (node:events:519:28)[39m
+[31m    at Socket.emit (node:domain:489:12)[39m
+[31m    at emitErrorNT (node:internal/streams/destroy:170:8)[39m
+[31m    at emitErrorCloseNT (node:internal/streams/destroy:129:3)[39m
+[31m    at processTicksAndRejections (node:internal/process/task_queues:90:21)[39m

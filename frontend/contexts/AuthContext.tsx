@@ -11,6 +11,7 @@ interface AuthContextType {
   assignedZone: string | null;
   login: (role: UserRole, name: string, id: string, token: string, assignedZone?: string | null) => void;
   logout: () => void;
+  updateName: (name: string) => void;
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -21,6 +22,7 @@ const AuthContext = createContext<AuthContextType>({
   assignedZone: null,
   login: () => {},
   logout: () => {},
+  updateName: () => {},
 });
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -48,8 +50,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setIsLoggedIn(false);
   };
 
+  const updateName = (name: string) => {
+    setUserName(name);
+  };
+
   return (
-    <AuthContext.Provider value={{ isLoggedIn, userRole, userName, userId, assignedZone, login, logout }}>
+    <AuthContext.Provider value={{ isLoggedIn, userRole, userName, userId, assignedZone, login, logout, updateName }}>
       {children}
     </AuthContext.Provider>
   );
