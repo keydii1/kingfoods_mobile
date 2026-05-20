@@ -142,15 +142,11 @@ export class OrderService {
       .where("order.customerId = :customerId", { customerId });
 
     if (startDate) {
-      const startUTC = new Date(startDate + "T00:00:00Z");
-      startUTC.setHours(startUTC.getHours() - 7);
-      query = query.andWhere("order.created_at >= :startDate", { startDate: startUTC });
+      query = query.andWhere("order.created_at >= :startDate", { startDate: new Date(startDate + "T00:00:00.000+07:00") });
     }
 
     if (endDate) {
-      const endUTC = new Date(endDate + "T23:59:59.999Z");
-      endUTC.setHours(endUTC.getHours() - 7);
-      query = query.andWhere("order.created_at <= :endDate", { endDate: endUTC });
+      query = query.andWhere("order.created_at <= :endDate", { endDate: new Date(endDate + "T23:59:59.999+07:00") });
     }
 
     const orders = await query.orderBy("order.created_at", "DESC").getMany();

@@ -1058,7 +1058,7 @@ export default function ManagerDashboardWebScreen() {
                           </View>
 
                           {stats.staffPerformance.map((item, idx) => (
-                            <View key={idx} style={styles.overviewTableRow}>
+                            <View key={item.id ?? item.name ?? idx} style={styles.overviewTableRow}>
                               <Text style={[styles.otdCell, { flex: 2.5, fontWeight: '800' }]}>{item.name || item.fullName || item.username}</Text>
                               <Text style={[styles.otdCell, { flex: 1.5, textAlign: 'center', fontWeight: 'bold' }]}>{item.ordersCompleted}</Text>
                               <Text style={[styles.otdCell, { flex: 1.5, textAlign: 'center', fontWeight: 'bold', color: GREEN_THEME.primary }]}>{item.itemsPicked}</Text>
@@ -1362,7 +1362,7 @@ export default function ManagerDashboardWebScreen() {
 
                       <Text style={[styles.invoiceCardLabel, { marginTop: 10 }]}>Thứ tự các trạm giao chặng cuối (AI Optimized):</Text>
                       {routingResult.stops.map((stop, idx) => (
-                        <View key={idx} style={{ flexDirection: 'row', alignItems: 'center', gap: 10, paddingVertical: 8 }}>
+                        <View key={stop.name ?? idx} style={{ flexDirection: 'row', alignItems: 'center', gap: 10, paddingVertical: 8 }}>
                           <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: GREEN_THEME.primary }} />
                           <View style={{ flex: 1 }}>
                             <Text style={{ fontSize: 13, fontWeight: '750', color: GREEN_THEME.textDark }}>{stop.name}</Text>
@@ -2157,7 +2157,7 @@ export default function ManagerDashboardWebScreen() {
                               <Text style={{ fontSize: 13, color: GREEN_THEME.textMuted, marginTop: 4 }}>Thùng hàng hiện đang trống rỗng, không chứa sản phẩm nào.</Text>
                             ) : (
                               tracedContainerData.items.map((item, idx) => (
-                                <View key={idx} style={{ flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 6, borderBottomWidth: 1, borderBottomColor: '#f1f5f9' }}>
+                                <View key={item.productName ?? idx} style={{ flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 6, borderBottomWidth: 1, borderBottomColor: '#f1f5f9' }}>
                                   <Text style={{ fontSize: 13, fontWeight: '700', color: GREEN_THEME.textDark }}>{item.productName || 'Hàng hoá WMS'}</Text>
                                   <Text style={{ fontSize: 13, fontWeight: '800', color: GREEN_THEME.primary }}>Số lượng: {item.quantity} {item.unit}</Text>
                                 </View>
@@ -2391,7 +2391,7 @@ export default function ManagerDashboardWebScreen() {
 
               <View style={styles.zoneGrid}>
                 {shelfOccupancies.map((shelf, idx) => (
-                  <View key={idx} style={[styles.zoneBox, { width: '31.5%', backgroundColor: '#fff', borderWidth: 1.5, borderColor: '#cbd5e1' }]}>
+                  <View key={shelf.shelf ?? idx} style={[styles.zoneBox, { width: '31.5%', backgroundColor: '#fff', borderWidth: 1.5, borderColor: '#cbd5e1' }]}>
                     <View style={styles.zoneHeader}>
                       <Text style={{ fontSize: 14, fontWeight: '950', color: GREEN_THEME.textDark }}>Kệ vật lý {shelf.shelf}</Text>
                       <View style={[styles.alertPill, { backgroundColor: shelf.color === '#D32F2F' ? '#ffebee' : '#e8f5e9' }]}>

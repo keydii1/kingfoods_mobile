@@ -32,11 +32,6 @@ function LayoutContent() {
     const isPickingFlow =
         pathname.includes('pickingflow');
 
-    if (!isLoggedIn && !isLoginScreen) {
-
-        return <Redirect href="/Login" />;
-    }
-
     return (
 
         <>
@@ -47,6 +42,7 @@ function LayoutContent() {
                     animationDuration: 200,
                 }}
             />
+            {!isLoggedIn && !isLoginScreen && <Redirect href="/Login" />}
         </>
 
     );

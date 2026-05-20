@@ -207,7 +207,6 @@ export default function DashboardScreen() {
                         </View>
                     </View>
                 </View>
-
                 {/* Main List Section */}
                 <View style={styles.mainContent}>
                     <View style={styles.sectionHeader}>
@@ -236,7 +235,7 @@ export default function DashboardScreen() {
                             const progressPercent = getPct(task);
                             return (
                                 <TouchableOpacity
-                                    key={task.id || index}
+                                    key={task.id ?? task._id ?? `${task.orderId}-${index}`}
                                     style={styles.orderCard}
                                     activeOpacity={0.9}
                                     onPress={() => router.push({

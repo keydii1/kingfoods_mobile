@@ -68,7 +68,7 @@ function BatchItem({ item, onToggle }) {
                 <View style={styles.binsRow}>
                     <Text style={styles.arrowText}>→ </Text>
                     {item.bins.map((bin, i) => (
-                        <BinChip key={i} bin={bin} />
+                        <BinChip key={`${bin.label}-${i}`} bin={bin} />
                     ))}
                 </View>
             </View>

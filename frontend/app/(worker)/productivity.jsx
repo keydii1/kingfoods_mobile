@@ -197,7 +197,7 @@ export default function ProductivityScreen() {
 
                         {stats.map((item, index) => (
                             <StatRow
-                                key={index}
+                                key={item.label}
                                 label={item.label}
                                 value={item.value}
                                 color={item.color}

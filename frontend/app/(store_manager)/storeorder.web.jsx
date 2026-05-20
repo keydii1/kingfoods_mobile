@@ -1727,7 +1727,7 @@ export default function StoreOrderWebScreen() {
                       ) : (
                         <View style={styles.topProductsListWeb}>
                           {topProducts.slice(0, 5).map((item, index) => (
-                            <View key={index} style={styles.topProductItemRowWeb}>
+                            <View key={item.name ?? index} style={styles.topProductItemRowWeb}>
                               <View style={[styles.topRankBadge, index === 0 ? styles.rankGold : index === 1 ? styles.rankSilver : index === 2 ? styles.rankBronze : {}]}>
                                 <Text style={styles.topRankText}>{index + 1}</Text>
                               </View>
@@ -1804,7 +1804,7 @@ export default function StoreOrderWebScreen() {
                   const isWarning = s.status === 'warning';
 
                   return (
-                    <View key={idx} style={styles.tableWebRow}>
+                    <View key={s.id ?? s.name ?? idx} style={styles.tableWebRow}>
                       <Text style={[styles.tdCell, { flex: 3, fontWeight: '900' }]}>{s.name}</Text>
                       <Text style={[styles.tdCell, { flex: 2, fontFamily: 'monospace' }]}>{s.expiryDate}</Text>
                       <Text style={[styles.tdCell, { flex: 2, textAlign: 'center', fontWeight: '800' }]}>
