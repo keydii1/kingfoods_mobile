@@ -8,9 +8,9 @@ const getBaseUrl = () => {
     if (__DEV__ && localhost) {
         return `http://${localhost}:9999/api/v1`;
     }
-    // Fallback to local host if no debuggerHost
+    // Fallback to localhost for local testing
     if (__DEV__) {
-        return 'http://localhost:9999/api/v1';
+        return 'http://localhost:9999/api/v1'; // ← Thử localhost trước
     }
     return 'https://kingfood-wms-backend.onrender.com/api/v1';
 };
