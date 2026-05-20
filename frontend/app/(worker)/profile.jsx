@@ -53,7 +53,12 @@ export default function ProfileScreen() {
     }, []);
 
     const startEdit = () => {
-        setEditForm({ name: user?.name || user?.fullName || '', zone: user?.zone || '' });
+        setEditForm({
+            name: user?.name || user?.fullName || '',
+            username: user?.username || '',
+            email: user?.email || '',
+            phoneNumber: user?.phoneNumber || '',
+        });
         setEditing(true);
     };
 
@@ -64,9 +69,23 @@ export default function ProfileScreen() {
             Alert.alert('Lỗi', 'Họ và tên không được để trống');
             return;
         }
+        if (!editForm.username?.trim()) {
+            Alert.alert('Lỗi', 'Tên đăng nhập không được để trống');
+            return;
+        }
         try {
-            await updateUser(user.id, { name: editForm.name.trim() });
-            setUser(prev => ({ ...prev, name: editForm.name.trim(), fullName: editForm.name.trim() }));
+            const updatePayload = {
+                name: editForm.name.trim(),
+                username: editForm.username.trim(),
+                email: editForm.email?.trim() || '',
+                phoneNumber: editForm.phoneNumber?.trim() || '',
+            };
+            await updateUser(user.id, updatePayload);
+            setUser(prev => ({
+                ...prev,
+                ...updatePayload,
+                fullName: updatePayload.name,
+            }));
             setEditing(false);
             Alert.alert('Thành công', 'Cập nhật hồ sơ thành công');
         } catch (err) {
@@ -177,11 +196,59 @@ export default function ProfileScreen() {
                         {/* Thông tin cá nhân */}
                         <View style={styles.card}>
                             <Text style={styles.cardTitle}>Thông tin tài khoản</Text>
-                            <InfoRow label='Họ và Tên' value={user?.name || 'Nhân viên kho'} />
-                            <InfoRow label='Tên đăng nhập' value={user?.username || ''} />
-                            <InfoRow label='Email liên hệ' value={user?.email || 'Chưa cập nhật'} />
-                            <InfoRow label='Số điện thoại' value={user?.phoneNumber || 'Chưa cập nhật'} />
-                            <InfoRow label='Khu vực kho' value={user?.assignedLocationId ? ZONE_MAP[user.assignedLocationId] : (user?.zone || 'Chưa phân khu')} />
+                            {editing ? (
+                                <>
+                                    <Text style={styles.fieldLabel}>Họ và Tên</Text>
+                                    <TextInput
+                                        style={styles.input}
+                                        value={editForm.name}
+                                        onChangeText={t => setEditForm(f => ({ ...f, name: t }))}
+                                        placeholder="Nhập họ và tên..."
+                                        placeholderTextColor="#aaa"
+                                    />
+
+                                    <Text style={styles.fieldLabel}>Tên đăng nhập</Text>
+                                    <TextInput
+                                        style={styles.input}
+                                        value={editForm.username}
+                                        onChangeText={t => setEditForm(f => ({ ...f, username: t }))}
+                                        placeholder="Nhập tên đăng nhập..."
+                                        placeholderTextColor="#aaa"
+                                        autoCapitalize="none"
+                                        autoCorrect={false}
+                                    />
+
+                                    <Text style={styles.fieldLabel}>Email liên hệ</Text>
+                                    <TextInput
+                                        style={styles.input}
+                                        value={editForm.email}
+                                        onChangeText={t => setEditForm(f => ({ ...f, email: t }))}
+                                        placeholder="Nhập email liên hệ..."
+                                        placeholderTextColor="#aaa"
+                                        keyboardType="email-address"
+                                        autoCapitalize="none"
+                                        autoCorrect={false}
+                                    />
+
+                                    <Text style={styles.fieldLabel}>Số điện thoại</Text>
+                                    <TextInput
+                                        style={styles.input}
+                                        value={editForm.phoneNumber}
+                                        onChangeText={t => setEditForm(f => ({ ...f, phoneNumber: t }))}
+                                        placeholder="Nhập số điện thoại..."
+                                        placeholderTextColor="#aaa"
+                                        keyboardType="phone-pad"
+                                    />
+                                </>
+                            ) : (
+                                <>
+                                    <InfoRow label='Họ và Tên' value={user?.name || 'Nhân viên kho'} />
+                                    <InfoRow label='Tên đăng nhập' value={user?.username || ''} />
+                                    <InfoRow label='Email liên hệ' value={user?.email || 'Chưa cập nhật'} />
+                                    <InfoRow label='Số điện thoại' value={user?.phoneNumber || 'Chưa cập nhật'} />
+                                    <InfoRow label='Khu vực kho' value={user?.assignedLocationId ? ZONE_MAP[user.assignedLocationId] : (user?.zone || 'Chưa phân khu')} />
+                                </>
+                            )}
                         </View>
 
                         {/* Đổi mật khẩu trực tiếp */}
@@ -348,6 +415,15 @@ const styles = StyleSheet.create({
         fontSize: 13,
         fontWeight: '600',
         color: '#1e293b',
+    },
+    fieldLabel: {
+        fontSize: 11,
+        fontWeight: '700',
+        color: '#64748b',
+        marginBottom: 6,
+        textTransform: 'uppercase',
+        letterSpacing: 0.5,
+        marginTop: 6,
     },
     input: {
         backgroundColor: '#f8fafc',

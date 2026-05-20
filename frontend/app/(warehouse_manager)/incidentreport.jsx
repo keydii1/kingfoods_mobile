@@ -10,6 +10,7 @@ import { playSound } from '../../utils/soundService';
 import StaffBottomNav from '../../components/StaffBottomNav';
 import { useAuth } from '../../contexts/AuthContext';
 import * as ImagePicker from 'expo-image-picker';
+import * as ImageManipulator from 'expo-image-manipulator';
 
 const issueTypes = [
   { key: 'damage', label: 'Hàng hư hỏng', icon: 'nutrition-outline', color: '#e57373' },
@@ -54,11 +55,20 @@ export default function IncidentReportScreen() {
     const result = await ImagePicker.launchCameraAsync({
       allowsEditing: false,
       quality: 0.7,
-      base64: true,
     });
     if (!result.canceled) {
-      setPhotoUri(result.assets[0].uri);
-      setPhotoBase64('data:image/jpeg;base64,' + result.assets[0].base64);
+      try {
+        const manipResult = await ImageManipulator.manipulateAsync(
+          result.assets[0].uri,
+          [{ resize: { width: 800 } }],
+          { compress: 0.6, format: ImageManipulator.SaveFormat.JPEG, base64: true }
+        );
+        setPhotoUri(manipResult.uri);
+        setPhotoBase64('data:image/jpeg;base64,' + manipResult.base64);
+      } catch (err) {
+        setPhotoUri(result.assets[0].uri);
+        setPhotoBase64(null);
+      }
     }
   };
 
@@ -71,11 +81,20 @@ export default function IncidentReportScreen() {
     const result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: false,
       quality: 0.7,
-      base64: true,
     });
     if (!result.canceled) {
-      setPhotoUri(result.assets[0].uri);
-      setPhotoBase64('data:image/jpeg;base64,' + result.assets[0].base64);
+      try {
+        const manipResult = await ImageManipulator.manipulateAsync(
+          result.assets[0].uri,
+          [{ resize: { width: 800 } }],
+          { compress: 0.6, format: ImageManipulator.SaveFormat.JPEG, base64: true }
+        );
+        setPhotoUri(manipResult.uri);
+        setPhotoBase64('data:image/jpeg;base64,' + manipResult.base64);
+      } catch (err) {
+        setPhotoUri(result.assets[0].uri);
+        setPhotoBase64(null);
+      }
     }
   };
 
