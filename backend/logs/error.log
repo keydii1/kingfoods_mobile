@@ -600,3 +600,20 @@
 [31m    at emitErrorNT (node:internal/streams/destroy:170:8)[39m
 [31m    at emitErrorCloseNT (node:internal/streams/destroy:129:3)[39m
 [31m    at processTicksAndRejections (node:internal/process/task_queues:90:21)[39m
+2026-05-21 03:25:50:2550 [31merror[39m: [31m[POST /api/v1/auth/customer/login] [400] email must be a valid email[39m
+2026-05-21 03:25:59:2559 [31merror[39m: [31m[POST /api/v1/auth/customer/login] [400] email must be a valid email[39m
+2026-05-21 03:26:19:2619 [31merror[39m: [31m[POST /api/v1/auth/customer/login] [400] email must be a valid email[39m
+2026-05-21 03:26:28:2628 [31merror[39m: [31m[POST /api/v1/auth/customer/login] [400] email must be a valid email[39m
+2026-05-21 03:26:29:2629 [31merror[39m: [31m[POST /api/v1/auth/customer/login] [400] email must be a valid email[39m
+2026-05-21 03:26:31:2631 [31merror[39m: [31m[POST /api/v1/auth/customer/login] [400] email must be a valid email[39m
+2026-05-21 03:26:33:2633 [31merror[39m: [31m[POST /api/v1/auth/customer/login] [400] email must be a valid email[39m
+2026-05-21 03:27:01:271 [31merror[39m: [31m[POST /api/v1/auth/customer/login] [400] email must be a valid email[39m
+2026-05-21 04:12:38:1238 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-21 04:12:38:1238 [31merror[39m: [31mlisten EADDRINUSE: address already in use 0.0.0.0:9999[39m
+2026-05-21 04:21:10:2110 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-21 04:21:10:2110 [31merror[39m: [31mlisten EADDRINUSE: address already in use 0.0.0.0:9999[39m
+2026-05-21 04:25:01:251 [31merror[39m: [31m[POST /api/v1/client/orders] [401] Invalid or expired token[39m
+2026-05-21 04:25:04:254 [31merror[39m: [31m[POST /api/v1/client/orders] [401] Invalid or expired token[39m
+2026-05-21 04:25:04:254 [31merror[39m: [31m[POST /api/v1/client/orders] [401] Invalid or expired token[39m
+2026-05-21 04:26:16:2616 [31merror[39m: [31m[POST /api/v1/client/orders] [401] Invalid or expired token[39m
+2026-05-21 04:26:19:2619 [31merror[39m: [31m[POST /api/v1/client/orders] [401] Invalid or expired token[39m

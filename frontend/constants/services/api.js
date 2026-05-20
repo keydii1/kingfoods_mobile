@@ -1,4 +1,17 @@
+import Constants from 'expo-constants';
+
 const getBaseUrl = () => {
+    // Dynamically detect local host IP to work on both simulators and physical devices
+    const debuggerHost = Constants.expoConfig?.hostUri || '';
+    const localhost = debuggerHost.split(':')[0];
+    
+    if (__DEV__ && localhost) {
+        return `http://${localhost}:3000/api/v1`;
+    }
+    // Fallback to localhost for local testing
+    if (__DEV__) {
+        return 'http://localhost:3000/api/v1';
+    }
     return 'https://kingfood-wms-backend.onrender.com/api/v1';
 };
 

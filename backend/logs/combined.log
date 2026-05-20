@@ -3581,3 +3581,141 @@
 2026-05-21 00:28:24:2824 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 0ms[39m
 2026-05-21 00:28:25:2825 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 577ms[39m
 2026-05-21 00:28:25:2825 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 810ms[39m
+2026-05-21 03:23:38:2338 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 03:23:38 21/5/2026[39m
+[32m      * URL: http://localhost:9999[39m
+[32m      * Port: 9999[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-21 03:24:33:2433 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 349ms[39m
+2026-05-21 03:24:55:2455 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 200 - 21784ms[39m
+2026-05-21 03:24:56:2456 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 200 - 247ms[39m
+2026-05-21 03:25:13:2513 [32minfo[39m: [32mGET /api/v1/admin/users 200 - 248ms[39m
+2026-05-21 03:25:13:2513 [32minfo[39m: [32mGET /api/v1/admin/locations?limit=1000 200 - 142ms[39m
+2026-05-21 03:25:21:2521 [32minfo[39m: [32mPOST /api/v1/auth/user/logout 200 - 3ms[39m
+2026-05-21 03:25:35:2535 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 200 - 21783ms[39m
+2026-05-21 03:25:50:2550 [31merror[39m: [31m[POST /api/v1/auth/customer/login] [400] email must be a valid email[39m
+2026-05-21 03:25:50:2550 [32minfo[39m: [32mPOST /api/v1/auth/customer/login 400 - 9ms[39m
+2026-05-21 03:25:59:2559 [31merror[39m: [31m[POST /api/v1/auth/customer/login] [400] email must be a valid email[39m
+2026-05-21 03:25:59:2559 [32minfo[39m: [32mPOST /api/v1/auth/customer/login 400 - 5ms[39m
+2026-05-21 03:26:19:2619 [31merror[39m: [31m[POST /api/v1/auth/customer/login] [400] email must be a valid email[39m
+2026-05-21 03:26:19:2619 [32minfo[39m: [32mPOST /api/v1/auth/customer/login 400 - 3ms[39m
+2026-05-21 03:26:28:2628 [31merror[39m: [31m[POST /api/v1/auth/customer/login] [400] email must be a valid email[39m
+2026-05-21 03:26:28:2628 [32minfo[39m: [32mPOST /api/v1/auth/customer/login 400 - 3ms[39m
+2026-05-21 03:26:29:2629 [31merror[39m: [31m[POST /api/v1/auth/customer/login] [400] email must be a valid email[39m
+2026-05-21 03:26:29:2629 [32minfo[39m: [32mPOST /api/v1/auth/customer/login 400 - 4ms[39m
+2026-05-21 03:26:31:2631 [31merror[39m: [31m[POST /api/v1/auth/customer/login] [400] email must be a valid email[39m
+2026-05-21 03:26:31:2631 [32minfo[39m: [32mPOST /api/v1/auth/customer/login 400 - 3ms[39m
+2026-05-21 03:26:33:2633 [31merror[39m: [31m[POST /api/v1/auth/customer/login] [400] email must be a valid email[39m
+2026-05-21 03:26:33:2633 [32minfo[39m: [32mPOST /api/v1/auth/customer/login 400 - 3ms[39m
+2026-05-21 03:27:01:271 [31merror[39m: [31m[POST /api/v1/auth/customer/login] [400] email must be a valid email[39m
+2026-05-21 03:27:01:271 [32minfo[39m: [32mPOST /api/v1/auth/customer/login 400 - 3ms[39m
+2026-05-21 03:27:55:2755 [32minfo[39m: [32mPOST /api/v1/auth/customer/login 200 - 419ms[39m
+2026-05-21 03:27:56:2756 [32minfo[39m: [32mGET /api/v1/public/products?limit=100 200 - 1065ms[39m
+2026-05-21 03:28:03:283 [32minfo[39m: [32mPOST /api/v1/client/orders 201 - 2328ms[39m
+2026-05-21 03:28:07:287 [32minfo[39m: [32mGET /api/v1/client/orders/statistics?startDate=2026-05-01&endDate=2026-05-21 200 - 828ms[39m
+2026-05-21 03:28:08:288 [32minfo[39m: [32mGET /api/v1/client/orders/statistics?startDate=2026-05-21&endDate=2026-05-21 200 - 135ms[39m
+2026-05-21 03:28:08:288 [32minfo[39m: [32mGET /api/v1/client/orders/statistics?startDate=2026-05-21&endDate=2026-05-21 200 - 243ms[39m
+2026-05-21 03:28:14:2814 [32minfo[39m: [32mGET /api/v1/client/orders/statistics?startDate=2026-05-01&endDate=2026-05-21 304 - 792ms[39m
+2026-05-21 03:28:18:2818 [32minfo[39m: [32mGET /api/v1/client/orders/detail/1036 200 - 472ms[39m
+2026-05-21 03:28:24:2824 [32minfo[39m: [32mGET /api/v1/client/orders/statistics?startDate=2026-05-01&endDate=2026-05-21 304 - 916ms[39m
+2026-05-21 03:28:27:2827 [32minfo[39m: [32mGET /api/v1/client/orders/statistics?startDate=2026-05-21&endDate=2026-05-21 304 - 238ms[39m
+2026-05-21 04:12:38:1238 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-21 04:12:38:1238 [31merror[39m: [31mlisten EADDRINUSE: address already in use 0.0.0.0:9999[39m
+2026-05-21 04:14:50:1450 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 04:14:50 21/5/2026[39m
+[32m      * URL: http://localhost:9999[39m
+[32m      * Port: 9999[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-21 04:17:04:174 [32minfo[39m: [32mPOST /api/v1/auth/customer/login 200 - 185ms[39m
+2026-05-21 04:17:05:175 [32minfo[39m: [32mGET /api/v1/public/products?limit=100 200 - 344ms[39m
+2026-05-21 04:17:12:1712 [32minfo[39m: [32mPOST /api/v1/client/orders 201 - 834ms[39m
+2026-05-21 04:17:17:1717 [32minfo[39m: [32mGET /api/v1/client/orders/statistics?startDate=2026-05-01&endDate=2026-05-21 200 - 250ms[39m
+2026-05-21 04:17:18:1718 [32minfo[39m: [32mGET /api/v1/client/orders/statistics?startDate=2026-05-21&endDate=2026-05-21 200 - 84ms[39m
+2026-05-21 04:17:18:1718 [32minfo[39m: [32mGET /api/v1/client/orders/statistics?startDate=2026-05-21&endDate=2026-05-21 200 - 115ms[39m
+2026-05-21 04:17:21:1721 [32minfo[39m: [32mGET /api/v1/client/orders/statistics?startDate=2026-05-21&endDate=2026-05-2 200 - 124ms[39m
+2026-05-21 04:17:22:1722 [32minfo[39m: [32mGET /api/v1/client/orders/statistics?startDate=2026-05-21&endDate=2026-05-22 200 - 113ms[39m
+2026-05-21 04:17:23:1723 [32minfo[39m: [32mGET /api/v1/client/orders/statistics?startDate=2026-05-21&endDate=2026-05-2 304 - 116ms[39m
+2026-05-21 04:17:24:1724 [32minfo[39m: [32mGET /api/v1/client/orders/statistics?startDate=2026-05-21&endDate=2026-05-21 304 - 113ms[39m
+2026-05-21 04:17:25:1725 [32minfo[39m: [32mGET /api/v1/client/orders/statistics?startDate=2026-05-2&endDate=2026-05-21 200 - 107ms[39m
+2026-05-21 04:17:26:1726 [32minfo[39m: [32mGET /api/v1/client/orders/statistics?startDate=2026-05-20&endDate=2026-05-21 200 - 229ms[39m
+2026-05-21 04:17:26:1726 [32minfo[39m: [32mGET /api/v1/client/orders/statistics?startDate=2026-05-20&endDate=2026-05-21 304 - 228ms[39m
+2026-05-21 04:21:10:2110 [31merror[39m: [31mError during server bootstrap:[39m
+2026-05-21 04:21:10:2110 [31merror[39m: [31mlisten EADDRINUSE: address already in use 0.0.0.0:9999[39m
+2026-05-21 04:22:01:221 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 04:22:01 21/5/2026[39m
+[32m      * URL: http://localhost:9999[39m
+[32m      * Port: 9999[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-21 04:23:27:2327 [32minfo[39m: [32mPOST /api/v1/auth/customer/login 200 - 199ms[39m
+2026-05-21 04:23:27:2327 [32minfo[39m: [32mGET /api/v1/public/products?limit=100 200 - 375ms[39m
+2026-05-21 04:23:33:2333 [32minfo[39m: [32mPOST /api/v1/client/orders 201 - 874ms[39m
+2026-05-21 04:23:37:2337 [32minfo[39m: [32mGET /api/v1/client/orders/statistics?startDate=2026-05-01&endDate=2026-05-21 200 - 273ms[39m
+2026-05-21 04:23:39:2339 [32minfo[39m: [32mGET /api/v1/client/orders/statistics?startDate=2026-05-21&endDate=2026-05-21 200 - 95ms[39m
+2026-05-21 04:23:39:2339 [32minfo[39m: [32mGET /api/v1/client/orders/statistics?startDate=2026-05-21&endDate=2026-05-21 200 - 105ms[39m
+2026-05-21 04:24:57:2457 [32minfo[39m: [32mGET /api/v1/public/products?limit=100 200 - 396ms[39m
+2026-05-21 04:25:01:251 [31merror[39m: [31m[POST /api/v1/client/orders] [401] Invalid or expired token[39m
+2026-05-21 04:25:04:254 [31merror[39m: [31m[POST /api/v1/client/orders] [401] Invalid or expired token[39m
+2026-05-21 04:25:04:254 [31merror[39m: [31m[POST /api/v1/client/orders] [401] Invalid or expired token[39m
+2026-05-21 04:26:16:2616 [31merror[39m: [31m[POST /api/v1/client/orders] [401] Invalid or expired token[39m
+2026-05-21 04:26:19:2619 [31merror[39m: [31m[POST /api/v1/client/orders] [401] Invalid or expired token[39m
+2026-05-21 04:27:46:2746 [32minfo[39m: [32mPOST /api/v1/auth/customer/login 200 - 199ms[39m
+2026-05-21 04:27:47:2747 [32minfo[39m: [32mGET /api/v1/public/products?limit=100 304 - 368ms[39m
+2026-05-21 04:27:53:2753 [32minfo[39m: [32mPOST /api/v1/client/orders 201 - 912ms[39m
+2026-05-21 04:27:57:2757 [32minfo[39m: [32mGET /api/v1/client/orders/statistics?startDate=2026-05-01&endDate=2026-05-21 200 - 281ms[39m
+2026-05-21 04:27:59:2759 [32minfo[39m: [32mGET /api/v1/client/orders/statistics?startDate=2026-05-21&endDate=2026-05-21 200 - 183ms[39m
+2026-05-21 04:27:59:2759 [32minfo[39m: [32mGET /api/v1/client/orders/statistics?startDate=2026-05-21&endDate=2026-05-21 200 - 168ms[39m
+2026-05-21 04:28:07:287 [32minfo[39m: [32mGET /api/v1/client/orders/detail/1043 200 - 199ms[39m
+2026-05-21 04:28:11:2811 [32minfo[39m: [32mGET /api/v1/client/orders/statistics?startDate=2026-05-21&endDate=2026-05-21 304 - 171ms[39m
+2026-05-21 04:35:10:3510 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 187ms[39m
+2026-05-21 04:35:11:3511 [32minfo[39m: [32mGET /api/v1/admin/users/me 200 - 2ms[39m
+2026-05-21 04:35:11:3511 [32minfo[39m: [32mGET /api/v1/admin/users/me 200 - 1ms[39m
+2026-05-21 04:35:11:3511 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 445ms[39m
+2026-05-21 04:35:11:3511 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 493ms[39m
+2026-05-21 04:35:13:3513 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 444ms[39m
+2026-05-21 04:35:13:3513 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 466ms[39m
+2026-05-21 04:35:43:3543 [32minfo[39m: [32mPOST /api/v1/admin/picking/pack 200 - 1452ms[39m
+2026-05-21 04:35:49:3549 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 499ms[39m
+2026-05-21 04:36:27:3627 [32minfo[39m: [32mPOST /api/v1/admin/picking/pack 200 - 1189ms[39m
+2026-05-21 04:36:51:3651 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 490ms[39m
+2026-05-21 04:43:53:4353 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 04:43:53 21/5/2026[39m
+[32m      * URL: http://localhost:9999[39m
+[32m      * Port: 9999[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-21 04:44:36:4436 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 220ms[39m
+2026-05-21 04:44:36:4436 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 15ms[39m
+2026-05-21 04:44:37:4437 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-21 04:44:37:4437 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 480ms[39m
+2026-05-21 04:44:37:4437 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 454ms[39m
+2026-05-21 04:44:38:4438 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 250ms[39m
+2026-05-21 04:57:21:5721 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 04:57:21 21/5/2026[39m
+[32m      * URL: http://localhost:9999[39m
+[32m      * Port: 9999[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-21 04:58:11:5811 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 229ms[39m
+2026-05-21 04:58:12:5812 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 3ms[39m
+2026-05-21 04:58:12:5812 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 518ms[39m
+2026-05-21 04:58:13:5813 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-21 04:58:14:5814 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 1043ms[39m
+2026-05-21 04:58:14:5814 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 304 - 494ms[39m

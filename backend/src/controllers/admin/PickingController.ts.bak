@@ -7,7 +7,6 @@ import { PickingService } from "../../services/PickingService";
 import { UserRole } from "../../Entity/User";
 import { IncidentReport, IncidentStatus } from "../../Entity/IncidentReport";
 import { Forbidden } from "../../core/ErrorResponse";
-import { PickingTask } from "../../Entity/PickingTask";
 import { v2 as cloudinary } from "cloudinary";
 import dotenv from "dotenv";
 import logger from "../../helpers/Logger";
@@ -59,18 +58,7 @@ export class PickingController {
       targetStaffId = staffId;
     }
 
-    const tasks = await PickingTask.find({
-      where: { assignedUserId: targetStaffId },
-      relations: [
-        "orderDetail",
-        "orderDetail.product",
-        "orderDetail.order",
-        "location",
-        "assignedUser"
-      ],
-      order: { createdAt: "DESC" }
-    });
-
+    const tasks = await this.pickingService.getAssignedTasks(targetStaffId);
     return res.OK("Lấy danh sách nhiệm vụ được giao thành công", tasks);
   }
 

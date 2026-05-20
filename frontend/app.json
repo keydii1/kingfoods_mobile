@@ -17,7 +17,9 @@
         "foregroundImage": "./assets/images/android-icon-foreground.png",
         "backgroundImage": "./assets/images/android-icon-background.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png",
-        "permissions": ["android.permission.CAMERA"]
+        "permissions": [
+          "android.permission.CAMERA"
+        ]
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false
@@ -28,18 +30,24 @@
     },
     "plugins": [
       "expo-router",
-          [
+      [
         "expo-camera",
         {
-            "cameraPermission": "Ứng dụng cần quyền camera để quét mã barcode sản phẩm"
+          "cameraPermission": "Ứng dụng cần quyền camera để quét mã barcode sản phẩm"
         }
-    ],
-    ["expo-camera", {
-        "cameraPermission": "Cần quyền camera để quét mã barcode"
-    }],
-    ["expo-image-picker", {
-        "cameraPermission": "Cần quyền camera để chụp ảnh minh chứng"
-    }],
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Cần quyền camera để quét mã barcode"
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "cameraPermission": "Cần quyền camera để chụp ảnh minh chứng"
+        }
+      ],
       [
         "expo-splash-screen",
         {
@@ -51,7 +59,9 @@
             "backgroundColor": "#000000"
           }
         }
-      ]
+      ],
+      "expo-audio",
+      "expo-video"
     ],
     "experiments": {
       "typedRoutes": true,
