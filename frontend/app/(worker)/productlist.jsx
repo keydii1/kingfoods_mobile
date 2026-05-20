@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Text, View, TouchableOpacity, StyleSheet, FlatList, Alert, ActivityIndicator, RefreshControl } from 'react-native';
+import { Text, View, TouchableOpacity, StyleSheet, FlatList, ActivityIndicator, RefreshControl } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {getAssignedTasks} from '../../constants/services/api'
 import { COLORS } from '../../constants/colors';
@@ -8,6 +8,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../../contexts/AuthContext';
 import StaffBottomNav from '../../components/StaffBottomNav';
 import { Ionicons } from '@expo/vector-icons';
+import { Alert } from '../../utils/appAlert';
 
 const getZoneMeta = (locationName) => {
   if (!locationName) return { icon: 'cube-outline', label: 'Kho sỉ', color: COLORS.primary, bg: '#e8f5e9' };

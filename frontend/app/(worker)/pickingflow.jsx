@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, TextInput, Animated, Alert, ScrollView, Modal } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, TextInput, Animated, ScrollView, Modal } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
 import { COLORS } from '../../constants/colors';
@@ -11,6 +11,7 @@ import { packItem } from '../../constants/services/api';
 import { Ionicons } from '@expo/vector-icons';
 import { PACKING_POS } from '../../config/warehouseLayout';
 import { findShortestPath, pathDistance } from '../../utils/pathfinding';
+import { Alert } from '../../utils/appAlert';
 
 export default function PickingFlowScreen() {
   const params = useLocalSearchParams();
