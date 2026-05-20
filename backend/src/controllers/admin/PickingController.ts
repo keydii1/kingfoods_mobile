@@ -9,6 +9,7 @@ import { IncidentReport, IncidentStatus } from "../../Entity/IncidentReport";
 import { Forbidden } from "../../core/ErrorResponse";
 import { v2 as cloudinary } from "cloudinary";
 import dotenv from "dotenv";
+import logger from "../../helpers/Logger";
 
 dotenv.config();
 cloudinary.config({
@@ -162,9 +163,12 @@ export class PickingController {
             folder: "kingfoods/incidents",
           });
           finalPhotoUrl = uploadResult.secure_url;
-        } catch (err) {
-          console.error("Cloudinary upload failed", err);
-          finalPhotoUrl = ""; // Failsafe fallback
+        } catch (err: any) {
+          const errMsg = err?.message || JSON.stringify(err);
+          logger.error("Cloudinary upload failed: " + errMsg);
+          return res.status(500).json({
+            message: "Tải ảnh lên Cloudinary thất bại: " + errMsg
+          });
         }
       } else {
         finalPhotoUrl = photoUrl;
