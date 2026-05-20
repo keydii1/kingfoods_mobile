@@ -119,7 +119,7 @@ export default function TeamScreen(){
                 setPerformance(statsRes?.staffPerformance || []);
             }
             catch(err){
-                console.error("[CRITICAL ERROR IN TEAM.JSX FETCH]:", err);
+                console.warn("[CRITICAL ERROR IN TEAM.JSX FETCH]:", err);
             }
             finally {
                 setLoading(false);

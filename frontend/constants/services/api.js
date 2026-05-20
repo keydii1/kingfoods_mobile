@@ -71,6 +71,8 @@ export const customerLogout = () =>
 // PROFILE 
 export const getProfile = () =>
     request ('GET', '/client/profile');
+export const getMyProfile = () =>
+    request('GET', '/admin/users/me');
 export const updateProfile = (data) =>
     request ('PATCH', '/client/profile', data);
 // PICKING
@@ -80,15 +82,8 @@ export const packItem = (taskId, containerCode, quantity) =>
     request ('POST', '/admin/picking/pack', {taskId, containerCode, quantity});
 export const moveItem = (productId, oldContainerCode, newContainerCode, quantity = 1) =>
     request ('POST', '/admin/picking/move', {productId, oldContainerCode, newContainerCode, quantity});
-export const reportIncident = (taskId, reason, photoUri) => {
-    const body = { taskId, reason, photoUrl: photoUri || '' };
-    if (photoUri) {
-        const formData = new FormData();
-        formData.append('file', { uri: photoUri, type: 'image/jpeg', name: 'incident.jpg' });
-        formData.append('taskId', String(taskId));
-        formData.append('reason', reason);
-        return request('POST', '/admin/picking/incident', formData);
-    }
+export const reportIncident = (taskId, reason, photoUrl) => {
+    const body = { taskId, reason, photoUrl: photoUrl || '' };
     return request('POST', '/admin/picking/incident', body);
 };
 export const handoverTask = (taskId, nextStaffId) =>
@@ -137,9 +132,8 @@ export const getDashboardStatus = () =>
     request ('GET', '/admin/dashboard/stats');
 export const getCustomers = (page = 1, limit = 50) =>
     request ('GET', `/admin/customers?page=${page}&limit=${limit}`);
-// ── LOCATIONS 
-export const getLocations = () =>
-    request('GET', '/admin/locations');
+export const getLocations = (params = '') =>
+    request('GET', `/admin/locations?limit=1000${params ? `&${params}` : ''}`);
 
 export const getLocationById = (id) =>
     request('GET', `/admin/locations/${id}`);
@@ -153,8 +147,8 @@ export const updateLocation = (id, data) =>
 export const deleteLocation = (id) =>
     request('DELETE', `/admin/locations/${id}`);
 // ── CONTAINERS 
-export const getContainers = () =>
-    request('GET', '/admin/containers');
+export const getContainers = (params = '') =>
+    request('GET', `/admin/containers?limit=1000${params ? `&${params}` : ''}`);
 
 export const getContainerById = (id) =>
     request('GET', `/admin/containers/${id}`);

@@ -1,7 +1,6 @@
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../../constants/colors';
 import StaffBottomNav from '../../components/StaffBottomNav';
 
@@ -48,8 +47,10 @@ export default function RouteOptimizationScreen() {
 
   const handleArrived = () => {
     if (isLast) {
+      // Last product done → back to productlist
       router.replace({ pathname: '/productlist', params: { completed: 'true' } });
     } else {
+      // Go to next product's picking screen
       const next = allProducts[productIndex + 1];
       router.replace({
         pathname: '/picking',
@@ -72,7 +73,7 @@ export default function RouteOptimizationScreen() {
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => router.back()}>
-          <Ionicons name="chevron-back" size={24} color="#fff" />
+          <Text style={styles.backBtn}>‹</Text>
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Lộ trình</Text>
         <View style={styles.savedBadge}>
@@ -87,7 +88,6 @@ export default function RouteOptimizationScreen() {
       >
         {/* Info */}
         <View style={styles.alertCard}>
-          <Ionicons name="map-outline" size={32} color="#fff" style={{ marginRight: 12 }} />
           <View style={styles.alertBody}>
             <Text style={styles.alertTitle}>
               {isLast ? 'Sản phẩm cuối cùng!' : `Đi đến sản phẩm #${productIndex + 1}`}
@@ -145,10 +145,7 @@ export default function RouteOptimizationScreen() {
 
         {/* Pick order */}
         <View style={styles.pickCard}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 12 }}>
-            <Ionicons name="location-outline" size={16} color="#666" />
-            <Text style={styles.pickTitle}>THỨ TỰ PICK</Text>
-          </View>
+          <Text style={styles.pickTitle}>THỨ TỰ PICK</Text>
           {pickList.map((item) => (
             <View key={item.id} style={styles.pickRow}>
               <View style={[
@@ -156,13 +153,9 @@ export default function RouteOptimizationScreen() {
                 item.done && styles.stepCircleDone,
                 item.active && styles.stepCircleActive,
               ]}>
-                {item.done ? (
-                  <Ionicons name="checkmark" size={16} color="#fff" />
-                ) : (
-                  <Text style={[styles.stepText, item.done && styles.stepTextDone]}>
-                    {item.id}
-                  </Text>
-                )}
+                <Text style={[styles.stepText, item.done && styles.stepTextDone]}>
+                  {item.done ? '✓' : item.id}
+                </Text>
               </View>
               <View style={styles.pickInfo}>
                 <Text style={styles.pickShelf}>{item.shelf}</Text>
@@ -179,12 +172,9 @@ export default function RouteOptimizationScreen() {
       {/* Arrived button */}
       <View style={styles.bottomBar}>
         <TouchableOpacity style={styles.arriveBtn} onPress={handleArrived}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, justifyContent: 'center' }}>
-            <Ionicons name="checkmark-circle-outline" size={18} color="#fff" />
-            <Text style={styles.arriveBtnText}>
-              {isLast ? 'Hoàn thành — quay lại danh sách' : 'Tôi đã đến vị trí này'}
-            </Text>
-          </View>
+          <Text style={styles.arriveBtnText}>
+            {isLast ? 'Hoàn thành — quay lại danh sách' : 'Tôi đã đến vị trí này'}
+          </Text>
         </TouchableOpacity>
       </View>
         <StaffBottomNav />
@@ -211,7 +201,7 @@ const styles = StyleSheet.create({
 
   alertCard: {
     flexDirection: 'row', backgroundColor: '#22863a', borderRadius: 20, padding: 16,
-    marginBottom: 14, alignItems: 'center',
+    marginBottom: 14, alignItems: 'flex-start',
   },
   alertIcon: { fontSize: 30, marginRight: 12 },
   alertBody: { flex: 1 },

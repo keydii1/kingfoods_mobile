@@ -4,11 +4,10 @@ import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../constants/colors';
 
 const tabs = [
-  { key: 'dashboard', icon: 'home-outline', activeIcon: 'home', label: 'Trang chủ', route: '/dashboard' },
-  { key: 'team', icon: 'people-outline', activeIcon: 'people', label: 'Nhóm', route: '/team' },
-  { key: 'search', icon: 'search-outline', activeIcon: 'search', label: 'Tìm kiếm', route: '/ordersearch' },
-  { key: 'setting', icon: 'settings-outline', activeIcon: 'settings', label: 'Tiện ích', route: '/setting' },
-  { key: 'profile', icon: 'person-outline', activeIcon: 'person', label: 'Tài khoản', route: '/profile' },
+  { key: 'dashboard', icon: 'home', iconOutline: 'home-outline', label: 'Trang chủ', route: '/dashboard' },
+  { key: 'search', icon: 'cube', iconOutline: 'cube-outline', label: 'Soạn hàng', route: '/ordersearch' },
+  { key: 'incident', icon: 'alert-circle', iconOutline: 'alert-circle-outline', label: 'Sự cố', route: '/incidentreport' },
+  { key: 'profile', icon: 'person-circle', iconOutline: 'person-circle-outline', label: 'Tài khoản', route: '/profile' },
 ];
 
 export default function StaffBottomNav({ active }) {
@@ -23,13 +22,14 @@ export default function StaffBottomNav({ active }) {
             key={tab.key}
             style={styles.navItem}
             disabled={isActive}
-            onPress={() => router.push(tab.route)}
+            onPress={() => router.navigate(tab.route)}
+            activeOpacity={0.8}
           >
             <Ionicons
-              name={isActive ? tab.activeIcon : tab.icon}
+              name={isActive ? tab.icon : tab.iconOutline}
               size={22}
-              color={isActive ? COLORS.primary : '#888'}
-              style={{ marginBottom: 4 }}
+              color={isActive ? COLORS.primary : '#94a3b8'}
+              style={{ marginBottom: 2 }}
             />
             <Text style={[styles.navLabel, isActive && styles.navActive]}>
               {tab.label}
@@ -47,13 +47,16 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
     borderTopWidth: 1,
-    borderTopColor: '#eee',
+    borderTopColor: '#f1f5f9',
     paddingVertical: 10,
     backgroundColor: '#fff',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: -4 },
+    shadowOpacity: 0.02,
+    shadowRadius: 10,
+    elevation: 4,
   },
-  navItem: { alignItems: 'center' },
-  navIcon: { fontSize: 20, marginBottom: 4 },
-  navIconActive: { opacity: 0.5 },
-  navLabel: { fontSize: 12, color: '#666' },
-  navActive: { color: COLORS.primary, fontWeight: '700' },
+  navItem: { alignItems: 'center', flex: 1 },
+  navLabel: { fontSize: 10, color: '#94a3b8', fontWeight: '600' },
+  navActive: { color: COLORS.primary, fontWeight: '800' },
 });

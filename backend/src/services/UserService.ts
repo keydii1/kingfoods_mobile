@@ -42,15 +42,26 @@ export class UserService {
   }
 
   async getListUser() {
-    return await User.find();
+    return await User.find({ relations: ["assignedLocation"] });
   }
 
   async getUser(id: number) {
-    return await User.getByIdOrFail(id);
+    return await User.getByIdOrFail(id, { relations: ["assignedLocation"] });
   }
 
   async updateUser(id: number, body: any) {
     const user = await User.getByIdOrFail(id);
+
+    const { username, email } = body;
+    if (username && username !== user.username) {
+      const exists = await User.findOne({ where: { username } });
+      if (exists) throw new BadRequest("Tên đăng nhập đã tồn tại trong hệ thống");
+    }
+    if (email && email !== user.email) {
+      const exists = await User.findOne({ where: { email } });
+      if (exists) throw new BadRequest("Email đã tồn tại trong hệ thống");
+    }
+
     return await user.update(body);
   }
 

@@ -21,7 +21,7 @@ export class IncidentReport extends BaseEntity {
   @Property()
   reporterId: number;
 
-  @Column({ name: "photo_url", nullable: true })
+  @Column({ name: "photo_url", type: "text", nullable: true })
   @Property()
   photoUrl: string;
 

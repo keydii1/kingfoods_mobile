@@ -7,6 +7,10 @@ import { Ionicons } from '@expo/vector-icons';
 import { getIncidents, resolveIncident, reportIncident } from '../../constants/services/api';
 import { COLORS } from '../../constants/colors';
 import { playSound } from '../../utils/soundService';
+import StaffBottomNav from '../../components/StaffBottomNav';
+import { useAuth } from '../../contexts/AuthContext';
+import * as ImagePicker from 'expo-image-picker';
+import * as ImageManipulator from 'expo-image-manipulator';
 
 const issueTypes = [
   { key: 'damage', label: 'Hàng hư hỏng', icon: 'nutrition-outline', color: '#e57373' },
@@ -30,6 +34,9 @@ const incidentImages = {
 };
 
 export default function IncidentReportScreen() {
+  const { userRole } = useAuth();
+  const [photoUri, setPhotoUri] = useState(null);
+  const [photoBase64, setPhotoBase64] = useState(null);
   const [selectedType, setSelectedType] = useState('');
   const [detail, setDetail] = useState('');
   const [location, setLocation] = useState('');
@@ -38,6 +45,58 @@ export default function IncidentReportScreen() {
   const [activeFilter, setActiveFilter] = useState('all');
   const [loadingReports, setLoadingReports] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+
+  const handleTakePhoto = async () => {
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
+    if (status !== 'granted') {
+      Alert.alert('Lỗi', 'Cần quyền camera để chụp ảnh minh chứng');
+      return;
+    }
+    const result = await ImagePicker.launchCameraAsync({
+      allowsEditing: false,
+      quality: 0.7,
+    });
+    if (!result.canceled) {
+      try {
+        const manipResult = await ImageManipulator.manipulateAsync(
+          result.assets[0].uri,
+          [{ resize: { width: 800 } }],
+          { compress: 0.6, format: ImageManipulator.SaveFormat.JPEG, base64: true }
+        );
+        setPhotoUri(manipResult.uri);
+        setPhotoBase64('data:image/jpeg;base64,' + manipResult.base64);
+      } catch (err) {
+        setPhotoUri(result.assets[0].uri);
+        setPhotoBase64(null);
+      }
+    }
+  };
+
+  const handleChoosePhoto = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== 'granted') {
+      Alert.alert('Lỗi', 'Cần quyền thư viện để chọn ảnh minh chứng');
+      return;
+    }
+    const result = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: false,
+      quality: 0.7,
+    });
+    if (!result.canceled) {
+      try {
+        const manipResult = await ImageManipulator.manipulateAsync(
+          result.assets[0].uri,
+          [{ resize: { width: 800 } }],
+          { compress: 0.6, format: ImageManipulator.SaveFormat.JPEG, base64: true }
+        );
+        setPhotoUri(manipResult.uri);
+        setPhotoBase64('data:image/jpeg;base64,' + manipResult.base64);
+      } catch (err) {
+        setPhotoUri(result.assets[0].uri);
+        setPhotoBase64(null);
+      }
+    }
+  };
 
   useEffect(() => {
     fetchReports();
@@ -64,6 +123,7 @@ export default function IncidentReportScreen() {
           by: r.reporter?.name || r.reporter?.fullName || r.reporter?.username || 'Nhân viên kho',
           time: r.createdAt ? new Date(r.createdAt).toLocaleString('vi-VN', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit' }) : '',
           status: r.status === 'resolved' ? 'resolved' : 'pending',
+          photoUrl: r.photoUrl || '',
         };
       }));
     } catch (err) {
@@ -83,7 +143,7 @@ export default function IncidentReportScreen() {
     try {
       const typeLabel = issueTypes.find(t => t.key === selectedType)?.label || selectedType;
       // Default to taskId: 1 to ensure it maps to database schema constraints
-      await reportIncident(1, `${selectedType.toUpperCase()}: ${detail} ${location ? `(Tại vị trí: ${location})` : ''}`, '');
+      await reportIncident(1, `${selectedType.toUpperCase()}: ${detail} ${location ? `(Tại vị trí: ${location})` : ''}`, photoBase64 || '');
       
       playSound('success'); // Play premium success beep
       Alert.alert('Thành công', 'Báo cáo sự cố đã được gửi và lưu trữ thành công!');
@@ -91,7 +151,10 @@ export default function IncidentReportScreen() {
       setSelectedType('');
       setDetail('');
       setLocation('');
+      setPhotoUri(null);
+      setPhotoBase64(null);
       setShowForm(false);
+      setActiveFilter('pending');
       
       // Refresh real list
       fetchReports();
@@ -123,13 +186,12 @@ export default function IncidentReportScreen() {
     <SafeAreaView style={styles.safeArea}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()}>
-          <Ionicons name="chevron-back" size={24} color={COLORS.primary} />
-        </TouchableOpacity>
+        <View style={{ width: 32 }} />
         <Text style={styles.headerTitle}>Báo cáo sự cố</Text>
         <TouchableOpacity 
           style={[styles.addBtnContainer, showForm && styles.addBtnActive]} 
           onPress={() => setShowForm(!showForm)}
+          activeOpacity={0.7}
         >
           <Ionicons name={showForm ? "close" : "add"} size={22} color={showForm ? "#fff" : COLORS.primary} />
         </TouchableOpacity>
@@ -205,6 +267,31 @@ export default function IncidentReportScreen() {
               autoCorrect={true}
             />
 
+            <Text style={styles.formLabel}>Hình ảnh minh chứng (Tùy chọn):</Text>
+            {photoUri ? (
+              <View style={styles.photoContainer}>
+                <Image source={{ uri: photoUri }} style={styles.photoPreview} />
+                <TouchableOpacity 
+                  style={styles.removePhotoBtn} 
+                  onPress={() => { setPhotoUri(null); setPhotoBase64(null); }}
+                >
+                  <Ionicons name="trash" size={16} color="#fff" />
+                  <Text style={{ color: '#fff', fontSize: 12, fontWeight: '700', marginLeft: 4 }}>Xóa ảnh</Text>
+                </TouchableOpacity>
+              </View>
+            ) : (
+              <View style={styles.photoRow}>
+                <TouchableOpacity style={styles.photoSelectBtn} onPress={handleTakePhoto} activeOpacity={0.7}>
+                  <Ionicons name="camera-outline" size={20} color={COLORS.primary} />
+                  <Text style={styles.photoSelectText}>Chụp ảnh</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.photoSelectBtn} onPress={handleChoosePhoto} activeOpacity={0.7}>
+                  <Ionicons name="images-outline" size={20} color={COLORS.primary} />
+                  <Text style={styles.photoSelectText}>Chọn từ thư viện</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+
             <TouchableOpacity
               style={[styles.submitBtn, submitting && { opacity: 0.7 }]}
               onPress={submitReport}
@@ -258,12 +345,20 @@ export default function IncidentReportScreen() {
                 <Text style={styles.reportDetail}>{r.detail}</Text>
                 
                 {/* Beautiful dynamic Incident Photo */}
-                {incidentImages[r.typeKey] && (
+                {r.photoUrl ? (
                   <Image 
-                    source={incidentImages[r.typeKey]} 
+                    source={{ uri: r.photoUrl }} 
                     style={styles.reportImage} 
                     resizeMode="cover"
                   />
+                ) : (
+                  incidentImages[r.typeKey] && (
+                    <Image 
+                      source={incidentImages[r.typeKey]} 
+                      style={styles.reportImage} 
+                      resizeMode="cover"
+                    />
+                  )
                 )}
                 
                 <View style={styles.reportFooter}>
@@ -272,7 +367,7 @@ export default function IncidentReportScreen() {
                     <Text style={styles.reportTime}>{r.time}</Text>
                   </View>
 
-                  {!isResolved && (
+                  {userRole === 'admin' && !isResolved && (
                     <TouchableOpacity style={styles.actionBtn} onPress={() => handleResolve(r.id)}>
                       <Ionicons name="checkmark-circle-outline" size={16} color="#fff" />
                       <Text style={styles.actionBtnText}>Xử lý xong</Text>
@@ -288,7 +383,7 @@ export default function IncidentReportScreen() {
             <View style={styles.emptyIconBg}>
               <Ionicons name="shield-checkmark" size={60} color={COLORS.primary} />
             </View>
-            <Text style={styles.emptyTitle}>Hệ thống vận hành trơn tru! 🎉</Text>
+            <Text style={styles.emptyTitle}>Hệ thống vận hành ổn định!</Text>
             <Text style={styles.emptySub}>
               {activeFilter === 'all' 
                 ? 'Không ghi nhận sự cố nào phát sinh. Kho hàng Kingfood hiện đang hoạt động vô cùng an toàn và ổn định.' 
@@ -307,6 +402,7 @@ export default function IncidentReportScreen() {
           </View>
         )}
       </ScrollView>
+      <StaffBottomNav active="incident" />
     </SafeAreaView>
   );
 }
@@ -478,5 +574,49 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: '700',
     color: '#fff',
+  },
+  photoRow: {
+    flexDirection: 'row',
+    gap: 12,
+    marginBottom: 16,
+  },
+  photoSelectBtn: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#fff',
+    borderWidth: 1.5,
+    borderColor: '#e0e0e0',
+    borderRadius: 12,
+    paddingVertical: 12,
+    gap: 6,
+  },
+  photoSelectText: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: '#444',
+  },
+  photoContainer: {
+    alignItems: 'center',
+    marginBottom: 16,
+    position: 'relative',
+    width: '100%',
+  },
+  photoPreview: {
+    width: '100%',
+    height: 180,
+    borderRadius: 14,
+  },
+  removePhotoBtn: {
+    position: 'absolute',
+    bottom: 12,
+    right: 12,
+    backgroundColor: 'rgba(211, 47, 47, 0.9)',
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 20,
   },
 });

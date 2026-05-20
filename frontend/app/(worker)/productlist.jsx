@@ -1,13 +1,33 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Text, View, TouchableOpacity, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
-import { Alert } from '../../utils/appAlert';
+import { Text, View, TouchableOpacity, StyleSheet, FlatList, ActivityIndicator, RefreshControl } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Ionicons } from '@expo/vector-icons';
 import {getAssignedTasks} from '../../constants/services/api'
 import { COLORS } from '../../constants/colors';
-import { router, useLocalSearchParams, useFocusEffect } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
+import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../../contexts/AuthContext';
 import StaffBottomNav from '../../components/StaffBottomNav';
+import { Ionicons } from '@expo/vector-icons';
+import { Alert } from '../../utils/appAlert';
+
+const getZoneMeta = (locationName) => {
+  if (!locationName) return { icon: 'cube-outline', label: 'Kho sỉ', color: COLORS.primary, bg: '#e8f5e9' };
+  // Remove emojis and get clear name
+  const name = locationName.replace(/[^\w\s\dÀ-ỹ]/g, '').trim();
+  if (locationName.includes('tươi') || locationName.includes('fresh') || locationName.includes('1')) {
+    return { icon: 'leaf-outline', label: 'Thực phẩm tươi', color: '#2e7d32', bg: '#e8f5e9' };
+  }
+  if (locationName.includes('khô') || locationName.includes('dry') || locationName.includes('2')) {
+    return { icon: 'fast-food-outline', label: 'Đồ khô & Gia vị', color: '#ef6c00', bg: '#fff3e0' };
+  }
+  if (locationName.includes('mỹ') || locationName.includes('chemical') || locationName.includes('3')) {
+    return { icon: 'color-palette-outline', label: 'Hoá mỹ phẩm', color: '#00838f', bg: '#e0f7fa' };
+  }
+  if (locationName.includes('lạnh') || locationName.includes('frozen') || locationName.includes('4')) {
+    return { icon: 'snow-outline', label: 'Đồ đông lạnh', color: '#1565c0', bg: '#e3f2fd' };
+  }
+  return { icon: 'cube-outline', label: name || 'Khu vực kệ', color: COLORS.primary, bg: '#e8f5e9' };
+};
 
 const initialProducts = [
   { id: 1, location: '26.10.15', name: 'Bánh Quy Hải Hà 200g', sku: 'KF-00123', qty: 5, unit: 'Hộp', done: true },
@@ -20,56 +40,66 @@ const initialProducts = [
 export default function productListScreen() {
   const params = useLocalSearchParams();
   const taskId = params.taskId;
+  const navigation = useNavigation();
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState([]);
   const { userRole } = useAuth();
+  const [refreshing, setRefreshing] = useState(false);
 
   const [taskInfo, setTaskInfo] = useState(null);
-  useFocusEffect(useCallback(() => {
-    async function fetchItem() {
-      try{
-        setLoading(true);
-        const res = await getAssignedTasks();
-        console.log('productlist: getAssignedTasks response', JSON.stringify(res, null, 2));
-        const arr = Array.isArray(res) ? res : [];
-        console.log(`productlist: looking for taskId=${taskId}, type=${typeof taskId}`);
-        console.log(`productlist: available task IDs:`, arr.map(t => ({ id: t.id, type: typeof t.id })));
-        const task = arr.find(t => String(t.id) === String(taskId));
-        console.log('productlist: found task?', !!task);
-        console.log('productlist: found task data', JSON.stringify(task, null, 2));
-        if(task){
-          const orderId = task.orderDetail?.order?.id;
-          const orderTasks = orderId
-            ? arr.filter(t => t.orderDetail?.order?.id === orderId)
-            : [task];
-          setTaskInfo(task);
-          setProducts(orderTasks.map(t => {
-            const prod = t.orderDetail?.product;
-            const remaining = (t.quantityToPick ?? 1) - (t.quantityPicked ?? 0);
-            return {
-              taskId: t.id,
-              location: t.location?.name || '',
-              name: prod?.name || 'Unknown',
-              sku: String(prod?.id ?? t.id),
-              qty: Math.max(0, remaining),
-              unit: 'cái',
-              done: t.status === 'completed' || remaining <= 0,
-            };
-          }));
-        } else {
-          setProducts(initialProducts);
-        }
-      }
-      catch(err){
-        console.log('productlist: fetch error', err.message);
-        setProducts(initialProducts);
-      }
-      finally {
-        setLoading(false);
+
+  const loadItems = useCallback(async (silent = false) => {
+    try{
+      if (!silent) setLoading(true);
+      const res = await getAssignedTasks();
+      const arr = Array.isArray(res) ? res : [];
+      const task = arr.find(t => String(t.id) === String(taskId));
+      if(task){
+        const orderId = task.orderDetail?.order?.id;
+        const orderTasks = orderId
+          ? arr.filter(t => t.orderDetail?.order?.id === orderId)
+          : [task];
+        setTaskInfo(task);
+        const newProducts = orderTasks.map(t => {
+          const prod = t.orderDetail?.product;
+          const remaining = (t.quantityToPick ?? 1) - (t.quantityPicked ?? 0);
+          const loc = t.location;
+          const catLoc = t.orderDetail?.product?.category?.location;
+          return {
+            taskId: t.id,
+            location: loc?.name || catLoc?.name || '',
+            locationCode: loc?.code || catLoc?.code || '',
+            name: prod?.name || 'Unknown',
+            sku: String(prod?.id ?? t.id),
+            qty: Math.max(0, remaining),
+            unit: 'cái',
+            done: t.status === 'completed' || remaining <= 0,
+          };
+        });
+        // Only update state if data actually changed (avoid unnecessary re-renders)
+        setProducts(prev => {
+          const hasChanged = prev.length !== newProducts.length ||
+            newProducts.some((np, i) => np.taskId !== prev[i]?.taskId || np.done !== prev[i]?.done || np.qty !== prev[i]?.qty);
+          return hasChanged ? newProducts : prev;
+        });
+      } else {
+        if (!silent) setProducts(initialProducts);
       }
     }
-    fetchItem();
-  }, [taskId]));
+    catch(err){
+      if (!silent) setProducts(initialProducts);
+    }
+    finally {
+      if (!silent) setLoading(false);
+      setRefreshing(false);
+    }
+  }, [taskId]);
+
+  useEffect(() => {
+    loadItems();
+    const unsub = navigation.addListener('focus', () => loadItems(true));
+    return unsub;
+  }, [navigation, loadItems]);
 
   const doneCount = products.filter(p => p.done).length;
   const remaining = products.length - doneCount;
@@ -103,35 +133,114 @@ export default function productListScreen() {
   };
 
   function renderItem({ item, index }) {
+    const isDone = item.done;
+    const meta = getZoneMeta(item.location);
+
     return (
-      <TouchableOpacity onPress={() => !item.done && startPicking(item, index)} disabled={item.done}>
-        <View style={[styles.itemRow, item.done && styles.itemDone]}>
-          <View style={styles.locationBox}>
-            <Text style={styles.locationText}>{item.location}</Text>
+      <TouchableOpacity 
+        onPress={() => !isDone && startPicking(item, index)} 
+        disabled={isDone}
+        activeOpacity={0.7}
+        style={{ marginBottom: 10 }}
+      >
+        <View style={[
+          styles.itemRow, 
+          isDone && styles.itemDone,
+          { 
+            backgroundColor: '#fff',
+            borderRadius: 16,
+            padding: 16,
+            flexDirection: 'row',
+            alignItems: 'center',
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.05,
+            shadowRadius: 8,
+            elevation: 2,
+            borderWidth: 1,
+            borderColor: isDone ? '#e2e8f0' : '#f1f5f9'
+          }
+        ]}>
+          {/* 1. Left Icon Container: Zone category indicator */}
+          <View style={{
+            width: 48,
+            height: 48,
+            borderRadius: 12,
+            backgroundColor: meta.bg || '#f1f5f9',
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginRight: 12
+          }}>
+            <Ionicons name={meta.icon} size={24} color={meta.color} />
           </View>
-          <View style={styles.itemInfo}>
-            <Text style={styles.itemName}>{item.name}</Text>
-            <Text style={styles.itemSku}>{item.sku}</Text>
+
+          {/* 2. Middle Content: Product name, SKU, and Clean Zone Label */}
+          <View style={{ flex: 1, marginRight: 8 }}>
+            <Text 
+              style={{ 
+                fontSize: 14, 
+                fontWeight: '700', 
+                color: isDone ? '#94a3b8' : '#1e293b',
+                lineHeight: 18 
+              }} 
+              numberOfLines={2}
+            >
+              {item.name}
+            </Text>
+            
+            <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 6, flexWrap: 'wrap', gap: 6 }}>
+              {/* SKU label */}
+              <Text style={{ fontSize: 11, fontWeight: '600', color: '#64748b', backgroundColor: '#f1f5f9', paddingHorizontal: 6, paddingVertical: 2, borderRadius: 4 }}>
+                SKU: {item.sku}
+              </Text>
+              
+              {/* Zone label */}
+              <Text style={{ fontSize: 11, fontWeight: '700', color: meta.color, backgroundColor: meta.bg, paddingHorizontal: 8, paddingVertical: 2, borderRadius: 4 }}>
+                {meta.label}
+              </Text>
+            </View>
           </View>
-          <View style={styles.itemQty}>
-            {item.done ? (
-              <Ionicons name="checkmark-circle" size={24} color={COLORS.primary} />
-            ) : (
-              <Text style={styles.qtyValue}>{item.qty}</Text>
+
+          {/* 3. Right Content: Qty and Report Button */}
+          <View style={{ alignItems: 'flex-end', justifyContent: 'center', minWidth: 85 }}>
+            {/* Qty value */}
+            <View style={{ flexDirection: 'row', alignItems: 'baseline', marginBottom: 6 }}>
+              <Text style={{ 
+                fontSize: 20, 
+                fontWeight: '900', 
+                color: isDone ? '#94a3b8' : COLORS.primary 
+              }}>
+                {isDone ? '✓' : item.qty}
+              </Text>
+              {!isDone && (
+                <Text style={{ fontSize: 11, fontWeight: '600', color: '#64748b', marginLeft: 2 }}>
+                  {item.unit || 'cái'}
+                </Text>
+              )}
+            </View>
+
+            {/* Báo thiếu button */}
+            {!isDone && (
+              <TouchableOpacity
+                style={{
+                  backgroundColor: '#fff5f5',
+                  borderWidth: 1.2,
+                  borderColor: '#feb2b2',
+                  borderRadius: 8,
+                  paddingHorizontal: 8,
+                  paddingVertical: 4,
+                }}
+                onPress={() =>
+                  router.push({
+                    pathname: '/(worker)/missingitem',
+                    params: { itemId: item.taskId },
+                  })
+                }
+              >
+                <Text style={{ color: '#c53030', fontSize: 11, fontWeight: '700' }}>Báo thiếu</Text>
+              </TouchableOpacity>
             )}
-            <Text style={styles.qtyUnit}>{item.unit}</Text>
           </View>
-          <TouchableOpacity
-            style={styles.reportBtn}
-            onPress={() =>
-              router.push({
-                pathname: '/(worker)/missingitem',
-                params: { itemId: item.taskId },
-              })
-            }
-          >
-            <Text style={styles.reportBtnText}>Báo thiếu</Text>
-          </TouchableOpacity>
         </View>
       </TouchableOpacity>
     );
@@ -143,7 +252,7 @@ export default function productListScreen() {
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => router.back()}>
-          <Ionicons name="chevron-back" size={24} color={COLORS.primary} style={{ marginRight: 10 }} />
+          <Text style={styles.backBtn}> ‹ </Text>
         </TouchableOpacity>
         <Text style={styles.headerTitle}>{taskInfo?.orderDetail?.order?.id ? `Đơn hàng #${taskInfo.orderDetail.order.id}` : `Đơn hàng #${taskId}`}</Text>
         <View style={styles.badge}>
@@ -153,7 +262,6 @@ export default function productListScreen() {
 
       {/* Zone Chip */}
       <View style={styles.zoneChip}>
-        <Ionicons name="cube-outline" size={28} color={COLORS.primary} />
         <View style={styles.zoneInfo}>
           <Text style={styles.zoneName}>Khu vực Bánh & Kẹo</Text>
           <Text style={styles.zoneSub}>12 sản phẩm thuộc khu vực của bạn</Text>
@@ -177,6 +285,8 @@ export default function productListScreen() {
         renderItem={renderItem}
         contentContainerStyle={styles.list}
         style={{ flex: 1 }}
+        refreshing={refreshing}
+        onRefresh={loadItems}
       />
         )}
       </View>
@@ -184,19 +294,13 @@ export default function productListScreen() {
       <View style={styles.confirmBar}>
         {allDone ? (
           <>
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, justifyContent: 'center' }}>
-                <Ionicons name="checkmark-circle-outline" size={18} color={COLORS.primary} />
-                <Text style={styles.confirmText}>Đã hoàn thành tất cả sản phẩm</Text>
-            </View>
+            <Text style={styles.confirmText}>Đã hoàn thành tất cả sản phẩm</Text>
             <TouchableOpacity style={styles.confirmBtn} onPress={confirmOrder}>
               <Text style={styles.confirmBtnText}>Xác nhận hoàn thành đơn hàng</Text>
             </TouchableOpacity>
           </>
         ) : (
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, justifyContent: 'center' }}>
-              <Ionicons name="time-outline" size={18} color={COLORS.primary} />
-              <Text style={styles.confirmText}>Còn {remaining} sản phẩm chưa lấy</Text>
-          </View>
+          <Text style={styles.confirmText}>Còn {remaining} sản phẩm chưa lấy</Text>
         )}
       </View>
       </View>

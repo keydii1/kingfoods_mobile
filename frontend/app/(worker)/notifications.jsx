@@ -1,21 +1,20 @@
 import {Text, View, SectionList, StyleSheet, TouchableOpacity} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useState, useEffect} from 'react';
-import {ActivityIndicator} from 'react-native';
-import {Ionicons} from '@expo/vector-icons';
-import {getAssignedTasks} from '../../constants/services/api'
+import {ActivityIndicator, Alert} from 'react-native';
+import {getIncidents} from '../../constants/services/api'
 import {router, usePathname} from 'expo-router';
 import {COLORS} from '../../constants/colors';
-import StaffBottomNav from '../../components/StaffBottomNav';
+
+// Mockdata chia thành 2 section SectionList
 
 const sections = [
     {
-        title : 'Mới nhất',
+            title : 'Mới nhất',
         data: [
             {
             id : '1',
-            icon: 'alert-circle-outline',
-            iconColor: '#e53935',
+            icon: '',
             iconBg: '#ffebee',
             title : 'Hủy đơn khẩn cấp',
             message: '#KF-12349 – Bình Thạnh vừa bị hủy. Dừng pick ngay.',
@@ -24,8 +23,7 @@ const sections = [
         },
         {
             id: '2',
-            icon: 'cube-outline',
-            iconColor: '#e65100',
+            icon: '',
             iconBg: '#fff3e0',
             title: 'Thêm 5 SKU vào đơn #KF-12345',
             time: '15 phút trước · Hệ thống',
@@ -35,8 +33,7 @@ const sections = [
         },
         {
             id : '3',
-            icon: 'location-outline',
-            iconColor: '#1565c0',
+            icon: '',
             iconBg: '#e3f2fd',
             title: 'Thay đổi vị trí của hàng',
             message: 'Chinsu 500ml đã chuyển từ kệ 12.03.A sang 12.07.B',
@@ -50,8 +47,7 @@ const sections = [
         data: [
             {
                 id: '4',
-                icon: 'checkmark-circle-outline',
-                iconColor: COLORS.primary,
+                icon: '',
                 iconBg: '#e8f5e9',
                 title: 'Bàn giao ca hoàn tất',
                 message: 'Ca sáng bàn giao thành công 3 ghi chú cho ca chiều.',
@@ -60,8 +56,7 @@ const sections = [
             },
             {
                 id: '5',
-                icon: 'warning-outline',
-                iconColor: '#e65100',
+                icon: '',
                 iconBg: '#fff3e0',
                 title: 'Cảnh báo năng suất',
                 message: 'Năng suất 10:00–11:00 chỉ đạt 43 SKU/h, dưới mức 50.',
@@ -79,7 +74,7 @@ function NotifItem({item}){
         style = {[styles.notifItem, item.unread && styles.notifUnread]}>
             {/* Icon */}
             <View style = {[styles.notifIcon, {backgroundColor:item.iconBg}]}>
-                <Ionicons name={item.icon} size={20} color={item.iconColor || COLORS.primary} />
+                <Text style = {styles.notifIconText}>{item.icon}</Text>
             </View>
             {/* Nội dung */}
             <View style = {styles.notifBody}>
@@ -99,36 +94,24 @@ export default function NotificationScreen(){
     useEffect(() =>{
         async function fetchNotification(){
             try{
-            const res = await getAssignedTasks();
-            const tasks = Array.isArray(res) ? res : [];
-            const newOnes = tasks
-            .filter(t => t.status !== 'completed')
-            .map((t, i) => ({
-                id: `new-${t.id}`,
-                icon: 'cube-outline', iconBg: '#e3f2fd', iconColor: '#1565c0',
-                title: `Đang pick: ${t.orderDetail?.product?.name || 'Sản phẩm'}`,
-                message: `${t.quantityPicked}/${t.quantityToPick} · ${t.orderDetail?.order?.branch?.name || ''}`,
-                time: t.createdAt ? new Date(t.createdAt).toLocaleTimeString('vi-VN') : ' ',
-                unread: true,
+            const res = await getIncidents();
+            const paginated = res?.data || res;
+            const items = Array.isArray(paginated) ? paginated : (paginated?.data || []);
+            const sorted = [...items].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+            const newOnes = sorted.slice(0, 10).map(t => ({
+                id: `inc-${t.id}`,
+                iconBg: t.status === 'resolved' ? '#e8f5e9' : '#ffebee',
+                title: t.reason || 'Sự cố',
+                message: `${t.task?.product?.name || 'Sản phẩm'} · ${t.reporter?.name || 'Nhân viên'} báo cáo`,
+                time: t.createdAt ? new Date(t.createdAt).toLocaleString('vi-VN') : '',
+                unread: t.status !== 'resolved',
             }));
-            const old = tasks
-            .filter(t => t.status === 'completed')
-            .map(t => ({
-                id: `old-${t.id}`,
-                icon: 'checkmark-circle-outline', iconBg: '#e8f5e9', iconColor: COLORS.primary,
-                title: `Hoàn thành: ${t.orderDetail?.product?.name || 'Sản phẩm'}`,
-                message: `${t.quantityToPick} cái · ${t.orderDetail?.order?.branch?.name || ''}`,
-                time: t.updatedAt ? new Date(t.updatedAt).toLocaleTimeString('vi-VN') : ' ',
-                unread: false
-            }));
-            if(newOnes.length > 0 || old.length > 0){
+            if(newOnes.length > 0){
                 setApiSections([
                     { title: 'Mới nhất', data: newOnes },
-                    { title: 'Trước đó', data: old },
                 ]);
             }
         } catch (err){
-            //  giữ mockdata nếu lỗi
         } finally {
             setLoading(false);
         }
@@ -143,43 +126,37 @@ export default function NotificationScreen(){
             {/* Header */}
             <View style = {styles.header}>
                 <TouchableOpacity onPress = {() => router.back()}>
-                    <Ionicons name="chevron-back" size={24} color={COLORS.primary} />
-                </TouchableOpacity>
-                <Text style = {styles.headerTitle}>Thông báo</Text>
-                <View style = {styles.badge}>
-                    <Text style = {styles.badgeText}>{unreadCount} mới</Text>
-                </View>
+                    <Text style = {styles.backBtn}>‹</Text>
+                     </TouchableOpacity>
+                    <Text style = {styles.headerTitle}>Thông báo</Text>
+                    <View style = {styles.badge}>
+                        <Text style = {styles.badgeText}>{unreadCount} mới</Text>
+                    </View>
             </View>
             {/* Danh sách thông báo */}
             {loading ? (
-                <ActivityIndicator color={COLORS.primary} size="large" style={{ marginTop: 40 }} />
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                    <ActivityIndicator color={COLORS.primary} size="large" />
+                </View>
             ) : (
-                <SectionList
-                    sections={displaySections}
-                    keyExtractor={(item) => item.id}
-                    renderItem={({ item }) => <NotifItem item={item} />}
-                    renderSectionHeader={({ section }) => (
-                        <View style={styles.sectionHeader}>
-                            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-                                <Ionicons 
-                                    name={section.title === 'Mới nhất' ? 'notifications-outline' : 'archive-outline'} 
-                                    size={16} 
-                                    color="#888" 
-                                />
-                                <Text style={styles.sectionTitle}>
-                                    {section.title}
-                                </Text>
-                            </View>
-                        </View>
-                    )}
-                    contentContainerStyle={styles.list}
-                />
+                       <SectionList
+                style={{ flex: 1 }}
+                sections={displaySections}
+                keyExtractor={(item) => item.id}
+                renderItem={({ item }) => <NotifItem item={item} />}
+                renderSectionHeader={({ section }) => (
+                    <View style={styles.sectionHeader}>
+                        <Text style={styles.sectionTitle}>
+                            {section.title}
+                        </Text>
+                    </View>
+                )}
+                contentContainerStyle={styles.list}
+            />
             )}
-        <StaffBottomNav />
         </SafeAreaView>
     );
 }
-
 const styles = StyleSheet.create({
     safeArea: {
         flex: 1,
@@ -220,6 +197,7 @@ const styles = StyleSheet.create({
     // List
     list: {
         padding: 12,
+        paddingBottom: 20,
     },
 
     // Section Header
@@ -231,6 +209,8 @@ const styles = StyleSheet.create({
         fontSize: 13,
         fontWeight: '700',
         color: '#888',
+        textTransform: 'uppercase',
+        letterSpacing: 0.5,
     },
 
     // Thông báo
@@ -238,10 +218,15 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'flex-start',
         backgroundColor: '#fff',
-        borderRadius: 14,
-        padding: 14,
+        borderRadius: 16,
+        padding: 16,
         marginBottom: 8,
         gap: 12,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.06,
+        shadowRadius: 8,
+        elevation: 2,
     },
     notifUnread: {
         backgroundColor: '#f0f7f0',

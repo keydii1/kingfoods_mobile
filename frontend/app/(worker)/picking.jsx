@@ -1,9 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, TextInput, Animated, ScrollView } from 'react-native';
-import { Alert } from '../../utils/appAlert';
+import { View, Text, TouchableOpacity, StyleSheet, TextInput, Animated, Alert, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../../constants/colors';
 import StaffBottomNav from '../../components/StaffBottomNav';
 
@@ -51,6 +49,18 @@ export default function PickingScreen() {
       Alert.alert('Lỗi', 'Vui lòng nhập mã barcode');
       return;
     }
+    if (productSku && barcode.trim() !== productSku) {
+      router.push({
+        pathname: '/pickingerror',
+        params: {
+          scannedSKU: barcode.trim(),
+          scannedName: '',
+          expectedSKU: productSku,
+          expectedName: productName || '',
+        },
+      });
+      return;
+    }
     setScanned(true);
     setTimeout(() => setShowQty(true), 500);
   };
@@ -80,7 +90,7 @@ export default function PickingScreen() {
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => router.back()}>
-          <Ionicons name="chevron-back" size={24} color={COLORS.primary} />
+          <Text style={styles.backBtn}>‹</Text>
         </TouchableOpacity>
         <View style={styles.headerCenter}>
           <Text style={styles.headerTitle}>Picking</Text>
@@ -96,11 +106,9 @@ export default function PickingScreen() {
         {[1, 2].map((s, i) => (
           <View key={s} style={styles.stepItem}>
             <View style={[styles.stepDot, currentStep >= s && styles.stepActive]}>
-              {s === 1 ? (
-                <Ionicons name="camera-outline" size={16} color={currentStep >= s ? '#fff' : '#666'} />
-              ) : (
-                <Ionicons name="calculator-outline" size={16} color={currentStep >= s ? '#fff' : '#666'} />
-              )}
+              <Text style={[styles.stepDotText, currentStep >= s && styles.stepDotTextActive]}>
+                {s === 1 ? 'Quét' : 'SL'}
+              </Text>
             </View>
             {i < 1 && <View style={[styles.stepLine, currentStep > s && styles.stepLineActive]} />}
           </View>
@@ -112,7 +120,6 @@ export default function PickingScreen() {
         <View style={styles.stepContainer}>
           <View style={styles.scannerBox}>
             <Animated.View style={[styles.scanFrame, { opacity: scanAnim }]}>
-              <Ionicons name="camera-outline" size={48} color="rgba(255,255,255,0.6)" style={{ marginBottom: 10 }} />
               <Text style={styles.scanHint}>Đưa mã vạch vào khung</Text>
               <Animated.View style={[styles.scanLine, { opacity: scanAnim.interpolate({
                 inputRange: [0.3, 1], outputRange: [0.3, 1]
@@ -124,10 +131,7 @@ export default function PickingScreen() {
           {!scanned ? (
             <>
               <TouchableOpacity style={styles.scanBtn} onPress={simulateScan}>
-                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, justifyContent: 'center' }}>
-                  <Ionicons name="camera-outline" size={18} color="#fff" />
-                  <Text style={styles.scanBtnText}>Quét mã</Text>
-                </View>
+                <Text style={styles.scanBtnText}>Quét mã</Text>
               </TouchableOpacity>
               <Text style={styles.orText}>— hoặc —</Text>
               <View style={styles.manualRow}>
@@ -137,12 +141,6 @@ export default function PickingScreen() {
                   placeholderTextColor="#aaa"
                   value={barcode}
                   onChangeText={setBarcode}
-                  autoCapitalize="none"
-                  autoCorrect={false}
-                  spellCheck={false}
-                  autoComplete="off"
-                  importantForAutofill="no"
-                  textContentType="oneTimeCode"
                 />
                 <TouchableOpacity style={styles.manualBtn} onPress={handleManualScan}>
                   <Text style={styles.manualBtnText}>Xác nhận</Text>
@@ -151,7 +149,6 @@ export default function PickingScreen() {
             </>
           ) : (
             <View style={styles.scanResult}>
-              <Ionicons name="checkmark-circle" size={48} color={COLORS.primary} style={{ marginBottom: 6 }} />
               <Text style={styles.scanSuccessText}>Quét thành công!</Text>
               <Text style={styles.scanSku}>Mã: {barcode}</Text>
               <Text style={styles.scanProduct}>{productName}</Text>
@@ -163,10 +160,7 @@ export default function PickingScreen() {
       {/* Step 2: Quantity */}
       {showQty && (
         <View style={styles.stepContainer}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, justifyContent: 'center', marginBottom: 16 }}>
-              <Ionicons name="calculator-outline" size={20} color="#222" />
-              <Text style={styles.qtyTitle}>Chọn số lượng</Text>
-          </View>
+          <Text style={styles.qtyTitle}>Chọn số lượng</Text>
           <View style={styles.qtyCard}>
             <Text style={styles.qtyProduct}>{productName}</Text>
             <Text style={styles.qtySku}>{productSku} · {productLocation}</Text>
@@ -190,10 +184,7 @@ export default function PickingScreen() {
             </View>
           </View>
           <TouchableOpacity style={styles.routeBtn} onPress={goToRoute}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, justifyContent: 'center' }}>
-                <Ionicons name="map-outline" size={18} color="#fff" />
-                <Text style={styles.routeBtnText}>Xem lộ trình đến sản phẩm tiếp theo</Text>
-            </View>
+            <Text style={styles.routeBtnText}>Xem lộ trình đến sản phẩm tiếp theo</Text>
           </TouchableOpacity>
         </View>
       )}
@@ -272,7 +263,7 @@ const styles = StyleSheet.create({
   scanProduct: { fontSize: 14, fontWeight: '600', color: '#222' },
 
   // Quantity
-  qtyTitle: { fontSize: 18, fontWeight: '700', color: '#222' },
+  qtyTitle: { fontSize: 18, fontWeight: '700', color: '#222', textAlign: 'center', marginBottom: 16 },
   qtyCard: {
     backgroundColor: '#fff', borderRadius: 20, padding: 24, alignItems: 'center', marginBottom: 20,
   },

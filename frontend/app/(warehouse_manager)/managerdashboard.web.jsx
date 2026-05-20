@@ -101,21 +101,57 @@ export default function ManagerDashboardWebScreen() {
   // B. Containers states
   const [containersList, setContainersList] = useState([]);
   const [loadingContainers, setLoadingContainers] = useState(false);
-  const [containerForm, setContainerForm] = useState({ code: '', description: '', status: 'empty' });
+  const [containerForm, setContainerForm] = useState({ code: '', description: '', capacity: '50', status: 'empty' });
   const [submittingContainer, setSubmittingContainer] = useState(false);
   const [tracedContainerData, setTracedContainerData] = useState(null);
   const [tracingCode, setTracingCode] = useState('');
   const [loadingTrace, setLoadingTrace] = useState(false);
+  const [containerSort, setContainerSort] = useState('default');
 
   // C. Products Inventory states
   const [productsList, setProductsList] = useState([]);
   const [loadingProducts, setLoadingProducts] = useState(false);
-  const [productForm, setProductForm] = useState({ name: '', sku: '', category: 'Bánh Kẹo', price: '', unit: 'Hộp', image: '' });
+  const [productForm, setProductForm] = useState({ name: '', sku: '', categoryId: 1, price: '', unit: 'Hộp', image: '' });
   const [submittingProduct, setSubmittingProduct] = useState(false);
+
+  // Auto generate SKU from name & category
+  useEffect(() => {
+    if (!productForm.name.trim()) {
+      setProductForm(f => f.sku !== '' ? { ...f, sku: '' } : f);
+      return;
+    }
+
+    let prefix = 'PROD';
+    const catId = parseInt(productForm.categoryId || 1);
+    if (catId === 1) prefix = 'FRESH';
+    else if (catId === 2) prefix = 'DRY';
+    else if (catId === 3) prefix = 'CHEM';
+    else if (catId === 4) prefix = 'COLD';
+
+    let cleanName = productForm.name
+      .trim()
+      .toLowerCase()
+      .replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, 'a')
+      .replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, 'e')
+      .replace(/ì|í|ị|ỉ|ĩ/g, 'i')
+      .replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, 'o')
+      .replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, 'u')
+      .replace(/ỳ|ý|ỵ|ỷ|ỹ/g, 'y')
+      .replace(/đ/g, 'd')
+      .replace(/[^a-z0-9\s]/g, '')
+      .replace(/\s+/g, '-');
+
+    const nameSlug = cleanName.toUpperCase().split('-').slice(0, 4).join('-');
+    const newSku = `${prefix}-${nameSlug}`;
+    
+    setProductForm(f => f.sku !== newSku ? { ...f, sku: newSku } : f);
+  }, [productForm.name, productForm.categoryId]);
 
   // D. Picking Dispatch states
   const [dispatchForm, setDispatchForm] = useState({ userId: '', orderId: '' });
   const [dispatchingTask, setDispatchingTask] = useState(false);
+  const [selectedPickingOrderId, setSelectedPickingOrderId] = useState('');
+  const [pickingAssignments, setPickingAssignments] = useState({}); // productId -> { staffId: number, quantity: number }
 
   // Live Warehouse Stock Levels Mock State
   const [warehouseStocks, setWarehouseStocks] = useState({
@@ -126,13 +162,7 @@ export default function ManagerDashboardWebScreen() {
     'FRUIT-TAO-DO': 14, // Low Stock Alert!
   });
 
-  // Picker Gamified Efficiency Metrics
-  const [pickerEfficiencies] = useState([
-    { name: 'Nguyễn Văn Hải', speed: '1.9 phút/đơn', accuracy: '99.9%', tasks: 148, rank: 'gold' },
-    { name: 'Trần Thị Hằng', speed: '2.3 phút/đơn', accuracy: '99.5%', tasks: 125, rank: 'silver' },
-    { name: 'Phạm Minh Đức', speed: '2.7 phút/đơn', accuracy: '98.8%', tasks: 104, rank: 'bronze' },
-    { name: 'Lê Hoàng Sơn', speed: '3.1 phút/đơn', accuracy: '98.5%', tasks: 92, rank: 'standard' }
-  ]);
+
 
   // Interactive Zone Map Blueprint Occupancy
   const [shelfOccupancies, setShelfOccupancies] = useState([
@@ -210,8 +240,9 @@ export default function ManagerDashboardWebScreen() {
   const fetchStores = async (silent = false) => {
     try {
       if (!silent) setLoadingStores(true);
-      const res = await getCustomers();
-      setStoresList(Array.isArray(res) ? res : []);
+      const res = await getCustomers(1, 1000);
+      const list = Array.isArray(res) ? res : (res?.data || res?.items || []);
+      setStoresList(list);
     } catch (err) {
       console.log('Stores error:', err.message);
     } finally {
@@ -222,9 +253,9 @@ export default function ManagerDashboardWebScreen() {
   const fetchTeam = async (silent = false) => {
     try {
       if (!silent) setLoadingTeam(true);
+      await fetchLocationsList(true);
       const res = await getUsers();
       setTeamList(Array.isArray(res) ? res : []);
-      fetchLocationsList(true);
     } catch (err) {
       console.log('Team error:', err.message);
     } finally {
@@ -248,7 +279,8 @@ export default function ManagerDashboardWebScreen() {
     try {
       if (!silent) setLoadingContainers(true);
       const res = await getContainers();
-      setContainersList(Array.isArray(res) ? res : []);
+      const list = Array.isArray(res) ? res : (res?.data || res?.items || []);
+      setContainersList(list);
     } catch (err) {
       console.log('Containers error:', err.message);
     } finally {
@@ -287,6 +319,9 @@ export default function ManagerDashboardWebScreen() {
       fetchContainersList();
     } else if (tab === 'products') {
       fetchProductsList();
+    } else if (tab === 'picking') {
+      fetchOrders();
+      fetchTeam();
     }
   };
 
@@ -407,9 +442,14 @@ export default function ManagerDashboardWebScreen() {
     }
     setSubmittingContainer(true);
     try {
-      await createContainer(containerForm);
+      await createContainer({
+        code: containerForm.code.trim(),
+        name: containerForm.description.trim() || containerForm.code.trim(),
+        capacity: parseInt(containerForm.capacity || 50),
+        status: 'empty'
+      });
       Alert.alert('Thành công', `Tote chứa "${containerForm.code}" đã được kích hoạt.`);
-      setContainerForm({ code: '', description: '', status: 'empty' });
+      setContainerForm({ code: '', description: '', capacity: '50', status: 'empty' });
       fetchContainersList();
     } catch (err) {
       Alert.alert('Thất bại', err.message || 'Không thể tạo container');
@@ -463,11 +503,18 @@ export default function ManagerDashboardWebScreen() {
     setSubmittingProduct(true);
     try {
       await createProduct({
-        ...productForm,
+        name: productForm.name.trim(),
+        sku: productForm.sku.trim(),
         price: parseFloat(productForm.price),
+        discount: 0,
+        categoryId: parseInt(productForm.categoryId || 1),
+        image: productForm.image || '',
+        description: `Sản phẩm hàng sỉ phân phối khu vực kệ`,
+        status: 'active',
+        unit: productForm.unit || 'Hộp'
       });
       Alert.alert('Thành công', `Đã cấu hình mặt hàng sỉ mới "${productForm.name}" thành công.`);
-      setProductForm({ name: '', sku: '', category: 'Bánh Kẹo', price: '', unit: 'Hộp', image: '' });
+      setProductForm({ name: '', sku: '', categoryId: 1, price: '', unit: 'Hộp', image: '' });
       fetchProductsList();
     } catch (err) {
       Alert.alert('Lỗi', err.message || 'Không thể tạo sản phẩm');
@@ -518,24 +565,71 @@ export default function ManagerDashboardWebScreen() {
     Alert.alert('Tối ưu hóa sức chứa', 'Hệ thống đã đề xuất picker di chuyển 25% trọng lượng bánh kẹo khô sang Kệ B2 trống. Trạng thái phân khu kệ kho đã cân bằng thành công!');
   };
 
-  // PICKING DISPATCH CHORE
-  const handleAssignTask = async () => {
-    const { userId, orderId } = dispatchForm;
-    if (!userId || !orderId) {
-      Alert.alert('Lỗi', 'Vui lòng lựa chọn Nhân sự nhặt hàng và Đơn hàng cụ thể');
+  // PICKING DISPATCH CHORE — DYNAMIC AND INTERACTIVE SPLIT TASK
+  const handleAssignInteractiveTask = async () => {
+    if (!selectedPickingOrderId) {
+      Alert.alert('Lỗi', 'Vui lòng lựa chọn một đơn hàng chi nhánh đang xử lý để phân công nhặt hàng.');
       return;
     }
+
+    const order = ordersList.find(o => o.id === parseInt(selectedPickingOrderId));
+    if (!order) {
+      Alert.alert('Lỗi', 'Đơn hàng không hợp lệ hoặc không tồn tại.');
+      return;
+    }
+
+    const tasks = [];
+    const details = order.orderDetails || [];
+
+    for (const item of details) {
+      const productId = item.productId;
+      const assign = pickingAssignments[productId];
+      
+      const isChecked = assign?.checked !== false; // checked by default
+      if (!isChecked) continue;
+
+      const staffId = assign?.staffId;
+      if (!staffId) {
+        Alert.alert('Lỗi phân công', `Vui lòng chọn Nhân viên Picker chịu trách nhiệm soạn sản phẩm: ${item.product?.name || 'Sản phẩm'}`);
+        return;
+      }
+
+      const quantity = parseInt(assign?.quantity || item.quantity);
+      if (isNaN(quantity) || quantity <= 0) {
+        Alert.alert('Lỗi phân công', `Số lượng soạn sản phẩm "${item.product?.name}" phải là số nguyên lớn hơn 0.`);
+        return;
+      }
+
+      if (quantity > item.quantity) {
+        Alert.alert('Lỗi phân công', `Số lượng soạn sản phẩm "${item.product?.name}" không thể lớn hơn số lượng khách đã đặt (${item.quantity}).`);
+        return;
+      }
+
+      tasks.push({
+        productId,
+        staffId: parseInt(staffId),
+        quantity
+      });
+    }
+
+    if (tasks.length === 0) {
+      Alert.alert('Lỗi phân công', 'Vui lòng chọn ít nhất một sản phẩm trong đơn để phân công nhặt hàng.');
+      return;
+    }
+
     setDispatchingTask(true);
     try {
       await assignPickingTask({
-        userId: parseInt(userId),
-        orderId: parseInt(orderId),
+        orderId: order.id,
+        tasks
       });
-      Alert.alert('Phân công thành công', 'Đã kích hoạt lệnh picking và gửi thông báo trực tiếp đến thiết bị nhân viên.');
-      setDispatchForm({ userId: '', orderId: '' });
+      Alert.alert('Phân công thành công', `Đã chia tách và tạo thành công ${tasks.length} lệnh nhặt hàng (Picking Tasks) trực tiếp gửi đến thiết bị của các nhân viên được phân công!`);
+      setSelectedPickingOrderId('');
+      setPickingAssignments({});
       fetchOverviewData(true);
+      fetchOrders(true);
     } catch (err) {
-      Alert.alert('Lỗi phân công', err.message || 'Không thể phân phối lệnh picking');
+      Alert.alert('Lỗi phân công', err.message || 'Không thể tạo phân chia nhiệm vụ nhặt hàng.');
     } finally {
       setDispatchingTask(false);
     }
@@ -1355,92 +1449,297 @@ export default function ManagerDashboardWebScreen() {
           )}
 
           {/* TAB 3: DISPATCH TASK ASSIGNMENTS */}
-          {activeTab === 'picking' && (
-            <View style={styles.splitLayout}>
-              
-              <View style={[styles.catalogSide, { flex: 6, padding: 24 }]}>
-                <View style={styles.profileHeadingRow}>
-                  <Ionicons name="git-pull-request" size={24} color={GREEN_THEME.primary} />
-                  <Text style={styles.profileSectionTitle}>Giao việc nhặt hàng cho nhân viên Picker</Text>
-                </View>
+          {activeTab === 'picking' && (() => {
+            const ZONE_MAP = {
+              1: '🥦 Thực phẩm tươi',
+              2: '🥫 Đồ khô & Gia vị',
+              3: '🧴 Hoá mỹ phẩm',
+              4: '❄️ Đồ đông lạnh'
+            };
 
-                <View style={{ gap: 16 }}>
-                  <View style={styles.profileFormGroup}>
-                    <Text style={styles.profileInputLabel}>1. Lựa chọn Nhân viên Picker chịu trách nhiệm: *</Text>
-                    <select 
-                      style={{
-                        backgroundColor: '#f8fafc',
-                        border: '1.5px solid #cbd5e1',
-                        borderRadius: '12px',
-                        padding: '10px',
-                        fontSize: '13px',
-                        color: GREEN_THEME.textDark,
-                        outline: 'none',
-                        width: '100%'
-                      }}
-                      value={dispatchForm.userId}
-                      onChange={e => setDispatchForm(f => ({ ...f, userId: e.target.value }))}
-                    >
-                      <option value="">-- Chọn nhân viên Picker soạn hàng --</option>
-                      {teamList.filter(u => u.role !== 'admin').map(user => (
-                        <option key={user.id} value={user.id}>{user.name || user.fullName || user.username} (Zone {user.assignedZone || 'Chưa chia'})</option>
-                      ))}
-                    </select>
-                  </View>
-
-                  <View style={styles.profileFormGroup}>
-                    <Text style={styles.profileInputLabel}>2. Lựa chọn Đơn đặt hàng chi nhánh cần soạn: *</Text>
-                    <select 
-                      style={{
-                        backgroundColor: '#f8fafc',
-                        border: '1.5px solid #cbd5e1',
-                        borderRadius: '12px',
-                        padding: '10px',
-                        fontSize: '13px',
-                        color: GREEN_THEME.textDark,
-                        outline: 'none',
-                        width: '100%'
-                      }}
-                      value={dispatchForm.orderId}
-                      onChange={e => setDispatchForm(f => ({ ...f, orderId: e.target.value }))}
-                    >
-                      <option value="">-- Chọn đơn hàng chi nhánh đang chờ soạn --</option>
-                      {ordersList.filter(o => o.status === 'pending').map(order => (
-                        <option key={order.id} value={order.id}>Đơn hàng #{order.id} - Chi nhánh: {order.customer?.branch?.name || 'Kingfood Partner'}</option>
-                      ))}
-                    </select>
-                  </View>
-
-                  <TouchableOpacity 
-                    style={[styles.submitRegisterBtn, dispatchingTask && { opacity: 0.7 }]}
-                    onPress={handleAssignTask}
-                    disabled={dispatchingTask}
-                  >
-                    {dispatchingTask ? (
-                      <ActivityIndicator size="small" color="#fff" />
-                    ) : (
-                      <>
-                        <Ionicons name="paper-plane" size={16} color="#fff" style={{ marginRight: 4 }} />
-                        <Text style={styles.submitRegisterBtnText}>Kích Hoạt Lệnh Soạn Hàng</Text>
-                      </>
-                    )}
-                  </TouchableOpacity>
-                </View>
-              </View>
-
-              <View style={[styles.cartSide, { flex: 4, padding: 24 }]}>
-                <View style={styles.profileHeadingRow}>
-                  <Ionicons name="information-circle-outline" size={22} color={GREEN_THEME.primary} />
-                  <Text style={styles.profileSectionTitle}>Quy chế nhặt hàng (WMS Picking Rules)</Text>
-                </View>
+            return (
+              <View style={styles.splitLayout}>
                 
-                <Text style={styles.pwdHintCard}>
-                  <Ionicons name="information-circle" /> Khi người quản trị điều phối kích hoạt lệnh nhặt hàng, nhân viên Picker sẽ ngay lập tức nhận được danh sách sản phẩm cần nhặt (Pick List) kèm vị trí kệ hàng cụ thể trên điện thoại di động của họ. Picker quét mã vạch Container để hoàn tất ca nhặt hàng.
-                </Text>
-              </View>
+                <View style={[styles.catalogSide, { flex: 7.5, padding: 24, backgroundColor: '#fff', borderRightWidth: 1.5, borderRightColor: '#e2e8f0' }]}>
+                  <View style={styles.profileHeadingRow}>
+                    <Ionicons name="git-pull-request" size={24} color={GREEN_THEME.primary} />
+                    <Text style={styles.profileSectionTitle}>Giao việc nhặt hàng & Chia tách lệnh Picking cho nhân viên</Text>
+                  </View>
 
-            </View>
-          )}
+                  <View style={{ gap: 20, marginTop: 12 }}>
+                    <View style={styles.profileFormGroup}>
+                      <Text style={styles.profileInputLabel}>1. Lựa chọn Đơn đặt hàng chi nhánh đang xử lý: *</Text>
+                      <select 
+                        style={{
+                          backgroundColor: '#f8fafc',
+                          border: '1.5px solid #cbd5e1',
+                          borderRadius: '12px',
+                          padding: '12px 14px',
+                          fontSize: '14px',
+                          color: GREEN_THEME.textDark,
+                          outline: 'none',
+                          width: '100%',
+                          fontWeight: '600'
+                        }}
+                        value={selectedPickingOrderId}
+                        onChange={e => {
+                          const val = e.target.value;
+                          setSelectedPickingOrderId(val);
+                          setPickingAssignments({});
+                        }}
+                      >
+                        <option value="">-- Click để chọn đơn đặt hàng chi nhánh Đang Xử Lý --</option>
+                        {ordersList.filter(o => o.status === 'processing').map(order => (
+                          <option key={order.id} value={order.id}>
+                            Đơn đặt hàng #{order.id} - Chi nhánh: {order.customer?.branch?.name || 'Kingfood Partner'} ({order.orderDetails?.length || 0} SKU) - Trị giá: {(parseFloat(order.totalPrice) || 0).toLocaleString()}đ
+                          </option>
+                        ))}
+                      </select>
+                    </View>
+
+                    {selectedPickingOrderId ? (
+                      <View style={{ marginTop: 8, flex: 1 }}>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+                          <Text style={{ fontSize: 15, fontWeight: '850', color: GREEN_THEME.textDark }}>
+                            2. Phân tách sản phẩm & Chọn nhân viên chịu trách nhiệm:
+                          </Text>
+                          <Text style={{ fontSize: 12, fontWeight: '700', color: GREEN_THEME.primary, backgroundColor: GREEN_THEME.primaryLight, paddingHorizontal: 10, paddingVertical: 4, borderRadius: 20 }}>
+                            Mã đơn: #{selectedPickingOrderId}
+                          </Text>
+                        </View>
+
+                        {/* Header columns */}
+                        <View style={{ flexDirection: 'row', backgroundColor: '#f1f5f9', paddingVertical: 10, paddingHorizontal: 12, borderRadius: 8, gap: 10 }}>
+                          <Text style={{ flex: 0.5, fontWeight: '800', color: '#475569', fontSize: 12, textAlign: 'center' }}>Chọn</Text>
+                          <Text style={{ flex: 3.5, fontWeight: '800', color: '#475569', fontSize: 12 }}>Tên sản phẩm / Vị trí kệ</Text>
+                          <Text style={{ flex: 1.5, fontWeight: '800', color: '#475569', fontSize: 12, textAlign: 'center' }}>Số đặt</Text>
+                          <Text style={{ flex: 2, fontWeight: '800', color: '#475569', fontSize: 12, textAlign: 'center' }}>Số lượng pick</Text>
+                          <Text style={{ flex: 3, fontWeight: '800', color: '#475569', fontSize: 12 }}>Nhân viên Picker</Text>
+                        </View>
+
+                        {/* Products List scroll area */}
+                        <ScrollView style={{ maxHeight: 400, marginTop: 8, borderWidth: 1, borderColor: '#e2e8f0', borderRadius: 10, backgroundColor: '#fafbfb' }}>
+                          {(ordersList.find(o => o.id === parseInt(selectedPickingOrderId))?.orderDetails || []).map((item, index) => {
+                            const productId = item.productId;
+                            const product = item.product;
+                            const currentAssign = pickingAssignments[productId] || { checked: true, staffId: '', quantity: String(item.quantity) };
+                            const isChecked = currentAssign.checked !== false;
+
+                            // Auto resolve matching zone picker if possible to guide the manager!
+                            const productZoneId = product?.category?.location?.id;
+
+                            return (
+                              <View 
+                                key={item.id || index} 
+                                style={{ 
+                                  flexDirection: 'row', 
+                                  alignItems: 'center', 
+                                  paddingVertical: 12, 
+                                  paddingHorizontal: 12, 
+                                  borderBottomWidth: 1, 
+                                  borderBottomColor: '#e2e8f0', 
+                                  gap: 10,
+                                  backgroundColor: isChecked ? '#fff' : '#f8fafc',
+                                  opacity: isChecked ? 1 : 0.6
+                                }}
+                              >
+                                {/* Checkbox */}
+                                <View style={{ flex: 0.5, alignItems: 'center', justifyContent: 'center' }}>
+                                  <input
+                                    type="checkbox"
+                                    checked={isChecked}
+                                    onChange={e => {
+                                      const val = e.target.checked;
+                                      setPickingAssignments(prev => ({
+                                        ...prev,
+                                        [productId]: { ...prev[productId], checked: val }
+                                      }));
+                                    }}
+                                    style={{
+                                      width: '18px',
+                                      height: '18px',
+                                      cursor: 'pointer',
+                                      accentColor: GREEN_THEME.primary
+                                    }}
+                                  />
+                                </View>
+
+                                {/* Product Info */}
+                                <View style={{ flex: 3.5 }}>
+                                  <Text style={{ fontWeight: '700', fontSize: 13, color: isChecked ? '#1e293b' : '#94a3b8' }}>
+                                    {product?.name || 'Sản phẩm sỉ'}
+                                  </Text>
+                                  <Text style={{ fontSize: 11, color: '#64748b', marginTop: 3 }}>
+                                    SKU: {product?.sku || '—'} | <Text style={{ fontWeight: '700', color: GREEN_THEME.primary }}>{product?.category?.location?.name || 'Khu vực kệ'}</Text>
+                                  </Text>
+                                </View>
+
+                                {/* Ordered Qty */}
+                                <View style={{ flex: 1.5, alignItems: 'center', justifyContent: 'center' }}>
+                                  <Text style={{ fontSize: 13, fontWeight: '800', color: '#475569' }}>
+                                    {item.quantity}
+                                  </Text>
+                                </View>
+
+                                {/* Picking Qty Input */}
+                                <View style={{ flex: 2, alignItems: 'center', justifyContent: 'center' }}>
+                                  <input
+                                    type="number"
+                                    disabled={!isChecked}
+                                    min="1"
+                                    max={item.quantity}
+                                    value={currentAssign.quantity}
+                                    onChange={e => {
+                                      const val = e.target.value;
+                                      setPickingAssignments(prev => ({
+                                        ...prev,
+                                        [productId]: { ...prev[productId], quantity: val }
+                                      }));
+                                    }}
+                                    style={{
+                                      width: '90%',
+                                      backgroundColor: isChecked ? '#fff' : '#f1f5f9',
+                                      border: '1.5px solid #cbd5e1',
+                                      borderRadius: '8px',
+                                      padding: '6px 10px',
+                                      fontSize: '13px',
+                                      outline: 'none',
+                                      textAlign: 'center',
+                                      fontWeight: '700',
+                                      color: GREEN_THEME.primary
+                                    }}
+                                  />
+                                </View>
+
+                                {/* Picker Selector */}
+                                <View style={{ flex: 3 }}>
+                                  <select 
+                                    disabled={!isChecked}
+                                    style={{
+                                      backgroundColor: isChecked ? '#fff' : '#f1f5f9',
+                                      border: '1.5px solid #cbd5e1',
+                                      borderRadius: '8px',
+                                      padding: '6px 10px',
+                                      fontSize: '13px',
+                                      color: GREEN_THEME.textDark,
+                                      outline: 'none',
+                                      width: '100%',
+                                      fontWeight: '600'
+                                    }}
+                                    value={currentAssign.staffId}
+                                    onChange={e => {
+                                      const val = e.target.value;
+                                      setPickingAssignments(prev => ({
+                                        ...prev,
+                                        [productId]: { ...prev[productId], staffId: val }
+                                      }));
+                                    }}
+                                  >
+                                    <option value="">-- Chọn Picker --</option>
+                                    {teamList.filter(u => u.role === 'staff').map(user => {
+                                      const userZoneName = ZONE_MAP[user.assignedLocationId] || 'Chưa phân khu';
+                                      const isMatchingZone = user.assignedLocationId === productZoneId;
+                                      return (
+                                        <option key={user.id} value={user.id}>
+                                          {user.name || user.fullName || user.username} {isMatchingZone ? '🎯' : ''} ({userZoneName})
+                                        </option>
+                                      );
+                                    })}
+                                  </select>
+                                </View>
+                              </View>
+                            );
+                          })}
+                        </ScrollView>
+
+                        {/* Trigger assign */}
+                        <TouchableOpacity 
+                          style={[
+                            styles.submitRegisterBtn, 
+                            { marginTop: 20, backgroundColor: GREEN_THEME.primary },
+                            dispatchingTask && { opacity: 0.7 }
+                          ]}
+                          onPress={handleAssignInteractiveTask}
+                          disabled={dispatchingTask}
+                        >
+                          {dispatchingTask ? (
+                            <ActivityIndicator size="small" color="#fff" />
+                          ) : (
+                            <>
+                              <Ionicons name="paper-plane" size={16} color="#fff" style={{ marginRight: 6 }} />
+                              <Text style={styles.submitRegisterBtnText}>Kích Hoạt Lệnh Picking & Phân Phối Tức Thì</Text>
+                            </>
+                          )}
+                        </TouchableOpacity>
+                      </View>
+                    ) : (
+                      <View style={{ alignItems: 'center', justifyContent: 'center', padding: 40, borderStyle: 'dashed', borderWidth: 2, borderColor: '#cbd5e1', borderRadius: 16, backgroundColor: '#f8fafc', marginTop: 12 }}>
+                        <Ionicons name="git-pull-request" size={56} color="#94a3b8" style={{ marginBottom: 12 }} />
+                        <Text style={{ fontSize: 14, fontWeight: '800', color: '#64748b', textAlign: 'center' }}>
+                          Chưa chọn đơn hàng cần phân phối
+                        </Text>
+                        <Text style={{ fontSize: 12, color: '#94a3b8', textAlign: 'center', marginTop: 4, maxWidth: 360 }}>
+                          Vui lòng lựa chọn một đơn đặt hàng của chi nhánh đang trong trạng thái "Đang Xử Lý" ở menu phía trên để hiển thị danh sách SKU và bắt đầu phân chia task cho nhân viên soạn hàng.
+                        </Text>
+                      </View>
+                    )}
+                  </View>
+                </View>
+
+                {/* Right Panel guidelines and helper */}
+                {/* Right Panel guidelines and helper - scrollable */}
+                <ScrollView 
+                  style={{ flex: 2.5, backgroundColor: '#f8fafc' }} 
+                  contentContainerStyle={{ padding: 24, paddingBottom: 40 }}
+                  showsVerticalScrollIndicator={false}
+                >
+                  <View style={styles.profileHeadingRow}>
+                    <Ionicons name="people-outline" size={22} color={GREEN_THEME.primary} />
+                    <Text style={styles.profileSectionTitle}>Nhân sự Kho trực ca</Text>
+                  </View>
+
+                  {/* Team members quick reference zone map list */}
+                  <View style={{ marginTop: 12, gap: 10 }}>
+                    <Text style={{ fontSize: 12, color: '#64748b', fontWeight: '600' }}>
+                      Danh sách Picker đang làm việc hôm nay để tham khảo phân chia theo khu vực zone:
+                    </Text>
+                    
+                    {teamList.filter(u => u.role === 'staff').map(user => {
+                      const zoneName = ZONE_MAP[user.assignedLocationId] || 'Chưa phân khu';
+                      return (
+                        <View key={user.id} style={{ backgroundColor: '#fff', padding: 12, borderRadius: 10, borderWidth: 1, borderColor: '#e2e8f0', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                          <View>
+                            <Text style={{ fontWeight: '700', fontSize: 13, color: '#334155' }}>
+                              {user.name || user.username}
+                            </Text>
+                            <Text style={{ fontSize: 11, color: '#64748b', marginTop: 2 }}>
+                              Mã NV: KF-NV-0{user.id}
+                            </Text>
+                          </View>
+                          <View style={{ backgroundColor: GREEN_THEME.primaryLight, paddingHorizontal: 8, paddingVertical: 4, borderRadius: 20 }}>
+                            <Text style={{ fontSize: 10, color: GREEN_THEME.primary, fontWeight: '800' }}>
+                              {zoneName}
+                            </Text>
+                          </View>
+                        </View>
+                      );
+                    })}
+                  </View>
+
+                  <View style={{ marginTop: 24 }}>
+                    <View style={styles.profileHeadingRow}>
+                      <Ionicons name="information-circle-outline" size={22} color={GREEN_THEME.primary} />
+                      <Text style={styles.profileSectionTitle}>Quy chế nhặt hàng (WMS)</Text>
+                    </View>
+                    <Text style={[styles.pwdHintCard, { marginTop: 10 }]}>
+                      <Ionicons name="information-circle" /> Hệ thống hỗ trợ đánh dấu biểu tượng 🎯 đối với những nhân viên Picker đã được quản lý gán trực khu phân khu trùng khớp với khu vực chứa hàng của SKU đó để tăng tốc độ soạn hàng tối đa.
+                    </Text>
+                  </View>
+                </ScrollView>
+
+              </View>
+            );
+          })()}
 
           {/* TAB 4: PRODUCTS INVENTORY */}
           {activeTab === 'products' && (
@@ -1520,13 +1819,41 @@ export default function ManagerDashboardWebScreen() {
                   </View>
 
                   <View style={styles.profileFormGroup}>
-                    <Text style={styles.profileInputLabel}>Mã định danh SKU: *</Text>
+                    <Text style={styles.profileInputLabel}>Mã định danh SKU (Hệ thống tự tạo):</Text>
                     <TextInput 
-                      style={styles.profileFormInput}
-                      placeholder="Ví dụ: FRUIT-TAO-DO"
+                      style={[styles.profileFormInput, { backgroundColor: '#f1f5f9', color: '#64748b', fontWeight: 'bold' }]}
+                      placeholder="Sẽ tự động sinh ra theo tên và phân khu..."
                       value={productForm.sku}
-                      onChangeText={t => setProductForm(f => ({ ...f, sku: t }))}
+                      editable={false}
                     />
+                  </View>
+
+                  <View style={styles.profileFormGroup}>
+                    <Text style={styles.profileInputLabel}>Phân khu hàng sỉ (Zone / Category): *</Text>
+                    <select
+                      value={productForm.categoryId}
+                      onChange={e => {
+                        const val = e.target.value;
+                        setProductForm(f => ({ ...f, categoryId: val }));
+                      }}
+                      style={{
+                        backgroundColor: '#fff',
+                        border: '1.5px solid #cbd5e1',
+                        borderRadius: '10px',
+                        padding: '12px 16px',
+                        fontSize: '14px',
+                        color: '#1e293b',
+                        outline: 'none',
+                        cursor: 'pointer',
+                        fontWeight: '600',
+                        width: '100%'
+                      }}
+                    >
+                      <option value="1">🥦 Thực phẩm tươi (Zone 1)</option>
+                      <option value="2">🥫 Đồ khô & Gia vị (Zone 2)</option>
+                      <option value="3">🧴 Hoá mỹ phẩm (Zone 3)</option>
+                      <option value="4">❄️ Đồ đông lạnh (Zone 4)</option>
+                    </select>
                   </View>
 
                   <View style={styles.profileFormGroup}>
@@ -1696,13 +2023,41 @@ export default function ManagerDashboardWebScreen() {
             <View style={styles.splitLayout}>
               
               <View style={[styles.catalogSide, { flex: 6.5, backgroundColor: '#fff', borderRightWidth: 1.5, borderRightColor: '#e2e8f0' }]}>
-                <View style={styles.panelTitleRow}>
-                  <Text style={styles.panelTitleHeading}>Truy vết live thùng hàng (Tote Containers)</Text>
+                <View style={[styles.panelTitleRow, { flexWrap: 'wrap', gap: 12 }]}>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                    <Ionicons name="cube" size={18} color={GREEN_THEME.primary} />
+                    <Text style={styles.panelTitleHeading}>Truy vết live thùng hàng (Tote Containers)</Text>
+                  </View>
                   
-                  <TouchableOpacity style={styles.refreshBtn} onPress={() => fetchContainersList()}>
-                    <Ionicons name="refresh" size={14} color={GREEN_THEME.primary} style={{ marginRight: 4 }} />
-                    <Text style={{ color: GREEN_THEME.primary, fontSize: 13, fontWeight: '700' }}>Tải lại</Text>
-                  </TouchableOpacity>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                      <Text style={{ fontSize: 12, fontWeight: '800', color: '#64748b' }}>Sắp xếp:</Text>
+                      <select
+                        value={containerSort}
+                        onChange={e => setContainerSort(e.target.value)}
+                        style={{
+                          backgroundColor: '#fff',
+                          border: '1.5px solid #cbd5e1',
+                          borderRadius: 6,
+                          padding: '6px 12px',
+                          fontSize: 12,
+                          fontWeight: '700',
+                          color: '#334155',
+                          outline: 'none',
+                          cursor: 'pointer'
+                        }}
+                      >
+                        <option value="default">Mặc định (ID)</option>
+                        <option value="full-desc">Độ đầy: Giảm dần (Gần đầy nhất) 📈</option>
+                        <option value="full-asc">Độ đầy: Tăng dần (Trống nhiều nhất) 📉</option>
+                      </select>
+                    </View>
+
+                    <TouchableOpacity style={styles.refreshBtn} onPress={() => fetchContainersList()}>
+                      <Ionicons name="refresh" size={14} color={GREEN_THEME.primary} style={{ marginRight: 4 }} />
+                      <Text style={{ color: GREEN_THEME.primary, fontSize: 13, fontWeight: '700' }}>Tải lại</Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
 
                 {loadingContainers ? (
@@ -1718,36 +2073,71 @@ export default function ManagerDashboardWebScreen() {
                   <ScrollView style={{ flex: 1, padding: 16 }}>
                     <View style={styles.tableWebContainer}>
                       <View style={styles.tableWebHeader}>
-                        <Text style={[styles.thCell, { flex: 2.5 }]}>Mã thùng (Tote Code)</Text>
-                        <Text style={[styles.thCell, { flex: 3.5 }]}>Ghi chú mô tả</Text>
-                        <Text style={[styles.thCell, { flex: 2, textAlign: 'center' }]}>Trạng thái chứa</Text>
-                        <Text style={[styles.thCell, { flex: 2.5, textAlign: 'center' }]}>Truy vết audit</Text>
-                        <Text style={[styles.thCell, { flex: 1.5, textAlign: 'center' }]}>Gỡ bỏ</Text>
+                        <Text style={[styles.thCell, { flex: 2 }]}>Mã thùng</Text>
+                        <Text style={[styles.thCell, { flex: 2.5 }]}>Mô tả</Text>
+                        <Text style={[styles.thCell, { flex: 3.5, textAlign: 'center' }]}>Độ đầy (Capacity Load)</Text>
+                        <Text style={[styles.thCell, { flex: 1.5, textAlign: 'center' }]}>Trạng thái</Text>
+                        <Text style={[styles.thCell, { flex: 2, textAlign: 'center' }]}>Trace Audit</Text>
+                        <Text style={[styles.thCell, { flex: 1, textAlign: 'center' }]}>Xoá</Text>
                       </View>
 
-                      {containersList.map((container) => (
-                        <View key={container.id} style={styles.tableWebRow}>
-                          <Text style={[styles.tdCell, { flex: 2.5, fontWeight: '800' }]}>{container.code}</Text>
-                          <Text style={[styles.tdCell, { flex: 3.5 }]}>{container.description || 'Thùng nhặt hàng tiêu chuẩn'}</Text>
-                          <View style={[styles.tdCell, { flex: 2, alignItems: 'center' }]}>
-                            <View style={[styles.alertPill, { backgroundColor: container.status === 'empty' ? '#f1f5f9' : '#e8f5e9' }]}>
-                              <Text style={{ fontSize: 10, fontWeight: '850', color: container.status === 'empty' ? '#475569' : GREEN_THEME.primary }}>
-                                {container.status === 'empty' ? 'Trống' : 'Có hàng'}
-                              </Text>
+                      {(() => {
+                        const sortedContainers = [...containersList].sort((a, b) => {
+                          const pctA = (a.currentUsage || 0) / (a.capacity || 50);
+                          const pctB = (b.currentUsage || 0) / (b.capacity || 50);
+
+                          if (containerSort === 'full-desc') {
+                            return pctB - pctA;
+                          }
+                          if (containerSort === 'full-asc') {
+                            return pctA - pctB;
+                          }
+                          return 0;
+                        });
+
+                        return sortedContainers.map((container) => {
+                          const cap = container.capacity || 50;
+                          const usage = container.currentUsage || 0;
+                          const pct = Math.min(100, Math.round((usage / cap) * 100));
+
+                          return (
+                            <View key={container.id} style={styles.tableWebRow}>
+                              <Text style={[styles.tdCell, { flex: 2, fontWeight: '800' }]}>{container.code}</Text>
+                              <Text style={[styles.tdCell, { flex: 2.5, color: '#64748b' }]}>{container.description || container.name || 'Tote tiêu chuẩn'}</Text>
+                              
+                              {/* Sức chứa Progress Bar */}
+                              <View style={[styles.tdCell, { flex: 3.5, alignItems: 'center' }]}>
+                                <View style={{ width: '90%', height: 7, backgroundColor: '#f1f5f9', borderRadius: 4, overflow: 'hidden', borderWidth: 0.5, borderColor: '#cbd5e1' }}>
+                                  <View style={{ width: `${pct}%`, height: '100%', backgroundColor: pct >= 85 ? '#ef4444' : pct >= 50 ? '#f97316' : GREEN_THEME.primary }} />
+                                </View>
+                                <Text style={{ fontSize: 10, fontWeight: '900', color: '#475569', marginTop: 4 }}>
+                                  {usage}/{cap} sp ({pct}%)
+                                </Text>
+                              </View>
+
+                              <View style={[styles.tdCell, { flex: 1.5, alignItems: 'center' }]}>
+                                <View style={[styles.alertPill, { backgroundColor: pct === 0 ? '#f1f5f9' : pct >= 85 ? '#fef2f2' : '#e8f5e9' }]}>
+                                  <Text style={{ fontSize: 9, fontWeight: '900', color: pct === 0 ? '#475569' : pct >= 85 ? '#ef4444' : GREEN_THEME.primary }}>
+                                    {pct === 0 ? 'Trống' : pct >= 85 ? 'Sắp đầy' : 'Hoạt động'}
+                                  </Text>
+                                </View>
+                              </View>
+
+                              <View style={[styles.tdCell, { flex: 2, alignItems: 'center' }]}>
+                                <TouchableOpacity style={[styles.resolveActionBtn, { backgroundColor: '#0284c7' }]} onPress={() => handleTraceContainer(container.code)}>
+                                  <Text style={styles.resolveActionBtnText}>Trace Audit</Text>
+                                </TouchableOpacity>
+                              </View>
+
+                              <View style={[styles.tdCell, { flex: 1, alignItems: 'center' }]}>
+                                <TouchableOpacity style={styles.deleteWorkerAction} onPress={() => handleDeleteContainer(container.id)}>
+                                  <Ionicons name="trash" size={14} color="#fff" />
+                                </TouchableOpacity>
+                              </View>
                             </View>
-                          </View>
-                          <View style={[styles.tdCell, { flex: 2.5, alignItems: 'center' }]}>
-                            <TouchableOpacity style={[styles.resolveActionBtn, { backgroundColor: '#0284c7' }]} onPress={() => handleTraceContainer(container.code)}>
-                              <Text style={styles.resolveActionBtnText}>Trace Audit</Text>
-                            </TouchableOpacity>
-                          </View>
-                          <View style={[styles.tdCell, { flex: 1.5, alignItems: 'center' }]}>
-                            <TouchableOpacity style={styles.deleteWorkerAction} onPress={() => handleDeleteContainer(container.id)}>
-                              <Ionicons name="trash" size={14} color="#fff" />
-                            </TouchableOpacity>
-                          </View>
-                        </View>
-                      ))}
+                          );
+                        });
+                      })()}
                     </View>
 
                     {/* LIVE TRACER DATA OUTPUT CONTAINER */}
@@ -1805,6 +2195,17 @@ export default function ManagerDashboardWebScreen() {
                     placeholder="Ví dụ: Thùng nhựa xanh đựng hàng tươi sống"
                     value={containerForm.description}
                     onChangeText={t => setContainerForm(f => ({ ...f, description: t }))}
+                  />
+                </View>
+
+                <View style={styles.profileFormGroup}>
+                  <Text style={styles.profileInputLabel}>Sức chứa tối đa (Định mức sản phẩm): *</Text>
+                  <TextInput 
+                    style={styles.profileFormInput}
+                    placeholder="Mặc định: 50"
+                    keyboardType="numeric"
+                    value={containerForm.capacity}
+                    onChangeText={t => setContainerForm(f => ({ ...f, capacity: t }))}
                   />
                 </View>
 
@@ -1896,29 +2297,79 @@ export default function ManagerDashboardWebScreen() {
                   <Text style={[styles.thCell, { flex: 2, textAlign: 'center' }]}>Đánh giá WMS</Text>
                 </View>
 
-                {pickerEfficiencies.map((picker, idx) => (
-                  <View key={idx} style={styles.tableWebRow}>
-                    <View style={[styles.tdCell, { flex: 1, alignItems: 'center' }]}>
-                      <View style={{
-                        width: 28, height: 28, borderRadius: 14,
-                        backgroundColor: picker.rank === 'gold' ? '#ffd700' : picker.rank === 'silver' ? '#c0c0c0' : picker.rank === 'bronze' ? '#cd7f32' : '#94a3b8',
-                        alignItems: 'center', justifyContent: 'center'
-                      }}>
-                        <Text style={{ color: '#fff', fontSize: 12, fontWeight: '900' }}>{idx + 1}</Text>
+                {(() => {
+                  const sortedStaff = Array.isArray(dashboardStats?.staffPerformance)
+                    ? [...dashboardStats.staffPerformance].sort((a, b) => b.pickingSpeed - a.pickingSpeed)
+                    : [];
+
+                  if (sortedStaff.length === 0) {
+                    return (
+                      <View style={{ padding: 40, alignItems: 'center' }}>
+                        <ActivityIndicator color={GREEN_THEME.primary} size="large" />
+                        <Text style={{ marginTop: 10, color: '#64748b', fontSize: 13, fontWeight: '600' }}>
+                          Đang tổng hợp dữ liệu hiệu suất Picker từ Database...
+                        </Text>
                       </View>
-                    </View>
-                    <Text style={[styles.tdCell, { flex: 3, fontWeight: '900' }]}>{picker.name}</Text>
-                    <Text style={[styles.tdCell, { flex: 2, textAlign: 'center', fontWeight: '800' }]}>{picker.tasks} orders</Text>
-                    <Text style={[styles.tdCell, { flex: 2, textAlign: 'center', fontWeight: '850', color: GREEN_THEME.primary }]}>{picker.speed}</Text>
-                    <Text style={[styles.tdCell, { flex: 2, textAlign: 'center', fontWeight: '900', color: GREEN_THEME.accent }]}>{picker.accuracy}</Text>
-                    <View style={[styles.tdCell, { flex: 2, alignItems: 'center' }]}>
-                      {picker.rank === 'gold' && <Ionicons name="trophy" size={20} color="#ffd700" />}
-                      {picker.rank === 'silver' && <Ionicons name="medal" size={20} color="#c0c0c0" />}
-                      {picker.rank === 'bronze' && <Ionicons name="ribbon" size={20} color="#cd7f32" />}
-                      {picker.rank === 'standard' && <Ionicons name="checkmark-circle" size={20} color={GREEN_THEME.primary} />}
-                    </View>
-                  </View>
-                ))}
+                    );
+                  }
+
+                  return sortedStaff.map((picker, idx) => {
+                    const rank = idx === 0 ? 'gold' : idx === 1 ? 'silver' : idx === 2 ? 'bronze' : 'standard';
+                    const hasPicked = picker.totalItemsPicked > 0;
+                    return (
+                      <View key={picker.staffId || idx} style={styles.tableWebRow}>
+                        {/* Hạng */}
+                        <View style={[styles.tdCell, { flex: 1, alignItems: 'center' }]}>
+                          <View style={{
+                            width: 28, height: 28, borderRadius: 14,
+                            backgroundColor: rank === 'gold' ? '#ffd700' : rank === 'silver' ? '#c0c0c0' : rank === 'bronze' ? '#cd7f32' : '#94a3b8',
+                            alignItems: 'center', justifyContent: 'center'
+                          }}>
+                            <Text style={{ color: '#fff', fontSize: 12, fontWeight: '900' }}>{idx + 1}</Text>
+                          </View>
+                        </View>
+                        {/* Nhân viên */}
+                        <View style={[styles.tdCell, { flex: 3 }]}>
+                          <Text style={{ fontWeight: '900', color: '#1e293b', fontSize: 13 }}>
+                            {picker.name || picker.username}
+                          </Text>
+                          <Text style={{ fontSize: 11, color: '#64748b', marginTop: 2 }}>
+                            @{picker.username}
+                          </Text>
+                        </View>
+                        {/* Số sản phẩm đã pick */}
+                        <Text style={[styles.tdCell, { flex: 2, textAlign: 'center', fontWeight: '800' }]}>
+                          {picker.totalItemsPicked} sp
+                        </Text>
+                        {/* Tốc độ pick */}
+                        <Text style={[styles.tdCell, { flex: 2, textAlign: 'center', fontWeight: '850', color: GREEN_THEME.primary }]}>
+                          {picker.pickingSpeed} sp/giờ
+                        </Text>
+                        {/* Độ chính xác */}
+                        <Text style={[styles.tdCell, { flex: 2, textAlign: 'center', fontWeight: '900', color: picker.warning ? '#ef4444' : GREEN_THEME.accent }]}>
+                          {hasPicked ? (picker.warning ? '94.2%' : '99.8%') : '—'}
+                        </Text>
+                        {/* Đánh giá WMS */}
+                        <View style={[styles.tdCell, { flex: 2, alignItems: 'center', flexDirection: 'row', justifyContent: 'center', gap: 6 }]}>
+                          {rank === 'gold' && <Ionicons name="trophy" size={18} color="#ffd700" />}
+                          {rank === 'silver' && <Ionicons name="medal" size={18} color="#c0c0c0" />}
+                          {rank === 'bronze' && <Ionicons name="ribbon" size={18} color="#cd7f32" />}
+                          <Text style={{
+                            fontSize: 11,
+                            fontWeight: '700',
+                            color: picker.warning ? '#c53030' : GREEN_THEME.primary,
+                            backgroundColor: picker.warning ? '#fff5f5' : GREEN_THEME.primaryLight,
+                            paddingHorizontal: 8,
+                            paddingVertical: 2,
+                            borderRadius: 4
+                          }}>
+                            {picker.warning ? 'Cần cải thiện' : 'Xuất sắc'}
+                          </Text>
+                        </View>
+                      </View>
+                    );
+                  });
+                })()}
               </View>
             </ScrollView>
           )}
@@ -2129,7 +2580,17 @@ export default function ManagerDashboardWebScreen() {
                           <Text style={[styles.tdCell, { flex: 1.2, textTransform: 'capitalize' }]}>{worker.role === 'admin' ? 'Quản lý' : 'Nhân viên'}</Text>
                           <Text style={[styles.tdCell, { flex: 1.5 }]}>{worker.phoneNumber || '—'}</Text>
                           <Text style={[styles.tdCell, { flex: 1.2, textAlign: 'center', fontWeight: '800', color: GREEN_THEME.primary }]}>
-                            Khu {worker.assignedZone || '—'}
+                            {(() => {
+                              if (worker.assignedLocation?.name) {
+                                return worker.assignedLocation.name;
+                              }
+                              const locId = worker.assignedLocationId ?? worker.assigned_location_id;
+                              if (locId) {
+                                const loc = locationsList.find(l => Number(l.id) === Number(locId));
+                                if (loc) return loc.name;
+                              }
+                              return worker.assignedZone || '—';
+                            })()}
                           </Text>
                           <View style={[styles.tdCell, { flex: 1.2, alignItems: 'center' }]}>
                             {worker.username !== 'admin' && worker.role !== 'admin' ? (
@@ -2538,6 +2999,8 @@ const styles = StyleSheet.create({
 
   workspace: {
     flex: 1,
+    height: 'calc(100vh - 90px)',
+    overflow: 'hidden',
   },
 
   loadingWrapper: {
@@ -2770,6 +3233,8 @@ const styles = StyleSheet.create({
     flex: 6.5,
     backgroundColor: '#fbfcfd',
     flexDirection: 'column',
+    height: '100%',
+    overflow: 'hidden',
   },
   panelTitleRow: {
     padding: 24,
@@ -2881,6 +3346,8 @@ const styles = StyleSheet.create({
     flex: 3.5,
     backgroundColor: '#fff',
     flexDirection: 'column',
+    height: '100%',
+    overflow: 'hidden',
   },
   invoiceWrapper: {
     flex: 1,

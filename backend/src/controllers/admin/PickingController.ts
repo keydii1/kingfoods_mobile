@@ -7,6 +7,16 @@ import { PickingService } from "../../services/PickingService";
 import { UserRole } from "../../Entity/User";
 import { IncidentReport, IncidentStatus } from "../../Entity/IncidentReport";
 import { Forbidden } from "../../core/ErrorResponse";
+import { v2 as cloudinary } from "cloudinary";
+import dotenv from "dotenv";
+import logger from "../../helpers/Logger";
+
+dotenv.config();
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY,
+  api_secret: process.env.API_SECRET,
+});
 import {
   AssignTasksDto,
   PackItemDto,
@@ -145,10 +155,30 @@ export class PickingController {
     const reporterId = req.decodeUser.id;
     const { taskId, photoUrl, reason } = body;
 
+    let finalPhotoUrl = "";
+    if (photoUrl) {
+      if (photoUrl.startsWith("data:image/")) {
+        try {
+          const uploadResult = await cloudinary.uploader.upload(photoUrl, {
+            folder: "kingfoods/incidents",
+          });
+          finalPhotoUrl = uploadResult.secure_url;
+        } catch (err: any) {
+          const errMsg = err?.message || JSON.stringify(err);
+          logger.error("Cloudinary upload failed: " + errMsg);
+          return res.status(500).json({
+            message: "Tải ảnh lên Cloudinary thất bại: " + errMsg
+          });
+        }
+      } else {
+        finalPhotoUrl = photoUrl;
+      }
+    }
+
     const incident = await IncidentReport.createAndSave({
       taskId,
       reporterId,
-      photoUrl,
+      photoUrl: finalPhotoUrl,
       reason,
       status: IncidentStatus.PENDING
     });
@@ -159,11 +189,13 @@ export class PickingController {
   @Get("/incidents")
   @Summary("Quản lý: Xem danh sách sự cố thiếu hàng tại kệ (Incident Center)")
   async getIncidents(@Req() req: any, @Res() res: Response) {
+    const where: any = {};
     if (req.decodeUser.role !== UserRole.ADMIN) {
-      throw new Forbidden("Chỉ quản lý mới có quyền truy cập trung tâm sự cố");
+      where.reporterId = req.decodeUser.id;
     }
 
     const incidents = await IncidentReport.find({
+      where,
       relations: [
         "reporter",
         "task",

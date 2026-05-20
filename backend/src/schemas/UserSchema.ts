@@ -30,5 +30,6 @@ export const UserUpdateSchema = Joi.object({
   email: Joi.string().email().optional(),
   dateOfBirth: Joi.date().iso().allow(null).optional(),
   phoneNumber: Joi.string().allow(null, "").optional(),
+  username: Joi.string().min(5).optional(),
   assignedZone: Joi.string().valid("🍬 Bánh kẹo", "🥤 Đồ uống", "🧴 Hóa phẩm", "🎁 KM").allow(null).optional()
 });

@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
 
 import {
     Text,
@@ -8,11 +8,28 @@ import {
     StyleSheet,
 } from 'react-native';
 
-import { router, usePathname } from 'expo-router';
+import { router, usePathname, useFocusEffect } from 'expo-router';
 
 import { COLORS } from '../constants/colors';
+import { getIncidents } from '../constants/services/api';
 
 export default function FloatingAssistiveButton() {
+
+    const [unreadCount, setUnreadCount] = useState(0);
+
+    const fetchUnread = useCallback(async () => {
+        try {
+            const res = await getIncidents();
+            const paginated = res?.data || res;
+            const items = Array.isArray(paginated) ? paginated : (paginated?.data || []);
+            const unread = items.filter(i => i.status !== 'resolved').length;
+            setUnreadCount(unread);
+        } catch { }
+    }, []);
+
+    useFocusEffect(useCallback(() => {
+        fetchUnread();
+    }, [fetchUnread]));
 
     // Lấy route hiện tại
     const pathname = usePathname();
@@ -91,24 +108,23 @@ export default function FloatingAssistiveButton() {
 
                 onPress={() => {
 
-                    // Chỉ push nếu chưa ở notifications
                     if (pathname !== '/notifications') {
+                        setUnreadCount(0);
                         router.push('/notifications');
                     }
 
                 }}
             >
 
-                <Text style={styles.floatingIcon}>
-                    🔔
-                </Text>
+                <Text style={styles.floatingIcon}>🔔</Text>
 
-                {/* Badge */}
-                <Animated.View style={styles.floatingBadge}>
-                    <Text style={styles.floatingBadgeText}>
-                        3
-                    </Text>
-                </Animated.View>
+                {unreadCount > 0 && (
+                    <Animated.View style={styles.floatingBadge}>
+                        <Text style={styles.floatingBadgeText}>
+                            {unreadCount > 99 ? '99+' : unreadCount}
+                        </Text>
+                    </Animated.View>
+                )}
 
             </TouchableOpacity>
 

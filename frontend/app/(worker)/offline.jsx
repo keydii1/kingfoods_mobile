@@ -1,7 +1,6 @@
 import {Text, View, StyleSheet, ScrollView, TouchableOpacity} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {router} from 'expo-router';
-import {Ionicons} from '@expo/vector-icons';
 import {COLORS} from '../../constants/colors'
 import StaffBottomNav from '../../components/StaffBottomNav'
 
@@ -9,19 +8,19 @@ import StaffBottomNav from '../../components/StaffBottomNav'
 const cacheData = [
     {
         id: '1', 
-        icon: 'document-text-outline',
+        icon: '',
         name: 'Danh sách đơn hàng',
         sub: 'Cache lúc 10h05 - 12 đơn'
     },
     {
         id: '2',
-        icon: 'map-outline',
+        icon: '',
         name: 'Bản đồ kho',
         sub: 'Cache lúc 9h30 - Khu A, B, C'
     },
     {
         id: '3',
-        icon: 'cube-outline',
+        icon: '',
         name: 'Thông tin SKU',
         sub: 'Cache lúc 9h30 - 1240 SKU',
     },
@@ -30,44 +29,27 @@ const cacheData = [
 const pendingSync = [
     {
         id: '1',
-        icon: 'checkmark-circle-outline',
-        iconColor: COLORS.primary,
+        icon: '',
         name: 'Quét container BIN-401',
         sub: 'SKU: KF-00123 · 15:42',
     },
     {
         id: '2',
-        icon: 'warning-outline',
-        iconColor: '#e65100',
+        icon: '',
         name: 'Báo thiếu hàng',
         sub: 'Kệ 14.07.B · 15:28'
     },
 ];
-
-// Component cache row
-function CacheRow({item}){
-    return(
-        <View style = {styles.cacheRow}>
-            <Ionicons name={item.icon} size={22} color={COLORS.primary} style={{ marginRight: 6 }} />
-            <View style = {styles.cacheInfo}>
-                <Text style = {styles.cacheName}>{item.name}</Text>
-                <Text style = {styles.cacheSub}>{item.sub}</Text>
-            </View>
-            <Text style = {styles.cacheStatus}>Sẵn sàng</Text>
-        </View>
-    );
-}
-
 // Component 1 dòng chờ đồng bộ
 function PendingRow({item}){
     return (
-        <View style = {styles.pendingRow}>
-            <Ionicons name={item.icon} size={22} color={item.iconColor || '#e65100'} style={{ marginRight: 6 }} />
+        <View style = {styles.itemRow}>
+            <Text style = {styles.pendingIcon}>{item.icon}</Text>
             <View style = {styles.pendingInfo}>
                 <Text style = {styles.pendingName}>{item.name}</Text>
                 <Text style = {styles.pendingSub}>{item.sub}</Text>
             </View>
-            <Text style = {styles.pendingStatus}>Chờ</Text>
+            <Text style = {styles.pendingStatus}>{item.pendingStatus}</Text>
         </View>
     );
 }
@@ -78,7 +60,7 @@ export default function OfflineScreen(){
             {/* Header */}
             <View style = {styles.header}>
                 <TouchableOpacity onPress = {() => router.back()}>
-                    <Ionicons name="chevron-back" size={24} color="#fff" />
+                    <Text style = {styles.backBtn}>‹</Text>
                 </TouchableOpacity>
                 <Text style = {styles.headerTitle}>Chế độ offline</Text>
                 <View style = {styles.badge}>
@@ -88,37 +70,33 @@ export default function OfflineScreen(){
             {/* Body */}
             <ScrollView style = {styles.scroll}>
                 {/* Alert */}
-                <View style = {styles.alert}>
-                    <Ionicons name="cloud-offline-outline" size={24} color="#e65100" style={{ marginRight: 6 }} />
-                    <View style = {styles.alertBody}>
-                        <Text style = {styles.alertTitle}>Đang hoạt động offline</Text>
-                        <Text style = {styles.alertSub}>App vẫn đang chạy bình thường, dữ liệu sẽ tự động đồng bộ khi có mạng trở lại</Text>
-                    </View>
+            <View style = {styles.alert}>
+                <View style = {styles.alertBody}>
+                    <Text style = {styles.alertTitle}>Đang hoạt động offline</Text>
+                    <Text style = {styles.alertSub}>App vẫn đang chạy bình thường, dữ liệu sẽ tự động đồng bộ khi có mạng trờ lại</Text>
                 </View>
-                {/* Dữ liệu đã cache */}
-                <View style = {styles.card}>    
-                    <Text style = {styles.cardTitle}>Dữ liệu đã cache</Text>
-                    {cacheData.map((item) =>(
-                        <CacheRow key = {item.id} item = {item} />
-                    ))}
-                </View>
-                {/* Chờ đồng bộ */}
-                <View style = {styles.card}>
-                    <Text style = {styles.cardTitle}>Chờ đồng bộ ({pendingSync.length} thao tác)</Text>
-                    {pendingSync.map((item) => (
-                        <PendingRow key = {item.id} item={item} />
-                    ))}
-                </View>
-                {/* Nút thử kết nối lại */}
-                <TouchableOpacity 
-                style = {styles.btnReconnect}>
-                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-                        <Ionicons name="refresh-outline" size={18} color="#fff" />
-                        <Text style = {styles.btnReconnectText}>Thử kết nối lại ngay</Text>
-                    </View>
-                </TouchableOpacity>
+            </View>
+            {/* Dữ liệu đã cache */}
+            <View style = {styles.card}>    
+                <Text style = {styles.cardTitle}>Dữ liệu đã cache</Text>
+                {cacheData.map((item) =>(
+                    <CacheRow key = {item.id} item = {item} />
+                ))}
+            </View>
+            {/* Chờ đồng bộ */}
+            <View style = {styles.card}>
+                <Text style = {styles.cardTitle}>Chờ đồng bộ ({pendingSync.lenght} thao tác)</Text>
+                {pendingSync.map((item) => (
+                    <PendingRow key = {item.id} item={item} />
+                ))}
+            </View>
+            {/* Nút thử kết nối lại */}
+            <TouchableOpacity 
+            style = {styles.btnReconnect}>
+                <Text style = {styles.btnReconnectText}>Thử kết nối lại ngay</Text>
+            </TouchableOpacity>
             </ScrollView>
-            <StaffBottomNav />
+        <StaffBottomNav />
         </SafeAreaView>
     );
 }
@@ -170,7 +148,6 @@ const styles = StyleSheet.create({
         marginBottom: 16,
         borderLeftWidth: 4,
         borderLeftColor: COLORS.warning,
-        alignItems: 'center',
     },
     alertIcon: { fontSize: 24 },
     alertBody: { flex: 1 },
