@@ -14,7 +14,8 @@ import {
   getProfile, 
   updateProfile,
   changeCustomerPassword,
-  logout as apiLogout
+  logout as apiLogout,
+  getIncidents
 } from '../../constants/services/api';
 import { getOrderStatusMeta, canCustomerCancelOrder, ORDER_STATUS } from '../../constants/orderStatus';
 import { validateNewPassword, PASSWORD_HINT } from '../../constants/passwordPolicy';
@@ -300,12 +301,22 @@ export default function StoreOrderWebScreen() {
   ]);
 
   // Store Rack Incident Logger
-  const [storeIncidents, setStoreIncidents] = useState([
-    { id: 1, product: 'Cam Sành Kingfood', type: 'Dập nát khi vận chuyển', severity: 'Cao', status: 'pending', date: '2026-05-19' },
-    { id: 2, product: 'Sữa TH True Milk', type: 'Móp méo vỏ hộp', severity: 'Trung bình', status: 'resolved', date: '2026-05-18' }
-  ]);
+  const [storeIncidents, setStoreIncidents] = useState([]);
   const [incidentForm, setIncidentForm] = useState({ product: '', type: 'Thiếu hàng trưng bày', severity: 'Trung bình', details: '' });
   const [submittingIncident, setSubmittingIncident] = useState(false);
+  const [loadingIncidents, setLoadingIncidents] = useState(false);
+
+  const fetchStoreIncidents = useCallback(async () => {
+    setLoadingIncidents(true);
+    try {
+      const res = await getIncidents();
+      setStoreIncidents(res?.data || []);
+    } catch (err) {
+      console.log('Fetch incidents error:', err.message);
+    } finally {
+      setLoadingIncidents(false);
+    }
+  }, []);
 
   // Supplier Support Desk
   const [supportTickets, setSupportTickets] = useState([
@@ -314,16 +325,6 @@ export default function StoreOrderWebScreen() {
   ]);
   const [supportForm, setSupportForm] = useState({ topic: '', type: 'Giao nhận', message: '' });
   const [submittingTicket, setSubmittingTicket] = useState(false);
-
-  // BRAND NEW RETAIL REPLENISHMENT EXPIRED EXPANSIONS
-  
-  // 1. Demand forecast lists
-  const [forecastList] = useState([
-    { name: 'Cam Sành Kingfood', sku: 'FRUIT-CAM-SANH', salesRate: '45kg/tuần', stock: 5, timeLimit: '1 ngày', recommendQty: 40, unit: 'kg' },
-    { name: 'Sữa tươi TH True Milk Organic', sku: 'MILK-TH-TRUE', salesRate: '60 hộp/tuần', stock: 8, timeLimit: '1 ngày', recommendQty: 50, unit: 'hộp' },
-    { name: 'Coca-Cola Lon 320ml', sku: 'BEV-COCA-COLA', salesRate: '120 lon/tuần', stock: 95, timeLimit: '5 ngày', recommendQty: 30, unit: 'lon' },
-    { name: 'Bánh Quy Oreo Socola', sku: 'SNK-OREO', salesRate: '80 hộp/tuần', stock: 68, timeLimit: '6 ngày', recommendQty: 20, unit: 'hộp' }
-  ]);
 
   // 2. Shelf Freshness & Expiration status tracking
   const [shelfFreshness, setShelfFreshness] = useState([
@@ -336,6 +337,13 @@ export default function StoreOrderWebScreen() {
   useEffect(() => {
     fetchCatalog();
   }, []);
+
+  // Fetch incidents when tab becomes active
+  useEffect(() => {
+    if (activeTab === 'store-incidents') {
+      fetchStoreIncidents();
+    }
+  }, [activeTab]);
 
   const fetchCatalog = async () => {
     try {
@@ -912,12 +920,10 @@ export default function StoreOrderWebScreen() {
     setTimeout(() => {
       setStoreIncidents(prev => [
         {
-          id: prev.length + 1,
-          product: incidentForm.product.trim(),
-          type: incidentForm.type,
-          severity: incidentForm.severity,
+          id: Date.now(),
+          reason: `${incidentForm.product.trim()} || ${incidentForm.type} || ${incidentForm.severity} || ${incidentForm.details.trim()}`,
           status: 'pending',
-          date: new Date().toISOString().split('T')[0]
+          createdAt: new Date().toISOString()
         },
         ...prev
       ]);
@@ -948,24 +954,6 @@ export default function StoreOrderWebScreen() {
       setSubmittingTicket(false);
       Alert.alert('Khởi tạo Ticket hỗ trợ', 'Yêu cầu hỗ trợ đã được chuyển tiếp đến Tổng đài điều phối Kingfood.');
     }, 800);
-  };
-
-  // RETAIL EXPANSION INTERACTIVE ACTIONS
-  
-  // 1. One-click Auto replenishment cart filler
-  const handleApplyForecastReplenish = () => {
-    clearCart();
-    filteredProducts.forEach(product => {
-      const forecast = forecastList.find(f => f.sku === product.sku)
-        || forecastList.find(f => product.name.toLowerCase().includes(f.name.toLowerCase())
-          || f.name.toLowerCase().includes(product.name.toLowerCase()));
-      if (!forecast) return;
-      for (let i = 0; i < forecast.recommendQty; i++) {
-        addToCart(product);
-      }
-    });
-    Alert.alert('Tiếp tế tự động', 'Đã thêm sản phẩm vào giỏ hàng với số lượng đề xuất bổ sung.');
-    handleTabChange('order');
   };
 
   // 2. Shelf product Markdown clearance promo
@@ -1074,16 +1062,7 @@ export default function StoreOrderWebScreen() {
             <Text style={[styles.menuLabel, activeTab === 'stats' && styles.menuLabelActive]}>Báo cáo chi tiêu</Text>
           </TouchableOpacity>
 
-          {/* ADVANCED BRAND NEW OPERATIONS TAB 1: CURATED AUTO-REPLENISHMENT FORECAST */}
-          <TouchableOpacity 
-            style={[styles.menuItem, activeTab === 'replenishment-forecast' && styles.menuItemActive]} 
-            onPress={() => handleTabChange('replenishment-forecast')}
-          >
-            <Ionicons name="bulb" size={20} color={activeTab === 'replenishment-forecast' ? '#fff' : ORANGE_THEME.textMuted} />
-            <Text style={[styles.menuLabel, activeTab === 'replenishment-forecast' && styles.menuLabelActive]}>Dự phóng đặt hàng</Text>
-          </TouchableOpacity>
-
-          {/* ADVANCED BRAND NEW OPERATIONS TAB 2: SHELF EXPIRATION MARKDOWN BARCODES */}
+          {/* ADVANCED BRAND NEW OPERATIONS TAB 1: SHELF EXPIRATION MARKDOWN BARCODES */}
           <TouchableOpacity 
             style={[styles.menuItem, activeTab === 'shelf-life' && styles.menuItemActive]} 
             onPress={() => handleTabChange('shelf-life')}
@@ -1802,57 +1781,7 @@ export default function StoreOrderWebScreen() {
             </ScrollView>
           )}
 
-          {/* ADVANCED BRAND NEW OPERATIONS TAB 1: CURATED AUTO-REPLENISHMENT FORECAST VIEW */}
-          {activeTab === 'replenishment-forecast' && (
-            <ScrollView style={{ flex: 1, backgroundColor: '#f8fafc' }} contentContainerStyle={{ padding: 28 }}>
-              <View style={[styles.profileHeadingRow, { justifyContent: 'space-between' }]}>
-                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-                  <Ionicons name="bulb" size={24} color={ORANGE_THEME.primary} />
-                  <Text style={styles.profileSectionTitle}>Dự phóng Tiêu Thụ & Tự động Đề Xuất Đặt Hàng Chi Nhánh</Text>
-                </View>
-                
-                <TouchableOpacity style={styles.submitFilterBtn} onPress={handleApplyForecastReplenish}>
-                  <Ionicons name="cart-outline" size={16} color="#fff" style={{ marginRight: 4 }} />
-                  <Text style={{ color: '#fff', fontSize: 13, fontWeight: '850' }}>Tự động tiếp tế vào giỏ hàng</Text>
-                </TouchableOpacity>
-              </View>
-
-              <View style={styles.tableWebContainer}>
-                <View style={styles.tableWebHeader}>
-                  <Text style={[styles.thCell, { flex: 5 }]}>Sản phẩm thực phẩm</Text>
-                  <Text style={[styles.thCell, { flex: 2, textAlign: 'center' }]}>Tần suất tiêu thụ</Text>
-                  <Text style={[styles.thCell, { flex: 2, textAlign: 'center' }]}>Tồn kho tại kệ chi nhánh</Text>
-                  <Text style={[styles.thCell, { flex: 2, textAlign: 'center' }]}>Dự báo hết hàng</Text>
-                  <Text style={[styles.thCell, { flex: 2, textAlign: 'center' }]}>Đề xuất đặt sỉ bổ sung</Text>
-                </View>
-
-                {forecastList.map((item, idx) => {
-                  const isUrgent = item.stock < 15;
-                  return (
-                    <View key={idx} style={styles.tableWebRow}>
-                      <Text style={[styles.tdCell, { flex: 5, fontWeight: '900' }]}>{item.name}</Text>
-                      <Text style={[styles.tdCell, { flex: 2, textAlign: 'center', fontWeight: '700' }]}>{item.salesRate}</Text>
-                      <Text style={[styles.tdCell, { flex: 2, textAlign: 'center', fontWeight: '800', color: isUrgent ? '#d32f2f' : '#334155' }]}>
-                        {item.stock} {item.unit}
-                      </Text>
-                      <View style={[styles.tdCell, { flex: 2, alignItems: 'center' }]}>
-                        <View style={[styles.alertPill, { backgroundColor: isUrgent ? '#ffebee' : '#f1f5f9' }]}>
-                          <Text style={{ fontSize: 10, fontWeight: '900', color: isUrgent ? '#d32f2f' : '#475569' }}>
-                            {item.timeLimit}
-                          </Text>
-                        </View>
-                      </View>
-                      <Text style={[styles.tdCell, { flex: 2, textAlign: 'center', fontWeight: '900', color: ORANGE_THEME.primary }]}>
-                        +{item.recommendQty} {item.unit}
-                      </Text>
-                    </View>
-                  );
-                })}
-              </View>
-            </ScrollView>
-          )}
-
-          {/* ADVANCED BRAND NEW OPERATIONS TAB 2: SHELF EXPIRATION MARKDOWN BARCODES VIEW */}
+          {/* ADVANCED BRAND NEW OPERATIONS TAB 1: SHELF EXPIRATION MARKDOWN BARCODES VIEW */}
           {activeTab === 'shelf-life' && (
             <ScrollView style={{ flex: 1, backgroundColor: '#f8fafc' }} contentContainerStyle={{ padding: 28 }}>
               <View style={styles.profileHeadingRow}>
@@ -2096,12 +2025,24 @@ export default function StoreOrderWebScreen() {
             <View style={styles.splitLayout}>
               
               <View style={[styles.catalogSide, { flex: 6, backgroundColor: '#fff', borderRightWidth: 1.5, borderRightColor: '#e2e8f0', padding: 24 }]}>
-                <View style={styles.profileHeadingRow}>
-                  <Ionicons name="warning-outline" size={24} color={ORANGE_THEME.primary} />
-                  <Text style={styles.profileSectionTitle}>Nhật ký Báo cáo Sự cố kệ hàng & Vận chuyển</Text>
+                <View style={[styles.profileHeadingRow, { justifyContent: 'space-between' }]}>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+                    <Ionicons name="warning-outline" size={24} color={ORANGE_THEME.primary} />
+                    <Text style={styles.profileSectionTitle}>Nhật ký Báo cáo Sự cố kệ hàng & Vận chuyển</Text>
+                  </View>
+                  <TouchableOpacity style={styles.refreshBtnRow} onPress={fetchStoreIncidents}>
+                    <Ionicons name="refresh" size={14} color={ORANGE_THEME.primary} style={{ marginRight: 4 }} />
+                    <Text style={{ fontSize: 13, fontWeight: '700', color: ORANGE_THEME.primary }}>Tải lại</Text>
+                  </TouchableOpacity>
                 </View>
 
                 <ScrollView style={{ flex: 1 }}>
+                  {loadingIncidents ? (
+                    <View style={{ padding: 40, alignItems: 'center' }}>
+                      <ActivityIndicator size="large" color={ORANGE_THEME.primary} />
+                      <Text style={{ marginTop: 12, color: ORANGE_THEME.textMuted, fontSize: 13 }}>Đang tải danh sách sự cố...</Text>
+                    </View>
+                  ) : (
                   <View style={styles.tableWebContainer}>
                     <View style={styles.tableWebHeader}>
                       <Text style={[styles.thCell, { flex: 1.5 }]}>ID sự cố</Text>
@@ -2111,12 +2052,22 @@ export default function StoreOrderWebScreen() {
                       <Text style={[styles.thCell, { flex: 2, textAlign: 'center' }]}>Trạng thái WMS</Text>
                     </View>
 
-                    {storeIncidents.map(inc => (
+                    {storeIncidents.length === 0 ? (
+                      <View style={{ padding: 40, alignItems: 'center' }}>
+                        <Ionicons name="checkmark-circle-outline" size={48} color="#cbd5e1" />
+                        <Text style={{ marginTop: 12, color: ORANGE_THEME.textMuted, fontSize: 13 }}>Chưa có báo cáo sự cố nào</Text>
+                      </View>
+                    ) : (storeIncidents.map(inc => {
+                      const parts = (inc.reason || '').split(' || ');
+                      const product = parts[0] || '';
+                      const type = parts[1] || inc.reason;
+                      const severity = parts[2] || 'Trung bình';
+                      return (
                       <View key={inc.id} style={styles.tableWebRow}>
                         <Text style={[styles.tdCell, { flex: 1.5, fontWeight: 'bold' }]}>#RACK-{inc.id}</Text>
-                        <Text style={[styles.tdCell, { flex: 3.5, fontWeight: '700' }]}>{inc.product}</Text>
-                        <Text style={[styles.tdCell, { flex: 2.5 }]}>{inc.type}</Text>
-                        <Text style={[styles.tdCell, { flex: 1.5, textAlign: 'center', fontWeight: 'bold', color: inc.severity === 'Cao' ? '#d32f2f' : '#f57c00' }]}>{inc.severity}</Text>
+                        <Text style={[styles.tdCell, { flex: 3.5, fontWeight: '700' }]}>{product}</Text>
+                        <Text style={[styles.tdCell, { flex: 2.5 }]}>{type}</Text>
+                        <Text style={[styles.tdCell, { flex: 1.5, textAlign: 'center', fontWeight: 'bold', color: severity === 'Cao' ? '#d32f2f' : '#f57c00' }]}>{severity}</Text>
                         <View style={[styles.tdCell, { flex: 2, alignItems: 'center' }]}>
                           <View style={[styles.alertPill, { backgroundColor: inc.status === 'resolved' ? '#e8f5e9' : '#fff3e0' }]}>
                             <Text style={{ fontSize: 10, fontWeight: '850', color: inc.status === 'resolved' ? '#2e7d32' : '#e65100' }}>
@@ -2125,8 +2076,9 @@ export default function StoreOrderWebScreen() {
                           </View>
                         </View>
                       </View>
-                    ))}
+                    )}))}
                   </View>
+                  )}
                 </ScrollView>
               </View>
 
