@@ -17,6 +17,8 @@ import { getOrderStatusMeta, canCustomerCancelOrder } from '../../constants/orde
 import { notifyOrdersRefresh } from '../../utils/ordersRefresh';
 import { useAuth } from '../../contexts/AuthContext';
 import { useStoreCart } from '../../contexts/StoreCartContext';
+import { useAppPreferences } from '../../contexts/AppPreferencesContext';
+import { translateProductName, translateUnit } from '../../utils/translator';
 
 // Timezone date helper for Vietnam (UTC+7)
 const formatVietnamDate = (dateStr) => {
@@ -41,6 +43,7 @@ const formatVietnamDate = (dateStr) => {
 
 export default function OrderDetailScreen() {
   const { orderId } = useLocalSearchParams();
+  const { darkMode, language } = useAppPreferences();
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
   const [cancelling, setCancelling] = useState(false);
@@ -94,12 +97,14 @@ export default function OrderDetailScreen() {
 
   const handleReorder = () => {
     Alert.alert(
-      'Đặt lại đơn hàng',
-      'Thêm tất cả sản phẩm của đơn hàng này vào giỏ hàng hiện tại?',
+      language === 'en' ? 'Re-order' : 'Đặt lại đơn hàng',
+      language === 'en' 
+        ? 'Add all products of this order to the current cart?' 
+        : 'Thêm tất cả sản phẩm của đơn hàng này vào giỏ hàng hiện tại?',
       [
-        { text: 'Huỷ', style: 'cancel' },
+        { text: language === 'en' ? 'Cancel' : 'Huỷ', style: 'cancel' },
         {
-          text: 'Đồng ý',
+          text: language === 'en' ? 'Agree' : 'Đồng ý',
           onPress: () => {
             clearCart();
             details.forEach(line => {
@@ -119,12 +124,14 @@ export default function OrderDetailScreen() {
               }
             });
             Alert.alert(
-              'Thành công',
-              'Đã thêm tất cả sản phẩm vào giỏ hàng. Chuyển đến trang Đặt hàng?',
+              language === 'en' ? 'Success' : 'Thành công',
+              language === 'en' 
+                ? 'All products have been added to the shopping cart. Go to the Order screen?' 
+                : 'Đã thêm tất cả sản phẩm vào giỏ hàng. Chuyển đến trang Đặt hàng?',
               [
-                { text: 'Ở lại', style: 'cancel' },
+                { text: language === 'en' ? 'Stay' : 'Ở lại', style: 'cancel' },
                 {
-                  text: 'Đi đặt hàng',
+                  text: language === 'en' ? 'Go to Order' : 'Đi đặt hàng',
                   onPress: () => {
                     router.push('/storeorder');
                   }
@@ -270,7 +277,7 @@ export default function OrderDetailScreen() {
         </View>
 
         <View style={styles.card}>
-          <Text style={styles.cardTitle}>Sản phẩm trong đơn</Text>
+          <Text style={styles.cardTitle}>{language === 'en' ? 'Products in Order' : 'Sản phẩm trong đơn'}</Text>
           {details.map((line, i) => (
             <View
               key={line.id || `${line.productId}-${i}`}
@@ -278,10 +285,10 @@ export default function OrderDetailScreen() {
             >
               <View style={styles.productInfo}>
                 <Text style={styles.productName}>
-                  {line.product?.name || `Sản phẩm #${line.productId}`}
+                  {line.product ? translateProductName(line.product.name, language) : (language === 'en' ? `Product #${line.productId}` : `Sản phẩm #${line.productId}`)}
                 </Text>
                 <Text style={styles.productSku}>
-                  SL: {line.quantity}
+                  {language === 'en' ? 'QTY' : 'SL'}: {line.quantity}
                 </Text>
               </View>
               <Text style={styles.lineTotal}>

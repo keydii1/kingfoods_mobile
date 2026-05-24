@@ -12,6 +12,7 @@ import { OrderConfirmModal, OrderSuccessOverlay } from '../../components/OrderCh
 import { notifyOrdersRefresh } from '../../utils/ordersRefresh';
 import { playSound } from '../../utils/soundService';
 import { useAppPreferences } from '../../contexts/AppPreferencesContext';
+import { translateProductName, translateCategoryName, translateUnit } from '../../utils/translator';
 
 const CART_LIST_MAX_HEIGHT = 152;
 
@@ -298,7 +299,7 @@ export default function StoreOrderScreen() {
                     isActive && styles.categoryCapTextActive
                   ]}
                 >
-                  {cat.name}
+                  {translateCategoryName(cat.name, language)}
                 </Text>
               </TouchableOpacity>
             );
@@ -335,8 +336,8 @@ export default function StoreOrderScreen() {
                 </View>
               )}
               <View style={styles.productInfo}>
-                <Text style={[styles.productName, { color: activeTextColor }]}>{product.name}</Text>
-                <Text style={styles.productPrice}>{product.price.toLocaleString()}đ / {product.unit}</Text>
+                <Text style={[styles.productName, { color: activeTextColor }]}>{translateProductName(product.name, language)}</Text>
+                <Text style={styles.productPrice}>{product.price.toLocaleString()}đ / {translateUnit(product.unit, language)}</Text>
               </View>
               <View style={styles.productAdd}>
                 <Text style={styles.productAddBtn}>+</Text>
@@ -391,7 +392,7 @@ export default function StoreOrderScreen() {
             >
               {cart.map(item => (
                 <View key={item.product.id} style={[styles.cartItem, { borderTopColor: activeBorderColor }]}>
-                  <Text style={[styles.cartItemName, { color: activeTextColor }]} numberOfLines={2}>{item.product.name}</Text>
+                  <Text style={[styles.cartItemName, { color: activeTextColor }]} numberOfLines={2}>{translateProductName(item.product.name, language)}</Text>
                   <View style={styles.cartQtyRow}>
                     <TouchableOpacity onPress={() => removeFromCart(item.product.id)} hitSlop={8}>
                       <Text style={styles.qtyBtn}>−</Text>

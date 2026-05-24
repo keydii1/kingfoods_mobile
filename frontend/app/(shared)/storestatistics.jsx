@@ -9,6 +9,7 @@ import { getClientStatistics, cancelClientOrder, BASE_URL } from '../../constant
 import { getOrderStatusMeta, canCustomerCancelOrder } from '../../constants/orderStatus';
 import { subscribeOrdersRefresh, notifyOrdersRefresh } from '../../utils/ordersRefresh';
 import { useAppPreferences } from '../../contexts/AppPreferencesContext';
+import { translateProductName, translateUnit } from '../../utils/translator';
 
 // Timezone date helper for Vietnam (UTC+7)
 const formatVietnamDateOnly = (dateStr) => {
@@ -337,8 +338,8 @@ export default function StoreStatisticsScreen() {
                 <View key={i} style={styles.topRow}>
                   <Text style={styles.topRank}>{i + 1}</Text>
                   <View style={styles.topInfo}>
-                    <Text style={[styles.topName, { color: activeTextColor }]}>{p.name}</Text>
-                    <Text style={[styles.topQty, { color: activeTextGrayColor }]}>{p.qty} {p.unit}</Text>
+                    <Text style={[styles.topName, { color: activeTextColor }]}>{translateProductName(p.name, language)}</Text>
+                    <Text style={[styles.topQty, { color: activeTextGrayColor }]}>{p.qty} {translateUnit(p.unit, language)}</Text>
                   </View>
                 </View>
               ))
