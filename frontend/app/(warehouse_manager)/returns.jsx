@@ -56,7 +56,7 @@ export default function ReturnsScreen() {
 
             {/* Header */}
             <View style={styles.header}>
-                <TouchableOpacity onPress={() => router.back()}>
+                <TouchableOpacity onPress={() => router.replace('/managerdashboard')}>
                     <Ionicons name="chevron-back" size={24} color={COLORS.primary} />
                 </TouchableOpacity>
                 <Text style={styles.headerTitle}>Xử lý Hàng Trả về</Text>
@@ -134,7 +134,10 @@ export default function ReturnsScreen() {
                 {/* Nút xác nhận */}
                 <TouchableOpacity
                     style={styles.btnPrimary}
-                    onPress={() => router.back()}
+                    onPress={() => {
+                        Alert.alert('Thành công', 'Đã nhập kho sản phẩm trả về thành công!');
+                        router.replace('/managerdashboard');
+                    }}
                 >
                     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
                         <Ionicons name="download-outline" size={18} color="#fff" />
