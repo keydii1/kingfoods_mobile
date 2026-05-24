@@ -9,6 +9,7 @@ import { useAuth } from '../../contexts/AuthContext'
 import {logout as apiLogout, changeUserPassword, changeCustomerPassword} from '../../constants/services/api'
 import { validateNewPassword, PASSWORD_HINT } from '../../constants/passwordPolicy';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useAppPreferences } from '../../contexts/AppPreferencesContext';
 
 // Vietnamese/English translations dictionary
 const TRANSLATIONS = {
@@ -142,11 +143,16 @@ export default function SettingScreen(){
     const insets = useSafeAreaInsets();
     const isCustomer = userRole === 'store_manager';
 
-    // Application Preferences
-    const [darkMode, setDarkMode] = useState(false);
-    const [language, setLanguage] = useState('vi');
-    const [biometric, setBiometric] = useState(false);
-    const [pushNotify, setPushNotify] = useState(true);
+    const {
+        darkMode,
+        language,
+        biometric,
+        pushNotify,
+        setDarkMode,
+        setLanguage,
+        setBiometric,
+        setPushNotify,
+    } = useAppPreferences();
 
     // Legacy / Staff settings
     const [beepSound, setBeepSound] = useState(true);
@@ -164,10 +170,6 @@ export default function SettingScreen(){
         async function loadSettings() {
             try {
                 const keys = [
-                    'setting_darkMode',
-                    'setting_language',
-                    'setting_biometric',
-                    'setting_pushNotify',
                     'setting_beepSound',
                     'setting_vibrate',
                     'setting_lowAlert',
@@ -178,10 +180,6 @@ export default function SettingScreen(){
                 stores.forEach(([key, val]) => {
                     if (val !== null) {
                         const bool = val === 'true';
-                        if (key === 'setting_darkMode') setDarkMode(bool);
-                        if (key === 'setting_language') setLanguage(val);
-                        if (key === 'setting_biometric') setBiometric(bool);
-                        if (key === 'setting_pushNotify') setPushNotify(bool);
                         if (key === 'setting_beepSound') setBeepSound(bool);
                         if (key === 'setting_vibrate') setVibrate(bool);
                         if (key === 'setting_lowAlert') setLowAlert(bool);
@@ -223,14 +221,12 @@ export default function SettingScreen(){
                     text: 'Tiếng Việt',
                     onPress: () => {
                         setLanguage('vi');
-                        saveSetting('language', 'vi');
                     }
                 },
                 {
                     text: 'English',
                     onPress: () => {
                         setLanguage('en');
-                        saveSetting('language', 'en');
                     }
                 },
                 {

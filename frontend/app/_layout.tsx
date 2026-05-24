@@ -13,6 +13,7 @@ import { AuthProvider, useAuth }
 from '../contexts/AuthContext';
 import { StoreCartProvider } from '../contexts/StoreCartContext';
 import { AppAlertProvider } from '../components/AppAlertProvider';
+import { AppPreferencesProvider } from '../contexts/AppPreferencesContext';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -71,11 +72,13 @@ export default function Layout() {
     return (
 
         <AuthProvider>
-            <StoreCartProvider>
-                <AppAlertProvider>
-                    <LayoutContent />
-                </AppAlertProvider>
-            </StoreCartProvider>
+            <AppPreferencesProvider>
+                <StoreCartProvider>
+                    <AppAlertProvider>
+                        <LayoutContent />
+                    </AppAlertProvider>
+                </StoreCartProvider>
+            </AppPreferencesProvider>
         </AuthProvider>
 
     );
