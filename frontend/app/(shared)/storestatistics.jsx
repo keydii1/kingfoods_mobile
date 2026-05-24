@@ -258,13 +258,7 @@ export default function StoreStatisticsScreen() {
     <SafeAreaView style={[styles.safeArea, { backgroundColor: activeBg }]} edges={['top', 'left', 'right']}>
       {/* Header */}
       <View style={[styles.header, { backgroundColor: activeCardBg, borderBottomColor: activeBorderColor }]}>
-        <TouchableOpacity onPress={() => {
-          if (router.canGoBack()) {
-            router.back();
-          } else {
-            router.replace('/storeorder');
-          }
-        }}>
+        <TouchableOpacity onPress={() => router.replace('/storeorder')}>
           <Ionicons name="chevron-back" size={24} color={COLORS.primary} />
         </TouchableOpacity>
         <Text style={[styles.headerTitle, { color: activeTextColor }]}>{t.statsTitle}</Text>

@@ -171,7 +171,13 @@ export default function OrderDetailScreen() {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()}>
+        <TouchableOpacity onPress={() => {
+          if (userRole === 'store_manager') {
+            router.replace('/storestatistics');
+          } else {
+            router.replace('/managerdashboard');
+          }
+        }}>
           <Ionicons name="chevron-back" size={24} color={COLORS.primary} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Chi tiết đơn #{orderId}</Text>

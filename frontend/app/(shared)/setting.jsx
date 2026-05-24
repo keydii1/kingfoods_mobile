@@ -328,13 +328,13 @@ export default function SettingScreen(){
             {/* Header */}
             <View style = {[styles.header, { backgroundColor: activeCardBg, borderBottomColor: activeBorderColor }]}>
                 <TouchableOpacity onPress = {() => {
-                    if (router.canGoBack()) {
-                        router.back();
+                    if (isCustomer) {
+                        router.replace('/storeorder');
                     } else {
-                        if (isCustomer) {
-                            router.replace('/storeorder');
-                        } else {
+                        if (userRole === 'admin' || userRole === 'warehouse_manager') {
                             router.replace('/managerdashboard');
+                        } else {
+                            router.replace('/dashboard');
                         }
                     }
                 }}>

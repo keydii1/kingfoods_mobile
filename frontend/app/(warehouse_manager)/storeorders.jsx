@@ -278,7 +278,7 @@ export default function StoreOrdersScreen() {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()}>
+        <TouchableOpacity onPress={() => router.replace('/managerdashboard')}>
           <Ionicons name="chevron-back" size={24} color={COLORS.primary} style={{ marginRight: 8 }} />
         </TouchableOpacity>
         <View style={styles.headerInfo}>
