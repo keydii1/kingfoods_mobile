@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as SecureStore from 'expo-secure-store';
 
 interface AppPreferencesContextType {
   darkMode: boolean;
@@ -68,6 +69,10 @@ export function AppPreferencesProvider({ children }: { children: ReactNode }) {
   const setBiometric = useCallback((val: boolean) => {
     setBiometricState(val);
     AsyncStorage.setItem('setting_biometric', String(val)).catch(() => {});
+    if (!val) {
+      SecureStore.deleteItemAsync('kfood_store_credentials').catch(() => {});
+      SecureStore.deleteItemAsync('kfood_wms_credentials').catch(() => {});
+    }
   }, []);
 
   const setPushNotify = useCallback((val: boolean) => {
