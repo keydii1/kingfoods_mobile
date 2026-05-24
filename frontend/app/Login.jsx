@@ -15,10 +15,6 @@ import { Ionicons } from '@expo/vector-icons';
 import {login as apiLogin, customerLogin, forgetPassword, verifyOtp, resetPassword} from '../constants/services/api'
 import { COLORS } from '../constants/colors';
 import { useAuth } from '../contexts/AuthContext';
-import * as LocalAuthentication from 'expo-local-authentication';
-import * as SecureStore from 'expo-secure-store';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Animated } from 'react-native';
 
 const roles = [
   { key: 'admin', label: 'Quản lý kho',      icon: 'cube-outline' },
@@ -53,126 +49,6 @@ export default function LoginScreen() {
   const [newPassword, setNewPassword] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const resetTokenRef = useRef('');
-  const [hasBiometric, setHasBiometric] = useState(false);
-  const [biometricCredKey, setBiometricCredKey] = useState(null);
-  const bioPulse = useRef(new Animated.Value(1)).current;
-
-  // Pulse animation for the biometric button
-  useEffect(() => {
-    if (hasBiometric) {
-      const pulse = Animated.loop(
-        Animated.sequence([
-          Animated.timing(bioPulse, { toValue: 1.12, duration: 900, useNativeDriver: true }),
-          Animated.timing(bioPulse, { toValue: 1, duration: 900, useNativeDriver: true }),
-        ])
-      );
-      pulse.start();
-      return () => pulse.stop();
-    }
-  }, [hasBiometric]);
-
-  // Check biometric support and existing credentials
-  useEffect(() => {
-    async function checkBiometrics() {
-      try {
-        const hasHardware = await LocalAuthentication.hasHardwareAsync();
-        const isEnrolled = await LocalAuthentication.isEnrolledAsync();
-        const isSettingEnabled = await AsyncStorage.getItem('setting_biometric') === 'true';
-
-        if (hasHardware && isEnrolled && isSettingEnabled) {
-          // Check credentials for the current mode first, then fallback
-          const primaryKey = customerMode ? 'kfood_store_credentials' : 'kfood_wms_credentials';
-          const fallbackKey = customerMode ? 'kfood_wms_credentials' : 'kfood_store_credentials';
-          
-          const primaryCreds = await SecureStore.getItemAsync(primaryKey);
-          if (primaryCreds) {
-            setHasBiometric(true);
-            setBiometricCredKey(primaryKey);
-            return;
-          }
-          const fallbackCreds = await SecureStore.getItemAsync(fallbackKey);
-          if (fallbackCreds) {
-            setHasBiometric(true);
-            setBiometricCredKey(fallbackKey);
-            return;
-          }
-        }
-        setHasBiometric(false);
-        setBiometricCredKey(null);
-      } catch (err) {
-        setHasBiometric(false);
-        setBiometricCredKey(null);
-      }
-    }
-    checkBiometrics();
-  }, [customerMode, role]);
-
-  const handleBiometricLogin = async () => {
-    try {
-      const key = biometricCredKey || (customerMode ? 'kfood_store_credentials' : 'kfood_wms_credentials');
-      const savedCreds = await SecureStore.getItemAsync(key);
-      if (!savedCreds) {
-        Alert.alert('Thông báo', 'Không tìm thấy thông tin đăng nhập đã lưu. Vui lòng đăng nhập bằng mật khẩu trước.');
-        return;
-      }
-
-      const parsed = JSON.parse(savedCreds);
-      const isStoreLogin = key === 'kfood_store_credentials';
-
-      // Authenticate locally using FaceID or fingerprint
-      const auth = await LocalAuthentication.authenticateAsync({
-        promptMessage: isStoreLogin
-          ? 'Quét FaceID/Vân tay để đăng nhập cửa hàng'
-          : 'Xác thực FaceID/Vân tay nhân viên kho',
-        fallbackLabel: 'Nhập mật khẩu',
-        disableDeviceFallback: false,
-      });
-
-      if (auth.success) {
-        setLoading(true);
-        let res;
-        if (isStoreLogin) {
-          // Auto-switch to customer mode if needed
-          if (!customerMode) setCustomerMode(true);
-          res = await customerLogin(parsed.email, parsed.password);
-        } else {
-          if (customerMode) setCustomerMode(false);
-          res = await apiLogin(parsed.username, parsed.password);
-          if (parsed.role) {
-            setRole(parsed.role);
-          }
-        }
-
-        const userData = isStoreLogin ? res.customer : res.user;
-        login(
-          isStoreLogin ? 'store_manager' : (parsed.role || role),
-          userData.name || userData.fullName || userData.username,
-          userData.id,
-          res.accessToken,
-          userData.assignedLocationId ? ZONE_MAP[userData.assignedLocationId] : null,
-        );
-
-        const nextRoute = isStoreLogin
-          ? '/storeorder'
-          : (parsed.role === 'admin' ? '/managerdashboard' : '/dashboard');
-        router.replace(nextRoute);
-      }
-    } catch (err) {
-      Alert.alert('Đăng nhập thất bại', err.message || 'Xác thực sinh trắc học không thành công.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Auto trigger biometrics if eligible when entering screen
-  useEffect(() => {
-    if (hasBiometric && !loading) {
-      const timer = setTimeout(() => {
-        handleBiometricLogin();
-      }, 500);
-      return () => clearTimeout(timer);
-    }
-  }, [hasBiometric]);
 
   const getDashboardRoute = () => {
     if (customerMode) return '/storeorder';
@@ -249,19 +125,6 @@ export default function LoginScreen() {
             res = await customerLogin(email.trim(), password.trim());
         } else {
             res = await apiLogin(username.trim(), password.trim());
-        }
-
-        // Always save credentials to SecureStore for biometric login
-        // SecureStore is encrypted by iOS Keychain / Android Keystore
-        // Credentials are deleted when biometric toggle is turned OFF in settings
-        try {
-          const key = customerMode ? 'kfood_store_credentials' : 'kfood_wms_credentials';
-          const credentials = customerMode
-            ? { email: email.trim(), password: password.trim() }
-            : { username: username.trim(), password: password.trim(), role: role };
-          await SecureStore.setItemAsync(key, JSON.stringify(credentials));
-        } catch (e) {
-          console.log('SecureStore save error:', e);
         }
 
         const userData = customerMode ? res.customer : res.user;
@@ -414,22 +277,9 @@ export default function LoginScreen() {
                 onChangeText={setPassword}
               />
 
-              <View style={hasBiometric ? styles.loginActionsRow : null}>
-                <TouchableOpacity style={[styles.loginBtn, hasBiometric && { flex: 1 }, loading && { opacity: 0.7 }]} onPress={handleLogin}  disabled={loading}>
-                  <Text style={styles.loginBtnText}>{loading ? 'Đang đăng nhập...' : 'Đăng nhập'}</Text>
-                </TouchableOpacity>
-
-                {hasBiometric && (
-                  <View style={styles.biometricWrap}>
-                    <Animated.View style={{ transform: [{ scale: bioPulse }] }}>
-                      <TouchableOpacity style={styles.biometricBtn} onPress={handleBiometricLogin} disabled={loading}>
-                        <Ionicons name="finger-print" size={28} color={COLORS.primary} />
-                      </TouchableOpacity>
-                    </Animated.View>
-                    <Text style={styles.biometricLabel}>FaceID</Text>
-                  </View>
-                )}
-              </View>
+              <TouchableOpacity style={[styles.loginBtn, loading && { opacity: 0.7 }]} onPress={handleLogin} disabled={loading}>
+                <Text style={styles.loginBtnText}>{loading ? 'Đang đăng nhập...' : 'Đăng nhập'}</Text>
+              </TouchableOpacity>
 
               {!customerMode && (
                 <TouchableOpacity onPress={() => setForgotStep(1)}>
@@ -559,36 +409,5 @@ const styles = StyleSheet.create({
     color: COLORS.textGray,
     fontSize: 14,
     marginBottom: 8,
-  },
-  loginActionsRow: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    gap: 12,
-  },
-  biometricWrap: {
-    alignItems: 'center',
-    marginTop: 6,
-  },
-  biometricBtn: {
-    width: 56,
-    height: 56,
-    borderRadius: 16,
-    borderWidth: 2,
-    borderColor: COLORS.primary,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#fff',
-    shadowColor: COLORS.primary,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 6,
-    elevation: 4,
-  },
-  biometricLabel: {
-    color: COLORS.primary,
-    fontSize: 10,
-    fontWeight: '700',
-    marginTop: 4,
-    letterSpacing: 0.5,
   },
 });

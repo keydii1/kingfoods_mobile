@@ -119,9 +119,14 @@ export default function StoreStatisticsScreen() {
   const [startDate, setStartDate] = useState(getFirstDayOfMonth());
   const [endDate, setEndDate] = useState(getTodayStr());
   const [activePreset, setActivePreset] = useState('month');
+  const [selectedStatus, setSelectedStatus] = useState('all');
   const hasLoadedRef = useRef(false);
 
   const fetchStats = useCallback(async (start = startDate, end = endDate, silent = false) => {
+    const regex = /^\d{4}-\d{2}-\d{2}$/;
+    if (!regex.test(start) || !regex.test(end)) {
+      return;
+    }
     if (!silent) setLoading(true);
     try {
       const res = await getClientStatistics(start, end);
@@ -181,17 +186,22 @@ export default function StoreStatisticsScreen() {
   };
 
   const displayKpis = [
-    { icon: 'cube-outline', value: String(orders.length),
+    { key: 'all', icon: 'cube-outline', value: String(orders.length),
       label: t.placed, color: darkMode ? '#1e2a1e' : '#e8f5e9', textColor: COLORS.primary },
-    { icon: 'hourglass-outline', value: String(orders.filter(o => o.status === 'pending').length),
+    { key: 'pending', icon: 'hourglass-outline', value: String(orders.filter(o => o.status === 'pending').length),
       label: t.pending, color: darkMode ? '#33230a' : '#fff3e0', textColor: '#e65100' },
-    { icon: 'time-outline', value: String(orders.filter(o => o.status === 'processing').length),
+    { key: 'processing', icon: 'time-outline', value: String(orders.filter(o => o.status === 'processing').length),
       label: t.processing, color: darkMode ? '#1a2436' : '#e3f2fd', textColor: '#1565c0' },
-    { icon: 'checkmark-circle-outline', value: String(orders.filter(o => o.status === 'delivered').length),
+    { key: 'delivered', icon: 'checkmark-circle-outline', value: String(orders.filter(o => o.status === 'delivered').length),
       label: t.delivered, color: darkMode ? '#1e2a1e' : '#e8f5e9', textColor: COLORS.primary },
-    { icon: 'close-circle-outline', value: String(orders.filter(o => o.status === 'cancelled').length),
+    { key: 'cancelled', icon: 'close-circle-outline', value: String(orders.filter(o => o.status === 'cancelled').length),
       label: t.cancelled, color: darkMode ? '#3b181a' : '#ffebee', textColor: '#e53935' },
   ];
+
+  const filteredOrders = useMemo(() => {
+    if (selectedStatus === 'all') return orders;
+    return orders.filter(o => o.status === selectedStatus);
+  }, [orders, selectedStatus]);
 
   const openOrderDetail = (order) => {
     router.push({
@@ -286,10 +296,6 @@ export default function StoreStatisticsScreen() {
               keyboardType="numeric"
             />
           </View>
-          <TouchableOpacity style={styles.filterBtn} onPress={handleFilterPress}>
-            <Ionicons name="funnel-outline" size={14} color="#fff" />
-            <Text style={styles.filterBtnText}>{t.filter}</Text>
-          </TouchableOpacity>
         </View>
 
         {/* Preset Badges */}
@@ -318,13 +324,25 @@ export default function StoreStatisticsScreen() {
       <ScrollView style={styles.scroll} contentContainerStyle={{ padding: 16 }}>
           {/* KPI Grid */}
           <View style={styles.kpiGrid}>
-            {displayKpis.map((item, index) => (
-              <View key={item.label} style={[styles.kpiCard, { backgroundColor: item.color }]}>
-                <Ionicons name={item.icon} size={24} color={item.textColor} style={{ marginBottom: 4 }} />
-                <Text style={[styles.kpiValue, { color: item.textColor }]}>{item.value}</Text>
-                <Text style={[styles.kpiLabel, darkMode && { color: '#9ca3af' }]}>{item.label}</Text>
-              </View>
-            ))}
+            {displayKpis.map((item, index) => {
+              const isActive = selectedStatus === item.key;
+              return (
+                <TouchableOpacity 
+                  key={item.key} 
+                  style={[
+                    styles.kpiCard, 
+                    { backgroundColor: item.color },
+                    isActive && { borderWidth: 2, borderColor: item.textColor }
+                  ]}
+                  onPress={() => setSelectedStatus(item.key === selectedStatus ? 'all' : item.key)}
+                  activeOpacity={0.8}
+                >
+                  <Ionicons name={item.icon} size={24} color={item.textColor} style={{ marginBottom: 4 }} />
+                  <Text style={[styles.kpiValue, { color: item.textColor }]}>{item.value}</Text>
+                  <Text style={[styles.kpiLabel, darkMode && { color: '#9ca3af' }]}>{item.label}</Text>
+                </TouchableOpacity>
+              );
+            })}
           </View>
 
           {/* Top sản phẩm */}
@@ -356,8 +374,8 @@ export default function StoreStatisticsScreen() {
               <Ionicons name="document-text-outline" size={20} color={activeTextColor} style={{ marginRight: 6 }} />
               <Text style={[styles.cardTitle, { color: activeTextColor }]}>{t.ordersPeriod}</Text>
             </View>
-            {orders.length > 0 ? (
-              orders.map((o) => {
+            {filteredOrders.length > 0 ? (
+              filteredOrders.map((o) => {
                 const meta = getOrderStatusMeta(o.status);
                 const cancellable = canCustomerCancelOrder(o.status);
                 const itemCount = o.orderDetails?.length || 0;

@@ -120,7 +120,7 @@ export default function StoreOrderScreen() {
   const [showConfirm, setShowConfirm] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const { userName } = useAuth();
-  const { cart, addToCart, removeFromCart, clearCart, persistCart } = useStoreCart();
+  const { cart, addToCart, removeFromCart, clearCart, persistCart, updateCartQty } = useStoreCart();
   const insets = useSafeAreaInsets();
   const [searchDebounced, setSearchDebounced] = useState('');
   const [cartExpanded, setCartExpanded] = useState(true);
@@ -397,7 +397,29 @@ export default function StoreOrderScreen() {
                     <TouchableOpacity onPress={() => removeFromCart(item.product.id)} hitSlop={8}>
                       <Text style={styles.qtyBtn}>−</Text>
                     </TouchableOpacity>
-                    <Text style={[styles.cartQty, { color: activeTextColor }]}>{item.qty}</Text>
+                    <TextInput
+                      style={[
+                        styles.cartQtyInput,
+                        {
+                          color: activeTextColor,
+                          backgroundColor: darkMode ? '#2d2d2d' : '#f5f5f5',
+                          borderColor: activeBorderColor,
+                        }
+                      ]}
+                      value={String(item.qty)}
+                      onChangeText={(val) => {
+                        const cleanVal = val.replace(/[^0-9]/g, '');
+                        const parsed = cleanVal === '' ? 0 : parseInt(cleanVal, 10);
+                        updateCartQty(item.product.id, parsed);
+                      }}
+                      onBlur={() => {
+                        if (item.qty === 0) {
+                          removeFromCart(item.product.id);
+                        }
+                      }}
+                      keyboardType="number-pad"
+                      selectTextOnFocus
+                    />
                     <TouchableOpacity onPress={() => addToCart(item.product)} hitSlop={8}>
                       <Text style={styles.qtyBtn}>+</Text>
                     </TouchableOpacity>
@@ -540,7 +562,16 @@ const styles = StyleSheet.create({
   cartItemName: { fontSize: 12, color: '#444', flex: 1, marginRight: 10 },
   cartQtyRow: { flexDirection: 'row', alignItems: 'center', gap: 10 },
   qtyBtn: { fontSize: 20, fontWeight: '700', color: COLORS.primary, width: 28, textAlign: 'center' },
-  cartQty: { fontSize: 14, fontWeight: '700', color: '#222', minWidth: 20, textAlign: 'center' },
+  cartQtyInput: {
+    fontSize: 14,
+    fontWeight: '700',
+    minWidth: 44,
+    height: 32,
+    borderWidth: 1,
+    borderRadius: 8,
+    textAlign: 'center',
+    paddingHorizontal: 4,
+  },
   bottomNav: {
     flexDirection: 'row', backgroundColor: '#fff', paddingTop: 10, paddingBottom: 6,
     borderTopWidth: 1, borderTopColor: '#eee',

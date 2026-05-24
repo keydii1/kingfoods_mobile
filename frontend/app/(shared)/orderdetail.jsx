@@ -6,6 +6,7 @@ import {
   StyleSheet,
   ScrollView,
   ActivityIndicator,
+  Image,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
@@ -66,6 +67,13 @@ export default function OrderDetailScreen() {
   }, [orderId]);
 
   const handleCancel = () => {
+    if (order?.status === 'processing') {
+      Alert.alert(
+        'Không thể huỷ đơn',
+        'Đơn hàng đã được duyệt và đang trong quá trình xử lý/chuẩn bị lấy hàng, không thể huỷ lúc này.'
+      );
+      return;
+    }
     Alert.alert(
       'Huỷ đơn hàng',
       `Bạn có chắc muốn huỷ đơn #${orderId}?`,
@@ -283,6 +291,17 @@ export default function OrderDetailScreen() {
               key={line.id || `${line.productId}-${i}`}
               style={[styles.productRow, i > 0 && styles.productRowBorder]}
             >
+              {line.product?.image ? (
+                <Image
+                  source={{ uri: line.product.image }}
+                  style={styles.productImage}
+                  resizeMode="cover"
+                />
+              ) : (
+                <View style={styles.productImagePlaceholder}>
+                  <Ionicons name="image-outline" size={20} color="#b0bec5" />
+                </View>
+              )}
               <View style={styles.productInfo}>
                 <Text style={styles.productName}>
                   {line.product ? translateProductName(line.product.name, language) : (language === 'en' ? `Product #${line.productId}` : `Sản phẩm #${line.productId}`)}
@@ -303,12 +322,16 @@ export default function OrderDetailScreen() {
 
         {canCancel && (
           <TouchableOpacity
-            style={[styles.cancelBtn, cancelling && { opacity: 0.7 }]}
+            style={[
+              styles.cancelBtn,
+              cancelling && { opacity: 0.7 },
+              order?.status === 'processing' && { opacity: 0.4, borderColor: '#e0e0e0', backgroundColor: '#f5f5f5' }
+            ]}
             onPress={handleCancel}
             disabled={cancelling}
           >
-            <Ionicons name="close-circle-outline" size={20} color="#e53935" />
-            <Text style={styles.cancelBtnText}>
+            <Ionicons name="close-circle-outline" size={20} color={order?.status === 'processing' ? '#9e9e9e' : '#e53935'} />
+            <Text style={[styles.cancelBtnText, order?.status === 'processing' && { color: '#9e9e9e' }]}>
               {cancelling ? 'Đang huỷ...' : 'Huỷ đơn hàng'}
             </Text>
           </TouchableOpacity>
@@ -376,6 +399,22 @@ const styles = StyleSheet.create({
   productRowBorder: {
     borderTopWidth: 0.5,
     borderTopColor: '#eee',
+  },
+  productImage: {
+    width: 48,
+    height: 48,
+    borderRadius: 8,
+    backgroundColor: '#f5f5f5',
+  },
+  productImagePlaceholder: {
+    width: 48,
+    height: 48,
+    borderRadius: 8,
+    backgroundColor: '#f0f4f1',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
   },
   productInfo: { flex: 1 },
   productName: { fontSize: 13, fontWeight: '600', color: '#222' },

@@ -362,16 +362,7 @@ export default function SettingScreen(){
                                 subColor={activeTextGrayColor}
                                 borderColor={activeBorderColor}
                             />
-                            <SettingRow
-                                icon="finger-print-outline" iconBg="#00bcd4" iconColor="#fff"
-                                name={t.biometrics}
-                                sub={t.biometricsSub}
-                                value={biometric}
-                                onValueChange={handleBiometricToggle}
-                                textColor={activeTextColor}
-                                subColor={activeTextGrayColor}
-                                borderColor={activeBorderColor}
-                            />
+
                             <SettingRow
                                 icon="notifications-outline" iconBg="#ff9800" iconColor="#fff"
                                 name={t.notifications}
@@ -447,15 +438,6 @@ export default function SettingScreen(){
                                     subColor={activeTextGrayColor}
                                     borderColor={activeBorderColor}
                                 />
-                                <SettingRow
-                                    icon="finger-print-outline" iconBg="#00bcd4" iconColor="#fff"
-                                    name={t.biometrics}
-                                    sub={t.biometricsSub}
-                                    value={biometric}
-                                    onValueChange={handleBiometricToggle}
-                                    textColor={activeTextColor}
-                                    subColor={activeTextGrayColor}
-                                    borderColor={activeBorderColor}
                                 />
                             </View>
 

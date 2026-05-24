@@ -7,7 +7,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { getIncidents, resolveIncident, reportIncident } from '../../constants/services/api';
 import { COLORS } from '../../constants/colors';
 import { playSound } from '../../utils/soundService';
-import StaffBottomNav from '../../components/StaffBottomNav';
+import ManagerBottomNav from '../../components/ManagerBottomNav';
 import { useAuth } from '../../contexts/AuthContext';
 import * as ImagePicker from 'expo-image-picker';
 import * as ImageManipulator from 'expo-image-manipulator';
@@ -196,124 +196,32 @@ export default function IncidentReportScreen() {
       <View style={styles.header}>
         <View style={{ width: 32 }} />
         <Text style={styles.headerTitle}>Báo cáo sự cố</Text>
-        <TouchableOpacity 
-          style={[styles.addBtnContainer, showForm && styles.addBtnActive]} 
-          onPress={() => setShowForm(!showForm)}
-          activeOpacity={0.7}
-        >
-          <Ionicons name={showForm ? "close" : "add"} size={22} color={showForm ? "#fff" : COLORS.primary} />
-        </TouchableOpacity>
+        <View style={{ width: 32 }} />
       </View>
 
       {/* Filter Tabs */}
-      {!showForm && (
-        <View style={styles.filterRow}>
-          {filters.map(f => {
-            const count = f.key === 'all' 
-              ? reports.length 
-              : reports.filter(r => r.status === f.key).length;
-            const isActive = activeFilter === f.key;
-            return (
-              <TouchableOpacity
-                key={f.key}
-                style={[styles.filterBtn, isActive && styles.filterBtnActive]}
-                onPress={() => setActiveFilter(f.key)}
-              >
-                <Text style={[styles.filterText, isActive && styles.filterTextActive]}>
-                  {f.label} {count > 0 ? `(${count})` : '(0)'}
-                </Text>
-              </TouchableOpacity>
-            );
-          })}
-        </View>
-      )}
+      <View style={styles.filterRow}>
+        {filters.map(f => {
+          const count = f.key === 'all' 
+            ? reports.length 
+            : reports.filter(r => r.status === f.key).length;
+          const isActive = activeFilter === f.key;
+          return (
+            <TouchableOpacity
+              key={f.key}
+              style={[styles.filterBtn, isActive && styles.filterBtnActive]}
+              onPress={() => setActiveFilter(f.key)}
+            >
+              <Text style={[styles.filterText, isActive && styles.filterTextActive]}>
+                {f.label} {count > 0 ? `(${count})` : '(0)'}
+              </Text>
+            </TouchableOpacity>
+          );
+        })}
+      </View>
 
       <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
-        {showForm && (
-          <View style={styles.formCard}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 16 }}>
-              <Ionicons name="create-outline" size={20} color={COLORS.primary} style={{ marginRight: 6 }} />
-              <Text style={styles.formTitle}>Báo cáo sự cố mới</Text>
-            </View>
 
-            <Text style={styles.formLabel}>Loại sự cố:</Text>
-            <View style={styles.typeGrid}>
-              {issueTypes.map(t => (
-                <TouchableOpacity
-                  key={t.key}
-                  style={[styles.typeBtn, selectedType === t.key && styles.typeBtnActive]}
-                  onPress={() => setSelectedType(t.key)}
-                >
-                  <Ionicons name={t.icon} size={16} color={selectedType === t.key ? '#fff' : '#666'} />
-                  <Text style={[styles.typeLabel, selectedType === t.key && styles.typeLabelActive]}>
-                    {t.label}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </View>
-
-            <Text style={styles.formLabel}>Vị trí kệ hàng (Tùy chọn):</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Ví dụ: Khu A - Kệ 14.07.B"
-              placeholderTextColor="#aaa"
-              value={location}
-              onChangeText={setLocation}
-              autoCapitalize="words"
-              autoCorrect={false}
-            />
-
-            <Text style={styles.formLabel}>Mô tả chi tiết sự cố:</Text>
-            <TextInput
-              style={[styles.input, styles.detailInput]}
-              placeholder="Vui lòng mô tả chi tiết sự cố (tên sản phẩm lỗi, số lượng hư hỏng, tình trạng kẹt xe nâng...)"
-              placeholderTextColor="#aaa"
-              value={detail}
-              onChangeText={setDetail}
-              multiline
-              autoCapitalize="none"
-              autoCorrect={true}
-            />
-
-            <Text style={styles.formLabel}>Hình ảnh minh chứng (Tùy chọn):</Text>
-            {photoUri ? (
-              <View style={styles.photoContainer}>
-                <Image source={{ uri: photoUri }} style={styles.photoPreview} />
-                <TouchableOpacity 
-                  style={styles.removePhotoBtn} 
-                  onPress={() => { setPhotoUri(null); setPhotoBase64(null); }}
-                >
-                  <Ionicons name="trash" size={16} color="#fff" />
-                  <Text style={{ color: '#fff', fontSize: 12, fontWeight: '700', marginLeft: 4 }}>Xóa ảnh</Text>
-                </TouchableOpacity>
-              </View>
-            ) : (
-              <View style={styles.photoRow}>
-                <TouchableOpacity style={styles.photoSelectBtn} onPress={handleTakePhoto} activeOpacity={0.7}>
-                  <Ionicons name="camera-outline" size={20} color={COLORS.primary} />
-                  <Text style={styles.photoSelectText}>Chụp ảnh</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.photoSelectBtn} onPress={handleChoosePhoto} activeOpacity={0.7}>
-                  <Ionicons name="images-outline" size={20} color={COLORS.primary} />
-                  <Text style={styles.photoSelectText}>Chọn từ thư viện</Text>
-                </TouchableOpacity>
-              </View>
-            )}
-
-            <TouchableOpacity
-              style={[styles.submitBtn, submitting && { opacity: 0.7 }]}
-              onPress={submitReport}
-              disabled={submitting}
-            >
-              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-                <Ionicons name="send" size={16} color="#fff" />
-                <Text style={styles.submitBtnText}>
-                  {submitting ? 'Đang gửi...' : 'Gửi báo cáo sự cố'}
-                </Text>
-              </View>
-            </TouchableOpacity>
-          </View>
-        )}
 
         {filteredReports.length > 0 ? (
           filteredReports.map(r => {
@@ -371,7 +279,7 @@ export default function IncidentReportScreen() {
                     <Text style={styles.reportTime}>{r.time}</Text>
                   </View>
 
-                  {userRole === 'admin' && !isResolved && (
+                  {(userRole === 'admin' || userRole === 'warehouse_manager') && !isResolved && (
                     <TouchableOpacity style={styles.actionBtn} onPress={() => handleResolve(r.id)}>
                       <Ionicons name="checkmark-circle-outline" size={16} color="#fff" />
                       <Text style={styles.actionBtnText}>Xử lý xong</Text>
@@ -396,17 +304,11 @@ export default function IncidentReportScreen() {
                   : 'Chưa có sự cố nào được xử lý thành công.'
               }
             </Text>
-            <TouchableOpacity 
-              style={styles.emptyActionBtn}
-              onPress={() => setShowForm(true)}
-            >
-              <Ionicons name="add" size={18} color="#fff" />
-              <Text style={styles.emptyActionText}>Gửi báo cáo sự cố mới</Text>
-            </TouchableOpacity>
+
           </View>
         )}
       </ScrollView>
-      <StaffBottomNav active="incident" />
+      <ManagerBottomNav active="incident" />
     </SafeAreaView>
   );
 }

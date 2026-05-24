@@ -101,6 +101,7 @@ export default function TeamScreen(){
     const [loading, setLoading] = useState(true);
     const [editingUser, setEditingUser] = useState(null);
     const [editName, setEditName] = useState('');
+    const [activeFilter, setActiveFilter] = useState('all'); // 'all', 'working', 'idle'
 
     useEffect(() => {
         async function fetchTeamData(){
@@ -219,10 +220,44 @@ export default function TeamScreen(){
                         <Text style = {styles.alertSub}>{activeStats.zoneDetails}Tổng năng suất: {activeStats.totalSKU} sp/giờ</Text>
                     </View>
                 </View>
+                {/* Filter Row */}
+                {users.length > 0 && (
+                    <View style={styles.filterRow}>
+                        <TouchableOpacity
+                            style={[styles.filterBtn, activeFilter === 'all' && styles.filterBtnActive]}
+                            onPress={() => setActiveFilter('all')}
+                        >
+                            <Text style={[styles.filterText, activeFilter === 'all' && styles.filterTextActive]}>
+                                Tất cả ({users.length})
+                            </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={[styles.filterBtn, activeFilter === 'working' && styles.filterBtnActive]}
+                            onPress={() => setActiveFilter('working')}
+                        >
+                            <Text style={[styles.filterText, activeFilter === 'working' && styles.filterTextActive]}>
+                                Đang làm ({users.filter(u => (u.activePickingTasksCount || 0) > 0).length})
+                            </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={[styles.filterBtn, activeFilter === 'idle' && styles.filterBtnActive]}
+                            onPress={() => setActiveFilter('idle')}
+                        >
+                            <Text style={[styles.filterText, activeFilter === 'idle' && styles.filterTextActive]}>
+                                Đang rảnh ({users.filter(u => (u.activePickingTasksCount || 0) === 0).length})
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                )}
+
                 {/* Danh sách từng khu vực */}
                 {
                 users.length > 0 ? (
-                    users.map(user =>{
+                    users.filter(user => {
+                        if (activeFilter === 'working') return (user.activePickingTasksCount || 0) > 0;
+                        if (activeFilter === 'idle') return (user.activePickingTasksCount || 0) === 0;
+                        return true;
+                    }).map(user =>{
                         const perf = perfMap[user.id] || {};
                         const locName = locMap[user.assignedLocationId] || 'Chưa phân công';
                         return (
@@ -447,4 +482,36 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.primary,
     },
     editSaveText: { fontSize: 14, fontWeight: '600', color: '#fff' },
+  filterRow: {
+    flexDirection: 'row',
+    paddingBottom: 14,
+    gap: 8,
+  },
+  filterBtn: {
+    flex: 1,
+    paddingVertical: 10,
+    borderRadius: 12,
+    backgroundColor: '#fff',
+    borderWidth: 1.5,
+    borderColor: '#e2e8f0',
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.02,
+    shadowRadius: 2,
+    elevation: 1,
+  },
+  filterBtnActive: {
+    backgroundColor: COLORS.primary,
+    borderColor: COLORS.primary,
+  },
+  filterText: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: '#64748b',
+  },
+  filterTextActive: {
+    color: '#fff',
+  },
 });

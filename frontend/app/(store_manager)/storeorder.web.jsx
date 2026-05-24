@@ -148,7 +148,7 @@ const SearchBarWeb = ({ onSearch }) => {
 
 export default function StoreOrderWebScreen() {
   const { userName, logout } = useAuth();
-  const { cart, addToCart, removeFromCart, clearCart, persistCart } = useStoreCart();
+  const { cart, addToCart, removeFromCart, clearCart, persistCart, updateCartQty } = useStoreCart();
 
   const [activeTab, setActiveTab] = useState('order');
 
@@ -1044,7 +1044,22 @@ export default function StoreOrderWebScreen() {
                                     <TouchableOpacity style={styles.qtyBtnSmall} onPress={() => removeFromCart(product.id)}>
                                       <Text style={styles.qtyBtnTextSmall}>−</Text>
                                     </TouchableOpacity>
-                                    <Text style={styles.qtyValSmall}>{inCart.qty}</Text>
+                                    <TextInput
+                                      style={styles.qtyValSmallInput}
+                                      value={String(inCart.qty)}
+                                      onChangeText={(val) => {
+                                        const cleanVal = val.replace(/[^0-9]/g, '');
+                                        const parsed = cleanVal === '' ? 0 : parseInt(cleanVal, 10);
+                                        updateCartQty(product.id, parsed);
+                                      }}
+                                      onBlur={() => {
+                                        if (inCart.qty === 0) {
+                                          removeFromCart(product.id);
+                                        }
+                                      }}
+                                      keyboardType="number-pad"
+                                      selectTextOnFocus
+                                    />
                                     <TouchableOpacity style={styles.qtyBtnSmall} onPress={() => addToCart(product)}>
                                       <Text style={styles.qtyBtnTextSmall}>+</Text>
                                     </TouchableOpacity>
@@ -1097,7 +1112,22 @@ export default function StoreOrderWebScreen() {
                             <TouchableOpacity style={styles.qtyArrow} onPress={() => removeFromCart(item.product.id)}>
                               <Text style={styles.qtyArrowText}>−</Text>
                             </TouchableOpacity>
-                            <Text style={styles.qtyArrowVal}>{item.qty}</Text>
+                            <TextInput
+                              style={styles.qtyArrowValInput}
+                              value={String(item.qty)}
+                              onChangeText={(val) => {
+                                const cleanVal = val.replace(/[^0-9]/g, '');
+                                const parsed = cleanVal === '' ? 0 : parseInt(cleanVal, 10);
+                                updateCartQty(item.product.id, parsed);
+                              }}
+                              onBlur={() => {
+                                if (item.qty === 0) {
+                                  removeFromCart(item.product.id);
+                                }
+                              }}
+                              keyboardType="number-pad"
+                              selectTextOnFocus
+                            />
                             <TouchableOpacity style={styles.qtyArrow} onPress={() => addToCart(item.product)}>
                               <Text style={styles.qtyArrowText}>+</Text>
                             </TouchableOpacity>
@@ -1666,7 +1696,22 @@ export default function StoreOrderWebScreen() {
                                 <TouchableOpacity style={styles.qtyBtnSmall} onPress={() => removeFromCart(product.id)}>
                                   <Text style={styles.qtyBtnTextSmall}>−</Text>
                                 </TouchableOpacity>
-                                <Text style={styles.qtyValSmall}>{inCart.qty}</Text>
+                                <TextInput
+                                  style={styles.qtyValSmallInput}
+                                  value={String(inCart.qty)}
+                                  onChangeText={(val) => {
+                                    const cleanVal = val.replace(/[^0-9]/g, '');
+                                    const parsed = cleanVal === '' ? 0 : parseInt(cleanVal, 10);
+                                    updateCartQty(product.id, parsed);
+                                  }}
+                                  onBlur={() => {
+                                    if (inCart.qty === 0) {
+                                      removeFromCart(product.id);
+                                    }
+                                  }}
+                                  keyboardType="number-pad"
+                                  selectTextOnFocus
+                                />
                                 <TouchableOpacity style={styles.qtyBtnSmall} onPress={() => addToCart(product)}>
                                   <Text style={styles.qtyBtnTextSmall}>+</Text>
                                 </TouchableOpacity>
@@ -2673,6 +2718,19 @@ const styles = StyleSheet.create({
     color: ORANGE_THEME.textDark,
     paddingHorizontal: 6,
   },
+  qtyValSmallInput: {
+    fontSize: 11,
+    fontWeight: '850',
+    color: ORANGE_THEME.textDark,
+    width: 32,
+    height: 20,
+    borderWidth: 1,
+    borderColor: '#cbd5e1',
+    borderRadius: 4,
+    textAlign: 'center',
+    paddingHorizontal: 2,
+    backgroundColor: '#fff',
+  },
 
   // Cart Side
   cartSide: {
@@ -2808,6 +2866,19 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     color: ORANGE_THEME.textDark,
     paddingHorizontal: 4,
+  },
+  qtyArrowValInput: {
+    fontSize: 11,
+    fontWeight: '800',
+    color: ORANGE_THEME.textDark,
+    width: 32,
+    height: 20,
+    borderWidth: 1,
+    borderColor: '#cbd5e1',
+    borderRadius: 4,
+    textAlign: 'center',
+    paddingHorizontal: 2,
+    backgroundColor: '#fff',
   },
   cartRowSub: {
     fontSize: 12,

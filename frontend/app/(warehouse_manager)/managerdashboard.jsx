@@ -7,6 +7,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { getDashboardStatus, getIncidents, getOrders, getUsers, assignPickingTask } from '../../constants/services/api';
 import { COLORS } from '../../constants/colors';
 import { Alert } from '../../utils/appAlert';
+import ManagerBottomNav from '../../components/ManagerBottomNav';
 
 // 4 KPI cards initial config (Ionicons name)
 const kpis = [
@@ -99,7 +100,10 @@ export default function ManagerDashboardScreen(){
 
     const openDispatchModal = async () => {
         setShowDispatchModal(true);
-        setLoadingDispatchData(true);
+        // If we don't have orders/staff loaded yet, show the activity indicator
+        if (ordersList.length === 0 || staffList.length === 0) {
+            setLoadingDispatchData(true);
+        }
         setStaffSearchQuery('');
         try {
             const [ordersRes, usersRes] = await Promise.all([
@@ -116,7 +120,6 @@ export default function ManagerDashboardScreen(){
             setStaffList(staffOnly);
         } catch (err) {
             console.log('Error loading dispatch data:', err.message);
-            Alert.alert('Lỗi', 'Không thể tải danh sách đơn và nhân viên');
         } finally {
             setLoadingDispatchData(false);
         }
@@ -219,20 +222,31 @@ export default function ManagerDashboardScreen(){
                 orderId: order.id,
                 tasks
             });
-            Alert.alert('Phân công thành công', `Đã chia nhỏ và tạo thành công ${tasks.length} lệnh nhặt hàng (Picking Tasks) trực tiếp gửi đến thiết bị của các nhân viên được chọn!`);
+            
+            // Close modal and reset states instantly before running heavy refreshes
             setShowDispatchModal(false);
             setSelectedPickingOrderId('');
             setPickingAssignments({});
-            
-            // Refresh
-            const statsRes = await getDashboardStatus();
-            setStats(statsRes);
-            const incidentsRes = await getIncidents();
-            setIncidents(Array.isArray(incidentsRes) ? incidentsRes : []);
-        } catch (err) {
-            Alert.alert('Lỗi phân công', err.message || 'Không thể tạo phân công nhiệm vụ');
-        } finally {
             setDispatching(false);
+            
+            Alert.alert('Phân công thành công', `Đã chia nhỏ và tạo thành công ${tasks.length} lệnh nhặt hàng (Picking Tasks) trực tiếp gửi đến thiết bị của các nhân viên được chọn!`);
+            
+            // Run background refreshes concurrently to avoid UI freezing
+            Promise.all([
+                getDashboardStatus().then(res => setStats(res)).catch(e => console.log('Bg stats error:', e.message)),
+                getIncidents().then(res => setIncidents(Array.isArray(res) ? res : [])).catch(e => console.log('Bg incidents error:', e.message)),
+                getOrders().then(res => {
+                    const orders = Array.isArray(res) ? res : (res?.data || []);
+                    setOrdersList(orders.filter(o => o.status === 'processing'));
+                }).catch(e => console.log('Bg orders error:', e.message)),
+                getUsers().then(res => {
+                    const users = Array.isArray(res) ? res : (res?.data || []);
+                    setStaffList(users.filter(u => u.role === 'staff'));
+                }).catch(e => console.log('Bg users error:', e.message))
+            ]);
+        } catch (err) {
+            setDispatching(false);
+            Alert.alert('Lỗi phân công', err.message || 'Không thể tạo phân công nhiệm vụ');
         }
     };
 
@@ -303,20 +317,48 @@ export default function ManagerDashboardScreen(){
     useEffect(() => {
         async function fetchAll(){
             try{
-                const statsRes = await getDashboardStatus();
-                setStats(statsRes);
+                // Parallel prefetching of dashboard stats, incidents, orders, and users
+                const [statsRes, incidentsRes, ordersRes, usersRes] = await Promise.allSettled([
+                    getDashboardStatus(),
+                    getIncidents(),
+                    getOrders(),
+                    getUsers()
+                ]);
+
+                if (statsRes.status === 'fulfilled') {
+                    setStats(statsRes.value);
+                } else {
+                    console.log('Stats pre-fetch error:', statsRes.reason?.message);
+                }
+                
+                if (incidentsRes.status === 'fulfilled') {
+                    setIncidents(Array.isArray(incidentsRes.value) ? incidentsRes.value : []);
+                } else {
+                    console.log('Incidents pre-fetch error:', incidentsRes.reason?.message);
+                }
+                
+                if (ordersRes.status === 'fulfilled') {
+                    const orders = Array.isArray(ordersRes.value) ? ordersRes.value : (ordersRes.value?.data || []);
+                    const processingOrders = orders.filter(o => o.status === 'processing');
+                    setOrdersList(processingOrders);
+                } else {
+                    console.log('Orders pre-fetch error:', ordersRes.reason?.message);
+                }
+                
+                if (usersRes.status === 'fulfilled') {
+                    const users = Array.isArray(usersRes.value) ? usersRes.value : (usersRes.value?.data || []);
+                    const staffOnly = users.filter(u => u.role === 'staff');
+                    setStaffList(staffOnly);
+                } else {
+                    console.log('Users pre-fetch error:', usersRes.reason?.message);
+                }
             } catch (err) {
-                console.log('Stats error:', err.message);
+                console.log('Initial pre-fetch error:', err.message);
+            } finally {
+                setLoading(false);
             }
-            try {
-                const incidentsRes = await getIncidents();
-                setIncidents(Array.isArray(incidentsRes) ? incidentsRes: [] );
-            } catch (err) {
-                console.log('Incidents error:', err.message);
-            }
-            setLoading(false);
         }
-        fetchAll()
+        fetchAll();
     }, []);
 
     if (loading) {
@@ -513,30 +555,7 @@ export default function ManagerDashboardScreen(){
             </ScrollView>
 
             {/* Bottom Navigation Manager */}
-            <View style={styles.bottomNav}>
-                <TouchableOpacity style={styles.navItem}>
-                    <Ionicons name="stats-chart" size={22} color={COLORS.primary} style={{ marginBottom: 4 }} />
-                    <Text style={[styles.navLabel, styles.navActive]}>
-                        Dashboard
-                    </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.navItem} onPress={() => router.push('/team')}>
-                    <Ionicons name="people-outline" size={22} color="#888" style={{ marginBottom: 4 }} />
-                    <Text style={styles.navLabel}>Nhân viên</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.navItem} onPress={() => router.push('/storelist')}>
-                    <Ionicons name="business-outline" size={22} color="#888" style={{ marginBottom: 4 }} />
-                    <Text style={styles.navLabel}>Cửa hàng</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.navItem} onPress={() => router.push('/incidentreport')}>
-                    <Ionicons name="warning-outline" size={22} color="#888" style={{ marginBottom: 4 }} />
-                    <Text style={styles.navLabel}>Sự cố</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.navItem} onPress={() => router.push('/setting')}>
-                    <Ionicons name="settings-outline" size={22} color="#888" style={{ marginBottom: 4 }} />
-                    <Text style={styles.navLabel}>Cài đặt</Text>
-                </TouchableOpacity>
-            </View>
+            <ManagerBottomNav active="dashboard" />
 
             {/* Modal Bàn Điều Phối & Chia Task */}
             {showDispatchModal && (

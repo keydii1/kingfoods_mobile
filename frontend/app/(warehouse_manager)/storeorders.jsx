@@ -4,9 +4,47 @@ import { Alert } from '../../utils/appAlert';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
 import { COLORS } from '../../constants/colors';
-import { getOrders, updateOrderStatus, deleteOrder, getUsers, assignPickingTask } from '../../constants/services/api';
+import { getOrders, updateOrderStatus, deleteOrder, getUsers, assignPickingTask, BASE_URL } from '../../constants/services/api';
 import { Ionicons } from '@expo/vector-icons';
 import { playSound } from '../../utils/soundService';
+
+// Timezone date helpers for Vietnam (UTC+7)
+const formatVietnamDate = (dateStr) => {
+  if (!dateStr) return '';
+  let date = new Date(dateStr);
+  if (isNaN(date.getTime())) return dateStr;
+  
+  // Workaround: If connecting to Render (which has the timezone bug), compensate by adding 7 hours
+  if (BASE_URL && BASE_URL.includes('onrender.com')) {
+    date = new Date(date.getTime() + (7 * 60 * 60 * 1000));
+  }
+  
+  const d = String(date.getDate()).padStart(2, '0');
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const y = date.getFullYear();
+  const h = String(date.getHours()).padStart(2, '0');
+  const min = String(date.getMinutes()).padStart(2, '0');
+  const sec = String(date.getSeconds()).padStart(2, '0');
+  
+  return `${h}:${min}:${sec} ${d}/${m}/${y}`;
+};
+
+const formatVietnamDateOnly = (dateStr) => {
+  if (!dateStr) return '';
+  let date = new Date(dateStr);
+  if (isNaN(date.getTime())) return dateStr;
+  
+  // Workaround: If connecting to Render (which has the timezone bug), compensate by adding 7 hours
+  if (BASE_URL && BASE_URL.includes('onrender.com')) {
+    date = new Date(date.getTime() + (7 * 60 * 60 * 1000));
+  }
+  
+  const d = String(date.getDate()).padStart(2, '0');
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const y = date.getFullYear();
+  
+  return `${d}/${m}/${y}`;
+};
 
 const statusConfig = {
   pending: { label: 'Chờ duyệt', color: '#fff3e0', textColor: '#e65100' },
@@ -217,7 +255,7 @@ export default function StoreOrdersScreen() {
             {item.totalPrice ? item.totalPrice.toLocaleString() : '0'}đ
           </Text>
           <Text style={styles.orderDate}>
-            {item.createdAt ? new Date(item.createdAt).toLocaleDateString('vi-VN') : ''}
+            {formatVietnamDateOnly(item.createdAt)}
           </Text>
         </View>
       </TouchableOpacity>
@@ -342,7 +380,7 @@ export default function StoreOrdersScreen() {
                   <View style={styles.detailRow}>
                     <Text style={styles.detailLabel}>Ngày đặt hàng</Text>
                     <Text style={styles.detailVal}>
-                      {selectedOrder.createdAt ? new Date(selectedOrder.createdAt).toLocaleString('vi-VN') : ''}
+                      {formatVietnamDate(selectedOrder.createdAt)}
                     </Text>
                   </View>
                   <View style={styles.detailRow}>
