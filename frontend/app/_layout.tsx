@@ -47,7 +47,15 @@ function LayoutContent() {
                     animation: 'slide_from_right',
                     animationDuration: 200,
                 }}
-            />
+            >
+                <Stack.Screen name="(shared)/storestatistics" options={{ gestureEnabled: false }} />
+                <Stack.Screen name="(shared)/team" options={{ gestureEnabled: false }} />
+                <Stack.Screen name="(shared)/setting" options={{ gestureEnabled: false }} />
+                <Stack.Screen name="(shared)/customerprofile" options={{ gestureEnabled: false }} />
+                <Stack.Screen name="(warehouse_manager)/managerdashboard" options={{ gestureEnabled: false }} />
+                <Stack.Screen name="(warehouse_manager)/incidentreport" options={{ gestureEnabled: false }} />
+                <Stack.Screen name="(store_manager)/storeorder" options={{ gestureEnabled: false }} />
+            </Stack>
         </>
 
     );

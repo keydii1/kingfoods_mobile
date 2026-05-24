@@ -56,7 +56,11 @@ export default function OrderDetailScreen() {
       setOrder(res);
     } catch (err) {
       Alert.alert('Lỗi', err.message || 'Không tải được chi tiết đơn hàng');
-      router.back();
+      if (router.canGoBack()) {
+        router.back();
+      } else {
+        router.replace('/storestatistics');
+      }
     } finally {
       setLoading(false);
     }
