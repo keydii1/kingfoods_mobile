@@ -3,6 +3,11 @@ import {
     Redirect,
     usePathname,
 } from 'expo-router';
+import { LogBox } from 'react-native';
+
+LogBox.ignoreLogs([
+    "The action 'GO_BACK' was not handled by any navigator",
+]);
 import { useEffect } from 'react';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
