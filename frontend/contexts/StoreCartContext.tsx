@@ -143,7 +143,7 @@ export function StoreCartProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const clearCart = useCallback(() => {
-    setCart([]);
+    setCart(() => []);
     if (userId) {
       AsyncStorage.removeItem(storageKey(userId)).catch(() => {});
     }
