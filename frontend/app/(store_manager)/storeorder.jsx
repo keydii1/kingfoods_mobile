@@ -7,7 +7,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../../constants/colors';
 import { useAuth } from '../../contexts/AuthContext';
 import { useStoreCart } from '../../contexts/StoreCartContext';
-import { getProducts, createOrder } from '../../constants/services/api';
+import { getProducts, createOrder, getPublicCategories } from '../../constants/services/api';
 import { OrderConfirmModal, OrderSuccessOverlay } from '../../components/OrderCheckoutOverlay';
 import { notifyOrdersRefresh } from '../../utils/ordersRefresh';
 import { playSound } from '../../utils/soundService';
@@ -75,6 +75,8 @@ const SearchBar = ({ onSearch }) => {
 
 export default function StoreOrderScreen() {
   const [productCatalog, setProductCatalog] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [selectedCategoryId, setSelectedCategoryId] = useState(null);
   const [loadingProducts, setLoadingProducts] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
@@ -101,16 +103,21 @@ export default function StoreOrderScreen() {
   
   const filteredProducts = useMemo(() => {
     return productCatalog.filter(p => {
-      return matchesSearch(p.name, searchDebounced) || matchesSearch(p.sku, searchDebounced);
+      const matchSearch = matchesSearch(p.name, searchDebounced) || matchesSearch(p.sku, searchDebounced);
+      const matchCategory = selectedCategoryId === null || Number(p.categoryId) === Number(selectedCategoryId);
+      return matchSearch && matchCategory;
     });
-  }, [productCatalog, searchDebounced]);
+  }, [productCatalog, searchDebounced, selectedCategoryId]);
 
   useEffect(() => {
       async function fetchCatalog() {
           try {
-              const res = await getProducts();
-              console.log('Catalog fetched response:', JSON.stringify(res, null, 2));
-              const products = Array.isArray(res) ? res : (res?.items || res?.data || []);
+              const [prodRes, catRes] = await Promise.all([
+                  getProducts(),
+                  getPublicCategories().catch(() => null)
+              ]);
+              console.log('Catalog fetched response:', JSON.stringify(prodRes, null, 2));
+              const products = Array.isArray(prodRes) ? prodRes : (prodRes?.items || prodRes?.data || []);
               setProductCatalog(products.map(p => ({
                   id: p.id,
                   name: p.name,
@@ -118,7 +125,11 @@ export default function StoreOrderScreen() {
                   unit: p.unit || 'cái',
                   price: typeof p.price === 'string' ? parseFloat(p.price) : (p.price || 0),
                   image: p.image || '',
+                  categoryId: p.category_id || p.category?.id || null,
               })));
+
+              const cats = Array.isArray(catRes) ? catRes : (catRes?.items || catRes?.data || []);
+              setCategories(cats);
           } catch (err) {
               console.log('Catalog fetch error:', err.message);
           } finally {
@@ -193,6 +204,57 @@ export default function StoreOrderScreen() {
       >
         {/* Search */}
         <SearchBar onSearch={handleSearch} />
+
+        {/* Category Filter Bar */}
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={styles.categoryScroll}
+          contentContainerStyle={styles.categoryContainer}
+          keyboardShouldPersistTaps="handled"
+        >
+          <TouchableOpacity
+            style={[
+              styles.categoryCap,
+              selectedCategoryId === null && styles.categoryCapActive
+            ]}
+            onPress={() => setSelectedCategoryId(null)}
+            activeOpacity={0.8}
+          >
+            <Text
+              style={[
+                styles.categoryCapText,
+                selectedCategoryId === null && styles.categoryCapTextActive
+              ]}
+            >
+              Tất cả
+            </Text>
+          </TouchableOpacity>
+
+          {categories.map((cat) => {
+            const isActive = selectedCategoryId === cat.id;
+            return (
+              <TouchableOpacity
+                key={cat.id}
+                style={[
+                  styles.categoryCap,
+                  isActive && styles.categoryCapActive
+                ]}
+                onPress={() => setSelectedCategoryId(cat.id)}
+                activeOpacity={0.8}
+              >
+                <Text
+                  style={[
+                    styles.categoryCapText,
+                    isActive && styles.categoryCapTextActive
+                  ]}
+                >
+                  {cat.name}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
+        </ScrollView>
 
         {/* Danh mục sản phẩm */}
         <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 12 }}>
@@ -430,4 +492,42 @@ const styles = StyleSheet.create({
   navIcon: { fontSize: 22 },
   navLabel: { fontSize: 10, color: '#aaa', marginTop: 2 },
   navActive: { color: COLORS.primary, fontWeight: '600' },
+  categoryScroll: {
+    marginBottom: 14,
+  },
+  categoryContainer: {
+    gap: 8,
+    paddingRight: 16,
+  },
+  categoryCap: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 20,
+    backgroundColor: '#fff',
+    borderWidth: 1.5,
+    borderColor: '#f0f0f0',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.03,
+    shadowRadius: 3,
+    elevation: 1,
+  },
+  categoryCapActive: {
+    backgroundColor: COLORS.primary,
+    borderColor: COLORS.primary,
+    shadowColor: COLORS.primary,
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.15,
+    shadowRadius: 5,
+    elevation: 3,
+  },
+  categoryCapText: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: '#64748b',
+  },
+  categoryCapTextActive: {
+    color: '#fff',
+    fontWeight: '800',
+  },
 });

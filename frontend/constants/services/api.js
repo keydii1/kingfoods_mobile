@@ -155,6 +155,8 @@ export const getProducts = (query = '') => {
 };
 export const getByProductId = (id) =>
     request ('GET', `/public/products/${id}`);
+export const getPublicCategories = () =>
+    request('GET', '/public/categories?limit=100');
 // Admin
 export const getUsers = () =>
     request ('GET', '/admin/users');
