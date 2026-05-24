@@ -3,17 +3,19 @@ import { Platform } from 'react-native';
 
 const getBaseUrl = () => {
     if (__DEV__) {
-        // iOS Simulator runs on the host mac, so 127.0.0.1 is 100% reliable and bypasses network cache issues (EADDRNOTAVAIL)
-        if (Platform.OS === 'ios') {
-            return 'http://127.0.0.1:9999/api/v1';
-        }
-        
-        // Dynamically detect local host IP for physical devices or Android emulator
+        // Dynamically detect the dev machine's IP from Expo's debugger host
+        // This works for both Simulator AND real devices on the same WiFi network
         const debuggerHost = Constants.expoConfig?.hostUri || '';
         const localhost = debuggerHost.split(':')[0];
         
-        if (localhost) {
+        if (localhost && localhost !== '127.0.0.1') {
             return `http://${localhost}:9999/api/v1`;
+        }
+        
+        // Fallback: iOS Simulator can use 127.0.0.1 (shares host network)
+        // For Android emulator, 10.0.2.2 maps to host machine
+        if (Platform.OS === 'android') {
+            return 'http://10.0.2.2:9999/api/v1';
         }
         return 'http://127.0.0.1:9999/api/v1';
     }
