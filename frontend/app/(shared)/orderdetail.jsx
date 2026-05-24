@@ -15,6 +15,8 @@ import { Alert } from '../../utils/appAlert';
 import { getClientOrderDetail, cancelClientOrder, BASE_URL } from '../../constants/services/api';
 import { getOrderStatusMeta, canCustomerCancelOrder } from '../../constants/orderStatus';
 import { notifyOrdersRefresh } from '../../utils/ordersRefresh';
+import { useAuth } from '../../contexts/AuthContext';
+import { useStoreCart } from '../../contexts/StoreCartContext';
 
 // Timezone date helper for Vietnam (UTC+7)
 const formatVietnamDate = (dateStr) => {
@@ -87,6 +89,54 @@ export default function OrderDetailScreen() {
     );
   };
 
+  const { userRole } = useAuth();
+  const { addToCart, clearCart } = useStoreCart();
+
+  const handleReorder = () => {
+    Alert.alert(
+      'Đặt lại đơn hàng',
+      'Thêm tất cả sản phẩm của đơn hàng này vào giỏ hàng hiện tại?',
+      [
+        { text: 'Huỷ', style: 'cancel' },
+        {
+          text: 'Đồng ý',
+          onPress: () => {
+            clearCart();
+            details.forEach(line => {
+              if (line.product) {
+                const prod = {
+                  id: line.product.id,
+                  name: line.product.name,
+                  sku: line.product.sku || `SKU-${line.product.id}`,
+                  unit: line.product.unit || 'cái',
+                  price: typeof line.product.price === 'string' ? parseFloat(line.product.price) : (line.product.price || 0),
+                  image: line.product.image || '',
+                  categoryId: line.product.category_id || line.product.category?.id || null,
+                };
+                for (let k = 0; k < (line.quantity || 1); k++) {
+                  addToCart(prod);
+                }
+              }
+            });
+            Alert.alert(
+              'Thành công',
+              'Đã thêm tất cả sản phẩm vào giỏ hàng. Chuyển đến trang Đặt hàng?',
+              [
+                { text: 'Ở lại', style: 'cancel' },
+                {
+                  text: 'Đi đặt hàng',
+                  onPress: () => {
+                    router.push('/storeorder');
+                  }
+                }
+              ]
+            );
+          }
+        }
+      ]
+    );
+  };
+
   const statusMeta = getOrderStatusMeta(order?.status);
   const canCancel = order && canCustomerCancelOrder(order.status);
   const details = order?.orderDetails || [];
@@ -109,7 +159,7 @@ export default function OrderDetailScreen() {
         <View style={{ width: 28 }} />
       </View>
 
-      <ScrollView style={styles.scroll} contentContainerStyle={{ paddingBottom: 24 }}>
+      <ScrollView style={styles.scroll} contentContainerStyle={{ paddingBottom: 32 }}>
         <View style={styles.summaryCard}>
           <View style={[styles.statusBadge, { backgroundColor: statusMeta.bg }]}>
             <Text style={[styles.statusText, { color: statusMeta.color }]}>
@@ -126,6 +176,97 @@ export default function OrderDetailScreen() {
             {details.length} loại sản phẩm ·{' '}
             {details.reduce((s, d) => s + (d.quantity || 0), 0)} SP
           </Text>
+        </View>
+
+        {/* Order Progress Timeline */}
+        <View style={styles.timelineCard}>
+          <Text style={styles.timelineTitle}>Trạng thái đơn hàng</Text>
+          
+          {order?.status === 'cancelled' ? (
+            <View style={styles.cancelledAlert}>
+              <Ionicons name="close-circle-outline" size={24} color="#e53935" />
+              <View>
+                <Text style={styles.cancelledTitle}>Đơn hàng đã bị hủy</Text>
+                <Text style={styles.cancelledSub}>Đơn hàng này không thể xử lý tiếp.</Text>
+              </View>
+            </View>
+          ) : (
+            <View style={styles.timelineRow}>
+              {/* Step 1: Đã đặt */}
+              <View style={styles.timelineStep}>
+                <View style={[styles.stepNode, styles.stepNodeDone]}>
+                  <Ionicons name="checkmark" size={14} color="#fff" />
+                </View>
+                <Text style={[styles.stepLabel, styles.stepLabelDone]}>Đã đặt</Text>
+              </View>
+              
+              <View style={[styles.stepLine, ['processing', 'shipped', 'delivered'].includes(order?.status) && styles.stepLineDone]} />
+
+              {/* Step 2: Duyệt đơn */}
+              <View style={styles.timelineStep}>
+                <View style={[
+                  styles.stepNode,
+                  ['processing', 'shipped', 'delivered'].includes(order?.status) && styles.stepNodeDone,
+                  order?.status === 'pending' && styles.stepNodeActive
+                ]}>
+                  {['processing', 'shipped', 'delivered'].includes(order?.status) ? (
+                    <Ionicons name="checkmark" size={14} color="#fff" />
+                  ) : (
+                    order?.status === 'pending' ? <View style={styles.stepPulse} /> : null
+                  )}
+                </View>
+                <Text style={[
+                  styles.stepLabel,
+                  ['processing', 'shipped', 'delivered'].includes(order?.status) && styles.stepLabelDone,
+                  order?.status === 'pending' && styles.stepLabelActive
+                ]}>Duyệt đơn</Text>
+              </View>
+
+              <View style={[styles.stepLine, ['shipped', 'delivered'].includes(order?.status) && styles.stepLineDone]} />
+
+              {/* Step 3: Đang giao */}
+              <View style={styles.timelineStep}>
+                <View style={[
+                  styles.stepNode,
+                  ['shipped', 'delivered'].includes(order?.status) && styles.stepNodeDone,
+                  order?.status === 'processing' && styles.stepNodeActive
+                ]}>
+                  {['shipped', 'delivered'].includes(order?.status) ? (
+                    <Ionicons name="checkmark" size={14} color="#fff" />
+                  ) : (
+                    order?.status === 'processing' ? <View style={styles.stepPulse} /> : null
+                  )}
+                </View>
+                <Text style={[
+                  styles.stepLabel,
+                  ['shipped', 'delivered'].includes(order?.status) && styles.stepLabelDone,
+                  order?.status === 'processing' && styles.stepLabelActive
+                ]}>Đang giao</Text>
+              </View>
+
+              <View style={[styles.stepLine, order?.status === 'delivered' && styles.stepLineDone]} />
+
+              {/* Step 4: Đã giao */}
+              <View style={styles.timelineStep}>
+                <View style={[
+                  styles.stepNode,
+                  order?.status === 'delivered' && styles.stepNodeDone,
+                  order?.status === 'shipped' && styles.stepNodeActive
+                ]}>
+                  {order?.status === 'delivered' ? (
+                    <Ionicons name="checkmark" size={14} color="#fff" />
+                  ) : (
+                    order?.status === 'shipped' ? <View style={styles.stepPulse} /> : null
+                  )}
+                </View>
+                <Text style={[
+                  styles.stepLabel,
+                  order?.status === 'delivered' && styles.stepLabelDone,
+                  order?.status === 'shipped' && styles.stepLabelActive
+                ]}>Đã nhận</Text>
+              </View>
+            </View>
+          )}
         </View>
 
         <View style={styles.card}>
@@ -162,6 +303,18 @@ export default function OrderDetailScreen() {
             <Ionicons name="close-circle-outline" size={20} color="#e53935" />
             <Text style={styles.cancelBtnText}>
               {cancelling ? 'Đang huỷ...' : 'Huỷ đơn hàng'}
+            </Text>
+          </TouchableOpacity>
+        )}
+
+        {userRole === 'store_manager' && (
+          <TouchableOpacity
+            style={[styles.reorderBtn, canCancel && { marginTop: 12 }]}
+            onPress={handleReorder}
+          >
+            <Ionicons name="refresh-circle-outline" size={22} color="#fff" />
+            <Text style={styles.reorderBtnText}>
+              Đặt lại đơn này
             </Text>
           </TouchableOpacity>
         )}
@@ -233,4 +386,111 @@ const styles = StyleSheet.create({
     borderColor: '#ffcdd2',
   },
   cancelBtnText: { fontSize: 15, fontWeight: '700', color: '#e53935' },
+  timelineCard: {
+    backgroundColor: '#fff',
+    borderRadius: 16,
+    padding: 16,
+    marginBottom: 12,
+  },
+  timelineTitle: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: '#222',
+    marginBottom: 16,
+  },
+  timelineRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 8,
+  },
+  timelineStep: {
+    alignItems: 'center',
+    flex: 1,
+  },
+  stepNode: {
+    width: 26,
+    height: 26,
+    borderRadius: 13,
+    backgroundColor: '#e2e8f0',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 2,
+    borderColor: '#e2e8f0',
+  },
+  stepNodeDone: {
+    backgroundColor: COLORS.primary,
+    borderColor: COLORS.primary,
+  },
+  stepNodeActive: {
+    backgroundColor: '#fff',
+    borderColor: COLORS.primary,
+  },
+  stepPulse: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    backgroundColor: COLORS.primary,
+  },
+  stepLine: {
+    height: 3,
+    backgroundColor: '#e2e8f0',
+    flex: 1,
+    marginTop: -16,
+  },
+  stepLineDone: {
+    backgroundColor: COLORS.primary,
+  },
+  stepLabel: {
+    fontSize: 10,
+    fontWeight: '700',
+    color: '#94a3b8',
+    marginTop: 6,
+    textAlign: 'center',
+  },
+  stepLabelDone: {
+    color: COLORS.primary,
+  },
+  stepLabelActive: {
+    color: COLORS.primary,
+  },
+  cancelledAlert: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#fff5f5',
+    padding: 12,
+    borderRadius: 12,
+    gap: 12,
+    borderWidth: 1,
+    borderColor: '#fed7d7',
+  },
+  cancelledTitle: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: '#c53030',
+  },
+  cancelledSub: {
+    fontSize: 12,
+    color: '#e53e3e',
+    marginTop: 2,
+  },
+  reorderBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    backgroundColor: COLORS.primary,
+    borderRadius: 14,
+    padding: 16,
+    shadowColor: COLORS.primary,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 3,
+  },
+  reorderBtnText: {
+    fontSize: 15,
+    fontWeight: '800',
+    color: '#fff',
+  },
 });
