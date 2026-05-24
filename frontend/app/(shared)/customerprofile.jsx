@@ -161,7 +161,7 @@ export default function CustomerProfileScreen() {
     <SafeAreaView style={[styles.safeArea, { backgroundColor: activeBg }]} edges={['top', 'left', 'right']}>
       {/* Header */}
       <View style={[styles.header, { backgroundColor: activeCardBg, borderBottomColor: activeBorderColor }]}>
-        <TouchableOpacity onPress={() => router.back()}>
+        <TouchableOpacity onPress={() => router.replace('/storeorder')}>
           <Ionicons name="chevron-back" size={24} color={COLORS.primary} />
         </TouchableOpacity>
         <Text style={[styles.headerTitle, { color: activeTextColor }]}>{t.profile}</Text>
