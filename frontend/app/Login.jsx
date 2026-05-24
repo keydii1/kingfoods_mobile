@@ -251,14 +251,17 @@ export default function LoginScreen() {
             res = await apiLogin(username.trim(), password.trim());
         }
 
-        // Save credentials to SecureStore if biometric is enabled in settings
-        const isBiometricEnabled = await AsyncStorage.getItem('setting_biometric') === 'true';
-        if (isBiometricEnabled) {
+        // Always save credentials to SecureStore for biometric login
+        // SecureStore is encrypted by iOS Keychain / Android Keystore
+        // Credentials are deleted when biometric toggle is turned OFF in settings
+        try {
           const key = customerMode ? 'kfood_store_credentials' : 'kfood_wms_credentials';
           const credentials = customerMode
             ? { email: email.trim(), password: password.trim() }
             : { username: username.trim(), password: password.trim(), role: role };
           await SecureStore.setItemAsync(key, JSON.stringify(credentials));
+        } catch (e) {
+          console.log('SecureStore save error:', e);
         }
 
         const userData = customerMode ? res.customer : res.user;
