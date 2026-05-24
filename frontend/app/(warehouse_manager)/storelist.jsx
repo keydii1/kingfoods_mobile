@@ -175,7 +175,7 @@ export default function StoreListScreen() {
             <Text style={styles.emptyText}>Không có cửa hàng nào có đơn hàng phù hợp</Text>
           </View>
         }
-      </FlatList>
+      />
       
       {/* Bottom Nav */}
       <ManagerBottomNav active="storelist" />
