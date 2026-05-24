@@ -1,4 +1,4 @@
-import { Audio } from 'expo-av';
+import { createAudioPlayer } from 'expo-audio';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // 100% public, CORS-enabled, reliable direct URLs from an open source GitHub repository
@@ -28,25 +28,17 @@ export const playSound = async (type) => {
     const url = SOUND_URLS[type];
     if (!url) return;
 
-    // 2. Configure audio to play immediately, ignoring silent hardware switch on iOS
-    await Audio.setAudioModeAsync({
-      playsInSilentModeIOS: true,
-      allowsRecordingIOS: false,
-      staysActiveInBackground: false,
-      shouldRouteThroughEarpieceAndroid: false
-    });
-
-    // 3. Load and play the sound
-    const playInstance = async () => {
+    // 2. Load and play the sound
+    const playInstance = () => {
       try {
-        const { sound } = await Audio.Sound.createAsync(
-          { uri: url },
-          { shouldPlay: true, volume: 1.0 }
-        );
-        // 4. Unload sound from memory after it finishes playing to prevent resource leaks
-        sound.setOnPlaybackStatusUpdate((status) => {
-          if (status.didJustFinish) {
-            sound.unloadAsync().catch(() => {});
+        const player = createAudioPlayer(url);
+        player.play();
+        
+        // Unload sound from memory after it finishes playing to prevent resource leaks
+        const subscription = player.addListener('playbackStatusUpdate', (status) => {
+          if (status.currentTime >= status.duration && status.duration > 0) {
+            subscription.remove();
+            player.release();
           }
         });
       } catch (err) {

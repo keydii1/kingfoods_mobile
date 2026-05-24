@@ -91,6 +91,14 @@ export default function OrderDetailScreen() {
   const canCancel = order && canCustomerCancelOrder(order.status);
   const details = order?.orderDetails || [];
 
+  if (loading) {
+    return (
+      <SafeAreaView style={[styles.safeArea, { justifyContent: 'center', alignItems: 'center' }]}>
+        <ActivityIndicator color={COLORS.primary} size="large" />
+      </SafeAreaView>
+    );
+  }
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.header}>
@@ -101,67 +109,63 @@ export default function OrderDetailScreen() {
         <View style={{ width: 28 }} />
       </View>
 
-      {loading ? (
-        <ActivityIndicator color={COLORS.primary} size="large" style={{ marginTop: 40 }} />
-      ) : (
-        <ScrollView style={styles.scroll} contentContainerStyle={{ paddingBottom: 24 }}>
-          <View style={styles.summaryCard}>
-            <View style={[styles.statusBadge, { backgroundColor: statusMeta.bg }]}>
-              <Text style={[styles.statusText, { color: statusMeta.color }]}>
-                {statusMeta.label}
-              </Text>
-            </View>
-            <Text style={styles.dateText}>
-              {formatVietnamDate(order?.createdAt)}
-            </Text>
-            <Text style={styles.totalText}>
-              {(parseFloat(order?.totalPrice) || 0).toLocaleString()}đ
-            </Text>
-            <Text style={styles.itemsCount}>
-              {details.length} loại sản phẩm ·{' '}
-              {details.reduce((s, d) => s + (d.quantity || 0), 0)} SP
+      <ScrollView style={styles.scroll} contentContainerStyle={{ paddingBottom: 24 }}>
+        <View style={styles.summaryCard}>
+          <View style={[styles.statusBadge, { backgroundColor: statusMeta.bg }]}>
+            <Text style={[styles.statusText, { color: statusMeta.color }]}>
+              {statusMeta.label}
             </Text>
           </View>
+          <Text style={styles.dateText}>
+            {formatVietnamDate(order?.createdAt)}
+          </Text>
+          <Text style={styles.totalText}>
+            {(parseFloat(order?.totalPrice) || 0).toLocaleString()}đ
+          </Text>
+          <Text style={styles.itemsCount}>
+            {details.length} loại sản phẩm ·{' '}
+            {details.reduce((s, d) => s + (d.quantity || 0), 0)} SP
+          </Text>
+        </View>
 
-          <View style={styles.card}>
-            <Text style={styles.cardTitle}>Sản phẩm trong đơn</Text>
-            {details.map((line, i) => (
-              <View
-                key={line.id || `${line.productId}-${i}`}
-                style={[styles.productRow, i > 0 && styles.productRowBorder]}
-              >
-                <View style={styles.productInfo}>
-                  <Text style={styles.productName}>
-                    {line.product?.name || `Sản phẩm #${line.productId}`}
-                  </Text>
-                  <Text style={styles.productSku}>
-                    SL: {line.quantity}
-                  </Text>
-                </View>
-                <Text style={styles.lineTotal}>
-                  {(
-                    (parseFloat(line.product?.price) || 0) * (line.quantity || 0)
-                  ).toLocaleString()}
-                  đ
+        <View style={styles.card}>
+          <Text style={styles.cardTitle}>Sản phẩm trong đơn</Text>
+          {details.map((line, i) => (
+            <View
+              key={line.id || `${line.productId}-${i}`}
+              style={[styles.productRow, i > 0 && styles.productRowBorder]}
+            >
+              <View style={styles.productInfo}>
+                <Text style={styles.productName}>
+                  {line.product?.name || `Sản phẩm #${line.productId}`}
+                </Text>
+                <Text style={styles.productSku}>
+                  SL: {line.quantity}
                 </Text>
               </View>
-            ))}
-          </View>
-
-          {canCancel && (
-            <TouchableOpacity
-              style={[styles.cancelBtn, cancelling && { opacity: 0.7 }]}
-              onPress={handleCancel}
-              disabled={cancelling}
-            >
-              <Ionicons name="close-circle-outline" size={20} color="#e53935" />
-              <Text style={styles.cancelBtnText}>
-                {cancelling ? 'Đang huỷ...' : 'Huỷ đơn hàng'}
+              <Text style={styles.lineTotal}>
+                {(
+                  (parseFloat(line.product?.price) || 0) * (line.quantity || 0)
+                ).toLocaleString()}
+                đ
               </Text>
-            </TouchableOpacity>
-          )}
-        </ScrollView>
-      )}
+            </View>
+          ))}
+        </View>
+
+        {canCancel && (
+          <TouchableOpacity
+            style={[styles.cancelBtn, cancelling && { opacity: 0.7 }]}
+            onPress={handleCancel}
+            disabled={cancelling}
+          >
+            <Ionicons name="close-circle-outline" size={20} color="#e53935" />
+            <Text style={styles.cancelBtnText}>
+              {cancelling ? 'Đang huỷ...' : 'Huỷ đơn hàng'}
+            </Text>
+          </TouchableOpacity>
+        )}
+      </ScrollView>
     </SafeAreaView>
   );
 }

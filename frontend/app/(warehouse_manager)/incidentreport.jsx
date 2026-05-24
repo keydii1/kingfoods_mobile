@@ -182,6 +182,14 @@ export default function IncidentReportScreen() {
     ? reports
     : reports.filter(r => r.status === activeFilter);
 
+  if (loadingReports) {
+    return (
+      <SafeAreaView style={[styles.safeArea, { justifyContent: 'center', alignItems: 'center' }]}>
+        <ActivityIndicator color={COLORS.primary} size="large" />
+      </SafeAreaView>
+    );
+  }
+
   return (
     <SafeAreaView style={styles.safeArea}>
       {/* Header */}
@@ -307,11 +315,7 @@ export default function IncidentReportScreen() {
           </View>
         )}
 
-        {loadingReports ? (
-          <View style={styles.centerPadding}>
-            <ActivityIndicator color={COLORS.primary} size="large" />
-          </View>
-        ) : filteredReports.length > 0 ? (
+        {filteredReports.length > 0 ? (
           filteredReports.map(r => {
             const isResolved = r.status === 'resolved';
             return (

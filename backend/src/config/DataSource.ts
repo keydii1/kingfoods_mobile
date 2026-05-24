@@ -16,5 +16,11 @@ export const AppDataSource = new DataSource({
   logging: false,
   entities: [__dirname + "/../Entity/*.{js,ts}"],
   entityPrefix: AppConfig.TABLE_PREFIX,
-  timezone: "Z",
+  timezone: "+07:00",
+  extra: {
+    connectionLimit: 10,
+    connectTimeout: 30000,
+    enableKeepAlive: true,
+    keepAliveInitialDelay: 10000,
+  },
 });

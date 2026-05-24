@@ -453,7 +453,7 @@ export default function PickingFlowScreen() {
 }
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: '#f0f4f1' },
+  safeArea: { flex: 1, backgroundColor: COLORS.background },
   scrollArea: { flex: 1 },
   scrollContent: { flexGrow: 1 },
   header: {
@@ -465,7 +465,7 @@ const styles = StyleSheet.create({
   headerTitle: { fontSize: 16, fontWeight: '700', color: '#222' },
   headerSub: { fontSize: 11, color: '#888', marginTop: 2 },
   badge: {
-    backgroundColor: '#e8f5e9', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 20,
+    backgroundColor: COLORS.warningBg, paddingHorizontal: 10, paddingVertical: 4, borderRadius: 20,
   },
   badgeText: { fontSize: 11, fontWeight: '600', color: COLORS.primary },
 
@@ -563,7 +563,7 @@ const styles = StyleSheet.create({
     flex: 1, backgroundColor: '#fff', borderRadius: 12, padding: 14, fontSize: 14,
   },
   manualBtn: {
-    backgroundColor: '#e8f5e9', borderRadius: 12, paddingHorizontal: 16, justifyContent: 'center',
+    backgroundColor: COLORS.warningBg, borderRadius: 12, paddingHorizontal: 16, justifyContent: 'center',
   },
   manualBtnText: { color: COLORS.primary, fontWeight: '700', fontSize: 13 },
   scanResult: { alignItems: 'center', padding: 20 },

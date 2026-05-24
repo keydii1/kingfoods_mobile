@@ -1,16 +1,21 @@
 import Constants from 'expo-constants';
+import { Platform } from 'react-native';
 
 const getBaseUrl = () => {
-    // Dynamically detect local host IP to work on both simulators and physical devices
-    const debuggerHost = Constants.expoConfig?.hostUri || '';
-    const localhost = debuggerHost.split(':')[0];
-    
-    if (__DEV__ && localhost) {
-        return `http://${localhost}:9999/api/v1`;
-    }
-    // Fallback to localhost for local testing
     if (__DEV__) {
-        return 'http://localhost:9999/api/v1'; // ← Thử localhost trước
+        // iOS Simulator runs on the host mac, so 127.0.0.1 is 100% reliable and bypasses network cache issues (EADDRNOTAVAIL)
+        if (Platform.OS === 'ios') {
+            return 'http://127.0.0.1:9999/api/v1';
+        }
+        
+        // Dynamically detect local host IP for physical devices or Android emulator
+        const debuggerHost = Constants.expoConfig?.hostUri || '';
+        const localhost = debuggerHost.split(':')[0];
+        
+        if (localhost) {
+            return `http://${localhost}:9999/api/v1`;
+        }
+        return 'http://127.0.0.1:9999/api/v1';
     }
     return 'https://kingfood-wms-backend.onrender.com/api/v1';
 };
@@ -21,10 +26,36 @@ console.log('[WMS] Connected to API URL:', BASE_URL);
 
 let authToken = null;
 
-export function setToken(token){authToken = token;}
-export function getToken(){return authToken;}
+// Lightweight high-performance in-memory cache for GET requests
+const apiCache = new Map();
+
+export function clearApiCache() {
+    apiCache.clear();
+}
+
+export function setToken(token) {
+    authToken = token;
+    clearApiCache(); // Clear cache on token changes (login/logout)
+}
+
+export function getToken() {
+    return authToken;
+}
 
 async function request(method, endpoint, body = null, extraHeaders = {}) {
+    const isGet = method === 'GET';
+    const cacheKey = `${endpoint}:${body ? JSON.stringify(body) : ''}`;
+
+    if (isGet) {
+        const cached = apiCache.get(cacheKey);
+        if (cached && Date.now() - cached.timestamp < 10000) { // 10s TTL
+            return cached.data;
+        }
+    } else {
+        // Automatically clear cache on any state mutation to guarantee fresh data
+        apiCache.clear();
+    }
+
     const headers = {};
     if (authToken) headers['Authorization'] = `Bearer ${authToken}`;
     Object.assign(headers, extraHeaders);
@@ -41,7 +72,16 @@ async function request(method, endpoint, body = null, extraHeaders = {}) {
 
     if (!res.ok) throw new Error(json.message || 'Lỗi server');
 
-    return json.metadata ?? json;
+    const result = json.metadata ?? json;
+
+    if (isGet) {
+        apiCache.set(cacheKey, {
+            data: result,
+            timestamp: Date.now()
+        });
+    }
+
+    return result;
 }
 // AUTH
 export const login = (username, password) => 

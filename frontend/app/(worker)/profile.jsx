@@ -149,6 +149,14 @@ export default function ProfileScreen() {
         );
     };
 
+    if (loading) {
+        return (
+            <SafeAreaView style={[styles.safeArea, { justifyContent: 'center', alignItems: 'center' }]}>
+                <ActivityIndicator color={COLORS.primary} size="large" />
+            </SafeAreaView>
+        );
+    }
+
     return (
         <SafeAreaView style={styles.safeArea}>
             {/* Header */}
@@ -161,9 +169,6 @@ export default function ProfileScreen() {
             </View>
 
             <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
-                {loading ? (
-                    <ActivityIndicator color={COLORS.primary} size="large" style={{ marginTop: 40 }} />
-                ) : (
                     <>
                         {/* Banner */}
                         <View style={styles.banner}>
@@ -307,7 +312,6 @@ export default function ProfileScreen() {
                             <Text style={styles.logoutBtnText}>Đăng xuất tài khoản</Text>
                         </TouchableOpacity>
                     </>
-                )}
             </ScrollView>
             <StaffBottomNav active="profile" />
         </SafeAreaView>

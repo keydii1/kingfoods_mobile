@@ -145,6 +145,14 @@ export default function DashboardScreen() {
 
     const displayZone = profile?.assignedLocationId ? ZONE_MAP[profile.assignedLocationId] : (assignedZone || 'Chưa phân khu');
 
+    if (loading) {
+        return (
+            <SafeAreaView style={[styles.safeArea, { justifyContent: 'center', alignItems: 'center' }]}>
+                <ActivityIndicator color={COLORS.primary} size="large" />
+            </SafeAreaView>
+        );
+    }
+
     return (
         <SafeAreaView style={styles.safeArea}>
             <ScrollView
@@ -219,12 +227,7 @@ export default function DashboardScreen() {
                         </View>
                     </View>
 
-                    {loading ? (
-                        <View style={styles.loadingBox}>
-                            <ActivityIndicator color={COLORS.primary} size="large" />
-                            <Text style={styles.loadingText}>Đang tải danh sách đơn...</Text>
-                        </View>
-                    ) : tasks.length === 0 ? (
+                    {tasks.length === 0 ? (
                         <View style={styles.emptyCard}>
                             <Ionicons name="sparkles-outline" size={48} color="#ccc" style={{ marginBottom: 12 }} />
                             <Text style={styles.emptyText}>Hôm nay bạn chưa có đơn hàng nào được phân công</Text>

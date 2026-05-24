@@ -246,6 +246,14 @@ export default function productListScreen() {
     );
   }
 
+  if (loading) {
+    return (
+      <SafeAreaView style={[styles.safeArea, { justifyContent: 'center', alignItems: 'center' }]}>
+        <ActivityIndicator color={COLORS.primary} size="large" />
+      </SafeAreaView>
+    );
+  }
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.contentArea}>
@@ -272,9 +280,7 @@ export default function productListScreen() {
         </View>
       </View>
       <View style={{ flex: 1 }}>
-        {loading ? (
-            <ActivityIndicator color={COLORS.primary} size="large" style={{ marginTop: 40 }} />
-        ) : products.length === 0 ? (
+        {products.length === 0 ? (
             <Text style={{ textAlign: 'center', marginTop: 40, color: '#888' }}>
                 Không có sản phẩm nào
             </Text>

@@ -2,6 +2,10 @@ import { PlatformExpress } from "@tsed/platform-express";
 import { Server } from "./Server";
 import Logger from "./helpers/Logger";
 import { AppConfig } from "./config/AppConfig";
+import dns from "dns";
+
+dns.setDefaultResultOrder("ipv4first");
+process.env.TZ = "Asia/Ho_Chi_Minh";
 
 async function bootstrap() {
   try {

@@ -4,7 +4,7 @@ import { Alert } from '../../utils/appAlert';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
 import { COLORS } from '../../constants/colors';
-import { getOrders, updateOrderStatus, deleteOrder } from '../../constants/services/api';
+import { getOrders, updateOrderStatus, deleteOrder, getUsers, assignPickingTask } from '../../constants/services/api';
 import { Ionicons } from '@expo/vector-icons';
 import { playSound } from '../../utils/soundService';
 
@@ -30,6 +30,97 @@ export default function StoreOrdersScreen() {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState(initialFilter || 'all');
   const [selectedOrder, setSelectedOrder] = useState(null);
+
+  // Task assignment states
+  const [showAssignModal, setShowAssignModal] = useState(false);
+  const [staffList, setStaffList] = useState([]);
+  const [loadingStaff, setLoadingStaff] = useState(false);
+  const [selectedStaff, setSelectedStaff] = useState(null);
+  const [assignQuantities, setAssignQuantities] = useState({}); // mapping: productId -> quantity
+  const [selectedProducts, setSelectedProducts] = useState({}); // mapping: productId -> boolean
+  const [assigning, setAssigning] = useState(false);
+
+  const fetchStaff = async () => {
+    try {
+      setLoadingStaff(true);
+      const res = await getUsers();
+      const allUsers = Array.isArray(res) ? res : (res?.data || []);
+      // Filter for staff role only
+      const staffOnly = allUsers.filter(u => u.role === 'staff');
+      // Sort staff: 1. Free first (activePickingTasksCount === 0), 2. Workload ascending
+      const sortedStaff = [...staffOnly].sort((a, b) => {
+        const aTasks = a.activePickingTasksCount || 0;
+        const bTasks = b.activePickingTasksCount || 0;
+        return aTasks - bTasks;
+      });
+      setStaffList(sortedStaff);
+      if (sortedStaff.length > 0) {
+        setSelectedStaff(sortedStaff[0].id || sortedStaff[0]._id);
+      }
+    } catch (err) {
+      console.log('Error fetching staff:', err.message);
+    } finally {
+      setLoadingStaff(false);
+    }
+  };
+
+  const openAssignModal = (order) => {
+    const initialQtys = {};
+    const initialSelected = {};
+    order.orderDetails?.forEach(detail => {
+      if (detail.product) {
+        initialQtys[detail.product.id] = detail.quantity;
+        initialSelected[detail.product.id] = true;
+      }
+    });
+    setAssignQuantities(initialQtys);
+    setSelectedProducts(initialSelected);
+    setSelectedOrder(order);
+    setShowAssignModal(true);
+    fetchStaff();
+  };
+
+  const handleAssignTask = async () => {
+    if (!selectedStaff) {
+      Alert.alert('Lỗi', 'Vui lòng chọn nhân viên để giao việc');
+      return;
+    }
+
+    const tasksToSubmit = [];
+    selectedOrder.orderDetails?.forEach(detail => {
+      const pId = detail.product?.id;
+      if (pId && selectedProducts[pId]) {
+        const qty = assignQuantities[pId] || detail.quantity;
+        tasksToSubmit.push({
+          productId: pId,
+          staffId: selectedStaff,
+          quantity: qty
+        });
+      }
+    });
+
+    if (tasksToSubmit.length === 0) {
+      Alert.alert('Lỗi', 'Vui lòng chọn ít nhất một sản phẩm để giao việc');
+      return;
+    }
+
+    setAssigning(true);
+    try {
+      await assignPickingTask({
+        orderId: selectedOrder.id || selectedOrder._id,
+        tasks: tasksToSubmit
+      });
+      playSound('success');
+      Alert.alert('Thành công', 'Đã phân công và giao nhiệm vụ soạn hàng thành công!');
+      setShowAssignModal(false);
+      setSelectedOrder(null);
+      fetchOrders();
+    } catch (err) {
+      Alert.alert('Lỗi', err.message || 'Không thể giao việc');
+    } finally {
+      setAssigning(false);
+    }
+  };
 
   useEffect(() => {
     fetchOrders();
@@ -135,8 +226,8 @@ export default function StoreOrdersScreen() {
 
   if (loading) {
     return (
-      <SafeAreaView style={styles.safeArea}>
-        <View style={styles.center}><ActivityIndicator size="large" color={COLORS.primary} /></View>
+      <SafeAreaView style={[styles.safeArea, { justifyContent: 'center', alignItems: 'center' }]}>
+        <ActivityIndicator color={COLORS.primary} size="large" />
       </SafeAreaView>
     );
   }
@@ -288,16 +379,27 @@ export default function StoreOrdersScreen() {
                     </TouchableOpacity>
                   </View>
                 ) : selectedOrder.status === 'processing' ? (
-                  <TouchableOpacity 
-                    style={[styles.actionBtn, styles.btnGoToTask, { width: '100%' }]} 
-                    onPress={() => {
-                      setSelectedOrder(null);
-                      router.push({ pathname: '/(worker)/productlist', params: { taskId: selectedOrder.id || selectedOrder._id } });
-                    }}
-                  >
-                    <Ionicons name="cube-outline" size={20} color="#fff" style={{ marginRight: 6 }} />
-                    <Text style={styles.btnText}>Chuyển sang Picker soạn hàng</Text>
-                  </TouchableOpacity>
+                  <View style={styles.actionRow}>
+                    <TouchableOpacity 
+                      style={[styles.actionBtn, styles.btnGoToTask, { flex: 1 }]} 
+                      onPress={() => {
+                        setSelectedOrder(null);
+                        router.push({ pathname: '/(worker)/productlist', params: { taskId: selectedOrder.id || selectedOrder._id } });
+                      }}
+                    >
+                      <Ionicons name="eye-outline" size={18} color="#fff" style={{ marginRight: 4 }} />
+                      <Text style={styles.btnText}>Xem soạn</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity 
+                      style={[styles.actionBtn, { flex: 1.5, backgroundColor: COLORS.primary }]} 
+                      onPress={() => {
+                        openAssignModal(selectedOrder);
+                      }}
+                    >
+                      <Ionicons name="people-outline" size={18} color="#fff" style={{ marginRight: 4 }} />
+                      <Text style={styles.btnText}>Giao việc nhân viên</Text>
+                    </TouchableOpacity>
+                  </View>
                 ) : (
                   <TouchableOpacity 
                     style={[styles.actionBtn, styles.btnCloseFooter, { width: '100%' }]} 
@@ -306,6 +408,161 @@ export default function StoreOrdersScreen() {
                     <Text style={styles.btnText}>Đóng</Text>
                   </TouchableOpacity>
                 )}
+              </View>
+
+            </View>
+          </View>
+        </Modal>
+      )}
+
+      {/* Modal Phân Chia & Giao Việc Cho Nhân Viên */}
+      {showAssignModal && selectedOrder && (
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={showAssignModal}
+          onRequestClose={() => setShowAssignModal(false)}
+        >
+          <View style={styles.modalOverlay}>
+            <View style={[styles.modalContent, { height: '85%' }]}>
+              
+              {/* Modal Header */}
+              <View style={styles.modalHeader}>
+                <View>
+                  <Text style={styles.modalTitle}>Giao việc · Đơn #{selectedOrder.id || selectedOrder._id}</Text>
+                  <Text style={styles.modalSub}>{branchName}</Text>
+                </View>
+                <TouchableOpacity onPress={() => setShowAssignModal(false)} style={styles.closeBtn}>
+                  <Ionicons name="close-circle" size={28} color="#aaa" />
+                </TouchableOpacity>
+              </View>
+
+              <ScrollView style={styles.modalBody}>
+                {/* 1. CHỌN NHÂN VIÊN */}
+                <Text style={[styles.sectionTitle, { marginBottom: 12 }]}>1. Chọn nhân viên soạn hàng:</Text>
+                {loadingStaff ? (
+                  <ActivityIndicator color={COLORS.primary} size="small" style={{ marginVertical: 12 }} />
+                ) : staffList.length > 0 ? (
+                  <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 20 }}>
+                    {staffList.map(staff => {
+                      const isSelected = selectedStaff === staff.id;
+                      const activeTasks = staff.activePickingTasksCount || 0;
+                      const isFree = activeTasks === 0;
+                      
+                      return (
+                        <TouchableOpacity
+                          key={staff.id}
+                          style={{
+                            paddingHorizontal: 12,
+                            paddingVertical: 8,
+                            borderRadius: 10,
+                            borderWidth: 1.5,
+                            borderColor: isSelected ? COLORS.primary : '#eee',
+                            backgroundColor: isSelected ? COLORS.warningBg : '#fff',
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            gap: 6
+                          }}
+                          onPress={() => setSelectedStaff(staff.id)}
+                        >
+                          <Ionicons name="person" size={14} color={isSelected ? COLORS.primary : '#888'} />
+                          <Text style={{ fontSize: 13, fontWeight: isSelected ? '700' : '500', color: isSelected ? COLORS.primary : '#444' }}>
+                            {staff.name || staff.username}
+                          </Text>
+                          
+                          {/* Availability Tag */}
+                          <Text style={{ 
+                            fontSize: 10, 
+                            fontWeight: '700', 
+                            color: isFree ? COLORS.success : COLORS.error, 
+                            backgroundColor: isFree ? COLORS.successBg : COLORS.errorBg, 
+                            paddingHorizontal: 5, 
+                            borderRadius: 4,
+                            paddingVertical: 2
+                          }}>
+                            {isFree ? '🟢 Rảnh' : `🔴 Bận (${activeTasks})`}
+                          </Text>
+                        </TouchableOpacity>
+                      );
+                    })}
+                  </View>
+                ) : (
+                  <Text style={{ color: '#888', fontStyle: 'italic', marginBottom: 20 }}>Không tìm thấy nhân viên nào trong hệ thống</Text>
+                )}
+
+                {/* 2. CHỌN SẢN PHẨM & SỐ LƯỢNG */}
+                <Text style={[styles.sectionTitle, { marginBottom: 12 }]}>2. Chọn sản phẩm & Số lượng giao:</Text>
+                {selectedOrder.orderDetails?.map((detail, idx) => {
+                  const p = detail.product;
+                  if (!p) return null;
+                  const isChecked = selectedProducts[p.id] ?? false;
+                  const qty = assignQuantities[p.id] ?? detail.quantity;
+
+                  return (
+                    <View key={idx} style={[styles.productRow, { opacity: isChecked ? 1 : 0.5, paddingVertical: 10 }]}>
+                      {/* Checkbox toggle */}
+                      <TouchableOpacity
+                        onPress={() => setSelectedProducts(prev => ({ ...prev, [p.id]: !isChecked }))}
+                        style={{ padding: 4 }}
+                      >
+                        <Ionicons
+                          name={isChecked ? "checkbox" : "square-outline"}
+                          size={22}
+                          color={isChecked ? COLORS.primary : '#aaa'}
+                        />
+                      </TouchableOpacity>
+
+                      <View style={{ flex: 1, marginLeft: 4 }}>
+                        <Text style={[styles.productName, { fontSize: 13 }]}>{p.name}</Text>
+                        <Text style={{ fontSize: 11, color: '#888', marginTop: 2 }}>Cần soạn: {detail.quantity} {p.unit || 'cái'}</Text>
+                      </View>
+
+                      {/* Quantity Selector */}
+                      {isChecked && (
+                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                          <TouchableOpacity
+                            onPress={() => setAssignQuantities(prev => ({ ...prev, [p.id]: Math.max(1, qty - 1) }))}
+                            style={{ width: 28, height: 28, borderRadius: 14, backgroundColor: '#f0f0f0', alignItems: 'center', justifyContent: 'center' }}
+                          >
+                            <Text style={{ fontWeight: '700', fontSize: 16 }}>−</Text>
+                          </TouchableOpacity>
+                          <Text style={{ fontSize: 14, fontWeight: '700', minWidth: 20, textAlign: 'center' }}>{qty}</Text>
+                          <TouchableOpacity
+                            onPress={() => setAssignQuantities(prev => ({ ...prev, [p.id]: Math.min(detail.quantity, qty + 1) }))}
+                            style={{ width: 28, height: 28, borderRadius: 14, backgroundColor: '#f0f0f0', alignItems: 'center', justifyContent: 'center' }}
+                          >
+                            <Text style={{ fontWeight: '700', fontSize: 16 }}>+</Text>
+                          </TouchableOpacity>
+                        </View>
+                      )}
+                    </View>
+                  );
+                })}
+              </ScrollView>
+
+              {/* Modal Footer */}
+              <View style={styles.modalFooter}>
+                <TouchableOpacity
+                  style={[
+                    styles.actionBtn,
+                    {
+                      backgroundColor: COLORS.primary,
+                      width: '100%',
+                      opacity: assigning ? 0.7 : 1
+                    }
+                  ]}
+                  onPress={handleAssignTask}
+                  disabled={assigning}
+                >
+                  {assigning ? (
+                    <ActivityIndicator color="#fff" size="small" />
+                  ) : (
+                    <>
+                      <Ionicons name="checkmark-done" size={20} color="#fff" style={{ marginRight: 6 }} />
+                      <Text style={styles.btnText}>Xác nhận giao việc</Text>
+                    </>
+                  )}
+                </TouchableOpacity>
               </View>
 
             </View>

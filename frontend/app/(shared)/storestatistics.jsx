@@ -161,6 +161,14 @@ export default function StoreStatisticsScreen() {
     );
   };
 
+  if (loading) {
+    return (
+      <SafeAreaView style={[styles.safeArea, { justifyContent: 'center', alignItems: 'center' }]}>
+        <ActivityIndicator color={COLORS.primary} size="large" />
+      </SafeAreaView>
+    );
+  }
+
   return (
     <SafeAreaView style={styles.safeArea}>
       {/* Header */}
@@ -232,12 +240,7 @@ export default function StoreStatisticsScreen() {
         </View>
       </View>
 
-      {loading ? (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-          <ActivityIndicator size="large" color={COLORS.primary} />
-        </View>
-      ) : (
-        <ScrollView style={styles.scroll}>
+      <ScrollView style={styles.scroll}>
           {/* KPI Grid */}
           <View style={styles.kpiGrid}>
             {displayKpis.map((item, index) => (
@@ -326,7 +329,6 @@ export default function StoreStatisticsScreen() {
             )}
           </View>
         </ScrollView>
-      )}
 
       {/* Bottom Nav */}
       <View style={styles.bottomNav}>

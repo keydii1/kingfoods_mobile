@@ -1,11 +1,12 @@
 import { View, Text, StyleSheet,
-         ScrollView, TouchableOpacity, ActivityIndicator} from 'react-native';
+         ScrollView, TouchableOpacity, ActivityIndicator, Modal, TextInput } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { useState, useEffect } from 'react';
 import { Ionicons } from '@expo/vector-icons';
-import { getDashboardStatus, getIncidents } from '../../constants/services/api';
+import { getDashboardStatus, getIncidents, getOrders, getUsers, assignPickingTask } from '../../constants/services/api';
 import { COLORS } from '../../constants/colors';
+import { Alert } from '../../utils/appAlert';
 
 // 4 KPI cards initial config (Ionicons name)
 const kpis = [
@@ -85,6 +86,155 @@ export default function ManagerDashboardScreen(){
     const [stats, setStats] = useState(null);
     const [incidents, setIncidents] = useState([]);
     const [loading, setLoading] = useState(true);
+
+    // Picking dispatch states
+    const [showDispatchModal, setShowDispatchModal] = useState(false);
+    const [ordersList, setOrdersList] = useState([]);
+    const [staffList, setStaffList] = useState([]);
+    const [selectedPickingOrderId, setSelectedPickingOrderId] = useState('');
+    const [pickingAssignments, setPickingAssignments] = useState({}); // mapping: productId -> { checked: boolean, staffId: number, quantity: number }
+    const [loadingDispatchData, setLoadingDispatchData] = useState(false);
+    const [dispatching, setDispatching] = useState(false);
+    const [staffSearchQuery, setStaffSearchQuery] = useState('');
+
+    const openDispatchModal = async () => {
+        setShowDispatchModal(true);
+        setLoadingDispatchData(true);
+        setStaffSearchQuery('');
+        try {
+            const [ordersRes, usersRes] = await Promise.all([
+                getOrders(),
+                getUsers()
+            ]);
+            
+            const orders = Array.isArray(ordersRes) ? ordersRes : (ordersRes?.data || []);
+            const processingOrders = orders.filter(o => o.status === 'processing');
+            setOrdersList(processingOrders);
+
+            const users = Array.isArray(usersRes) ? usersRes : (usersRes?.data || []);
+            const staffOnly = users.filter(u => u.role === 'staff');
+            setStaffList(staffOnly);
+        } catch (err) {
+            console.log('Error loading dispatch data:', err.message);
+            Alert.alert('Lỗi', 'Không thể tải danh sách đơn và nhân viên');
+        } finally {
+            setLoadingDispatchData(false);
+        }
+    };
+
+    const handleSelectOrder = (orderId) => {
+        setSelectedPickingOrderId(orderId);
+        if (!orderId) {
+            setPickingAssignments({});
+            return;
+        }
+        
+        const order = ordersList.find(o => String(o.id) === String(orderId));
+        if (!order) return;
+
+        const initialAssignments = {};
+        order.orderDetails?.forEach(item => {
+            if (item.productId) {
+                const productZoneId = item.product?.category?.location?.id;
+                
+                // Sort staff specifically for this item: 1. Free first, 2. Zone match second, 3. Workload third
+                const sortedStaff = [...staffList].sort((a, b) => {
+                    const aTasks = a.activePickingTasksCount || 0;
+                    const bTasks = b.activePickingTasksCount || 0;
+                    
+                    if (aTasks === 0 && bTasks > 0) return -1;
+                    if (aTasks > 0 && bTasks === 0) return 1;
+                    
+                    const aZoneMatch = a.assignedLocationId && productZoneId && String(a.assignedLocationId) === String(productZoneId);
+                    const bZoneMatch = b.assignedLocationId && productZoneId && String(b.assignedLocationId) === String(productZoneId);
+                    
+                    if (aZoneMatch && !bZoneMatch) return -1;
+                    if (!aZoneMatch && bZoneMatch) return 1;
+                    
+                    return aTasks - bTasks;
+                });
+                
+                const bestStaff = sortedStaff[0];
+                initialAssignments[item.productId] = {
+                    checked: true,
+                    staffId: bestStaff ? bestStaff.id : '',
+                    quantity: item.quantity
+                };
+            }
+        });
+        setPickingAssignments(initialAssignments);
+    };
+
+    const handleDispatchTasks = async () => {
+        if (!selectedPickingOrderId) {
+            Alert.alert('Lỗi', 'Vui lòng chọn một đơn hàng để giao việc');
+            return;
+        }
+
+        const order = ordersList.find(o => String(o.id) === String(selectedPickingOrderId));
+        if (!order) return;
+
+        const tasks = [];
+        const details = order.orderDetails || [];
+
+        for (const item of details) {
+            const productId = item.productId;
+            const assign = pickingAssignments[productId];
+            
+            const isChecked = assign?.checked !== false;
+            if (!isChecked) continue;
+
+            const staffId = assign?.staffId;
+            if (!staffId) {
+                Alert.alert('Lỗi phân công', `Vui lòng chọn Nhân viên soạn sản phẩm: ${item.product?.name || 'Sản phẩm'}`);
+                return;
+            }
+
+            const quantity = parseInt(assign?.quantity || item.quantity);
+            if (isNaN(quantity) || quantity <= 0) {
+                Alert.alert('Lỗi phân công', `Số lượng soạn sản phẩm "${item.product?.name}" phải lớn hơn 0`);
+                return;
+            }
+
+            if (quantity > item.quantity) {
+                Alert.alert('Lỗi phân công', `Số lượng soạn sản phẩm "${item.product?.name}" không thể lớn hơn số lượng khách đặt (${item.quantity})`);
+                return;
+            }
+
+            tasks.push({
+                productId,
+                staffId: parseInt(staffId),
+                quantity
+            });
+        }
+
+        if (tasks.length === 0) {
+            Alert.alert('Lỗi phân công', 'Vui lòng chọn ít nhất một sản phẩm để giao việc');
+            return;
+        }
+
+        setDispatching(true);
+        try {
+            await assignPickingTask({
+                orderId: order.id,
+                tasks
+            });
+            Alert.alert('Phân công thành công', `Đã chia nhỏ và tạo thành công ${tasks.length} lệnh nhặt hàng (Picking Tasks) trực tiếp gửi đến thiết bị của các nhân viên được chọn!`);
+            setShowDispatchModal(false);
+            setSelectedPickingOrderId('');
+            setPickingAssignments({});
+            
+            // Refresh
+            const statsRes = await getDashboardStatus();
+            setStats(statsRes);
+            const incidentsRes = await getIncidents();
+            setIncidents(Array.isArray(incidentsRes) ? incidentsRes : []);
+        } catch (err) {
+            Alert.alert('Lỗi phân công', err.message || 'Không thể tạo phân công nhiệm vụ');
+        } finally {
+            setDispatching(false);
+        }
+    };
 
     const s = stats || {};
     const totals = s.totals || {};
@@ -171,8 +321,8 @@ export default function ManagerDashboardScreen(){
 
     if (loading) {
         return (
-            <SafeAreaView style={styles.safeArea}>
-                <ActivityIndicator color={COLORS.primary} size="large" style={{ marginTop: 60 }} />
+            <SafeAreaView style={[styles.safeArea, { justifyContent: 'center', alignItems: 'center' }]}>
+                <ActivityIndicator color={COLORS.primary} size="large" />
             </SafeAreaView>
         );
     }
@@ -197,6 +347,35 @@ export default function ManagerDashboardScreen(){
                         <KpiCard key = {index}  item = {item} />
                     ))}
                 </View>
+
+                {/* BÀN ĐIỀU PHỐI & CHIA TASK (NHƯ WEB) */}
+                <TouchableOpacity 
+                    style={{
+                        backgroundColor: COLORS.primary,
+                        borderRadius: 16,
+                        padding: 16,
+                        marginBottom: 12,
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        shadowColor: COLORS.primary,
+                        shadowOpacity: 0.2,
+                        shadowRadius: 6,
+                        elevation: 3,
+                    }}
+                    onPress={openDispatchModal}
+                >
+                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+                        <View style={{ backgroundColor: 'rgba(255, 255, 255, 0.2)', width: 40, height: 40, borderRadius: 20, alignItems: 'center', justifyContent: 'center' }}>
+                            <Ionicons name="git-pull-request" size={22} color="#fff" />
+                        </View>
+                        <View>
+                            <Text style={{ color: '#fff', fontSize: 15, fontWeight: '800' }}>Bàn Điều Phối & Chia Lệnh</Text>
+                            <Text style={{ color: 'rgba(255, 255, 255, 0.8)', fontSize: 11, marginTop: 2 }}>Phân tách sỉ & giao việc trực tiếp cho Picker</Text>
+                        </View>
+                    </View>
+                    <Ionicons name="chevron-forward" size={20} color="#fff" />
+                </TouchableOpacity>
 
                 {/* Phân tích trạng thái đơn hàng */}
                 <View style = {styles.card}>
@@ -358,6 +537,375 @@ export default function ManagerDashboardScreen(){
                     <Text style={styles.navLabel}>Cài đặt</Text>
                 </TouchableOpacity>
             </View>
+
+            {/* Modal Bàn Điều Phối & Chia Task */}
+            {showDispatchModal && (
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={showDispatchModal}
+                    onRequestClose={() => setShowDispatchModal(false)}
+                >
+                    <View style={styles.modalOverlay}>
+                        <View style={[styles.modalContent, { height: '90%' }]}>
+                            
+                            {/* Modal Header */}
+                            <View style={styles.modalHeader}>
+                                <View style={{ flex: 1, marginRight: 8 }}>
+                                    <Text style={styles.modalTitle}>Bàn Điều Phối & Chia Task</Text>
+                                    <Text style={styles.modalSub}>Phân tách đơn sỉ & giao việc cho nhân viên kho</Text>
+                                </View>
+                                <TouchableOpacity onPress={() => setShowDispatchModal(false)} style={styles.closeBtn}>
+                                    <Ionicons name="close-circle" size={28} color="#aaa" />
+                                </TouchableOpacity>
+                            </View>
+
+                            <ScrollView style={styles.modalBody} keyboardShouldPersistTaps="handled">
+                                {/* 1. LỰA CHỌN ĐƠN HÀNG */}
+                                <Text style={styles.sectionTitle}>1. Lựa chọn Đơn đặt hàng đang xử lý: *</Text>
+                                {loadingDispatchData ? (
+                                    <ActivityIndicator color={COLORS.primary} size="small" style={{ marginVertical: 12 }} />
+                                ) : selectedPickingOrderId ? (
+                                    // Premium Collapsed Order Card
+                                    (() => {
+                                        const order = ordersList.find(o => String(o.id) === String(selectedPickingOrderId));
+                                        if (!order) return null;
+                                        return (
+                                            <View style={{ 
+                                                borderWidth: 1.5, 
+                                                borderColor: COLORS.primary, 
+                                                borderRadius: 14, 
+                                                backgroundColor: COLORS.warningBg, 
+                                                padding: 14, 
+                                                marginVertical: 8,
+                                                flexDirection: 'row',
+                                                justifyContent: 'space-between',
+                                                alignItems: 'center'
+                                            }}>
+                                                <View style={{ flex: 1, marginRight: 10 }}>
+                                                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                                                        <Ionicons name="receipt" size={16} color={COLORS.primary} />
+                                                        <Text style={{ fontWeight: '800', fontSize: 14, color: COLORS.primary }}>
+                                                            Đơn hàng #{order.id}
+                                                        </Text>
+                                                    </View>
+                                                    <Text style={{ fontSize: 12, fontWeight: '700', color: COLORS.text, marginTop: 4 }}>
+                                                        {order.branch?.name || order.customer?.name || 'Kingfood Partner'}
+                                                    </Text>
+                                                    <Text style={{ fontSize: 11, color: COLORS.textGray, marginTop: 2 }}>
+                                                        Tổng tiền: <Text style={{ fontWeight: '750', color: COLORS.text }}>{order.totalPrice ? order.totalPrice.toLocaleString() : '0'}đ</Text> · <Text style={{ fontWeight: '750', color: COLORS.primary }}>{order.orderDetails?.length || 0} SKU</Text>
+                                                    </Text>
+                                                </View>
+                                                <TouchableOpacity 
+                                                    style={{ 
+                                                        backgroundColor: '#fff', 
+                                                        borderWidth: 1.5, 
+                                                        borderColor: COLORS.primary, 
+                                                        paddingHorizontal: 12, 
+                                                        paddingVertical: 6, 
+                                                        borderRadius: 8 
+                                                    }}
+                                                    onPress={() => {
+                                                        setSelectedPickingOrderId('');
+                                                        setPickingAssignments({});
+                                                    }}
+                                                >
+                                                    <Text style={{ fontSize: 12, fontWeight: '750', color: COLORS.primary }}>Thay đổi</Text>
+                                                </TouchableOpacity>
+                                            </View>
+                                        );
+                                    })()
+                                ) : ordersList.length > 0 ? (
+                                    <View style={{ borderWidth: 1.5, borderColor: COLORS.border, borderRadius: 12, overflow: 'hidden', backgroundColor: '#fff', marginVertical: 8 }}>
+                                        {ordersList.map(order => (
+                                            <TouchableOpacity
+                                                key={order.id}
+                                                style={{
+                                                    padding: 14,
+                                                    borderBottomWidth: 1,
+                                                    borderBottomColor: '#eee',
+                                                    backgroundColor: '#fff',
+                                                }}
+                                                onPress={() => handleSelectOrder(order.id)}
+                                            >
+                                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                                                    <Text style={{ fontWeight: '700', fontSize: 13, color: COLORS.text }}>
+                                                        Đơn hàng #{order.id}
+                                                    </Text>
+                                                    <Text style={{ fontSize: 12, fontWeight: '800', color: COLORS.primary }}>
+                                                        {order.totalPrice ? order.totalPrice.toLocaleString() : '0'}đ
+                                                    </Text>
+                                                </View>
+                                                <Text style={{ fontSize: 11, color: COLORS.textGray, marginTop: 4 }}>
+                                                    Chi nhánh: {order.branch?.name || order.customer?.name || 'Kingfood Partner'} · {order.orderDetails?.length || 0} SKU
+                                                </Text>
+                                            </TouchableOpacity>
+                                        ))}
+                                    </View>
+                                ) : (
+                                    <Text style={{ color: '#888', fontStyle: 'italic', marginVertical: 12 }}>Không có đơn đặt hàng nào đang ở trạng thái Đang Soạn Hàng.</Text>
+                                )}
+
+                                {/* 2. PHÂN TÁCH SẢN PHẨM & CHỌN PICKER */}
+                                {selectedPickingOrderId ? (
+                                    <View style={{ marginTop: 16 }}>
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+                                            <Text style={styles.sectionTitle}>2. Phân chia sản phẩm & Chọn nhân viên:</Text>
+                                            <View style={{ backgroundColor: COLORS.primary, paddingHorizontal: 10, paddingVertical: 4, borderRadius: 12 }}>
+                                                <Text style={{ fontSize: 11, fontWeight: '700', color: '#fff' }}>Đơn #{selectedPickingOrderId}</Text>
+                                            </View>
+                                        </View>
+
+                                        {/* Global Staff Search Bar */}
+                                        <View style={{
+                                            flexDirection: 'row',
+                                            alignItems: 'center',
+                                            backgroundColor: '#f8fafc',
+                                            borderRadius: 12,
+                                            paddingHorizontal: 12,
+                                            paddingVertical: 8,
+                                            marginBottom: 14,
+                                            borderWidth: 1.5,
+                                            borderColor: COLORS.border,
+                                            gap: 8
+                                        }}>
+                                            <Ionicons name="search" size={16} color="#64748b" />
+                                            <TextInput
+                                                placeholder="Tìm tên nhân viên hoặc username..."
+                                                placeholderTextColor="#94a3b8"
+                                                value={staffSearchQuery}
+                                                onChangeText={setStaffSearchQuery}
+                                                style={{
+                                                    flex: 1,
+                                                    fontSize: 13,
+                                                    color: COLORS.text,
+                                                    padding: 0,
+                                                    height: 22
+                                                }}
+                                            />
+                                            {staffSearchQuery ? (
+                                                <TouchableOpacity onPress={() => setStaffSearchQuery('')}>
+                                                    <Ionicons name="close-circle" size={18} color="#94a3b8" />
+                                                </TouchableOpacity>
+                                            ) : null}
+                                        </View>
+
+                                        {/* Product Items List */}
+                                        {(ordersList.find(o => String(o.id) === String(selectedPickingOrderId))?.orderDetails || []).map((item, idx) => {
+                                            const productId = item.productId;
+                                            const product = item.product;
+                                            if (!productId || !product) return null;
+                                            const currentAssign = pickingAssignments[productId] || { checked: true, staffId: '', quantity: item.quantity };
+                                            const isChecked = currentAssign.checked !== false;
+                                            const assignedStaffId = currentAssign.staffId;
+                                            const assignedQty = currentAssign.quantity;
+
+                                            return (
+                                                <View 
+                                                    key={idx} 
+                                                    style={{
+                                                        borderWidth: 1.5,
+                                                        borderColor: isChecked ? COLORS.border : '#eee',
+                                                        borderRadius: 14,
+                                                        padding: 12,
+                                                        marginBottom: 8,
+                                                        backgroundColor: isChecked ? '#fff' : '#f9f9f9',
+                                                        opacity: isChecked ? 1 : 0.6
+                                                    }}
+                                                >
+                                                    {/* Top Row: Checkbox, Name, Qty */}
+                                                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                                                        <TouchableOpacity
+                                                            onPress={() => {
+                                                                setPickingAssignments(prev => ({
+                                                                    ...prev,
+                                                                    [productId]: { ...prev[productId], checked: !isChecked }
+                                                                }));
+                                                            }}
+                                                        >
+                                                            <Ionicons 
+                                                                name={isChecked ? "checkbox" : "square-outline"} 
+                                                                size={22} 
+                                                                color={isChecked ? COLORS.primary : '#aaa'} 
+                                                            />
+                                                        </TouchableOpacity>
+
+                                                        <View style={{ flex: 1 }}>
+                                                            <Text style={{ fontWeight: '700', fontSize: 13, color: COLORS.text }}>{product.name}</Text>
+                                                            <Text style={{ fontSize: 11, color: COLORS.textGray, marginTop: 2 }}>
+                                                                SKU: {product.sku || `SKU-${product.id}`} · <Text style={{ fontWeight: '700', color: COLORS.primary }}>{product.category?.name || 'Khu vực kệ'}</Text>
+                                                            </Text>
+                                                        </View>
+
+                                                        <View style={{ alignItems: 'flex-end' }}>
+                                                            <Text style={{ fontSize: 11, color: COLORS.textGray }}>Yêu cầu</Text>
+                                                            <Text style={{ fontSize: 14, fontWeight: '800', color: COLORS.text }}>{item.quantity} {product.unit || 'cái'}</Text>
+                                                        </View>
+                                                    </View>
+
+                                                    {/* Assignment Picker Row */}
+                                                    {isChecked && (
+                                                        <View style={{ marginTop: 12, borderTopWidth: 1, borderTopColor: '#f0f0f0', paddingTop: 10 }}>
+                                                            <Text style={{ fontSize: 11, fontWeight: '700', color: COLORS.text, marginBottom: 6 }}>Nhân viên Picker phụ trách:</Text>
+                                                            
+                                                            {(() => {
+                                                                const filteredStaff = staffList.filter(s => {
+                                                                    const q = (staffSearchQuery || '').toLowerCase().trim();
+                                                                    if (!q) return true;
+                                                                    return (s.name || '').toLowerCase().includes(q) || (s.username || '').toLowerCase().includes(q);
+                                                                });
+
+                                                                if (staffList.length === 0) {
+                                                                    return <Text style={{ fontStyle: 'italic', color: '#ff9800', fontSize: 11, marginVertical: 4 }}>Chưa có nhân viên Picker nào</Text>;
+                                                                }
+
+                                                                if (filteredStaff.length === 0) {
+                                                                    return <Text style={{ fontStyle: 'italic', color: '#64748b', fontSize: 11, marginVertical: 4 }}>Không tìm thấy nhân viên phù hợp</Text>;
+                                                                }
+
+                                                                return (
+                                                                    <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 6, paddingBottom: 4 }}>
+                                                                        {[...filteredStaff].sort((a, b) => {
+                                                                            const aTasks = a.activePickingTasksCount || 0;
+                                                                            const bTasks = b.activePickingTasksCount || 0;
+                                                                            
+                                                                            if (aTasks === 0 && bTasks > 0) return -1;
+                                                                            if (aTasks > 0 && bTasks === 0) return 1;
+                                                                            
+                                                                            const productZoneId = product?.category?.location?.id;
+                                                                            const aZoneMatch = a.assignedLocationId && productZoneId && String(a.assignedLocationId) === String(productZoneId);
+                                                                            const bZoneMatch = b.assignedLocationId && productZoneId && String(b.assignedLocationId) === String(productZoneId);
+                                                                            
+                                                                            if (aZoneMatch && !bZoneMatch) return -1;
+                                                                            if (!aZoneMatch && bZoneMatch) return 1;
+                                                                            
+                                                                            return aTasks - bTasks;
+                                                                        }).map(staff => {
+                                                                            const isSelected = String(assignedStaffId) === String(staff.id);
+                                                                            const productZoneId = product?.category?.location?.id;
+                                                                            const isZoneMatch = staff.assignedLocationId && productZoneId && String(staff.assignedLocationId) === String(productZoneId);
+                                                                            
+                                                                            const activeTasks = staff.activePickingTasksCount || 0;
+                                                                            const isFree = activeTasks === 0;
+
+                                                                            return (
+                                                                                <TouchableOpacity
+                                                                                    key={staff.id}
+                                                                                    style={{
+                                                                                        paddingHorizontal: 10,
+                                                                                        paddingVertical: 6,
+                                                                                        borderRadius: 8,
+                                                                                        borderWidth: 1,
+                                                                                        borderColor: isSelected ? COLORS.primary : '#ddd',
+                                                                                        backgroundColor: isSelected ? COLORS.warningBg : '#fff',
+                                                                                        flexDirection: 'row',
+                                                                                        alignItems: 'center',
+                                                                                        gap: 6
+                                                                                    }}
+                                                                                    onPress={() => {
+                                                                                        setPickingAssignments(prev => ({
+                                                                                            ...prev,
+                                                                                            [productId]: { ...prev[productId], staffId: staff.id }
+                                                                                        }));
+                                                                                    }}
+                                                                                >
+                                                                                    <Ionicons name="person" size={11} color={isSelected ? COLORS.primary : '#888'} />
+                                                                                    <Text style={{ fontSize: 12, fontWeight: isSelected ? '700' : '500', color: isSelected ? COLORS.primary : '#444' }}>
+                                                                                        {staff.name || staff.username}
+                                                                                    </Text>
+                                                                                    
+                                                                                    <Text style={{ 
+                                                                                        fontSize: 9, 
+                                                                                        fontWeight: '700', 
+                                                                                        color: isFree ? COLORS.success : COLORS.error, 
+                                                                                        backgroundColor: isFree ? COLORS.successBg : COLORS.errorBg, 
+                                                                                        paddingHorizontal: 4, 
+                                                                                        borderRadius: 4 
+                                                                                    }}>
+                                                                                        {isFree ? '🟢 Rảnh' : `🔴 Bận (${activeTasks})`}
+                                                                                    </Text>
+
+                                                                                    {isZoneMatch && (
+                                                                                        <Text style={{ fontSize: 9, fontWeight: '700', color: COLORS.primary, backgroundColor: '#ffe5db', paddingHorizontal: 4, borderRadius: 4 }}>
+                                                                                            Khu vực Kệ
+                                                                                        </Text>
+                                                                                    )}
+                                                                                </TouchableOpacity>
+                                                                            );
+                                                                        })}
+                                                                    </ScrollView>
+                                                                );
+                                                            })()}
+
+                                                            {/* Quantity adjustment */}
+                                                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 10 }}>
+                                                                <Text style={{ fontSize: 11, fontWeight: '700', color: COLORS.text }}>Số lượng giao nhặt:</Text>
+                                                                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                                                                    <TouchableOpacity
+                                                                        onPress={() => {
+                                                                            setPickingAssignments(prev => ({
+                                                                                ...prev,
+                                                                                [productId]: { ...prev[productId], quantity: Math.max(1, parseInt(assignedQty) - 1) }
+                                                                            }));
+                                                                        }}
+                                                                        style={{ width: 26, height: 26, borderRadius: 13, backgroundColor: '#f0f0f0', alignItems: 'center', justifyContent: 'center' }}
+                                                                    >
+                                                                        <Text style={{ fontWeight: '700', fontSize: 14 }}>−</Text>
+                                                                    </TouchableOpacity>
+                                                                    <Text style={{ fontSize: 13, fontWeight: '800', minWidth: 20, textAlign: 'center' }}>{assignedQty}</Text>
+                                                                    <TouchableOpacity
+                                                                        onPress={() => {
+                                                                            setPickingAssignments(prev => ({
+                                                                                ...prev,
+                                                                                [productId]: { ...prev[productId], quantity: Math.min(item.quantity, parseInt(assignedQty) + 1) }
+                                                                            }));
+                                                                        }}
+                                                                        style={{ width: 26, height: 26, borderRadius: 13, backgroundColor: '#f0f0f0', alignItems: 'center', justifyContent: 'center' }}
+                                                                    >
+                                                                        <Text style={{ fontWeight: '700', fontSize: 14 }}>+</Text>
+                                                                    </TouchableOpacity>
+                                                                </View>
+                                                            </View>
+                                                        </View>
+                                                    )}
+                                                </View>
+                                            );
+                                        })}
+                                    </View>
+                                ) : null}
+                            </ScrollView>
+
+                            {/* Modal Footer */}
+                            {selectedPickingOrderId && (
+                                <View style={styles.modalFooter}>
+                                    <TouchableOpacity
+                                        style={[
+                                            styles.actionBtn,
+                                            {
+                                                backgroundColor: COLORS.primary,
+                                                width: '100%',
+                                                opacity: dispatching ? 0.7 : 1
+                                            }
+                                        ]}
+                                        onPress={handleDispatchTasks}
+                                        disabled={dispatching}
+                                    >
+                                        {dispatching ? (
+                                            <ActivityIndicator color="#fff" size="small" />
+                                        ) : (
+                                            <>
+                                                <Ionicons name="flash" size={18} color="#fff" style={{ marginRight: 6 }} />
+                                                <Text style={styles.btnText}>Kích hoạt & Gửi lệnh Picking sỉ</Text>
+                                            </>
+                                        )}
+                                    </TouchableOpacity>
+                                </View>
+                            )}
+
+                        </View>
+                    </View>
+                </Modal>
+            )}
         </SafeAreaView>
     )
 }
@@ -624,5 +1172,65 @@ const styles = StyleSheet.create({
         fontSize: 10,
         color: '#777',
         marginTop: 2,
+    },
+    modalOverlay: {
+        flex: 1,
+        backgroundColor: 'rgba(0,0,0,0.5)',
+        justifyContent: 'flex-end',
+    },
+    modalContent: {
+        backgroundColor: '#fff',
+        borderTopLeftRadius: 24,
+        borderTopRightRadius: 24,
+        paddingBottom: 24,
+    },
+    modalHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: 20,
+        borderBottomWidth: 1,
+        borderBottomColor: '#f0f0f0',
+    },
+    modalTitle: {
+        fontSize: 18,
+        fontWeight: '800',
+        color: '#222',
+    },
+    modalSub: {
+        fontSize: 12,
+        color: '#666',
+        marginTop: 2,
+    },
+    closeBtn: {
+        padding: 4,
+    },
+    modalBody: {
+        flex: 1,
+        padding: 20,
+    },
+    modalFooter: {
+        padding: 20,
+        borderTopWidth: 1,
+        borderTopColor: '#f0f0f0',
+        backgroundColor: '#fff',
+    },
+    actionBtn: {
+        height: 48,
+        borderRadius: 12,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    btnText: {
+        fontSize: 14,
+        fontWeight: '700',
+        color: '#fff',
+    },
+    sectionTitle: {
+        fontSize: 14,
+        fontWeight: '700',
+        color: '#444',
+        marginBottom: 8,
     },
 });

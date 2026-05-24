@@ -162,6 +162,14 @@ export default function StoreOrderScreen() {
 
   const hasCart = cart.length > 0;
 
+  if (loadingProducts) {
+    return (
+      <SafeAreaView style={[styles.safeArea, { justifyContent: 'center', alignItems: 'center' }]}>
+        <ActivityIndicator color={COLORS.primary} size="large" />
+      </SafeAreaView>
+    );
+  }
+
   return (
     <SafeAreaView style={styles.safeArea} edges={['top', 'left', 'right']}>
       {/* Header */}
@@ -192,36 +200,32 @@ export default function StoreOrderScreen() {
           <Text style={styles.sectionTitle}>Danh mục sản phẩm</Text>
         </View>
 
-        {loadingProducts ? (
-          <ActivityIndicator color={COLORS.primary} size="large" />
-        ) : (
-          filteredProducts.map(product => (
-            <TouchableOpacity
-              key={product.id}
-              style={styles.productRow}
-              onPress={() => addToCart(product)}
-            >
-              {product.image ? (
-                <Image
-                  source={{ uri: product.image }}
-                  style={styles.productImage}
-                  resizeMode="cover"
-                />
-              ) : (
-                <View style={styles.imagePlaceholder}>
-                  <Ionicons name="basket-outline" size={22} color={COLORS.primary} />
-                </View>
-              )}
-              <View style={styles.productInfo}>
-                <Text style={styles.productName}>{product.name}</Text>
-                <Text style={styles.productPrice}>{product.price.toLocaleString()}đ / {product.unit}</Text>
+        {filteredProducts.map(product => (
+          <TouchableOpacity
+            key={product.id}
+            style={styles.productRow}
+            onPress={() => addToCart(product)}
+          >
+            {product.image ? (
+              <Image
+                source={{ uri: product.image }}
+                style={styles.productImage}
+                resizeMode="cover"
+              />
+            ) : (
+              <View style={styles.imagePlaceholder}>
+                <Ionicons name="basket-outline" size={22} color={COLORS.primary} />
               </View>
-              <View style={styles.productAdd}>
-                <Text style={styles.productAddBtn}>+</Text>
-              </View>
-            </TouchableOpacity>
-          ))
-        )}
+            )}
+            <View style={styles.productInfo}>
+              <Text style={styles.productName}>{product.name}</Text>
+              <Text style={styles.productPrice}>{product.price.toLocaleString()}đ / {product.unit}</Text>
+            </View>
+            <View style={styles.productAdd}>
+              <Text style={styles.productAddBtn}>+</Text>
+            </View>
+          </TouchableOpacity>
+        ))}
       </ScrollView>
 
       {hasCart && (
@@ -323,7 +327,7 @@ export default function StoreOrderScreen() {
 }
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: '#f0f4f1' },
+  safeArea: { flex: 1, backgroundColor: COLORS.background },
   header: {
     flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
     padding: 16, backgroundColor: '#fff', borderBottomWidth: 1, borderBottomColor: '#eee',
@@ -374,7 +378,7 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 10,
-    backgroundColor: '#e8f5e9',
+    backgroundColor: COLORS.warningBg,
     alignItems: 'center',
     justifyContent: 'center',
   },

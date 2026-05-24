@@ -145,7 +145,7 @@ export default function LoginScreen() {
       <ScrollView contentContainerStyle={styles.container}>
 
         <View style={styles.logoBox}>
-          <Ionicons name="cube" size={44} color={COLORS.white} />
+          <Ionicons name="cube" size={44} color={COLORS.primary} />
         </View>
         <Text style={styles.title}>Kingfood WMS</Text>
         <Text style={styles.subtitle}>Warehouse Management System</Text>
@@ -164,7 +164,7 @@ export default function LoginScreen() {
                   <TextInput
                     style={styles.input}
                     placeholder="Email"
-                    placeholderTextColor="rgba(255,255,255,0.45)"
+                    placeholderTextColor="rgba(30,41,59,0.4)"
                     keyboardType="email-address"
                     autoCapitalize="none"
                     value={forgotEmail}
@@ -179,7 +179,7 @@ export default function LoginScreen() {
                   <TextInput
                     style={styles.input}
                     placeholder="Mã OTP"
-                    placeholderTextColor="rgba(255,255,255,0.45)"
+                    placeholderTextColor="rgba(30,41,59,0.4)"
                     keyboardType="number-pad"
                     autoCapitalize="none"
                     autoCorrect={false}
@@ -195,7 +195,7 @@ export default function LoginScreen() {
                   <TextInput
                     style={styles.input}
                     placeholder="Mật khẩu mới"
-                    placeholderTextColor="rgba(255,255,255,0.45)"
+                    placeholderTextColor="rgba(30,41,59,0.4)"
                     secureTextEntry
                     autoCapitalize="none"
                     value={newPassword}
@@ -221,7 +221,7 @@ export default function LoginScreen() {
                   <TextInput
                     style={styles.input}
                     placeholder="Email"
-                    placeholderTextColor="rgba(255,255,255,0.45)"
+                    placeholderTextColor="rgba(30,41,59,0.4)"
                     keyboardType="email-address"
                     autoCapitalize="none"
                     autoCorrect={false}
@@ -242,7 +242,7 @@ export default function LoginScreen() {
                         <Ionicons 
                           name={r.icon} 
                           size={24} 
-                          color={role === r.key ? COLORS.accent : 'rgba(255,255,255,0.7)'} 
+                          color={role === r.key ? COLORS.primary : '#94a3b8'} 
                         />
                         <Text style={[styles.roleLabel, role === r.key && styles.roleLabelActive]}>
                           {r.label}
@@ -254,7 +254,7 @@ export default function LoginScreen() {
                   <TextInput
                     style={styles.input}
                     placeholder="Tên đăng nhập"
-                    placeholderTextColor="rgba(255,255,255,0.45)"
+                    placeholderTextColor="rgba(30,41,59,0.4)"
                     autoCapitalize="none"
                     autoCorrect={false}
                     value={username}
@@ -266,7 +266,7 @@ export default function LoginScreen() {
               <TextInput
                 style={styles.input}
                 placeholder="Mật khẩu"
-                placeholderTextColor="rgba(255,255,255,0.45)"
+                placeholderTextColor="rgba(30,41,59,0.4)"
                 secureTextEntry={true}
                 autoCapitalize="none"
                 autoCorrect={false}
@@ -304,7 +304,7 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: COLORS.primary,
+    backgroundColor: COLORS.background,
   },
   container: {
     flexGrow: 1,
@@ -314,23 +314,23 @@ const styles = StyleSheet.create({
   },
   logoBox: {
     width: 80, height: 80,
-    backgroundColor: 'rgba(255,255,255,0.12)',
+    backgroundColor: COLORS.warningBg,
     borderRadius: 28,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 14,
     borderWidth: 2,
-    borderColor: 'rgba(255,255,255,0.2)',
+    borderColor: COLORS.border,
   },
   logoIcon: { fontSize: 40 },
   title: {
-    color: COLORS.white,
+    color: COLORS.primary,
     fontSize: 26,
     fontWeight: '900',
     marginBottom: 4,
   },
   subtitle: {
-    color: 'rgba(255,255,255,0.6)',
+    color: COLORS.textGray,
     fontSize: 13,
     marginBottom: 32,
   },
@@ -340,9 +340,9 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 14,
     borderWidth: 1.5,
-    borderColor: 'rgba(255,255,255,0.2)',
-    backgroundColor: 'rgba(255,255,255,0.1)',
-    color: COLORS.white,
+    borderColor: COLORS.border,
+    backgroundColor: COLORS.white,
+    color: COLORS.text,
     fontSize: 15,
   },
   roleRow: {
@@ -355,29 +355,30 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 12,
     borderWidth: 1.5,
-    borderColor: 'rgba(255,255,255,0.2)',
+    borderColor: COLORS.border,
+    backgroundColor: COLORS.white,
     alignItems: 'center',
     gap: 4,
   },
   roleBtnActive: {
-    backgroundColor: 'rgba(76,175,80,0.3)',
-    borderColor: COLORS.accent,
+    backgroundColor: COLORS.warningBg,
+    borderColor: COLORS.primary,
   },
   roleIcon: { fontSize: 22 },
   roleLabel: {
-    color: 'rgba(255,255,255,0.7)',
+    color: COLORS.textGray,
     fontSize: 11,
     fontWeight: '600',
     textAlign: 'center',
   },
-  roleLabelActive: { color: COLORS.white },
+  roleLabelActive: { color: COLORS.primary, fontWeight: '700' },
   zoneLabel: {
-    color: 'rgba(255,255,255,0.7)',
+    color: COLORS.text,
     fontSize: 13,
     fontWeight: '600',
   },
   loginBtn: {
-    backgroundColor: COLORS.accent,
+    backgroundColor: COLORS.primary,
     borderRadius: 14,
     padding: 17,
     alignItems: 'center',
@@ -389,19 +390,20 @@ const styles = StyleSheet.create({
     fontWeight: '800',
   },
   footer: {
-    color: 'rgba(255,255,255,0.35)',
+    color: COLORS.textGray,
+    opacity: 0.5,
     fontSize: 12,
     marginTop: 32,
   },
   storeLink: {
-    color: 'rgba(255,255,255,0.7)',
+    color: COLORS.primary,
     fontSize: 13,
     textAlign: 'center',
     marginTop: 16,
     textDecorationLine: 'underline',
   },
   backLink: {
-    color: 'rgba(255,255,255,0.7)',
+    color: COLORS.textGray,
     fontSize: 14,
     marginBottom: 8,
   },

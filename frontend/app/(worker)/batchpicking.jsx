@@ -131,6 +131,14 @@ export default function BatchPickingScreen() {
         { value: String(new Set(items.flatMap(i => i.bins.map(b => b.label))).size), label: 'Thùng đích' },
     ];
 
+    if (loading) {
+        return (
+            <SafeAreaView style={[styles.safeArea, { justifyContent: 'center', alignItems: 'center' }]}>
+                <ActivityIndicator color={COLORS.primary} size="large" />
+            </SafeAreaView>
+        );
+    }
+
     return (
         <SafeAreaView style={styles.safeArea}>
 
@@ -187,17 +195,13 @@ export default function BatchPickingScreen() {
                     <Text style={styles.cardTitle}>
                         Thứ tự Pick ({doneCount}/{items.length} xong)
                     </Text>
-                    {loading ? (
-                        <ActivityIndicator color={COLORS.primary} size="large" style={{ marginTop: 40 }} />
-                    ) : (
-                        items.map((item) => (
-                            <BatchItem
-                                key={item.id}
-                                item={item}
-                                onToggle={handleToggle}
-                            />
-                        ))
-                    )}
+                    {items.map((item) => (
+                        <BatchItem
+                            key={item.id}
+                            item={item}
+                            onToggle={handleToggle}
+                        />
+                    ))}
                 </View>
 
                 {/* Nút quét mã */}

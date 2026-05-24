@@ -137,6 +137,14 @@ export default function OrderSearchScreen() {
     );
   };
 
+  if (loading) {
+    return (
+      <SafeAreaView style={[styles.safeArea, { justifyContent: 'center', alignItems: 'center' }]}>
+        <ActivityIndicator color={COLORS.primary} size="large" />
+      </SafeAreaView>
+    );
+  }
+
   return (
     <SafeAreaView style={styles.safeArea}>
       {/* Header */}
@@ -182,24 +190,18 @@ export default function OrderSearchScreen() {
       </View>
 
       {/* Task List */}
-      {loading ? (
-        <View style={styles.center}>
-          <ActivityIndicator size="large" color={COLORS.primary} />
-        </View>
-      ) : (
-        <FlatList
-          data={filtered}
-          keyExtractor={(item) => String(item.id)}
-          renderItem={renderItem}
-          contentContainerStyle={styles.list}
-          ItemSeparatorComponent={() => <View style={styles.separator} />}
-          ListEmptyComponent={
-            <View style={styles.center}>
-              <Text style={styles.emptyText}>Không tìm thấy nhiệm vụ nào trong hôm nay</Text>
-            </View>
-          }
-        />
-      )}
+      <FlatList
+        data={filtered}
+        keyExtractor={(item) => String(item.id)}
+        renderItem={renderItem}
+        contentContainerStyle={styles.list}
+        ItemSeparatorComponent={() => <View style={styles.separator} />}
+        ListEmptyComponent={
+          <View style={styles.center}>
+            <Text style={styles.emptyText}>Không tìm thấy nhiệm vụ nào trong hôm nay</Text>
+          </View>
+        }
+      />
 
       <StaffBottomNav active="search" />
     </SafeAreaView>

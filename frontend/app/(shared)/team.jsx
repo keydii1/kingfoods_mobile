@@ -189,6 +189,14 @@ export default function TeamScreen(){
           return acc;
         }, { totalActive: 0, totalSKU: 0, zoneDetails: '' });
 
+    if (loading) {
+        return (
+            <SafeAreaView style={[styles.safeArea, { justifyContent: 'center', alignItems: 'center' }]}>
+                <ActivityIndicator color={COLORS.primary} size="large" />
+            </SafeAreaView>
+        );
+    }
+
     return(
         <SafeAreaView style = {styles.safeArea}>
             {/* Headder */}
@@ -212,9 +220,7 @@ export default function TeamScreen(){
                     </View>
                 </View>
                 {/* Danh sách từng khu vực */}
-                {loading ? (
-                    <ActivityIndicator color={COLORS.primary} size = 'large' style = {{marginTop : 40}} />
-                ): 
+                {
                 users.length > 0 ? (
                     users.map(user =>{
                         const perf = perfMap[user.id] || {};
@@ -228,7 +234,9 @@ export default function TeamScreen(){
                                     avatarColor: '#e8f5e9',
                                     avatarText: COLORS.primary,
                                     name: user.name || user.fullName || user.username,
-                                    order: user.currentTask || `Phân công: ${locName}`,
+                                    order: user.role === 'staff' 
+                                        ? `${(user.activePickingTasksCount || 0) > 0 ? `🔴 Đang làm (${user.activePickingTasksCount} task)` : '🟢 Đang rảnh'} · Phân công: ${locName}`
+                                        : `Quản lý · Phân công: ${locName}`,
                                     sku: perf.pickingSpeed !== undefined ? perf.pickingSpeed : null,
                                     skuColor: perf.warning ? COLORS.error : COLORS.primary,
                                     status: perf.totalItemsPicked > 0 ? 'good' : (perf.pickingSpeed !== undefined ? 'warn' : 'offline'),

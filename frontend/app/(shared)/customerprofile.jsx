@@ -81,6 +81,14 @@ export default function CustomerProfileScreen() {
     }
   };
 
+  if (loading) {
+    return (
+      <SafeAreaView style={[styles.safeArea, { justifyContent: 'center', alignItems: 'center' }]}>
+        <ActivityIndicator color={COLORS.primary} size="large" />
+      </SafeAreaView>
+    );
+  }
+
   return (
     <SafeAreaView style={styles.safeArea}>
       {/* Header */}
@@ -95,11 +103,7 @@ export default function CustomerProfileScreen() {
       </View>
 
       <ScrollView style={styles.scroll}>
-        {loading ? (
-          <ActivityIndicator color={COLORS.primary} size="large" style={{ marginTop: 40 }} />
-        ) : (
-          <>
-            {/* Banner */}
+        {/* Banner */}
             <View style={styles.banner}>
               <View style={styles.avatarContainer}>
                 <Ionicons name="storefront" size={42} color="#fff" />
@@ -163,8 +167,6 @@ export default function CustomerProfileScreen() {
               <InfoRow label="Địa chỉ" value={user?.branch?.address || 'Chưa cấu hình'} stacked />
               <InfoRow label="Trạng thái" value={user?.status === 'active' ? 'Hoạt động' : 'Tạm khóa'} valueColor={user?.status === 'active' ? COLORS.primary : COLORS.error} />
             </View>
-          </>
-        )}
       </ScrollView>
 
       {/* Bottom Nav */}

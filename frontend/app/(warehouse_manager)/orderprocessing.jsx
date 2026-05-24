@@ -88,6 +88,14 @@ export default function OrderProcessingScreen() {
     }
   };
 
+  if (loadingOrders) {
+    return (
+      <SafeAreaView style={[styles.safeArea, { justifyContent: 'center', alignItems: 'center' }]}>
+        <ActivityIndicator color={COLORS.primary} size="large" />
+      </SafeAreaView>
+    );
+  }
+
   return (
     <SafeAreaView style={styles.safeArea}>
       {/* Header */}
@@ -118,12 +126,7 @@ export default function OrderProcessingScreen() {
           </TouchableOpacity>
         ))}
       </View>
-      {loadingOrders ? (
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator color={COLORS.primary} size="large" />
-        </View>
-      ) : (
-        <ScrollView style={styles.scroll}>
+      <ScrollView style={styles.scroll}>
           {filteredOrders.length === 0 ? (
             <Text style={styles.emptyText}>Không có đơn hàng nào</Text>
           ) : (
@@ -151,7 +154,6 @@ export default function OrderProcessingScreen() {
             })
           )}
         </ScrollView>
-      )}
     </SafeAreaView>
   );
 }
