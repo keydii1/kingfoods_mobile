@@ -258,7 +258,13 @@ export default function StoreStatisticsScreen() {
     <SafeAreaView style={[styles.safeArea, { backgroundColor: activeBg }]} edges={['top', 'left', 'right']}>
       {/* Header */}
       <View style={[styles.header, { backgroundColor: activeCardBg, borderBottomColor: activeBorderColor }]}>
-        <TouchableOpacity onPress={() => router.back()}>
+        <TouchableOpacity onPress={() => {
+          if (router.canGoBack()) {
+            router.back();
+          } else {
+            router.replace('/storeorder');
+          }
+        }}>
           <Ionicons name="chevron-back" size={24} color={COLORS.primary} />
         </TouchableOpacity>
         <Text style={[styles.headerTitle, { color: activeTextColor }]}>{t.statsTitle}</Text>
@@ -374,6 +380,44 @@ export default function StoreStatisticsScreen() {
               <Ionicons name="document-text-outline" size={20} color={activeTextColor} style={{ marginRight: 6 }} />
               <Text style={[styles.cardTitle, { color: activeTextColor }]}>{t.ordersPeriod}</Text>
             </View>
+
+            {/* Premium Status Filters Tab Bar */}
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginBottom: 14, flexDirection: 'row' }}>
+              {[
+                { key: 'all', label: 'Tất cả', count: orders.length },
+                { key: 'pending', label: 'Chờ xác nhận', count: orders.filter(o => o.status === 'pending').length },
+                { key: 'processing', label: 'Đang xử lý', count: orders.filter(o => o.status === 'processing').length },
+                { key: 'delivered', label: 'Đã hoàn thành', count: orders.filter(o => o.status === 'delivered').length },
+                { key: 'cancelled', label: 'Đã hủy', count: orders.filter(o => o.status === 'cancelled').length },
+              ].map(tab => {
+                const isActive = selectedStatus === tab.key;
+                return (
+                  <TouchableOpacity
+                    key={tab.key}
+                    style={{
+                      paddingHorizontal: 12,
+                      paddingVertical: 6,
+                      borderRadius: 12,
+                      backgroundColor: isActive ? COLORS.primary : (darkMode ? '#2d2d2d' : '#f0f3f1'),
+                      marginRight: 8,
+                      borderWidth: 1.5,
+                      borderColor: isActive ? COLORS.primary : (darkMode ? '#3d3d3d' : '#e2e8e3'),
+                    }}
+                    onPress={() => setSelectedStatus(tab.key)}
+                    activeOpacity={0.8}
+                  >
+                    <Text style={{
+                      fontSize: 11,
+                      fontWeight: '700',
+                      color: isActive ? '#fff' : (darkMode ? '#d1d5db' : '#555'),
+                    }}>
+                      {tab.label} ({tab.count})
+                    </Text>
+                  </TouchableOpacity>
+                );
+              })}
+            </ScrollView>
+
             {filteredOrders.length > 0 ? (
               filteredOrders.map((o) => {
                 const meta = getOrderStatusMeta(o.status);

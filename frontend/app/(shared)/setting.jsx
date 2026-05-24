@@ -327,7 +327,17 @@ export default function SettingScreen(){
         <SafeAreaView style = {[styles.safeArea, { backgroundColor: activeBg }]}>
             {/* Header */}
             <View style = {[styles.header, { backgroundColor: activeCardBg, borderBottomColor: activeBorderColor }]}>
-                <TouchableOpacity onPress = {() => router.back()}>
+                <TouchableOpacity onPress = {() => {
+                    if (router.canGoBack()) {
+                        router.back();
+                    } else {
+                        if (isCustomer) {
+                            router.replace('/storeorder');
+                        } else {
+                            router.replace('/managerdashboard');
+                        }
+                    }
+                }}>
                     <Ionicons name="chevron-back" size={24} color={COLORS.primary} />
                 </TouchableOpacity>
                 <Text style = {[styles.headerTitle, { color: activeTextColor }]}>{isCustomer ? t.settings : t.appSettings}</Text>

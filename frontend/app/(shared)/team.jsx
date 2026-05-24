@@ -202,7 +202,13 @@ export default function TeamScreen(){
         <SafeAreaView style = {styles.safeArea}>
             {/* Headder */}
             <View style = {styles.header}>
-                <TouchableOpacity onPress = {() => router.back()}>
+                <TouchableOpacity onPress = {() => {
+                    if (router.canGoBack()) {
+                        router.back();
+                    } else {
+                        router.replace('/managerdashboard');
+                    }
+                }}>
                     <Ionicons name="chevron-back" size={24} color={COLORS.primary} />
                 </TouchableOpacity>
                 <Text style = {styles.headerTitle}>Team Overview</Text>
