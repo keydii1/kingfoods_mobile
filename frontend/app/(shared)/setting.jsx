@@ -11,6 +11,8 @@ import { validateNewPassword, PASSWORD_HINT } from '../../constants/passwordPoli
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useAppPreferences } from '../../contexts/AppPreferencesContext';
 import * as LocalAuthentication from 'expo-local-authentication';
+import ManagerBottomNav from '../../components/ManagerBottomNav';
+import StaffBottomNav from '../../components/StaffBottomNav';
 
 // Vietnamese/English translations dictionary
 const TRANSLATIONS = {
@@ -326,22 +328,8 @@ export default function SettingScreen(){
     return(
         <SafeAreaView style = {[styles.safeArea, { backgroundColor: activeBg }]}>
             {/* Header */}
-            <View style = {[styles.header, { backgroundColor: activeCardBg, borderBottomColor: activeBorderColor }]}>
-                <TouchableOpacity onPress = {() => {
-                    if (isCustomer) {
-                        router.replace('/storeorder');
-                    } else {
-                        if (userRole === 'admin' || userRole === 'warehouse_manager') {
-                            router.replace('/managerdashboard');
-                        } else {
-                            router.replace('/dashboard');
-                        }
-                    }
-                }}>
-                    <Ionicons name="chevron-back" size={24} color={COLORS.primary} />
-                </TouchableOpacity>
+            <View style = {[styles.header, { backgroundColor: activeCardBg, borderBottomColor: activeBorderColor, justifyContent: 'center' }]}>
                 <Text style = {[styles.headerTitle, { color: activeTextColor }]}>{isCustomer ? t.settings : t.appSettings}</Text>
-                <View style = {{width: 28}} />
             </View>
 
             <ScrollView style = {styles.scroll} contentContainerStyle={{ paddingBottom: 16 }}>
@@ -421,7 +409,7 @@ export default function SettingScreen(){
                         </View>
                     </>
                 ) : (
-                    userRole === 'staff' ? (
+                    (userRole === 'staff' || userRole === 'admin' || userRole === 'warehouse_manager') ? (
                         <>
                             {/* App Preferences */}
                             <View style={[styles.card, { backgroundColor: activeCardBg }]}>
@@ -448,82 +436,86 @@ export default function SettingScreen(){
                                     subColor={activeTextGrayColor}
                                     borderColor={activeBorderColor}
                                 />
-                                />
                             </View>
 
-                            {/* Notifications & staff specific alerts */}
-                            <View style = {[styles.card, { backgroundColor: activeCardBg }]}>
-                                <Text style = {[styles.cardTitle, { color: activeTextGrayColor }]}>Thông báo & cảnh báo</Text>
-                                <SettingRow
-                                icon="notifications-outline" iconBg="#e8f5e9" iconColor={COLORS.primary}
-                                name='Âm Thanh khi quét mã'
-                                sub='Phát tiếng beep khi quét thành công'
-                                value ={beepSound}
-                                onValueChange={(val) => {
-                                    setBeepSound(val);
-                                    saveSetting('beepSound', val);
-                                }}
-                                textColor={activeTextColor}
-                                subColor={activeTextGrayColor}
-                                borderColor={activeBorderColor}
-                                />
-                                <SettingRow 
-                                icon="alert-circle-outline" iconBg="#ffebee" iconColor={COLORS.error}
-                                name ='Rung khi quét sai'
-                                sub='Rung mạnh khi phát hiện sai sản phẩm'
-                                value = {vibrate}
-                                onValueChange ={(val) => {
-                                    setVibrate(val);
-                                    saveSetting('vibrate', val);
-                                }}
-                                textColor={activeTextColor}
-                                subColor={activeTextGrayColor}
-                                borderColor={activeBorderColor}
-                                />
-                                <SettingRow
-                                icon="warning-outline" iconBg="#fff3e0" iconColor="#e65100"
-                                name ='Cảnh báo khi năng suất thấp'
-                                sub ='Dưới 50 SKU/h sẽ thông báo'
-                                value = {lowAlert}
-                                onValueChange ={(val) => {
-                                    setLowAlert(val);
-                                    saveSetting('lowAlert', val);
-                                }}
-                                textColor={activeTextColor}
-                                subColor={activeTextGrayColor}
-                                borderColor={activeBorderColor}
-                                />
-                            </View>
+                            {/* Notifications & staff specific alerts - Staff only */}
+                            {userRole === 'staff' && (
+                                <View style = {[styles.card, { backgroundColor: activeCardBg }]}>
+                                    <Text style = {[styles.cardTitle, { color: activeTextGrayColor }]}>Thông báo & cảnh báo</Text>
+                                    <SettingRow
+                                    icon="notifications-outline" iconBg="#e8f5e9" iconColor={COLORS.primary}
+                                    name='Âm Thanh khi quét mã'
+                                    sub='Phát tiếng beep khi quét thành công'
+                                    value ={beepSound}
+                                    onValueChange={(val) => {
+                                        setBeepSound(val);
+                                        saveSetting('beepSound', val);
+                                    }}
+                                    textColor={activeTextColor}
+                                    subColor={activeTextGrayColor}
+                                    borderColor={activeBorderColor}
+                                    />
+                                    <SettingRow 
+                                    icon="alert-circle-outline" iconBg="#ffebee" iconColor={COLORS.error}
+                                    name ='Rung khi quét sai'
+                                    sub='Rung mạnh khi phát hiện sai sản phẩm'
+                                    value = {vibrate}
+                                    onValueChange ={(val) => {
+                                        setVibrate(val);
+                                        saveSetting('vibrate', val);
+                                    }}
+                                    textColor={activeTextColor}
+                                    subColor={activeTextGrayColor}
+                                    borderColor={activeBorderColor}
+                                    />
+                                    <SettingRow
+                                    icon="warning-outline" iconBg="#fff3e0" iconColor="#e65100"
+                                    name ='Cảnh báo khi năng suất thấp'
+                                    sub ='Dưới 50 SKU/h sẽ thông báo'
+                                    value = {lowAlert}
+                                    onValueChange ={(val) => {
+                                        setLowAlert(val);
+                                        saveSetting('lowAlert', val);
+                                    }}
+                                    textColor={activeTextColor}
+                                    subColor={activeTextGrayColor}
+                                    borderColor={activeBorderColor}
+                                    />
+                                </View>
+                            )}
 
-                            <View style = {[styles.card, { backgroundColor: activeCardBg }]}>
-                                <Text style = {[styles.cardTitle, { color: activeTextGrayColor }]}>Kết nối & dữ liệu</Text>
-                                <SettingRow 
-                                icon="wifi-outline" iconBg="#e3f2fd" iconColor="#1565c0"
-                                name ='Chế độ Offline'
-                                sub='Offline Mode'
-                                value = {offlineMode}
-                                onValueChange = {(val) => {
-                                    setOfflineMode(val);
-                                    saveSetting('offlineMode', val);
-                                }}
-                                textColor={activeTextColor}
-                                subColor={activeTextGrayColor}
-                                borderColor={activeBorderColor}
-                                />
-                                <SettingRow 
-                                icon="sync-outline" iconBg="#fff3e0" iconColor="#e65100"
-                                name = 'Tự đồng bộ khi có mạng'
-                                sub = 'Gửi dữ liệu offline khi kết nối lại'
-                                value = {autoSync}
-                                onValueChange = {(val) => {
-                                    setAutoSync(val);
-                                    saveSetting('autoSync', val);
-                                }}
-                                textColor={activeTextColor}
-                                subColor={activeTextGrayColor}
-                                borderColor={activeBorderColor}
-                                />
-                            </View>
+                            {/* Connection & Data - Staff only */}
+                            {userRole === 'staff' && (
+                                <View style = {[styles.card, { backgroundColor: activeCardBg }]}>
+                                    <Text style = {[styles.cardTitle, { color: activeTextGrayColor }]}>Kết nối & dữ liệu</Text>
+                                    <SettingRow 
+                                    icon="wifi-outline" iconBg="#e3f2fd" iconColor="#1565c0"
+                                    name ='Chế độ Offline'
+                                    sub='Offline Mode'
+                                    value = {offlineMode}
+                                    onValueChange = {(val) => {
+                                        setOfflineMode(val);
+                                        saveSetting('offlineMode', val);
+                                    }}
+                                    textColor={activeTextColor}
+                                    subColor={activeTextGrayColor}
+                                    borderColor={activeBorderColor}
+                                    />
+                                    <SettingRow 
+                                    icon="sync-outline" iconBg="#fff3e0" iconColor="#e65100"
+                                    name = 'Tự đồng bộ khi có mạng'
+                                    sub = 'Gửi dữ liệu offline khi kết nối lại'
+                                    value = {autoSync}
+                                    onValueChange = {(val) => {
+                                        setAutoSync(val);
+                                        saveSetting('autoSync', val);
+                                    }}
+                                    textColor={activeTextColor}
+                                    subColor={activeTextGrayColor}
+                                    borderColor={activeBorderColor}
+                                    />
+                                </View>
+                            )}
                         </>
                     ) : null
                 )}
@@ -605,14 +597,14 @@ export default function SettingScreen(){
                 </TouchableOpacity>
             </ScrollView>
 
-            {/* Bottom Nav for customer */}
-            {isCustomer && (
+            {/* Bottom Nav based on role */}
+            {isCustomer ? (
                 <View style={[styles.bottomNav, { backgroundColor: activeCardBg, borderTopColor: activeBorderColor, paddingBottom: Math.max(insets.bottom, 8) }]}>
-                    <TouchableOpacity style={styles.navItem} onPress={() => router.push('/storeorder')}>
+                    <TouchableOpacity style={styles.navItem} onPress={() => router.replace('/storeorder')}>
                         <Ionicons name="cart-outline" size={22} color={activeTextGrayColor} style={{ marginBottom: 2 }} />
                         <Text style={[styles.navLabel, { color: activeTextGrayColor }]}>Đặt hàng</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.navItem} onPress={() => router.push('/storestatistics')}>
+                    <TouchableOpacity style={styles.navItem} onPress={() => router.replace('/storestatistics')}>
                         <Ionicons name="stats-chart-outline" size={22} color={activeTextGrayColor} style={{ marginBottom: 2 }} />
                         <Text style={[styles.navLabel, { color: activeTextGrayColor }]}>Thống kê</Text>
                     </TouchableOpacity>
@@ -620,11 +612,17 @@ export default function SettingScreen(){
                         <Ionicons name="settings" size={22} color={COLORS.primary} style={{ marginBottom: 2 }} />
                         <Text style={[styles.navLabel, styles.navActive]}>Cài đặt</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.navItem} onPress={() => router.push('/customerprofile')}>
+                    <TouchableOpacity style={styles.navItem} onPress={() => router.replace('/customerprofile')}>
                         <Ionicons name="person-outline" size={22} color={activeTextGrayColor} style={{ marginBottom: 2 }} />
                         <Text style={[styles.navLabel, { color: activeTextGrayColor }]}>Cá nhân</Text>
                     </TouchableOpacity>
                 </View>
+            ) : (
+                userRole === 'admin' || userRole === 'warehouse_manager' ? (
+                    <ManagerBottomNav active="setting" />
+                ) : (
+                    <StaffBottomNav active="profile" />
+                )
             )}
         </SafeAreaView>
     );

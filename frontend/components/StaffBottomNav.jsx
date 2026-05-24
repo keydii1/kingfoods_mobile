@@ -2,6 +2,7 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { router, usePathname } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../constants/colors';
+import { useAppPreferences } from '../contexts/AppPreferencesContext';
 
 const tabs = [
   { key: 'dashboard', icon: 'home', iconOutline: 'home-outline', label: 'Trang chủ', route: '/dashboard' },
@@ -12,9 +13,14 @@ const tabs = [
 
 export default function StaffBottomNav({ active }) {
   const pathname = usePathname();
+  const { darkMode } = useAppPreferences();
+
+  const activeNavBg = darkMode ? '#1e1e1e' : '#fff';
+  const activeBorderColor = darkMode ? '#2d2d2d' : '#f1f5f9';
+  const inactiveTextColor = darkMode ? '#9ca3af' : '#94a3b8';
 
   return (
-    <View style={styles.bottomNav}>
+    <View style={[styles.bottomNav, { backgroundColor: activeNavBg, borderTopColor: activeBorderColor }]}>
       {tabs.map((tab) => {
         const isActive = pathname === tab.route || active === tab.key;
         return (
@@ -28,10 +34,10 @@ export default function StaffBottomNav({ active }) {
             <Ionicons
               name={isActive ? tab.icon : tab.iconOutline}
               size={22}
-              color={isActive ? COLORS.primary : '#94a3b8'}
+              color={isActive ? COLORS.primary : inactiveTextColor}
               style={{ marginBottom: 2 }}
             />
-            <Text style={[styles.navLabel, isActive && styles.navActive]}>
+            <Text style={[styles.navLabel, { color: inactiveTextColor }, isActive && styles.navActive]}>
               {tab.label}
             </Text>
           </TouchableOpacity>

@@ -4,10 +4,11 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { useState, useEffect } from 'react';
 import { Ionicons } from '@expo/vector-icons';
-import { getDashboardStatus, getIncidents, getOrders, getUsers, assignPickingTask } from '../../constants/services/api';
+import { getDashboardStatus, getIncidents, getOrders, getUsers, assignPickingTask, getCachedData } from '../../constants/services/api';
 import { COLORS } from '../../constants/colors';
 import { Alert } from '../../utils/appAlert';
 import ManagerBottomNav from '../../components/ManagerBottomNav';
+import { useAppPreferences } from '../../contexts/AppPreferencesContext';
 
 // 4 KPI cards initial config (Ionicons name)
 const kpis = [
@@ -25,36 +26,26 @@ const zones = [
     { icon: 'gift-outline', name: 'KM',        pct: 78, color: '#1976d2'},
 ];
 
-// Sản phẩm thiếu (Ionicons name)
-const shortages = [
-    { id: '1', icon: 'cube-outline',
-      name: 'Nước tương Chinsu 500ml',
-      loc: 'Kệ 14.07.B · Khu Bánh kẹo',
-      who: 'mai · 15:28' },
-    { id: '2', icon: 'fast-food-outline',
-      name: 'Snack Oishi Tôm 68g',
-      loc: 'Kệ 22.08.A · Khu Bánh kẹo',
-      who: 'đức · 14:12' },
-];
-
 // component KPI card
 function KpiCard ({item}){
+    const { darkMode } = useAppPreferences();
     return (
         <View style = {[styles.kpiCard, {backgroundColor: item.color}]} >
             <Ionicons name={item.icon} size={28} color={item.textColor} />
             <Text style = {[styles.kpiValue, {color: item.textColor}]}>{item.value}</Text>
-            <Text style = {styles.kpiLabel}>{item.label}</Text>
+            <Text style = {[styles.kpiLabel, {color: darkMode ? '#cbd5e1' : '#888'}]}>{item.label}</Text>
         </View>
     );
 }
 
 // Component cho 1 dòng tiến độ khu vực
 function ZoneRow({zone}){
+    const { darkMode } = useAppPreferences();
     return(
         <View style = {styles.zoneRow}>
             <Ionicons name={zone.icon} size={18} color={zone.color} style={{ marginRight: 6 }} />
-            <Text style = {styles.zoneName}>{zone.name}</Text>
-            <View style = {styles.zoneBar}>
+            <Text style = {[styles.zoneName, {color: darkMode ? '#cbd5e1' : '#444'}]}>{zone.name}</Text>
+            <View style = {[styles.zoneBar, {backgroundColor: darkMode ? '#2d2d2d' : '#f0f0f0'}]}>
                 <View style = {[styles.zoneBarFill, {width: `${zone.pct}%`, backgroundColor: zone.color}]}/> 
             </View>
             <Text style = {[styles.zonePct, {color: zone.color}]} >{zone.pct}%</Text>
@@ -64,19 +55,20 @@ function ZoneRow({zone}){
 
 // component cho sản phẩm bị Thiếu
 function ShortageItem({item}){
+    const { darkMode } = useAppPreferences();
     return(
-        <View style={styles.shortageRow}>
-            <View style={styles.shortageIconContainer}>
+        <View style={[styles.shortageRow, {borderBottomColor: darkMode ? '#2d2d2d' : '#f0f0f0'}]}>
+            <View style={[styles.shortageIconContainer, {backgroundColor: darkMode ? '#451a1a' : '#ffebee'}]}>
                 <Ionicons name="alert-circle" size={18} color="#e53935" />
             </View>
             <View style={styles.shortageInfo}>
-                <Text style={styles.shortageName}>{item.name}</Text>
+                <Text style={[styles.shortageName, {color: darkMode ? '#cbd5e1' : '#222'}]}>{item.name}</Text>
                 <View style={styles.shortageMeta}>
-                    <View style={styles.shortageLocBadge}>
-                        <Ionicons name="location-outline" size={10} color="#666" style={{ marginRight: 2 }} />
-                        <Text style={styles.shortageLocText}>{item.loc}</Text>
+                    <View style={[styles.shortageLocBadge, {backgroundColor: darkMode ? '#2d2d2d' : '#f5f5f5', borderColor: darkMode ? '#444' : '#e0e0e0'}]}>
+                        <Ionicons name="location-outline" size={10} color={darkMode ? '#9ca3af' : '#666'} style={{ marginRight: 2 }} />
+                        <Text style={[styles.shortageLocText, {color: darkMode ? '#cbd5e1' : '#555'}]}>{item.loc}</Text>
                     </View>
-                    <Text style={styles.shortageWhoText}>{item.who}</Text>
+                    <Text style={[styles.shortageWhoText, {color: darkMode ? '#9ca3af' : '#888'}]}>{item.who}</Text>
                 </View>
             </View>
         </View>
@@ -84,9 +76,22 @@ function ShortageItem({item}){
 }
 
 export default function ManagerDashboardScreen(){
-    const [stats, setStats] = useState(null);
-    const [incidents, setIncidents] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const cachedStats = getCachedData('/admin/dashboard/stats');
+    const cachedIncidents = getCachedData('/admin/picking/incidents');
+
+    const { darkMode } = useAppPreferences();
+
+    const activeBg = darkMode ? '#121212' : '#f0f4f1';
+    const activeHeaderBg = darkMode ? '#1e1e1e' : '#fff';
+    const activeBorderColor = darkMode ? '#2d2d2d' : '#eee';
+    const activeTextColor = darkMode ? '#f3f4f6' : '#222';
+    const activeCardBg = darkMode ? '#1e1e1e' : '#fff';
+    const activeTextGrayColor = darkMode ? '#9ca3af' : '#888';
+    const activeInputBg = darkMode ? '#2d2d2d' : '#f8f9fa';
+
+    const [stats, setStats] = useState(cachedStats);
+    const [incidents, setIncidents] = useState(cachedIncidents || []);
+    const [loading, setLoading] = useState(!cachedStats);
 
     // Picking dispatch states
     const [showDispatchModal, setShowDispatchModal] = useState(false);
@@ -100,7 +105,6 @@ export default function ManagerDashboardScreen(){
 
     const openDispatchModal = async () => {
         setShowDispatchModal(true);
-        // If we don't have orders/staff loaded yet, show the activity indicator
         if (ordersList.length === 0 || staffList.length === 0) {
             setLoadingDispatchData(true);
         }
@@ -140,7 +144,6 @@ export default function ManagerDashboardScreen(){
             if (item.productId) {
                 const productZoneId = item.product?.category?.location?.id;
                 
-                // Sort staff specifically for this item: 1. Free first, 2. Zone match second, 3. Workload third
                 const sortedStaff = [...staffList].sort((a, b) => {
                     const aTasks = a.activePickingTasksCount || 0;
                     const bTasks = b.activePickingTasksCount || 0;
@@ -223,7 +226,6 @@ export default function ManagerDashboardScreen(){
                 tasks
             });
             
-            // Close modal and reset states instantly before running heavy refreshes
             setShowDispatchModal(false);
             setSelectedPickingOrderId('');
             setPickingAssignments({});
@@ -231,7 +233,6 @@ export default function ManagerDashboardScreen(){
             
             Alert.alert('Phân công thành công', `Đã chia nhỏ và tạo thành công ${tasks.length} lệnh nhặt hàng (Picking Tasks) trực tiếp gửi đến thiết bị của các nhân viên được chọn!`);
             
-            // Run background refreshes concurrently to avoid UI freezing
             Promise.all([
                 getDashboardStatus().then(res => setStats(res)).catch(e => console.log('Bg stats error:', e.message)),
                 getIncidents().then(res => setIncidents(Array.isArray(res) ? res : [])).catch(e => console.log('Bg incidents error:', e.message)),
@@ -253,7 +254,6 @@ export default function ManagerDashboardScreen(){
     const s = stats || {};
     const totals = s.totals || {};
     
-    // Dynamic KPI calculations
     const totalPickedItems = totals.itemsPicked ?? 0;
     const activeWorkers  = s.staffPerformance?.filter(p => p.totalItemsPicked > 0).length ?? 0;
     const totalWorkers   = s.staffPerformance?.length ?? 0;
@@ -262,27 +262,23 @@ export default function ManagerDashboardScreen(){
 
     const displayKpis = [
         { icon: 'checkmark-circle-outline', value: String(totalPickedItems),
-          label: 'Sản phẩm đã pick', color: COLORS.successBg, textColor: COLORS.primary },
+          label: 'Sản phẩm đã pick', color: darkMode ? '#14532d' : COLORS.successBg, textColor: darkMode ? '#4ade80' : COLORS.primary },
         { icon: 'people-outline', value: `${activeWorkers}/${totalWorkers}`,
-          label: 'NV hoạt động', color: '#e3f2fd', textColor: '#1565c0' },
+          label: 'NV hoạt động', color: darkMode ? '#1e3a8a' : '#e3f2fd', textColor: darkMode ? '#60a5fa' : '#1565c0' },
         { icon: 'warning-outline', value: String(pendingIncidentsCount),
-          label: 'Báo thiếu', color: COLORS.warningBg, textColor: '#e65100' },
+          label: 'Báo thiếu', color: darkMode ? '#7c2d12' : COLORS.warningBg, textColor: darkMode ? '#fb923c' : '#e65100' },
         { icon: 'cube-outline', value: String(pendingOrders),
-          label: 'Đơn tồn', color: '#f3e5f5', textColor: '#7b1fa2' },
+          label: 'Đơn tồn', color: darkMode ? '#581c87' : '#f3e5f5', textColor: darkMode ? '#c084fc' : '#7b1fa2' },
     ];
 
-    // Dynamic hourly productivity mapping
     const maxHourPicked = Math.max(...(s.hourlyProductivity?.map(h => h.totalItemsPicked) || [1]));
 
-    // Dynamic Top picking staff sorted by speed
     const topStaff = [...(s.staffPerformance || [])]
         .sort((a, b) => b.pickingSpeed - a.pickingSpeed)
         .slice(0, 3);
 
-    // Dynamic Underperforming staff below 60 sp/giờ
     const underperformingStaff = s.staffPerformance?.filter(p => p.warning && p.totalItemsPicked > 0) || [];
 
-    // Dynamic pending shortages
     const displayShortages = incidents.filter(inc => inc.status === 'pending').slice(0, 3).map(inc => {
         let productName = 'Sản phẩm';
         let locationName = 'Chưa định vị';
@@ -317,7 +313,6 @@ export default function ManagerDashboardScreen(){
     useEffect(() => {
         async function fetchAll(){
             try{
-                // Parallel prefetching of dashboard stats, incidents, orders, and users
                 const [statsRes, incidentsRes, ordersRes, usersRes] = await Promise.allSettled([
                     getDashboardStatus(),
                     getIncidents(),
@@ -363,34 +358,32 @@ export default function ManagerDashboardScreen(){
 
     if (loading) {
         return (
-            <SafeAreaView style={[styles.safeArea, { justifyContent: 'center', alignItems: 'center' }]}>
+            <SafeAreaView style={[styles.safeArea, { backgroundColor: activeBg, justifyContent: 'center', alignItems: 'center' }]}>
                 <ActivityIndicator color={COLORS.primary} size="large" />
             </SafeAreaView>
         );
     }
 
     return(
-        <SafeAreaView style={styles.safeArea}>
+        <SafeAreaView style={[styles.safeArea, { backgroundColor: activeBg }]}>
 
             {/* Header */}
-            <View style={styles.header}>
-                <Text style={styles.headerTitle}>Manager Dashboard</Text>
-                <View style={styles.liveBadge}>
+            <View style={[styles.header, { backgroundColor: activeHeaderBg, borderBottomColor: activeBorderColor }]}>
+                <Text style={[styles.headerTitle, { color: activeTextColor }]}>Manager Dashboard</Text>
+                <View style={[styles.liveBadge, darkMode && { backgroundColor: '#451a1a' }]}>
                     <View style={styles.liveDot} />
-                    <Text style={styles.liveText}>LIVE</Text>
+                    <Text style={[styles.liveText, darkMode && { color: '#f87171' }]}>LIVE</Text>
                 </View>
             </View>
 
             {/* Body */}
-            <ScrollView style = {styles.scroll}>
-                {/* 4 thẻ card 2x2 */}
+            <ScrollView style = {[styles.scroll, { backgroundColor: activeBg }]}>
                 <View style = {styles.kpiGrid}>
                     {displayKpis.map((item, index) => (
                         <KpiCard key = {index}  item = {item} />
                     ))}
                 </View>
 
-                {/* BÀN ĐIỀU PHỐI & CHIA TASK (NHƯ WEB) */}
                 <TouchableOpacity 
                     style={{
                         backgroundColor: COLORS.primary,
@@ -420,59 +413,59 @@ export default function ManagerDashboardScreen(){
                 </TouchableOpacity>
 
                 {/* Phân tích trạng thái đơn hàng */}
-                <View style = {styles.card}>
-                    <Text style = {styles.cardTitle}>Phân tích trạng thái đơn hàng</Text>
+                <View style = {[styles.card, { backgroundColor: activeCardBg }]}>
+                    <Text style = {[styles.cardTitle, { color: activeTextColor }]}>Phân tích trạng thái đơn hàng</Text>
                     <View style = {styles.orderStatsGrid}>
-                        <View style = {styles.orderStatBox}>
-                            <View style = {[styles.orderStatIconContainer, { backgroundColor: '#e3f2fd' }]}>
-                                <Ionicons name="time-outline" size={20} color="#2196f3" />
+                        <View style = {[styles.orderStatBox, { backgroundColor: darkMode ? '#2d2d2d' : '#f8f9fa' }]}>
+                            <View style = {[styles.orderStatIconContainer, { backgroundColor: darkMode ? '#1e3a8a' : '#e3f2fd' }]}>
+                                <Ionicons name="time-outline" size={20} color={darkMode ? '#60a5fa' : "#2196f3"} />
                             </View>
                             <View style = {styles.orderStatInfo}>
-                                <Text style = {styles.orderStatValue}>{s.ordersByStatus?.pending ?? 0}</Text>
-                                <Text style = {styles.orderStatLabel}>Chờ xử lý / Đơn mới</Text>
+                                <Text style = {[styles.orderStatValue, { color: activeTextColor }]}>{s.ordersByStatus?.pending ?? 0}</Text>
+                                <Text style = {[styles.orderStatLabel, { color: activeTextGrayColor }]}>Chờ xử lý / Đơn mới</Text>
                             </View>
                         </View>
-                        <View style = {styles.orderStatBox}>
-                            <View style = {[styles.orderStatIconContainer, { backgroundColor: '#fff3e0' }]}>
-                                <Ionicons name="cube-outline" size={20} color="#ff9800" />
+                        <View style = {[styles.orderStatBox, { backgroundColor: darkMode ? '#2d2d2d' : '#f8f9fa' }]}>
+                            <View style = {[styles.orderStatIconContainer, { backgroundColor: darkMode ? '#7c2d12' : '#fff3e0' }]}>
+                                <Ionicons name="cube-outline" size={20} color={darkMode ? '#fb923c' : "#ff9800"} />
                             </View>
                             <View style = {styles.orderStatInfo}>
-                                <Text style = {styles.orderStatValue}>{s.ordersByStatus?.processing ?? 0}</Text>
-                                <Text style = {styles.orderStatLabel}>Đang soạn hàng</Text>
+                                <Text style = {[styles.orderStatValue, { color: activeTextColor }]}>{s.ordersByStatus?.processing ?? 0}</Text>
+                                <Text style = {[styles.orderStatLabel, { color: activeTextGrayColor }]}>Đang soạn hàng</Text>
                             </View>
                         </View>
-                        <View style = {styles.orderStatBox}>
-                            <View style = {[styles.orderStatIconContainer, { backgroundColor: '#e8f5e9' }]}>
-                                <Ionicons name="checkmark-circle-outline" size={20} color="#4caf50" />
+                        <View style = {[styles.orderStatBox, { backgroundColor: darkMode ? '#2d2d2d' : '#f8f9fa' }]}>
+                            <View style = {[styles.orderStatIconContainer, { backgroundColor: darkMode ? '#14532d' : '#e8f5e9' }]}>
+                                <Ionicons name="checkmark-circle-outline" size={20} color={darkMode ? '#4ade80' : "#4caf50"} />
                             </View>
                             <View style = {styles.orderStatInfo}>
-                                <Text style = {styles.orderStatValue}>{(s.ordersByStatus?.delivered ?? 0) + (s.ordersByStatus?.shipped ?? 0)}</Text>
-                                <Text style = {styles.orderStatLabel}>Thành công</Text>
+                                <Text style = {[styles.orderStatValue, { color: activeTextColor }]}>{(s.ordersByStatus?.delivered ?? 0) + (s.ordersByStatus?.shipped ?? 0)}</Text>
+                                <Text style = {[styles.orderStatLabel, { color: activeTextGrayColor }]}>Thành công</Text>
                             </View>
                         </View>
-                        <View style = {styles.orderStatBox}>
-                            <View style = {[styles.orderStatIconContainer, { backgroundColor: '#ffebee' }]}>
-                                <Ionicons name="close-circle-outline" size={20} color="#f44336" />
+                        <View style = {[styles.orderStatBox, { backgroundColor: darkMode ? '#2d2d2d' : '#f8f9fa' }]}>
+                            <View style = {[styles.orderStatIconContainer, { backgroundColor: darkMode ? '#7f1d1d' : '#ffebee' }]}>
+                                <Ionicons name="close-circle-outline" size={20} color={darkMode ? '#f87171' : "#f44336"} />
                             </View>
                             <View style = {styles.orderStatInfo}>
-                                <Text style = {styles.orderStatValue}>{s.ordersByStatus?.cancelled ?? 0}</Text>
-                                <Text style = {styles.orderStatLabel}>Đã huỷ</Text>
+                                <Text style = {[styles.orderStatValue, { color: activeTextColor }]}>{s.ordersByStatus?.cancelled ?? 0}</Text>
+                                <Text style = {[styles.orderStatLabel, { color: activeTextGrayColor }]}>Đã huỷ</Text>
                             </View>
                         </View>
                     </View>
                 </View>
 
                 {/* Live Hourly Productivity Chart */}
-                <View style = {styles.card}>
-                    <Text style = {styles.cardTitle}>Năng suất soạn hàng theo giờ</Text>
+                <View style = {[styles.card, { backgroundColor: activeCardBg }]}>
+                    <Text style = {[styles.cardTitle, { color: activeTextColor }]}>Năng suất soạn hàng theo giờ</Text>
                     {s.hourlyProductivity && s.hourlyProductivity.length > 0 ? (
                         s.hourlyProductivity.slice(0, 4).map((h) => {
                             const pct = Math.round((h.totalItemsPicked / maxHourPicked) * 100) || 0;
                             return (
                                 <View style = {styles.zoneRow} key={h.hour}>
                                     <Ionicons name="time-outline" size={18} color={COLORS.primary} style={{ marginRight: 6 }} />
-                                    <Text style = {styles.zoneName}>{h.label}</Text>
-                                    <View style = {styles.zoneBar}>
+                                    <Text style = {[styles.zoneName, { color: activeTextColor }]}>{h.label}</Text>
+                                    <View style = {[styles.zoneBar, { backgroundColor: darkMode ? '#2d2d2d' : '#f0f0f0' }]}>
                                         <View style = {[styles.zoneBarFill, {width: `${pct}%`, backgroundColor: COLORS.primary}]}/> 
                                     </View>
                                     <Text style = {[styles.zonePct, {color: COLORS.primary, width: 70}]} >{h.totalItemsPicked} sp</Text>
@@ -481,55 +474,55 @@ export default function ManagerDashboardScreen(){
                         })
                     ) : (
                         <View style={{ alignItems: 'center', paddingVertical: 15 }}>
-                            <Text style={{ fontSize: 13, color: '#888' }}>Chưa ghi nhận năng suất soạn hàng theo giờ</Text>
+                            <Text style={{ fontSize: 13, color: activeTextGrayColor }}>Chưa ghi nhận năng suất soạn hàng theo giờ</Text>
                         </View>
                     )}
                 </View>
 
                 {/* Top Picking Staff Leaderboard */}
-                <View style = {styles.card}>
-                    <Text style = {styles.cardTitle}>Picker xuất sắc nhất hôm nay</Text>
+                <View style = {[styles.card, { backgroundColor: activeCardBg }]}>
+                    <Text style = {[styles.cardTitle, { color: activeTextColor }]}>Picker xuất sắc nhất hôm nay</Text>
                     {topStaff.length > 0 ? (
                         topStaff.map((staff, idx) => {
                             const icons = ['🥇', '🥈', '🥉'];
                             return (
-                                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 10, borderBottomWidth: idx < topStaff.length - 1 ? 0.5 : 0, borderColor: '#eee' }} key={staff.staffId}>
+                                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 10, borderBottomWidth: idx < topStaff.length - 1 ? 0.5 : 0, borderColor: activeBorderColor }} key={staff.staffId}>
                                     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
                                         <Text style={{ fontSize: 16 }}>{icons[idx] || '👤'}</Text>
-                                        <Text style={{ fontSize: 14, fontWeight: '600', color: COLORS.text }}>{staff.name}</Text>
+                                        <Text style={{ fontSize: 14, fontWeight: '600', color: activeTextColor }}>{staff.name}</Text>
                                     </View>
                                     <View style={{ alignItems: 'flex-end' }}>
                                         <Text style={{ fontSize: 13, fontWeight: '700', color: COLORS.primary }}>{staff.pickingSpeed} sp/giờ</Text>
-                                        <Text style={{ fontSize: 10, color: '#888' }}>Đã soạn: {staff.totalItemsPicked} sp</Text>
+                                        <Text style={{ fontSize: 10, color: activeTextGrayColor }}>Đã soạn: {staff.totalItemsPicked} sp</Text>
                                     </View>
                                 </View>
                             );
                         })
                     ) : (
                         <View style={{ alignItems: 'center', paddingVertical: 10 }}>
-                            <Text style={{ fontSize: 13, color: '#888' }}>Chưa có số liệu picker</Text>
+                            <Text style={{ fontSize: 13, color: activeTextGrayColor }}>Chưa có số liệu picker</Text>
                         </View>
                     )}
                 </View>
 
                 {/* Alert cảnh báo năng suất làm việc */}
                 {underperformingStaff.length > 0 ? (
-                    <View style = {styles.alert}>
-                        <Ionicons name="warning-outline" size={24} color="#e65100" style={{ marginRight: 4 }} />
+                    <View style = {[styles.alert, darkMode && { backgroundColor: '#7c2d12', borderLeftColor: '#fb923c' }]}>
+                        <Ionicons name="warning-outline" size={24} color={darkMode ? '#fb923c' : "#e65100"} style={{ marginRight: 4 }} />
                         <View style = {styles.alertBody}>
-                            <Text style = {styles.alertTitle}>{underperformingStaff.length} nhân viên dưới mức năng suất</Text>
-                            <Text style={styles.alertSub}>
+                            <Text style = {[styles.alertTitle, { color: darkMode ? '#fb923c' : '#e65100' }]}>{underperformingStaff.length} nhân viên dưới mức năng suất</Text>
+                            <Text style={[styles.alertSub, { color: darkMode ? '#cbd5e1' : '#666' }]}>
                                 {underperformingStaff.slice(0, 3).map(p => `${p.name} (${p.pickingSpeed} sp/giờ)`).join(', ')}
                                 {underperformingStaff.length > 3 ? ` và ${underperformingStaff.length - 3} nhân viên khác` : ''} đang dưới định mức tối thiểu 6.5 sp/giờ.
                             </Text>
                         </View>
                     </View>
                 ) : (
-                    <View style = {[styles.alert, { backgroundColor: '#e8f5e9', borderLeftColor: COLORS.success }]}>
-                        <Ionicons name="checkmark-circle-outline" size={24} color={COLORS.primary} style={{ marginRight: 4 }} />
+                    <View style = {[styles.alert, { backgroundColor: darkMode ? '#14532d' : '#e8f5e9', borderLeftColor: COLORS.success }]}>
+                        <Ionicons name="checkmark-circle-outline" size={24} color={darkMode ? '#4ade80' : COLORS.primary} style={{ marginRight: 4 }} />
                         <View style = {styles.alertBody}>
-                            <Text style = {[styles.alertTitle, { color: COLORS.primary }]}>Năng suất Picker hoàn hảo!</Text>
-                            <Text style={styles.alertSub}>
+                            <Text style = {[styles.alertTitle, { color: darkMode ? '#4ade80' : COLORS.primary }]}>Năng suất Picker hoàn hảo!</Text>
+                            <Text style={[styles.alertSub, { color: darkMode ? '#cbd5e1' : '#666' }]}>
                                 Tất cả nhân viên soạn hàng đều đạt hiệu suất tiêu chuẩn (trên 6.5 sp/giờ).
                             </Text>
                         </View>
@@ -537,8 +530,8 @@ export default function ManagerDashboardScreen(){
                 )}
 
                 {/* Sản phẩm còn thiếu */}
-                <View style = {styles.card}>
-                    <Text style = {styles.cardTitle}>Sản phẩm báo thiếu tại kệ</Text>
+                <View style = {[styles.card, { backgroundColor: activeCardBg }]}>
+                    <Text style = {[styles.cardTitle, { color: activeTextColor }]}>Sản phẩm báo thiếu tại kệ</Text>
                     {displayShortages.length > 0 ? (
                         displayShortages.map((item) => (
                             <ShortageItem key = {item.id} item = {item} />
@@ -546,7 +539,7 @@ export default function ManagerDashboardScreen(){
                     ) : (
                         <View style={{ alignItems: 'center', paddingVertical: 20 }}>
                             <Ionicons name="checkmark-circle" size={40} color={COLORS.primary} />
-                            <Text style={{ fontSize: 13, color: '#888', marginTop: 8, fontWeight: '500' }}>
+                            <Text style={{ fontSize: 13, color: activeTextGrayColor, marginTop: 8, fontWeight: '500' }}>
                                 Không có báo thiếu nào cần xử lý!
                             </Text>
                         </View>
@@ -566,22 +559,22 @@ export default function ManagerDashboardScreen(){
                     onRequestClose={() => setShowDispatchModal(false)}
                 >
                     <View style={styles.modalOverlay}>
-                        <View style={[styles.modalContent, { height: '90%' }]}>
+                        <View style={[styles.modalContent, { height: '90%', backgroundColor: activeCardBg }]}>
                             
                             {/* Modal Header */}
-                            <View style={styles.modalHeader}>
+                            <View style={[styles.modalHeader, { borderBottomColor: activeBorderColor }]}>
                                 <View style={{ flex: 1, marginRight: 8 }}>
-                                    <Text style={styles.modalTitle}>Bàn Điều Phối & Chia Task</Text>
-                                    <Text style={styles.modalSub}>Phân tách đơn sỉ & giao việc cho nhân viên kho</Text>
+                                    <Text style={[styles.modalTitle, { color: activeTextColor }]}>Bàn Điều Phối & Chia Task</Text>
+                                    <Text style={[styles.modalSub, { color: activeTextGrayColor }]}>Phân tách đơn sỉ & giao việc cho nhân viên kho</Text>
                                 </View>
                                 <TouchableOpacity onPress={() => setShowDispatchModal(false)} style={styles.closeBtn}>
-                                    <Ionicons name="close-circle" size={28} color="#aaa" />
+                                    <Ionicons name="close-circle" size={28} color={darkMode ? '#666' : "#aaa"} />
                                 </TouchableOpacity>
                             </View>
 
                             <ScrollView style={styles.modalBody} keyboardShouldPersistTaps="handled">
                                 {/* 1. LỰA CHỌN ĐƠN HÀNG */}
-                                <Text style={styles.sectionTitle}>1. Lựa chọn Đơn đặt hàng đang xử lý: *</Text>
+                                <Text style={[styles.sectionTitle, { color: activeTextColor }]}>1. Lựa chọn Đơn đặt hàng đang xử lý: *</Text>
                                 {loadingDispatchData ? (
                                     <ActivityIndicator color={COLORS.primary} size="small" style={{ marginVertical: 12 }} />
                                 ) : selectedPickingOrderId ? (
@@ -594,7 +587,7 @@ export default function ManagerDashboardScreen(){
                                                 borderWidth: 1.5, 
                                                 borderColor: COLORS.primary, 
                                                 borderRadius: 14, 
-                                                backgroundColor: COLORS.warningBg, 
+                                                backgroundColor: darkMode ? '#2d2d2d' : COLORS.warningBg, 
                                                 padding: 14, 
                                                 marginVertical: 8,
                                                 flexDirection: 'row',
@@ -608,16 +601,16 @@ export default function ManagerDashboardScreen(){
                                                             Đơn hàng #{order.id}
                                                         </Text>
                                                     </View>
-                                                    <Text style={{ fontSize: 12, fontWeight: '700', color: COLORS.text, marginTop: 4 }}>
+                                                    <Text style={{ fontSize: 12, fontWeight: '700', color: activeTextColor, marginTop: 4 }}>
                                                         {order.branch?.name || order.customer?.name || 'Kingfood Partner'}
                                                     </Text>
-                                                    <Text style={{ fontSize: 11, color: COLORS.textGray, marginTop: 2 }}>
-                                                        Tổng tiền: <Text style={{ fontWeight: '750', color: COLORS.text }}>{order.totalPrice ? order.totalPrice.toLocaleString() : '0'}đ</Text> · <Text style={{ fontWeight: '750', color: COLORS.primary }}>{order.orderDetails?.length || 0} SKU</Text>
+                                                    <Text style={{ fontSize: 11, color: activeTextGrayColor, marginTop: 2 }}>
+                                                        Tổng tiền: <Text style={{ fontWeight: '750', color: activeTextColor }}>{order.totalPrice ? order.totalPrice.toLocaleString() : '0'}đ</Text> · <Text style={{ fontWeight: '750', color: COLORS.primary }}>{order.orderDetails?.length || 0} SKU</Text>
                                                     </Text>
                                                 </View>
                                                 <TouchableOpacity 
                                                     style={{ 
-                                                        backgroundColor: '#fff', 
+                                                        backgroundColor: darkMode ? '#1e1e1e' : '#fff', 
                                                         borderWidth: 1.5, 
                                                         borderColor: COLORS.primary, 
                                                         paddingHorizontal: 12, 
@@ -635,41 +628,41 @@ export default function ManagerDashboardScreen(){
                                         );
                                     })()
                                 ) : ordersList.length > 0 ? (
-                                    <View style={{ borderWidth: 1.5, borderColor: COLORS.border, borderRadius: 12, overflow: 'hidden', backgroundColor: '#fff', marginVertical: 8 }}>
+                                    <View style={{ borderWidth: 1.5, borderColor: activeBorderColor, borderRadius: 12, overflow: 'hidden', backgroundColor: activeCardBg, marginVertical: 8 }}>
                                         {ordersList.map(order => (
                                             <TouchableOpacity
                                                 key={order.id}
                                                 style={{
                                                     padding: 14,
                                                     borderBottomWidth: 1,
-                                                    borderBottomColor: '#eee',
-                                                    backgroundColor: '#fff',
+                                                    borderBottomColor: activeBorderColor,
+                                                    backgroundColor: activeCardBg,
                                                 }}
                                                 onPress={() => handleSelectOrder(order.id)}
                                             >
                                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                                                    <Text style={{ fontWeight: '700', fontSize: 13, color: COLORS.text }}>
+                                                    <Text style={{ fontWeight: '700', fontSize: 13, color: activeTextColor }}>
                                                         Đơn hàng #{order.id}
                                                     </Text>
                                                     <Text style={{ fontSize: 12, fontWeight: '800', color: COLORS.primary }}>
                                                         {order.totalPrice ? order.totalPrice.toLocaleString() : '0'}đ
                                                     </Text>
                                                 </View>
-                                                <Text style={{ fontSize: 11, color: COLORS.textGray, marginTop: 4 }}>
+                                                <Text style={{ fontSize: 11, color: activeTextGrayColor, marginTop: 4 }}>
                                                     Chi nhánh: {order.branch?.name || order.customer?.name || 'Kingfood Partner'} · {order.orderDetails?.length || 0} SKU
                                                 </Text>
                                             </TouchableOpacity>
                                         ))}
                                     </View>
                                 ) : (
-                                    <Text style={{ color: '#888', fontStyle: 'italic', marginVertical: 12 }}>Không có đơn đặt hàng nào đang ở trạng thái Đang Soạn Hàng.</Text>
+                                    <Text style={{ color: activeTextGrayColor, fontStyle: 'italic', marginVertical: 12 }}>Không có đơn đặt hàng nào đang ở trạng thái Đang Soạn Hàng.</Text>
                                 )}
 
                                 {/* 2. PHÂN TÁCH SẢN PHẨM & CHỌN PICKER */}
                                 {selectedPickingOrderId ? (
                                     <View style={{ marginTop: 16 }}>
                                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-                                            <Text style={styles.sectionTitle}>2. Phân chia sản phẩm & Chọn nhân viên:</Text>
+                                            <Text style={[styles.sectionTitle, { color: activeTextColor }]}>2. Phân chia sản phẩm & Chọn nhân viên:</Text>
                                             <View style={{ backgroundColor: COLORS.primary, paddingHorizontal: 10, paddingVertical: 4, borderRadius: 12 }}>
                                                 <Text style={{ fontSize: 11, fontWeight: '700', color: '#fff' }}>Đơn #{selectedPickingOrderId}</Text>
                                             </View>
@@ -679,32 +672,32 @@ export default function ManagerDashboardScreen(){
                                         <View style={{
                                             flexDirection: 'row',
                                             alignItems: 'center',
-                                            backgroundColor: '#f8fafc',
+                                            backgroundColor: activeInputBg,
                                             borderRadius: 12,
                                             paddingHorizontal: 12,
                                             paddingVertical: 8,
                                             marginBottom: 14,
                                             borderWidth: 1.5,
-                                            borderColor: COLORS.border,
+                                            borderColor: activeBorderColor,
                                             gap: 8
                                         }}>
-                                            <Ionicons name="search" size={16} color="#64748b" />
+                                            <Ionicons name="search" size={16} color={activeTextGrayColor} />
                                             <TextInput
                                                 placeholder="Tìm tên nhân viên hoặc username..."
-                                                placeholderTextColor="#94a3b8"
+                                                placeholderTextColor={darkMode ? '#6b7280' : "#94a3b8"}
                                                 value={staffSearchQuery}
                                                 onChangeText={setStaffSearchQuery}
                                                 style={{
                                                     flex: 1,
                                                     fontSize: 13,
-                                                    color: COLORS.text,
+                                                    color: activeTextColor,
                                                     padding: 0,
                                                     height: 22
                                                 }}
                                             />
                                             {staffSearchQuery ? (
                                                 <TouchableOpacity onPress={() => setStaffSearchQuery('')}>
-                                                    <Ionicons name="close-circle" size={18} color="#94a3b8" />
+                                                    <Ionicons name="close-circle" size={18} color={activeTextGrayColor} />
                                                 </TouchableOpacity>
                                             ) : null}
                                         </View>
@@ -724,11 +717,11 @@ export default function ManagerDashboardScreen(){
                                                     key={idx} 
                                                     style={{
                                                         borderWidth: 1.5,
-                                                        borderColor: isChecked ? COLORS.border : '#eee',
+                                                        borderColor: isChecked ? activeBorderColor : (darkMode ? '#2d2d2d' : '#eee'),
                                                         borderRadius: 14,
                                                         padding: 12,
                                                         marginBottom: 8,
-                                                        backgroundColor: isChecked ? '#fff' : '#f9f9f9',
+                                                        backgroundColor: isChecked ? activeCardBg : (darkMode ? '#151515' : '#f9f9f9'),
                                                         opacity: isChecked ? 1 : 0.6
                                                     }}
                                                 >
@@ -745,27 +738,27 @@ export default function ManagerDashboardScreen(){
                                                             <Ionicons 
                                                                 name={isChecked ? "checkbox" : "square-outline"} 
                                                                 size={22} 
-                                                                color={isChecked ? COLORS.primary : '#aaa'} 
+                                                                color={isChecked ? COLORS.primary : (darkMode ? '#555' : '#aaa')} 
                                                             />
                                                         </TouchableOpacity>
 
                                                         <View style={{ flex: 1 }}>
-                                                            <Text style={{ fontWeight: '700', fontSize: 13, color: COLORS.text }}>{product.name}</Text>
-                                                            <Text style={{ fontSize: 11, color: COLORS.textGray, marginTop: 2 }}>
+                                                            <Text style={{ fontWeight: '700', fontSize: 13, color: activeTextColor }}>{product.name}</Text>
+                                                            <Text style={{ fontSize: 11, color: activeTextGrayColor, marginTop: 2 }}>
                                                                 SKU: {product.sku || `SKU-${product.id}`} · <Text style={{ fontWeight: '700', color: COLORS.primary }}>{product.category?.name || 'Khu vực kệ'}</Text>
                                                             </Text>
                                                         </View>
 
                                                         <View style={{ alignItems: 'flex-end' }}>
-                                                            <Text style={{ fontSize: 11, color: COLORS.textGray }}>Yêu cầu</Text>
-                                                            <Text style={{ fontSize: 14, fontWeight: '800', color: COLORS.text }}>{item.quantity} {product.unit || 'cái'}</Text>
+                                                            <Text style={{ fontSize: 11, color: activeTextGrayColor }}>Yêu cầu</Text>
+                                                            <Text style={{ fontSize: 14, fontWeight: '800', color: activeTextColor }}>{item.quantity} {product.unit || 'cái'}</Text>
                                                         </View>
                                                     </View>
 
                                                     {/* Assignment Picker Row */}
                                                     {isChecked && (
-                                                        <View style={{ marginTop: 12, borderTopWidth: 1, borderTopColor: '#f0f0f0', paddingTop: 10 }}>
-                                                            <Text style={{ fontSize: 11, fontWeight: '700', color: COLORS.text, marginBottom: 6 }}>Nhân viên Picker phụ trách:</Text>
+                                                        <View style={{ marginTop: 12, borderTopWidth: 1, borderTopColor: activeBorderColor, paddingTop: 10 }}>
+                                                            <Text style={{ fontSize: 11, fontWeight: '700', color: activeTextColor, marginBottom: 6 }}>Nhân viên Picker phụ trách:</Text>
                                                             
                                                             {(() => {
                                                                 const filteredStaff = staffList.filter(s => {
@@ -779,7 +772,7 @@ export default function ManagerDashboardScreen(){
                                                                 }
 
                                                                 if (filteredStaff.length === 0) {
-                                                                    return <Text style={{ fontStyle: 'italic', color: '#64748b', fontSize: 11, marginVertical: 4 }}>Không tìm thấy nhân viên phù hợp</Text>;
+                                                                    return <Text style={{ fontStyle: 'italic', color: activeTextGrayColor, fontSize: 11, marginVertical: 4 }}>Không tìm thấy nhân viên phù hợp</Text>;
                                                                 }
 
                                                                 return (
@@ -815,8 +808,8 @@ export default function ManagerDashboardScreen(){
                                                                                         paddingVertical: 6,
                                                                                         borderRadius: 8,
                                                                                         borderWidth: 1,
-                                                                                        borderColor: isSelected ? COLORS.primary : '#ddd',
-                                                                                        backgroundColor: isSelected ? COLORS.warningBg : '#fff',
+                                                                                        borderColor: isSelected ? COLORS.primary : (darkMode ? '#444' : '#ddd'),
+                                                                                        backgroundColor: isSelected ? (darkMode ? '#451a1a' : COLORS.warningBg) : activeCardBg,
                                                                                         flexDirection: 'row',
                                                                                         alignItems: 'center',
                                                                                         gap: 6
@@ -828,8 +821,8 @@ export default function ManagerDashboardScreen(){
                                                                                         }));
                                                                                     }}
                                                                                 >
-                                                                                    <Ionicons name="person" size={11} color={isSelected ? COLORS.primary : '#888'} />
-                                                                                    <Text style={{ fontSize: 12, fontWeight: isSelected ? '700' : '500', color: isSelected ? COLORS.primary : '#444' }}>
+                                                                                    <Ionicons name="person" size={11} color={isSelected ? COLORS.primary : activeTextGrayColor} />
+                                                                                    <Text style={{ fontSize: 12, fontWeight: isSelected ? '700' : '500', color: isSelected ? COLORS.primary : activeTextColor }}>
                                                                                         {staff.name || staff.username}
                                                                                     </Text>
                                                                                     
@@ -837,7 +830,7 @@ export default function ManagerDashboardScreen(){
                                                                                         fontSize: 9, 
                                                                                         fontWeight: '700', 
                                                                                         color: isFree ? COLORS.success : COLORS.error, 
-                                                                                        backgroundColor: isFree ? COLORS.successBg : COLORS.errorBg, 
+                                                                                        backgroundColor: isFree ? (darkMode ? '#14532d' : COLORS.successBg) : (darkMode ? '#7f1d1d' : COLORS.errorBg), 
                                                                                         paddingHorizontal: 4, 
                                                                                         borderRadius: 4 
                                                                                     }}>
@@ -845,7 +838,7 @@ export default function ManagerDashboardScreen(){
                                                                                     </Text>
 
                                                                                     {isZoneMatch && (
-                                                                                        <Text style={{ fontSize: 9, fontWeight: '700', color: COLORS.primary, backgroundColor: '#ffe5db', paddingHorizontal: 4, borderRadius: 4 }}>
+                                                                                        <Text style={{ fontSize: 9, fontWeight: '700', color: COLORS.primary, backgroundColor: darkMode ? '#7c2d12' : '#ffe5db', paddingHorizontal: 4, borderRadius: 4 }}>
                                                                                             Khu vực Kệ
                                                                                         </Text>
                                                                                     )}
@@ -858,7 +851,7 @@ export default function ManagerDashboardScreen(){
 
                                                             {/* Quantity adjustment */}
                                                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 10 }}>
-                                                                <Text style={{ fontSize: 11, fontWeight: '700', color: COLORS.text }}>Số lượng giao nhặt:</Text>
+                                                                <Text style={{ fontSize: 11, fontWeight: '700', color: activeTextColor }}>Số lượng giao nhặt:</Text>
                                                                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
                                                                     <TouchableOpacity
                                                                         onPress={() => {
@@ -867,11 +860,11 @@ export default function ManagerDashboardScreen(){
                                                                                 [productId]: { ...prev[productId], quantity: Math.max(1, parseInt(assignedQty) - 1) }
                                                                             }));
                                                                         }}
-                                                                        style={{ width: 26, height: 26, borderRadius: 13, backgroundColor: '#f0f0f0', alignItems: 'center', justifyContent: 'center' }}
+                                                                        style={{ width: 26, height: 26, borderRadius: 13, backgroundColor: darkMode ? '#2d2d2d' : '#f0f0f0', alignItems: 'center', justifyContent: 'center' }}
                                                                     >
-                                                                        <Text style={{ fontWeight: '700', fontSize: 14 }}>−</Text>
+                                                                        <Text style={{ fontWeight: '700', fontSize: 14, color: activeTextColor }}>−</Text>
                                                                     </TouchableOpacity>
-                                                                    <Text style={{ fontSize: 13, fontWeight: '800', minWidth: 20, textAlign: 'center' }}>{assignedQty}</Text>
+                                                                    <Text style={{ fontSize: 13, fontWeight: '800', minWidth: 20, textAlign: 'center', color: activeTextColor }}>{assignedQty}</Text>
                                                                     <TouchableOpacity
                                                                         onPress={() => {
                                                                             setPickingAssignments(prev => ({
@@ -879,9 +872,9 @@ export default function ManagerDashboardScreen(){
                                                                                 [productId]: { ...prev[productId], quantity: Math.min(item.quantity, parseInt(assignedQty) + 1) }
                                                                             }));
                                                                         }}
-                                                                        style={{ width: 26, height: 26, borderRadius: 13, backgroundColor: '#f0f0f0', alignItems: 'center', justifyContent: 'center' }}
+                                                                        style={{ width: 26, height: 26, borderRadius: 13, backgroundColor: darkMode ? '#2d2d2d' : '#f0f0f0', alignItems: 'center', justifyContent: 'center' }}
                                                                     >
-                                                                        <Text style={{ fontWeight: '700', fontSize: 14 }}>+</Text>
+                                                                        <Text style={{ fontWeight: '700', fontSize: 14, color: activeTextColor }}>+</Text>
                                                                     </TouchableOpacity>
                                                                 </View>
                                                             </View>
@@ -896,7 +889,7 @@ export default function ManagerDashboardScreen(){
 
                             {/* Modal Footer */}
                             {selectedPickingOrderId && (
-                                <View style={styles.modalFooter}>
+                                <View style={[styles.modalFooter, { backgroundColor: activeCardBg, borderTopColor: activeBorderColor }]}>
                                     <TouchableOpacity
                                         style={[
                                             styles.actionBtn,

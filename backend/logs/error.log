@@ -617,3 +617,164 @@
 2026-05-21 04:25:04:254 [31merror[39m: [31m[POST /api/v1/client/orders] [401] Invalid or expired token[39m
 2026-05-21 04:26:16:2616 [31merror[39m: [31m[POST /api/v1/client/orders] [401] Invalid or expired token[39m
 2026-05-21 04:26:19:2619 [31merror[39m: [31m[POST /api/v1/client/orders] [401] Invalid or expired token[39m
+2026-05-24 00:07:57:757 [31merror[39m: [31m[GET /api/v1/admin/users] [401] Invalid or expired token[39m
+2026-05-24 00:07:57:757 [31merror[39m: [31m[GET /api/v1/admin/locations?limit=1000] [401] Invalid or expired token[39m
+2026-05-24 00:07:57:757 [31merror[39m: [31m[GET /api/v1/admin/dashboard/stats] [401] Invalid or expired token[39m
+2026-05-24 00:10:43:1043 [31merror[39m: [31m[POST /api/v1/auth/customer/login] [401] Invalid email or password[39m
+2026-05-24 01:12:22:1222 [31merror[39m: [31m[POST /api/v1/client/orders] [401] Invalid or expired token[39m
+2026-05-24 01:12:24:1224 [31merror[39m: [31m[POST /api/v1/client/orders] [401] Invalid or expired token[39m
+2026-05-24 01:12:25:1225 [31merror[39m: [31m[POST /api/v1/client/orders] [401] Invalid or expired token[39m
+2026-05-24 01:12:25:1225 [31merror[39m: [31m[POST /api/v1/client/orders] [401] Invalid or expired token[39m
+2026-05-24 01:12:26:1226 [31merror[39m: [31m[POST /api/v1/client/orders] [401] Invalid or expired token[39m
+2026-05-24 01:12:26:1226 [31merror[39m: [31m[POST /api/v1/client/orders] [401] Invalid or expired token[39m
+2026-05-24 01:12:26:1226 [31merror[39m: [31m[POST /api/v1/client/orders] [401] Invalid or expired token[39m
+2026-05-24 01:12:26:1226 [31merror[39m: [31m[POST /api/v1/client/orders] [401] Invalid or expired token[39m
+2026-05-24 01:12:27:1227 [31merror[39m: [31m[POST /api/v1/client/orders] [401] Invalid or expired token[39m
+2026-05-24 01:12:27:1227 [31merror[39m: [31m[POST /api/v1/client/orders] [401] Invalid or expired token[39m
+2026-05-24 01:12:27:1227 [31merror[39m: [31m[POST /api/v1/client/orders] [401] Invalid or expired token[39m
+2026-05-24 01:12:27:1227 [31merror[39m: [31m[POST /api/v1/client/orders] [401] Invalid or expired token[39m
+2026-05-24 01:12:27:1227 [31merror[39m: [31m[POST /api/v1/client/orders] [401] Invalid or expired token[39m
+2026-05-24 01:12:28:1228 [31merror[39m: [31m[POST /api/v1/client/orders] [401] Invalid or expired token[39m
+2026-05-24 01:12:28:1228 [31merror[39m: [31m[POST /api/v1/client/orders] [401] Invalid or expired token[39m
+2026-05-24 01:12:28:1228 [31merror[39m: [31m[POST /api/v1/client/orders] [401] Invalid or expired token[39m
+2026-05-24 01:13:58:1358 [31merror[39m: [31m[POST /api/v1/client/orders] [401] Invalid or expired token[39m
+2026-05-24 01:13:59:1359 [31merror[39m: [31m[POST /api/v1/client/orders] [401] Invalid or expired token[39m
+2026-05-24 01:15:00:150 [31merror[39m: [31m[POST /api/v1/auth/customer/login] [401] Invalid email or password[39m
+2026-05-24 02:17:55:1755 [31merror[39m: [31m[GET /api/v1/admin/orders] [401] Invalid or expired token[39m
+2026-05-24 02:17:55:1755 [31merror[39m: [31m[GET /api/v1/admin/users] [401] Invalid or expired token[39m
+2026-05-24 02:19:56:1956 [31merror[39m: [31m[GET /api/v1/admin/dashboard/stats] [401] Invalid or expired token[39m
+2026-05-24 02:19:56:1956 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [401] Invalid or expired token[39m
+2026-05-24 02:20:02:202 [31merror[39m: [31m[GET /api/v1/admin/dashboard/stats] [401] Invalid or expired token[39m
+2026-05-24 02:20:02:202 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [401] Invalid or expired token[39m
+2026-05-24 02:20:27:2027 [31merror[39m: [31m[GET /api/v1/admin/dashboard/stats] [401] Invalid or expired token[39m
+2026-05-24 02:20:27:2027 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [401] Invalid or expired token[39m
+2026-05-24 02:22:33:2233 [31merror[39m: [31m[GET /api/v1/admin/dashboard/stats] [401] Invalid or expired token[39m
+2026-05-24 02:22:33:2233 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [401] Invalid or expired token[39m
+2026-05-24 02:32:25:3225 [31merror[39m: [31m[GET /api/v1/admin/dashboard/stats] [401] Invalid or expired token[39m
+2026-05-24 02:32:25:3225 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [401] Invalid or expired token[39m
+2026-05-24 12:17:17:1717 [31merror[39m: [31m[POST /api/v1/auth/customer/login] [500] read EADDRNOTAVAIL[39m
+2026-05-24 12:17:17:1717 [31merror[39m: [31mQueryFailedError: read EADDRNOTAVAIL[39m
+[31m    at Query.onResult (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/typeorm/src/driver/mysql/MysqlQueryRunner.ts:248:33)[39m
+[31m    at PoolConnection._notifyError (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/base/connection.js:267:21)[39m
+[31m    at PoolConnection._handleFatalError (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/base/connection.js:222:10)[39m
+[31m    at PoolConnection._handleNetworkError (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/base/connection.js:235:10)[39m
+[31m    at Socket.emit (node:events:519:28)[39m
+[31m    at Socket.emit (node:domain:489:12)[39m
+[31m    at emitErrorNT (node:internal/streams/destroy:170:8)[39m
+[31m    at emitErrorCloseNT (node:internal/streams/destroy:129:3)[39m
+[31m    at processTicksAndRejections (node:internal/process/task_queues:90:21)[39m
+2026-05-24 12:18:18:1818 [31merror[39m: [31m[POST /api/v1/auth/customer/login] [500] read EADDRNOTAVAIL[39m
+2026-05-24 12:18:18:1818 [31merror[39m: [31mQueryFailedError: read EADDRNOTAVAIL[39m
+[31m    at Query.onResult (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/typeorm/src/driver/mysql/MysqlQueryRunner.ts:248:33)[39m
+[31m    at PoolConnection._notifyError (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/base/connection.js:267:21)[39m
+[31m    at PoolConnection._handleFatalError (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/base/connection.js:222:10)[39m
+[31m    at PoolConnection._handleNetworkError (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/base/connection.js:235:10)[39m
+[31m    at Socket.emit (node:events:519:28)[39m
+[31m    at Socket.emit (node:domain:489:12)[39m
+[31m    at emitErrorNT (node:internal/streams/destroy:170:8)[39m
+[31m    at emitErrorCloseNT (node:internal/streams/destroy:129:3)[39m
+[31m    at processTicksAndRejections (node:internal/process/task_queues:90:21)[39m
+2026-05-24 12:21:10:2110 [31merror[39m: [31m[POST /api/v1/auth/customer/login] [500] read EADDRNOTAVAIL[39m
+2026-05-24 12:21:10:2110 [31merror[39m: [31mQueryFailedError: read EADDRNOTAVAIL[39m
+[31m    at Query.onResult (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/typeorm/src/driver/mysql/MysqlQueryRunner.ts:248:33)[39m
+[31m    at PoolConnection._notifyError (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/base/connection.js:267:21)[39m
+[31m    at PoolConnection._handleFatalError (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/base/connection.js:222:10)[39m
+[31m    at PoolConnection._handleNetworkError (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/base/connection.js:235:10)[39m
+[31m    at Socket.emit (node:events:519:28)[39m
+[31m    at Socket.emit (node:domain:489:12)[39m
+[31m    at emitErrorNT (node:internal/streams/destroy:170:8)[39m
+[31m    at emitErrorCloseNT (node:internal/streams/destroy:129:3)[39m
+[31m    at processTicksAndRejections (node:internal/process/task_queues:90:21)[39m
+2026-05-24 12:23:25:2325 [31merror[39m: [31m[POST /api/v1/auth/customer/login] [500] read EADDRNOTAVAIL[39m
+2026-05-24 12:23:25:2325 [31merror[39m: [31mQueryFailedError: read EADDRNOTAVAIL[39m
+[31m    at Query.onResult (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/typeorm/src/driver/mysql/MysqlQueryRunner.ts:248:33)[39m
+[31m    at PoolConnection._notifyError (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/base/connection.js:267:21)[39m
+[31m    at PoolConnection._handleFatalError (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/base/connection.js:222:10)[39m
+[31m    at PoolConnection._handleNetworkError (/Users/hohoangson/Documents/my_study/Application_v1/backend/node_modules/mysql2/lib/base/connection.js:235:10)[39m
+[31m    at Socket.emit (node:events:519:28)[39m
+[31m    at Socket.emit (node:domain:489:12)[39m
+[31m    at emitErrorNT (node:internal/streams/destroy:170:8)[39m
+[31m    at emitErrorCloseNT (node:internal/streams/destroy:129:3)[39m
+[31m    at processTicksAndRejections (node:internal/process/task_queues:90:21)[39m
+2026-05-24 12:26:01:261 [31merror[39m: [31m[POST /api/v1/auth/customer/login] [401] Invalid email or password[39m
+2026-05-24 12:26:31:2631 [31merror[39m: [31m[POST /api/v1/auth/customer/login] [401] Invalid email or password[39m
+2026-05-24 12:45:43:4543 [31merror[39m: [31m[POST /api/v1/client/orders] [401] Invalid or expired token[39m
+2026-05-24 12:45:54:4554 [31merror[39m: [31m[POST /api/v1/client/orders] [401] Invalid or expired token[39m
+2026-05-24 12:45:55:4555 [31merror[39m: [31m[POST /api/v1/client/orders] [401] Invalid or expired token[39m
+2026-05-24 12:45:55:4555 [31merror[39m: [31m[POST /api/v1/client/orders] [401] Invalid or expired token[39m
+2026-05-24 12:45:56:4556 [31merror[39m: [31m[POST /api/v1/client/orders] [401] Invalid or expired token[39m
+2026-05-24 12:45:56:4556 [31merror[39m: [31m[POST /api/v1/client/orders] [401] Invalid or expired token[39m
+2026-05-24 12:45:56:4556 [31merror[39m: [31m[POST /api/v1/client/orders] [401] Invalid or expired token[39m
+2026-05-24 12:45:57:4557 [31merror[39m: [31m[POST /api/v1/client/orders] [401] Invalid or expired token[39m
+2026-05-24 12:45:57:4557 [31merror[39m: [31m[POST /api/v1/client/orders] [401] Invalid or expired token[39m
+2026-05-24 13:07:33:733 [31merror[39m: [31m[POST /api/v1/auth/customer/login] [401] Invalid email or password[39m
+2026-05-24 13:08:07:87 [31merror[39m: [31m[POST /api/v1/auth/customer/login] [401] Invalid email or password[39m
+2026-05-24 13:08:17:817 [31merror[39m: [31m[POST /api/v1/auth/customer/login] [401] Invalid email or password[39m
+2026-05-24 13:24:36:2436 [31merror[39m: [31m[GET /api/v1/client/orders/statistics?startDate=2026-05-01&endDate=2026-05-24] [401] Invalid or expired token[39m
+2026-05-24 13:24:38:2438 [31merror[39m: [31m[GET /api/v1/client/orders/statistics?startDate=2026-05-17&endDate=2026-05-24] [401] Invalid or expired token[39m
+2026-05-24 13:24:38:2438 [31merror[39m: [31m[GET /api/v1/client/orders/statistics?startDate=2026-05-17&endDate=2026-05-24] [401] Invalid or expired token[39m
+2026-05-24 13:24:41:2441 [31merror[39m: [31m[GET /api/v1/client/orders/statistics?startDate=2026-05-01&endDate=2026-05-24] [401] Invalid or expired token[39m
+2026-05-24 13:24:41:2441 [31merror[39m: [31m[GET /api/v1/client/orders/statistics?startDate=2026-05-01&endDate=2026-05-24] [401] Invalid or expired token[39m
+2026-05-24 13:29:19:2919 [31merror[39m: [31m[GET /api/v1/client/orders/statistics?startDate=2026-05-17&endDate=2026-05-24] [401] Invalid or expired token[39m
+2026-05-24 13:29:19:2919 [31merror[39m: [31m[GET /api/v1/client/orders/statistics?startDate=2026-05-17&endDate=2026-05-24] [401] Invalid or expired token[39m
+2026-05-24 13:29:21:2921 [31merror[39m: [31m[GET /api/v1/client/orders/statistics?startDate=2026-05-24&endDate=2026-05-24] [401] Invalid or expired token[39m
+2026-05-24 13:29:21:2921 [31merror[39m: [31m[GET /api/v1/client/orders/statistics?startDate=2026-05-24&endDate=2026-05-24] [401] Invalid or expired token[39m
+2026-05-24 14:08:50:850 [31merror[39m: [31m[GET /api/v1/client/orders/detail/1058] [401] Invalid or expired token[39m
+2026-05-24 14:08:50:850 [31merror[39m: [31m[GET /api/v1/client/orders/detail/1057] [401] Invalid or expired token[39m
+2026-05-24 14:08:50:850 [31merror[39m: [31m[GET /api/v1/client/orders/detail/1060] [401] Invalid or expired token[39m
+2026-05-24 14:08:51:851 [31merror[39m: [31m[GET /api/v1/client/orders/statistics?startDate=2026-05-01&endDate=2026-05-24] [401] Invalid or expired token[39m
+2026-05-24 14:08:54:854 [31merror[39m: [31m[GET /api/v1/client/orders/detail/1058] [401] Invalid or expired token[39m
+2026-05-24 14:08:54:854 [31merror[39m: [31m[GET /api/v1/client/orders/detail/1057] [401] Invalid or expired token[39m
+2026-05-24 14:08:54:854 [31merror[39m: [31m[GET /api/v1/client/orders/detail/1060] [401] Invalid or expired token[39m
+2026-05-24 14:09:01:91 [31merror[39m: [31m[GET /api/v1/client/orders/detail/1058] [401] Invalid or expired token[39m
+2026-05-24 14:09:01:91 [31merror[39m: [31m[GET /api/v1/client/orders/detail/1057] [401] Invalid or expired token[39m
+2026-05-24 14:09:01:91 [31merror[39m: [31m[GET /api/v1/client/orders/detail/1060] [401] Invalid or expired token[39m
+2026-05-24 14:09:01:91 [31merror[39m: [31m[GET /api/v1/client/orders/statistics?startDate=2026-05-01&endDate=2026-05-24] [401] Invalid or expired token[39m
+2026-05-24 14:09:10:910 [31merror[39m: [31m[GET /api/v1/client/orders/detail/1058] [401] Invalid or expired token[39m
+2026-05-24 14:09:10:910 [31merror[39m: [31m[GET /api/v1/client/orders/detail/1057] [401] Invalid or expired token[39m
+2026-05-24 14:09:10:910 [31merror[39m: [31m[GET /api/v1/client/orders/detail/1060] [401] Invalid or expired token[39m
+2026-05-24 14:09:10:910 [31merror[39m: [31m[GET /api/v1/client/orders/statistics?startDate=2026-05-01&endDate=2026-05-24] [401] Invalid or expired token[39m
+2026-05-24 14:13:42:1342 [31merror[39m: [31m[GET /api/v1/client/orders/detail/1058] [401] Invalid or expired token[39m
+2026-05-24 14:13:42:1342 [31merror[39m: [31m[GET /api/v1/client/orders/detail/1057] [401] Invalid or expired token[39m
+2026-05-24 14:13:42:1342 [31merror[39m: [31m[GET /api/v1/client/orders/detail/1060] [401] Invalid or expired token[39m
+2026-05-24 14:13:43:1343 [31merror[39m: [31m[GET /api/v1/client/profile] [401] Invalid or expired token[39m
+2026-05-24 14:13:43:1343 [31merror[39m: [31m[GET /api/v1/client/profile] [401] Invalid or expired token[39m
+2026-05-24 14:13:43:1343 [31merror[39m: [31m[GET /api/v1/client/orders/statistics?startDate=2026-05-01&endDate=2026-05-24] [401] Invalid or expired token[39m
+2026-05-24 14:19:27:1927 [31merror[39m: [31m[GET /api/v1/client/profile] [401] Invalid or expired token[39m
+2026-05-24 14:19:30:1930 [31merror[39m: [31m[GET /api/v1/client/profile] [401] Invalid or expired token[39m
+2026-05-24 14:26:29:2629 [31merror[39m: [31m[POST /api/v1/auth/customer/login] [401] Invalid email or password[39m
+2026-05-24 16:11:35:1135 [31merror[39m: [31m[POST /api/v1/auth/user/login] [401] Invalid username or password[39m
+2026-05-24 16:11:46:1146 [31merror[39m: [31m[POST /api/v1/auth/user/login] [401] Invalid username or password[39m
+2026-05-24 16:14:07:147 [31merror[39m: [31m[POST /api/v1/auth/user/login] [401] Invalid username or password[39m
+2026-05-24 16:43:36:4336 [31merror[39m: [31m[GET /api/v1/admin/orders] [401] Invalid or expired token[39m
+2026-05-24 16:43:36:4336 [31merror[39m: [31m[GET /api/v1/admin/users] [401] Invalid or expired token[39m
+2026-05-24 17:51:55:5155 [31merror[39m: [31m[GET /api/v1/client/orders/statistics?startDate=2026-05-01&endDate=2026-05-24] [401] Invalid or expired token[39m
+2026-05-24 18:13:33:1333 [31merror[39m: [31m[POST /api/v1/client/orders] [401] Invalid or expired token[39m
+2026-05-24 18:13:37:1337 [31merror[39m: [31m[POST /api/v1/client/orders] [401] Invalid or expired token[39m
+2026-05-24 18:36:26:3626 [31merror[39m: [31m[GET /api/v1/admin/users] [401] Invalid or expired token[39m
+2026-05-24 18:36:26:3626 [31merror[39m: [31m[GET /api/v1/admin/locations?limit=1000] [401] Invalid or expired token[39m
+2026-05-24 18:36:26:3626 [31merror[39m: [31m[GET /api/v1/admin/dashboard/stats] [401] Invalid or expired token[39m
+2026-05-24 18:36:34:3634 [31merror[39m: [31m[GET /api/v1/admin/users] [401] Invalid or expired token[39m
+2026-05-24 18:36:34:3634 [31merror[39m: [31m[GET /api/v1/admin/locations?limit=1000] [401] Invalid or expired token[39m
+2026-05-24 18:36:34:3634 [31merror[39m: [31m[GET /api/v1/admin/dashboard/stats] [401] Invalid or expired token[39m
+2026-05-24 18:36:42:3642 [31merror[39m: [31m[GET /api/v1/admin/users] [401] Invalid or expired token[39m
+2026-05-24 18:36:42:3642 [31merror[39m: [31m[GET /api/v1/admin/locations?limit=1000] [401] Invalid or expired token[39m
+2026-05-24 18:36:42:3642 [31merror[39m: [31m[GET /api/v1/admin/dashboard/stats] [401] Invalid or expired token[39m
+2026-05-24 18:36:55:3655 [31merror[39m: [31m[GET /api/v1/admin/customers?page=1&limit=200] [401] Invalid or expired token[39m
+2026-05-24 18:36:55:3655 [31merror[39m: [31m[GET /api/v1/admin/orders] [401] Invalid or expired token[39m
+2026-05-24 18:50:28:5028 [31merror[39m: [31m[POST /api/v1/auth/user/login] [401] Invalid username or password[39m
+2026-05-24 18:50:36:5036 [31merror[39m: [31m[POST /api/v1/auth/user/login] [401] Invalid username or password[39m
+2026-05-24 18:50:43:5043 [31merror[39m: [31m[POST /api/v1/auth/user/login] [401] Invalid username or password[39m
+2026-05-24 21:02:18:218 [31merror[39m: [31m[POST /api/v1/auth/customer/login] [401] Invalid email or password[39m
+2026-05-24 21:03:41:341 [31merror[39m: [31m[POST /api/v1/auth/customer/login] [401] Invalid email or password[39m
+2026-05-24 21:03:52:352 [31merror[39m: [31m[POST /api/v1/auth/customer/login] [401] Invalid email or password[39m
+2026-05-24 22:28:46:2846 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [401] Invalid or expired token[39m
+2026-05-24 22:28:47:2847 [31merror[39m: [31m[GET /api/v1/admin/orders] [401] Invalid or expired token[39m
+2026-05-24 22:28:47:2847 [31merror[39m: [31m[GET /api/v1/admin/customers?page=1&limit=200] [401] Invalid or expired token[39m
+2026-05-24 22:28:55:2855 [31merror[39m: [31m[GET /api/v1/admin/dashboard/stats] [401] Invalid or expired token[39m
+2026-05-24 22:28:55:2855 [31merror[39m: [31m[GET /api/v1/admin/picking/incidents] [401] Invalid or expired token[39m
+2026-05-24 22:28:55:2855 [31merror[39m: [31m[GET /api/v1/admin/orders] [401] Invalid or expired token[39m
+2026-05-24 22:28:55:2855 [31merror[39m: [31m[GET /api/v1/admin/users] [401] Invalid or expired token[39m
+2026-05-24 22:28:56:2856 [31merror[39m: [31m[GET /api/v1/admin/users] [401] Invalid or expired token[39m
+2026-05-24 22:28:56:2856 [31merror[39m: [31m[GET /api/v1/admin/locations?limit=1000] [401] Invalid or expired token[39m
+2026-05-24 22:28:56:2856 [31merror[39m: [31m[GET /api/v1/admin/dashboard/stats] [401] Invalid or expired token[39m

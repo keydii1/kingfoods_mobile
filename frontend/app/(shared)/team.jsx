@@ -4,8 +4,10 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {router} from 'expo-router';
 import {useState, useEffect} from 'react';
 import {Ionicons} from '@expo/vector-icons';
-import {getUsers, updateUser, deleteUser, getLocations, getDashboardStatus} from '../../constants/services/api'
+import {getUsers, updateUser, deleteUser, getLocations, getDashboardStatus, getCachedData} from '../../constants/services/api'
 import {COLORS} from '../../constants/colors';
+import ManagerBottomNav from '../../components/ManagerBottomNav';
+import { useAppPreferences } from '../../contexts/AppPreferencesContext';
 
 // MockData 2 khu vực
 const teams = [
@@ -58,50 +60,148 @@ const teams = [
     },
 ];
 
-// Component dành cho 1 thành viên 
+// Component dành cho 1 thành viên - Premium Card Redesign
 function MemberRow({member, onEdit, onDelete}){
-    return(
-    <View style = {styles.memberRow}>
-        {/* Avatar chữ viết tắt */}
-        <View style = {[styles.avatar, {backgroundColor: member.avatarColor}]}>
-            <Text style = {[styles.avatarText, {color: member.avatarText}]}>{member.initials}</Text>
-        </View>
-        {/* Tên và đơn hàng */}
-        <View style = {styles.memberInfo}>
-            <Text style = {styles.memberName}>{member.name}</Text>
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 2 }}>
-                {member.status === 'warn' && <Ionicons name="warning" size={12} color="#e65100" />}
-                {member.status === 'good' && <Ionicons name="checkmark-circle" size={12} color={COLORS.primary} />}
-                <Text style = {styles.memberOrder}>{member.order}</Text>
+    const { darkMode } = useAppPreferences();
+
+    const activeCardBg = darkMode ? '#1e1e1e' : '#fff';
+    const activeBorderColor = darkMode ? '#2d2d2d' : '#e2e8f0';
+    const activeTextColor = darkMode ? '#f3f4f6' : '#1e293b';
+    const activeTextGrayColor = darkMode ? '#9ca3af' : '#64748b';
+    const activeBtnBg = darkMode ? '#2d2d2d' : '#f1f5f9';
+    const activeDeleteBtnBg = darkMode ? '#451a1a' : '#fee2e2';
+
+    // Phân tích trạng thái để hiển thị badge và màu sắc
+    let statusLabel = '';
+    let statusBg = darkMode ? '#1a202c' : '#f1f5f9';
+    let statusColor = darkMode ? '#cbd5e1' : '#64748b';
+    let dotColor = '#94a3b8';
+
+    if (member.order) {
+        // Dành cho Mock Data hoặc fallback
+        statusLabel = member.order;
+        if (member.status === 'good') {
+            statusBg = darkMode ? '#14532d' : '#f0fdf4';
+            statusColor = darkMode ? '#4ade80' : '#166534';
+            dotColor = '#22c55e';
+        } else if (member.status === 'warn') {
+            statusBg = darkMode ? '#7c2d12' : '#fff7ed';
+            statusColor = darkMode ? '#fb923c' : '#9a3412';
+            dotColor = '#f97316';
+        } else if (member.status === 'break') {
+            statusBg = darkMode ? '#7f1d1d' : '#fef2f2';
+            statusColor = darkMode ? '#f87171' : '#991b1b';
+            dotColor = '#ef4444';
+        }
+    } else {
+        // Dành cho dữ liệu thật từ API
+        if (member.role !== 'staff') {
+            statusLabel = 'Quản lý';
+            statusBg = darkMode ? '#1e3a8a' : '#eff6ff';
+            statusColor = darkMode ? '#60a5fa' : '#1d4ed8';
+            dotColor = '#3b82f6';
+        } else if (member.isActiveTask) {
+            statusLabel = `Đang làm (${member.activeTasks} đơn)`;
+            statusBg = darkMode ? '#7c2d12' : '#fff7ed';
+            statusColor = darkMode ? '#fb923c' : '#c2410c';
+            dotColor = '#f97316';
+        } else {
+            statusLabel = 'Đang rảnh';
+            statusBg = darkMode ? '#14532d' : '#f0fdf4';
+            statusColor = darkMode ? '#4ade80' : '#166534';
+            dotColor = '#22c55e';
+        }
+    }
+
+    return (
+        <View style={[styles.memberCard, { backgroundColor: activeCardBg, borderColor: activeBorderColor }]}>
+            {/* Header của card: Avatar, Tên, Role & Nút hành động */}
+            <View style={[styles.cardHeader, { borderBottomColor: darkMode ? '#2d2d2d' : '#f1f5f9' }]}>
+                <View style={styles.headerLeft}>
+                    <View style={[styles.avatar, { backgroundColor: member.avatarColor || (darkMode ? '#2d2d2d' : '#e2e8f0') }]}>
+                        <Text style={[styles.avatarText, { color: member.avatarText || (darkMode ? '#3b82f6' : '#475569') }]}>
+                            {member.initials}
+                        </Text>
+                    </View>
+                    <View style={styles.nameContainer}>
+                        <Text style={[styles.memberName, { color: activeTextColor }]} numberOfLines={1}>{member.name}</Text>
+                        <Text style={[styles.roleBadge, { 
+                            backgroundColor: member.role === 'staff' ? (darkMode ? '#14532d' : '#f0fdf4') : (darkMode ? '#1e3a8a' : '#eff6ff'),
+                            color: member.role === 'staff' ? (darkMode ? '#4ade80' : COLORS.primary) : (darkMode ? '#60a5fa' : '#2563eb')
+                        }]}>
+                            {member.role === 'staff' ? 'Nhân viên kho' : 'Quản lý'}
+                        </Text>
+                    </View>
+                </View>
+
+                {/* Các nút hành động góc trên bên phải rộng rãi */}
+                <View style={styles.actionGroup}>
+                    {onEdit && (
+                        <TouchableOpacity onPress={onEdit} style={[styles.actionButton, { backgroundColor: activeBtnBg }]} activeOpacity={0.7}>
+                            <Ionicons name="create" size={16} color={COLORS.primary} />
+                        </TouchableOpacity>
+                    )}
+                    {onDelete && (
+                        <TouchableOpacity onPress={onDelete} style={[styles.actionButton, styles.deleteBtn, { backgroundColor: activeDeleteBtnBg }]} activeOpacity={0.7}>
+                            <Ionicons name="trash" size={16} color={COLORS.error} />
+                        </TouchableOpacity>
+                    )}
+                </View>
+            </View>
+
+            {/* Body của card: Badge Trạng thái, Phân công & KPI */}
+            <View style={styles.cardBody}>
+                <View style={styles.bodyLeft}>
+                    <View style={[styles.statusBadge, { backgroundColor: statusBg }]}>
+                        <View style={[styles.statusDot, { backgroundColor: dotColor }]} />
+                        <Text style={[styles.statusText, { color: statusColor }]} numberOfLines={1}>
+                            {statusLabel}
+                        </Text>
+                    </View>
+
+                    {member.location ? (
+                        <View style={styles.locationContainer}>
+                            <Ionicons name="location-outline" size={13} color={activeTextGrayColor} style={{ marginRight: 3 }} />
+                            <Text style={[styles.locationText, { color: activeTextGrayColor }]} numberOfLines={1}>
+                                {member.location}
+                            </Text>
+                        </View>
+                    ) : null}
+                </View>
+
+                {/* Stats năng suất bên phải */}
+                <View style={styles.kpiContainer}>
+                    <Text style={[styles.kpiValue, { color: member.skuColor || COLORS.primary }]}>
+                        {member.sku !== null && member.sku !== undefined ? member.sku : '-'}
+                    </Text>
+                    <Text style={[styles.kpiUnit, { color: activeTextGrayColor }]}>
+                        {member.status === 'break' ? 'Nghỉ' : 'sp/giờ'}
+                    </Text>
+                </View>
             </View>
         </View>
-        {/* SKU/h */}
-        <View style = {styles.memberSku}>
-            <Text style= {[styles.skuValue, {color: member.skuColor}]}>{member.sku ?? '-'}</Text>
-            <Text style = {styles.skuUnit}>{member.status === 'break' ? 'Nghỉ': 'sp/giờ'}</Text>
-        </View>
-        {onEdit && (
-            <TouchableOpacity onPress={onEdit} style={styles.memberAction}>
-                <Ionicons name="create-outline" size={18} color={COLORS.primary} />
-            </TouchableOpacity>
-        )}
-        {onDelete && (
-            <TouchableOpacity onPress={onDelete} style={styles.memberAction}>
-                <Ionicons name="trash-outline" size={18} color={COLORS.error} />
-            </TouchableOpacity>
-        )}
-    </View>
     );
 }
 
 export default function TeamScreen(){
-    const [users, setUsers] = useState([]);
-    const [locations, setLocations] = useState([]);
-    const [performance, setPerformance] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const cachedUsers = getCachedData('/admin/users');
+    const cachedLocations = getCachedData('/admin/locations?limit=1000');
+    const cachedStats = getCachedData('/admin/dashboard/stats');
+
+    const [users, setUsers] = useState(cachedUsers || []);
+    const [locations, setLocations] = useState(cachedLocations?.data || cachedLocations?.items || cachedLocations || []);
+    const [performance, setPerformance] = useState(cachedStats?.staffPerformance || []);
+    const [loading, setLoading] = useState(!cachedUsers || !cachedLocations);
     const [editingUser, setEditingUser] = useState(null);
     const [editName, setEditName] = useState('');
     const [activeFilter, setActiveFilter] = useState('all'); // 'all', 'working', 'idle'
+
+    const { darkMode } = useAppPreferences();
+
+    const activeBg = darkMode ? '#121212' : '#f0f4f1';
+    const activeHeaderBg = darkMode ? '#1e1e1e' : '#fff';
+    const activeBorderColor = darkMode ? '#2d2d2d' : '#eee';
+    const activeTextColor = darkMode ? '#f3f4f6' : '#222';
 
     useEffect(() => {
         async function fetchTeamData(){
@@ -192,58 +292,68 @@ export default function TeamScreen(){
 
     if (loading) {
         return (
-            <SafeAreaView style={[styles.safeArea, { justifyContent: 'center', alignItems: 'center' }]}>
+            <SafeAreaView style={[styles.safeArea, { backgroundColor: activeBg, justifyContent: 'center', alignItems: 'center' }]}>
                 <ActivityIndicator color={COLORS.primary} size="large" />
             </SafeAreaView>
         );
     }
 
     return(
-        <SafeAreaView style = {styles.safeArea}>
-            {/* Headder */}
-            <View style = {styles.header}>
-                <TouchableOpacity onPress = {() => router.replace('/managerdashboard')}>
-                    <Ionicons name="chevron-back" size={24} color={COLORS.primary} />
-                </TouchableOpacity>
-                <Text style = {styles.headerTitle}>Team Overview</Text>
-                <View style = {styles.badge}>
-                    <Text style = {styles.badgeText}>Trưởng nhóm</Text>
+        <SafeAreaView style = {[styles.safeArea, { backgroundColor: activeBg }]}>
+            {/* Header */}
+            <View style = {[styles.header, { backgroundColor: activeHeaderBg, borderBottomColor: activeBorderColor }]}>
+                <View style = {{ width: 80 }} />
+                <Text style = {[styles.headerTitle, { color: activeTextColor }]}>Team Overview</Text>
+                <View style = {[styles.badge, { backgroundColor: darkMode ? '#1e293b' : '#e3f2fd' }]}>
+                    <Text style = {[styles.badgeText, { color: darkMode ? '#60a5fa' : '#1565c0' }]}>Trưởng nhóm</Text>
                 </View>
             </View>
             {/* Body */}
             <ScrollView style = {styles.scroll}>
                 {/* Alert tổng quan */}
-                <View style = {styles.alert}>
+                <View style = {[styles.alert, darkMode && { backgroundColor: '#1e293b', borderLeftColor: '#3b82f6', borderLeftWidth: 4 }]}>
                     <Ionicons name="people-outline" size={24} color={COLORS.primary} style={{ marginRight: 6 }} />
                     <View style = {styles.alertBody}>
-                        <Text style = {styles.alertTitle}>{activeStats.totalActive} nhân viên vẫn còn đang hoạt động</Text>
-                        <Text style = {styles.alertSub}>{activeStats.zoneDetails}Tổng năng suất: {activeStats.totalSKU} sp/giờ</Text>
+                        <Text style = {[styles.alertTitle, darkMode && { color: '#60a5fa' }]}>{activeStats.totalActive} nhân viên vẫn còn đang hoạt động</Text>
+                        <Text style = {[styles.alertSub, { color: darkMode ? '#cbd5e1' : '#555' }]}>{activeStats.zoneDetails}Tổng năng suất: {activeStats.totalSKU} sp/giờ</Text>
                     </View>
                 </View>
                 {/* Filter Row */}
                 {users.length > 0 && (
                     <View style={styles.filterRow}>
                         <TouchableOpacity
-                            style={[styles.filterBtn, activeFilter === 'all' && styles.filterBtnActive]}
+                            style={[
+                                styles.filterBtn, 
+                                { backgroundColor: darkMode ? '#1e1e1e' : '#fff', borderColor: darkMode ? '#2d2d2d' : '#e2e8f0' },
+                                activeFilter === 'all' && styles.filterBtnActive
+                            ]}
                             onPress={() => setActiveFilter('all')}
                         >
-                            <Text style={[styles.filterText, activeFilter === 'all' && styles.filterTextActive]}>
+                            <Text style={[styles.filterText, { color: darkMode ? '#9ca3af' : '#64748b' }, activeFilter === 'all' && styles.filterTextActive]}>
                                 Tất cả ({users.length})
                             </Text>
                         </TouchableOpacity>
                         <TouchableOpacity
-                            style={[styles.filterBtn, activeFilter === 'working' && styles.filterBtnActive]}
+                            style={[
+                                styles.filterBtn, 
+                                { backgroundColor: darkMode ? '#1e1e1e' : '#fff', borderColor: darkMode ? '#2d2d2d' : '#e2e8f0' },
+                                activeFilter === 'working' && styles.filterBtnActive
+                            ]}
                             onPress={() => setActiveFilter('working')}
                         >
-                            <Text style={[styles.filterText, activeFilter === 'working' && styles.filterTextActive]}>
+                            <Text style={[styles.filterText, { color: darkMode ? '#9ca3af' : '#64748b' }, activeFilter === 'working' && styles.filterTextActive]}>
                                 Đang làm ({users.filter(u => (u.activePickingTasksCount || 0) > 0).length})
                             </Text>
                         </TouchableOpacity>
                         <TouchableOpacity
-                            style={[styles.filterBtn, activeFilter === 'idle' && styles.filterBtnActive]}
+                            style={[
+                                styles.filterBtn, 
+                                { backgroundColor: darkMode ? '#1e1e1e' : '#fff', borderColor: darkMode ? '#2d2d2d' : '#e2e8f0' },
+                                activeFilter === 'idle' && styles.filterBtnActive
+                            ]}
                             onPress={() => setActiveFilter('idle')}
                         >
-                            <Text style={[styles.filterText, activeFilter === 'idle' && styles.filterTextActive]}>
+                            <Text style={[styles.filterText, { color: darkMode ? '#9ca3af' : '#64748b' }, activeFilter === 'idle' && styles.filterTextActive]}>
                                 Đang rảnh ({users.filter(u => (u.activePickingTasksCount || 0) === 0).length})
                             </Text>
                         </TouchableOpacity>
@@ -265,13 +375,14 @@ export default function TeamScreen(){
                                 key = {user._id || user.id}
                                 member = {{
                                     id: user._id || user.id,
-                                    initials : (user.name || user.fullName || user.username || 'NV').split(' ').map(w =>w[0]).slice(-2).join('').toUpperCase(),
-                                    avatarColor: '#e8f5e9',
-                                    avatarText: COLORS.primary,
+                                    initials: (user.name || user.fullName || user.username || 'NV').split(' ').map(w => w[0]).slice(-2).join('').toUpperCase(),
+                                    avatarColor: user.role === 'staff' ? '#f0fdf4' : '#eff6ff',
+                                    avatarText: user.role === 'staff' ? COLORS.primary : '#3b82f6',
                                     name: user.name || user.fullName || user.username,
-                                    order: user.role === 'staff' 
-                                        ? `${(user.activePickingTasksCount || 0) > 0 ? `🔴 Đang làm (${user.activePickingTasksCount} task)` : '🟢 Đang rảnh'} · Phân công: ${locName}`
-                                        : `Quản lý · Phân công: ${locName}`,
+                                    role: user.role,
+                                    isActiveTask: user.role === 'staff' ? (user.activePickingTasksCount || 0) > 0 : false,
+                                    activeTasks: user.activePickingTasksCount || 0,
+                                    location: locName,
                                     sku: perf.pickingSpeed !== undefined ? perf.pickingSpeed : null,
                                     skuColor: perf.warning ? COLORS.error : COLORS.primary,
                                     status: perf.totalItemsPicked > 0 ? 'good' : (perf.pickingSpeed !== undefined ? 'warn' : 'offline'),
@@ -294,6 +405,9 @@ export default function TeamScreen(){
                 </View>
             ))}
             </ScrollView>
+
+            {/* Bottom navigation bar */}
+            <ManagerBottomNav active="team" />
 
             {editingUser && (
                 <View style={styles.overlay}>
@@ -400,57 +514,133 @@ const styles = StyleSheet.create({
         marginBottom: 12,
     },
 
-    // Member Row
-    memberRow: {
+    // Premium Member Card Styles
+    memberCard: {
+        backgroundColor: '#fff',
+        borderRadius: 16,
+        padding: 16,
+        marginBottom: 12,
+        borderWidth: 1,
+        borderColor: '#e2e8f0',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.03,
+        shadowRadius: 8,
+        elevation: 2,
+    },
+    cardHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 12,
+        borderBottomWidth: 1,
+        borderBottomColor: '#f1f5f9',
+        paddingBottom: 10,
+    },
+    headerLeft: {
         flexDirection: 'row',
         alignItems: 'center',
-        paddingVertical: 10,
-        borderBottomWidth: 0.5,
-        borderBottomColor: '#eee',
+        flex: 1,
         gap: 12,
     },
-
-    // Avatar
     avatar: {
-        width: 40,
-        height: 40,
-        borderRadius: 20,
+        width: 44,
+        height: 44,
+        borderRadius: 22,
+        alignItems: 'center',
+        justifyContent: 'center',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.05,
+        shadowRadius: 2,
+        elevation: 1,
+    },
+    avatarText: {
+        fontSize: 15,
+        fontWeight: '800',
+    },
+    nameContainer: {
+        flex: 1,
+        justifyContent: 'center',
+    },
+    memberName: {
+        fontSize: 15,
+        fontWeight: '700',
+        color: '#1e293b',
+        marginBottom: 2,
+    },
+    roleBadge: {
+        fontSize: 10,
+        fontWeight: '700',
+        paddingHorizontal: 8,
+        paddingVertical: 2,
+        borderRadius: 6,
+        alignSelf: 'flex-start',
+    },
+    actionGroup: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 8,
+    },
+    actionButton: {
+        width: 32,
+        height: 32,
+        borderRadius: 16,
+        backgroundColor: '#f1f5f9',
         alignItems: 'center',
         justifyContent: 'center',
     },
-    avatarText: {
-        fontSize: 14,
-        fontWeight: '800',
+    deleteBtn: {
+        backgroundColor: '#fee2e2',
     },
-
-    // Thông tin thành viên
-    memberInfo: { flex: 1 },
-    memberName: {
-        fontSize: 13,
-        fontWeight: '600',
-        color: '#222',
+    cardBody: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'flex-end',
     },
-    memberOrder: {
+    bodyLeft: {
+        flex: 1,
+        gap: 8,
+    },
+    statusBadge: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingHorizontal: 8,
+        paddingVertical: 4,
+        borderRadius: 8,
+        alignSelf: 'flex-start',
+        gap: 6,
+    },
+    statusDot: {
+        width: 6,
+        height: 6,
+        borderRadius: 3,
+    },
+    statusText: {
         fontSize: 12,
-        color: '#888',
-        marginTop: 2,
+        fontWeight: '600',
     },
-
-    memberAction: {
-        padding: 4,
-        marginLeft: 4,
+    locationContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
     },
-    memberActionText: { fontSize: 16 },
-
-    // SKU/h
-    memberSku: { alignItems: 'flex-end' },
-    skuValue: {
-        fontSize: 20,
+    locationText: {
+        fontSize: 12,
+        color: '#64748b',
+        fontWeight: '500',
+    },
+    kpiContainer: {
+        alignItems: 'flex-end',
+    },
+    kpiValue: {
+        fontSize: 22,
         fontWeight: '800',
+        lineHeight: 26,
     },
-    skuUnit: {
+    kpiUnit: {
         fontSize: 10,
-        color: '#aaa',
+        color: '#94a3b8',
+        fontWeight: '600',
         marginTop: 1,
     },
 

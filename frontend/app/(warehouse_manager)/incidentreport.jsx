@@ -4,19 +4,20 @@ import { Alert } from '../../utils/appAlert';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { getIncidents, resolveIncident, reportIncident } from '../../constants/services/api';
+import { getIncidents, resolveIncident, reportIncident, getCachedData } from '../../constants/services/api';
 import { COLORS } from '../../constants/colors';
 import { playSound } from '../../utils/soundService';
 import ManagerBottomNav from '../../components/ManagerBottomNav';
+import StaffBottomNav from '../../components/StaffBottomNav';
 import { useAuth } from '../../contexts/AuthContext';
+import { useAppPreferences } from '../../contexts/AppPreferencesContext';
 import * as ImagePicker from 'expo-image-picker';
 import * as ImageManipulator from 'expo-image-manipulator';
 
 const issueTypes = [
-  { key: 'damage', label: 'Hàng hư hỏng', icon: 'nutrition-outline', color: '#e57373' },
-  { key: 'missing', label: 'Thiếu hàng', icon: 'help-circle-outline', color: '#ffb74d' },
-  { key: 'wrong', label: 'Sai sản phẩm', icon: 'alert-circle-outline', color: '#f06292' },
-  { key: 'equipment', label: 'Hỏng thiết bị', icon: 'construct-outline', color: '#4db6ac' },
+  { key: 'missing', label: 'Thiếu hàng', icon: 'cube-outline', color: '#ffb74d' },
+  { key: 'damage', label: 'Hỏng hóc', icon: 'construct-outline', color: '#e57373' },
+  { key: 'equipment', label: 'Thiết bị', icon: 'settings-outline', color: '#64b5f6' },
   { key: 'safety', label: 'An toàn', icon: 'shield-half-outline', color: '#81c784' },
   { key: 'other', label: 'Khác', icon: 'document-text-outline', color: '#90a4ae' },
 ];
@@ -35,15 +36,47 @@ const incidentImages = {
 
 export default function IncidentReportScreen() {
   const { userRole } = useAuth();
+  const { darkMode } = useAppPreferences();
+
+  const activeBg = darkMode ? '#121212' : '#f0f4f1';
+  const activeHeaderBg = darkMode ? '#1e1e1e' : '#fff';
+  const activeBorderColor = darkMode ? '#2d2d2d' : '#eee';
+  const activeTextColor = darkMode ? '#f3f4f6' : '#222';
+  const activeCardBg = darkMode ? '#1e1e1e' : '#fff';
+  const activeTextGrayColor = darkMode ? '#9ca3af' : '#666';
+  const activeInputBg = darkMode ? '#2d2d2d' : '#f8f9fa';
+
   const [photoUri, setPhotoUri] = useState(null);
   const [photoBase64, setPhotoBase64] = useState(null);
   const [selectedType, setSelectedType] = useState('');
+  const [summary, setSummary] = useState('');
   const [detail, setDetail] = useState('');
   const [location, setLocation] = useState('');
   const [showForm, setShowForm] = useState(false);
-  const [reports, setReports] = useState([]);
+  
+  const cachedIncidents = getCachedData('/admin/picking/incidents');
+  const initialReports = Array.isArray(cachedIncidents) ? cachedIncidents.map(r => {
+    const typeObj = issueTypes.find(t => t.key === r.reason?.split(':')[0]?.trim()?.toLowerCase()) || 
+                    issueTypes.find(t => t.label === r.reason) || 
+                    { label: r.reason || 'Khác', icon: 'alert-circle-outline', color: '#666' };
+    
+    return {
+      id: r.id || r._id,
+      type: typeObj.label,
+      typeKey: typeObj.key || 'other',
+      icon: typeObj.icon,
+      iconColor: typeObj.color,
+      detail: r.reason?.includes(':') ? r.reason.substring(r.reason.indexOf(':') + 1).trim() : (r.reason || 'Sự cố phát sinh'),
+      by: r.reporter?.name || r.reporter?.fullName || r.reporter?.username || 'Nhân viên kho',
+      time: r.createdAt ? new Date(r.createdAt).toLocaleString('vi-VN', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit' }) : '',
+      status: r.status === 'resolved' ? 'resolved' : 'pending',
+      photoUrl: r.photoUrl || '',
+    };
+  }) : [];
+
+  const [reports, setReports] = useState(initialReports);
   const [activeFilter, setActiveFilter] = useState('all');
-  const [loadingReports, setLoadingReports] = useState(true);
+  const [loadingReports, setLoadingReports] = useState(!cachedIncidents);
   const [submitting, setSubmitting] = useState(false);
 
   const handleTakePhoto = async () => {
@@ -135,20 +168,23 @@ export default function IncidentReportScreen() {
   };
 
   const submitReport = async () => {
-    if (!selectedType || !detail) {
-      Alert.alert('Lỗi', 'Vui lòng chọn loại sự cố và nhập mô tả');
+    if (!selectedType || !summary || !detail) {
+      Alert.alert('Lỗi', 'Vui lòng chọn loại sự cố, nhập tóm gọn và mô tả chi tiết');
       return;
     }
     setSubmitting(true);
     try {
       const typeLabel = issueTypes.find(t => t.key === selectedType)?.label || selectedType;
       // Default to taskId: 1 to ensure it maps to database schema constraints
-      await reportIncident(1, `${selectedType.toUpperCase()}: ${detail} ${location ? `(Tại vị trí: ${location})` : ''}`, photoBase64 || '');
+      // Embed [summary] into the reason string so admin can easily read the brief
+      const reasonText = `${selectedType.toUpperCase()}: [${summary}] ${detail} ${location ? `(Tại vị trí: ${location})` : ''}`;
+      await reportIncident(1, reasonText, photoBase64 || '');
       
       playSound('success'); // Play premium success beep
       Alert.alert('Thành công', 'Báo cáo sự cố đã được gửi và lưu trữ thành công!');
       
       setSelectedType('');
+      setSummary('');
       setDetail('');
       setLocation('');
       setPhotoUri(null);
@@ -184,43 +220,182 @@ export default function IncidentReportScreen() {
 
   if (loadingReports) {
     return (
-      <SafeAreaView style={[styles.safeArea, { justifyContent: 'center', alignItems: 'center' }]}>
+      <SafeAreaView style={[styles.safeArea, { backgroundColor: activeBg, justifyContent: 'center', alignItems: 'center' }]}>
         <ActivityIndicator color={COLORS.primary} size="large" />
       </SafeAreaView>
     );
   }
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView style={[styles.safeArea, { backgroundColor: activeBg }]}>
       {/* Header */}
-      <View style={styles.header}>
+      <View style={[styles.header, { backgroundColor: activeHeaderBg, borderBottomColor: activeBorderColor }]}>
         <View style={{ width: 32 }} />
-        <Text style={styles.headerTitle}>Báo cáo sự cố</Text>
-        <View style={{ width: 32 }} />
+        <Text style={[styles.headerTitle, { color: activeTextColor }]}>Báo cáo sự cố</Text>
+        <TouchableOpacity 
+          style={[styles.addBtnContainer, { backgroundColor: darkMode ? '#2d2d2d' : '#e8f5e9' }]} 
+          onPress={() => {
+            setShowForm(!showForm);
+            // Reset form states on toggle
+            if (!showForm) {
+              setSelectedType('missing');
+              setSummary('');
+              setDetail('');
+              setLocation('');
+              setPhotoUri(null);
+              setPhotoBase64(null);
+            }
+          }}
+          activeOpacity={0.7}
+        >
+          <Ionicons name={showForm ? "close-outline" : "add-outline"} size={22} color={COLORS.primary} />
+        </TouchableOpacity>
       </View>
 
-      {/* Filter Tabs */}
-      <View style={styles.filterRow}>
-        {filters.map(f => {
-          const count = f.key === 'all' 
-            ? reports.length 
-            : reports.filter(r => r.status === f.key).length;
-          const isActive = activeFilter === f.key;
-          return (
-            <TouchableOpacity
-              key={f.key}
-              style={[styles.filterBtn, isActive && styles.filterBtnActive]}
-              onPress={() => setActiveFilter(f.key)}
+      {/* Filter Tabs - Hide when showForm is true */}
+      {!showForm && (
+        <View style={[styles.filterRow, { backgroundColor: activeHeaderBg, borderBottomColor: activeBorderColor }]}>
+          {filters.map(f => {
+            const count = f.key === 'all' 
+              ? reports.length 
+              : reports.filter(r => r.status === f.key).length;
+            const isActive = activeFilter === f.key;
+            return (
+              <TouchableOpacity
+                key={f.key}
+                style={[
+                  styles.filterBtn, 
+                  { backgroundColor: darkMode ? '#2d2d2d' : '#f5f5f5', borderColor: darkMode ? '#3d3d3d' : '#e0e0e0' },
+                  isActive && styles.filterBtnActive
+                ]}
+                onPress={() => setActiveFilter(f.key)}
+              >
+                <Text style={[styles.filterText, { color: darkMode ? '#9ca3af' : '#666' }, isActive && styles.filterTextActive]}>
+                  {f.label} {count > 0 ? `(${count})` : '(0)'}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
+        </View>
+      )}
+
+      {showForm ? (
+        // Premium Reporting Form using pre-defined styles
+        <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 32 }}>
+          <View style={[styles.formCard, { backgroundColor: activeCardBg }]}>
+            <Text style={[styles.formTitle, { color: activeTextColor, marginBottom: 16 }]}>Khai báo sự cố mới</Text>
+            
+            {/* Loại sự cố */}
+            <Text style={[styles.formLabel, { color: activeTextGrayColor }]}>Loại sự cố *</Text>
+            <View style={styles.typeGrid}>
+              {issueTypes.map(type => {
+                const isSelected = selectedType === type.key;
+                return (
+                  <TouchableOpacity
+                    key={type.key}
+                    style={[
+                      styles.typeBtn, 
+                      { backgroundColor: darkMode ? '#2d2d2d' : '#f5f5f5', borderColor: darkMode ? '#3d3d3d' : '#e0e0e0' },
+                      isSelected && styles.typeBtnActive
+                    ]}
+                    onPress={() => setSelectedType(type.key)}
+                    activeOpacity={0.7}
+                  >
+                    <Ionicons name={type.icon} size={16} color={isSelected ? '#fff' : type.color} />
+                    <Text style={[
+                      styles.typeLabel, 
+                      { color: darkMode ? '#cbd5e1' : '#555' }, 
+                      isSelected && styles.typeLabelActive
+                    ]}>
+                      {type.label}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+
+            {/* Tóm gọn sự cố */}
+            <Text style={[styles.formLabel, { color: activeTextGrayColor }]}>Tóm gọn sự cố *</Text>
+            <TextInput
+              style={[styles.input, { backgroundColor: activeInputBg, color: activeTextColor, borderColor: activeBorderColor }]}
+              placeholder="Ví dụ: Thiếu 5 lon Coca-Cola ở kệ A12"
+              placeholderTextColor={darkMode ? '#64748b' : '#888'}
+              value={summary}
+              onChangeText={setSummary}
+              autoCapitalize="sentences"
+            />
+
+            {/* Vị trí */}
+            <Text style={[styles.formLabel, { color: activeTextGrayColor }]}>Vị trí sự cố (Khu vực / Kệ hàng)</Text>
+            <TextInput
+              style={[styles.input, { backgroundColor: activeInputBg, color: activeTextColor, borderColor: activeBorderColor }]}
+              placeholder="Ví dụ: Khu A - Kệ 12.02.A"
+              placeholderTextColor={darkMode ? '#64748b' : '#888'}
+              value={location}
+              onChangeText={setLocation}
+              autoCapitalize="characters"
+            />
+
+            {/* Chi tiết sự cố */}
+            <Text style={[styles.formLabel, { color: activeTextGrayColor }]}>Nội dung chi tiết *</Text>
+            <TextInput
+              style={[styles.input, styles.detailInput, { backgroundColor: activeInputBg, color: activeTextColor, borderColor: activeBorderColor }]}
+              placeholder="Mô tả chi tiết tình trạng sự cố để quản lý nắm rõ thông tin..."
+              placeholderTextColor={darkMode ? '#64748b' : '#888'}
+              value={detail}
+              onChangeText={setDetail}
+              multiline
+              numberOfLines={4}
+            />
+
+            {/* Ảnh minh chứng */}
+            <Text style={[styles.formLabel, { color: activeTextGrayColor }]}>Ảnh minh chứng sự cố</Text>
+            {photoUri ? (
+              <View style={styles.photoContainer}>
+                <Image source={{ uri: photoUri }} style={styles.photoPreview} />
+                <TouchableOpacity 
+                  style={styles.removePhotoBtn} 
+                  onPress={() => {
+                    setPhotoUri(null);
+                    setPhotoBase64(null);
+                  }}
+                  activeOpacity={0.7}
+                >
+                  <Ionicons name="trash-outline" size={16} color="#fff" style={{ marginRight: 4 }} />
+                  <Text style={{ color: '#fff', fontSize: 12, fontWeight: '700' }}>Xoá ảnh</Text>
+                </TouchableOpacity>
+              </View>
+            ) : (
+              <View style={styles.photoRow}>
+                <TouchableOpacity style={[styles.photoSelectBtn, { backgroundColor: activeCardBg, borderColor: activeBorderColor }]} onPress={handleTakePhoto} activeOpacity={0.7}>
+                  <Ionicons name="camera-outline" size={18} color={COLORS.primary} />
+                  <Text style={[styles.photoSelectText, { color: activeTextColor }]}>Chụp ảnh</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={[styles.photoSelectBtn, { backgroundColor: activeCardBg, borderColor: activeBorderColor }]} onPress={handleChoosePhoto} activeOpacity={0.7}>
+                  <Ionicons name="images-outline" size={18} color={COLORS.primary} />
+                  <Text style={[styles.photoSelectText, { color: activeTextColor }]}>Thư viện</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+
+            {/* Nút gửi */}
+            <TouchableOpacity 
+              style={[styles.submitBtn, submitting && { opacity: 0.7 }]} 
+              onPress={submitReport}
+              disabled={submitting}
+              activeOpacity={0.8}
             >
-              <Text style={[styles.filterText, isActive && styles.filterTextActive]}>
-                {f.label} {count > 0 ? `(${count})` : '(0)'}
-              </Text>
+              {submitting ? (
+                <ActivityIndicator color="#fff" size="small" />
+              ) : (
+                <Text style={styles.submitBtnText}>Gửi báo cáo sự cố</Text>
+              )}
             </TouchableOpacity>
-          );
-        })}
-      </View>
-
-      <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
+          </View>
+        </ScrollView>
+      ) : (
+        // Danh sách sự cố hiện tại
+        <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
 
 
         {filteredReports.length > 0 ? (
@@ -231,7 +406,8 @@ export default function IncidentReportScreen() {
                 key={r.id} 
                 style={[
                   styles.reportCard, 
-                  isResolved ? styles.reportCardResolved : styles.reportCardPending
+                  { backgroundColor: activeCardBg, borderLeftColor: isResolved ? '#66bb6a' : '#ffa726' },
+                  darkMode && { shadowColor: '#000', elevation: 1 }
                 ]}
               >
                 <View style={styles.reportHeader}>
@@ -239,7 +415,7 @@ export default function IncidentReportScreen() {
                     <View style={[styles.iconContainer, { backgroundColor: isResolved ? '#e8f5e9' : '#fff3e0' }]}>
                       <Ionicons name={r.icon} size={18} color={r.iconColor} />
                     </View>
-                    <Text style={styles.reportType}>{r.type}</Text>
+                    <Text style={[styles.reportType, { color: activeTextColor }]}>{r.type}</Text>
                   </View>
                   <View style={[
                     styles.statusBadge, 
@@ -254,7 +430,7 @@ export default function IncidentReportScreen() {
                   </View>
                 </View>
 
-                <Text style={styles.reportDetail}>{r.detail}</Text>
+                <Text style={[styles.reportDetail, { color: darkMode ? '#cbd5e1' : '#444' }]}>{r.detail}</Text>
                 
                 {/* Beautiful dynamic Incident Photo */}
                 {r.photoUrl ? (
@@ -275,8 +451,8 @@ export default function IncidentReportScreen() {
                 
                 <View style={styles.reportFooter}>
                   <View style={{ gap: 2 }}>
-                    <Text style={styles.reportBy}>Báo cáo bởi: {r.by}</Text>
-                    <Text style={styles.reportTime}>{r.time}</Text>
+                    <Text style={[styles.reportBy, { color: activeTextGrayColor }]}>Báo cáo bởi: {r.by}</Text>
+                    <Text style={[styles.reportTime, { color: darkMode ? '#64748b' : '#aaa' }]}>{r.time}</Text>
                   </View>
 
                   {(userRole === 'admin' || userRole === 'warehouse_manager') && !isResolved && (
@@ -291,12 +467,12 @@ export default function IncidentReportScreen() {
           })
         ) : (
           /* Premium and Welcoming Empty State */
-          <View style={styles.emptyContainer}>
+          <View style={[styles.emptyContainer, { backgroundColor: activeCardBg }]}>
             <View style={styles.emptyIconBg}>
               <Ionicons name="shield-checkmark" size={60} color={COLORS.primary} />
             </View>
-            <Text style={styles.emptyTitle}>Hệ thống vận hành ổn định!</Text>
-            <Text style={styles.emptySub}>
+            <Text style={[styles.emptyTitle, { color: activeTextColor }]}>Hệ thống vận hành ổn định!</Text>
+            <Text style={[styles.emptySub, { color: activeTextGrayColor }]}>
               {activeFilter === 'all' 
                 ? 'Không ghi nhận sự cố nào phát sinh. Kho hàng Kingfood hiện đang hoạt động vô cùng an toàn và ổn định.' 
                 : activeFilter === 'pending'
@@ -308,7 +484,14 @@ export default function IncidentReportScreen() {
           </View>
         )}
       </ScrollView>
-      <ManagerBottomNav active="incident" />
+      )}
+      
+      {/* Dynamic Role-Based Bottom Navigation */}
+      {userRole === 'admin' || userRole === 'warehouse_manager' ? (
+        <ManagerBottomNav active="incident" />
+      ) : (
+        <StaffBottomNav active="incident" />
+      )}
     </SafeAreaView>
   );
 }

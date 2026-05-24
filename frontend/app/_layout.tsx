@@ -13,12 +13,13 @@ import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { StatusBar } from 'expo-status-bar';
 
 import { AuthProvider, useAuth }
 from '../contexts/AuthContext';
 import { StoreCartProvider } from '../contexts/StoreCartContext';
 import { AppAlertProvider } from '../components/AppAlertProvider';
-import { AppPreferencesProvider } from '../contexts/AppPreferencesContext';
+import { AppPreferencesProvider, useAppPreferences } from '../contexts/AppPreferencesContext';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -27,6 +28,7 @@ SplashScreen.preventAutoHideAsync();
 function LayoutContent() {
 
     const { isLoggedIn, userRole } = useAuth();
+    const { darkMode } = useAppPreferences();
 
     const pathname = usePathname();
 

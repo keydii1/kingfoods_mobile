@@ -5,8 +5,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../../constants/colors';
-import { getCustomers, getOrders } from '../../constants/services/api';
+import { getCustomers, getOrders, getCachedData } from '../../constants/services/api';
 import ManagerBottomNav from '../../components/ManagerBottomNav';
+import { useAppPreferences } from '../../contexts/AppPreferencesContext';
 
 const filterTabs = [
   { key: 'all', label: 'Tất cả' },
@@ -16,9 +17,21 @@ const filterTabs = [
 ];
 
 export default function StoreListScreen() {
-  const [stores, setStores] = useState([]);
-  const [orders, setOrders] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const cachedStores = getCachedData('/admin/customers?page=1&limit=200');
+  const cachedOrders = getCachedData('/admin/orders');
+
+  const { darkMode } = useAppPreferences();
+
+  const activeBg = darkMode ? '#121212' : '#f0f4f1';
+  const activeHeaderBg = darkMode ? '#1e1e1e' : '#fff';
+  const activeBorderColor = darkMode ? '#2d2d2d' : '#eee';
+  const activeTextColor = darkMode ? '#f3f4f6' : '#222';
+  const activeCardBg = darkMode ? '#1e1e1e' : '#fff';
+  const activeTextGrayColor = darkMode ? '#9ca3af' : '#666';
+
+  const [stores, setStores] = useState(cachedStores?.data || cachedStores?.customers || cachedStores?.items || (Array.isArray(cachedStores) ? cachedStores : []));
+  const [orders, setOrders] = useState(Array.isArray(cachedOrders) ? cachedOrders : (cachedOrders?.data || []));
+  const [loading, setLoading] = useState(!cachedStores || !cachedOrders);
   const [selectedFilter, setSelectedFilter] = useState('all');
 
   useEffect(() => {
@@ -77,7 +90,7 @@ export default function StoreListScreen() {
 
     return (
       <TouchableOpacity
-        style={styles.storeItem}
+        style={[styles.storeItem, { backgroundColor: activeCardBg, borderColor: activeBorderColor }]}
         onPress={() => router.push({ 
           pathname: '/storeorders', 
           params: { 
@@ -87,25 +100,25 @@ export default function StoreListScreen() {
           } 
         })}
       >
-        <View style={styles.storeIcon}>
+        <View style={[styles.storeIcon, { backgroundColor: darkMode ? '#2d2d2d' : '#e8f5e9' }]}>
           <Ionicons name="business-outline" size={22} color={COLORS.primary} />
         </View>
         <View style={styles.storeInfo}>
-          <Text style={styles.storeName}>{item.name}</Text>
-          <Text style={styles.storeEmail}>{item.email}</Text>
+          <Text style={[styles.storeName, { color: activeTextColor }]}>{item.name}</Text>
+          <Text style={[styles.storeEmail, { color: activeTextGrayColor }]}>{item.email}</Text>
           {matchedOrders.length > 0 && (
             <View style={styles.badgeRow}>
               <View style={[
                 styles.statusBadge, 
-                selectedFilter === 'pending' && { backgroundColor: '#fff3e0' },
-                selectedFilter === 'processing' && { backgroundColor: '#e3f2fd' },
-                selectedFilter === 'delivered' && { backgroundColor: '#e8f5e9' },
+                selectedFilter === 'pending' && { backgroundColor: darkMode ? '#7c2d12' : '#fff3e0' },
+                selectedFilter === 'processing' && { backgroundColor: darkMode ? '#1e3a8a' : '#e3f2fd' },
+                selectedFilter === 'delivered' && { backgroundColor: darkMode ? '#14532d' : '#e8f5e9' },
               ]}>
                 <Text style={[
                   styles.statusBadgeText,
-                  selectedFilter === 'pending' && { color: '#e65100' },
-                  selectedFilter === 'processing' && { color: '#1565c0' },
-                  selectedFilter === 'delivered' && { color: '#2e7d32' },
+                  selectedFilter === 'pending' && { color: darkMode ? '#fb923c' : '#e65100' },
+                  selectedFilter === 'processing' && { color: darkMode ? '#60a5fa' : '#1565c0' },
+                  selectedFilter === 'delivered' && { color: darkMode ? '#4ade80' : '#2e7d32' },
                 ]}>
                   {selectedFilter === 'all' 
                     ? `${matchedOrders.length} đơn hàng` 
@@ -125,22 +138,22 @@ export default function StoreListScreen() {
 
   if (loading) {
     return (
-      <SafeAreaView style={[styles.safeArea, { justifyContent: 'center', alignItems: 'center' }]}>
+      <SafeAreaView style={[styles.safeArea, { backgroundColor: activeBg, justifyContent: 'center', alignItems: 'center' }]}>
         <ActivityIndicator color={COLORS.primary} size="large" />
       </SafeAreaView>
     );
   }
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <View style={styles.header}>
+    <SafeAreaView style={[styles.safeArea, { backgroundColor: activeBg }]}>
+      <View style={[styles.header, { backgroundColor: activeHeaderBg, borderBottomColor: activeBorderColor }]}>
         <View style={{ width: 32 }} />
-        <Text style={styles.headerTitle}>Danh sách cửa hàng</Text>
-        <Text style={[styles.count, { width: 32, textAlign: 'right' }]}>{filteredStores.length}</Text>
+        <Text style={[styles.headerTitle, { color: activeTextColor }]}>Danh sách cửa hàng</Text>
+        <Text style={[styles.count, { color: activeTextColor, width: 32, textAlign: 'right' }]}>{filteredStores.length}</Text>
       </View>
 
       {/* Filter Row */}
-      <View style={styles.filterRow}>
+      <View style={[styles.filterRow, { backgroundColor: activeHeaderBg, borderBottomColor: activeBorderColor }]}>
         <FlatList
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -152,10 +165,14 @@ export default function StoreListScreen() {
             const isActive = selectedFilter === item.key;
             return (
               <TouchableOpacity
-                style={[styles.filterBtn, isActive && styles.filterActive]}
+                style={[
+                  styles.filterBtn, 
+                  { backgroundColor: darkMode ? '#2d2d2d' : '#f5f5f5', borderColor: darkMode ? '#3d3d3d' : '#e0e0e0' },
+                  isActive && styles.filterActive
+                ]}
                 onPress={() => setSelectedFilter(item.key)}
               >
-                <Text style={[styles.filterText, isActive && styles.filterTextActive]}>
+                <Text style={[styles.filterText, { color: darkMode ? '#cbd5e1' : '#666' }, isActive && styles.filterTextActive]}>
                   {item.label} {count > 0 ? `(${count})` : '(0)'}
                 </Text>
               </TouchableOpacity>
@@ -169,10 +186,10 @@ export default function StoreListScreen() {
         keyExtractor={(item) => String(item.id)}
         renderItem={renderItem}
         contentContainerStyle={styles.list}
-        ItemSeparatorComponent={() => <View style={styles.separator} />}
+        ItemSeparatorComponent={() => <View style={[styles.separator, { backgroundColor: activeBorderColor }]} />}
         ListEmptyComponent={
           <View style={styles.center}>
-            <Text style={styles.emptyText}>Không có cửa hàng nào có đơn hàng phù hợp</Text>
+            <Text style={[styles.emptyText, { color: activeTextGrayColor }]}>Không có cửa hàng nào có đơn hàng phù hợp</Text>
           </View>
         }
       />

@@ -44,13 +44,22 @@ export function getToken() {
     return authToken;
 }
 
+export function getCachedData(endpoint, body = null) {
+    const cacheKey = `${endpoint}:${body ? JSON.stringify(body) : ''}`;
+    const cached = apiCache.get(cacheKey);
+    if (cached) {
+        return cached.data;
+    }
+    return null;
+}
+
 async function request(method, endpoint, body = null, extraHeaders = {}) {
     const isGet = method === 'GET';
     const cacheKey = `${endpoint}:${body ? JSON.stringify(body) : ''}`;
 
     if (isGet) {
         const cached = apiCache.get(cacheKey);
-        if (cached && Date.now() - cached.timestamp < 10000) { // 10s TTL
+        if (cached && Date.now() - cached.timestamp < 60000) { // Extended to 60s TTL
             return cached.data;
         }
     } else {
