@@ -125,7 +125,7 @@ export default function StoreOrderScreen() {
                   unit: p.unit || 'cái',
                   price: typeof p.price === 'string' ? parseFloat(p.price) : (p.price || 0),
                   image: p.image || '',
-                  categoryId: p.category_id || p.category?.id || null,
+                  categoryId: p.categoryId || p.category_id || p.category?.id || null,
               })));
 
               const cats = Array.isArray(catRes) ? catRes : (catRes?.items || catRes?.data || []);
