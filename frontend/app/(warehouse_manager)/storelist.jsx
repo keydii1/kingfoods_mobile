@@ -6,6 +6,7 @@ import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../../constants/colors';
 import { getCustomers, getOrders } from '../../constants/services/api';
+import ManagerBottomNav from '../../components/ManagerBottomNav';
 
 const filterTabs = [
   { key: 'all', label: 'Tất cả' },
@@ -133,11 +134,9 @@ export default function StoreListScreen() {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.replace('/managerdashboard')}>
-          <Ionicons name="chevron-back" size={24} color={COLORS.primary} />
-        </TouchableOpacity>
+        <View style={{ width: 32 }} />
         <Text style={styles.headerTitle}>Danh sách cửa hàng</Text>
-        <Text style={styles.count}>{filteredStores.length}</Text>
+        <Text style={[styles.count, { width: 32, textAlign: 'right' }]}>{filteredStores.length}</Text>
       </View>
 
       {/* Filter Row */}
@@ -176,7 +175,10 @@ export default function StoreListScreen() {
             <Text style={styles.emptyText}>Không có cửa hàng nào có đơn hàng phù hợp</Text>
           </View>
         }
-      />
+      </FlatList>
+      
+      {/* Bottom Nav */}
+      <ManagerBottomNav active="storelist" />
     </SafeAreaView>
   );
 }
