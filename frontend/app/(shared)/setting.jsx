@@ -1,26 +1,108 @@
 import {Text, TextInput, View, TouchableOpacity, StyleSheet, ScrollView, Switch, Linking} from 'react-native'
 import { Alert } from '../../utils/appAlert';
-import {useState, useEffect} from 'react'
+import {useState, useEffect, useCallback} from 'react'
 import {router} from 'expo-router'
 import {Ionicons} from '@expo/vector-icons'
 import {COLORS} from '../../constants/colors'
 import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context'
 import { useAuth } from '../../contexts/AuthContext'
-import { useStoreCart } from '../../contexts/StoreCartContext'
 import {logout as apiLogout, changeUserPassword, changeCustomerPassword} from '../../constants/services/api'
 import { validateNewPassword, PASSWORD_HINT } from '../../constants/passwordPolicy';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// Tạo 1 component chung cho tất cả các card
-function SettingRow({icon, iconBg, iconColor, name, sub, value, onValueChange}){
+// Vietnamese/English translations dictionary
+const TRANSLATIONS = {
+    vi: {
+        settings: 'Cài đặt',
+        appSettings: 'Cài đặt app',
+        appPreferences: 'Cài đặt ứng dụng',
+        darkMode: 'Giao diện tối (Dark Mode)',
+        darkModeSub: 'Chuyển đổi giao diện sáng/tối',
+        language: 'Ngôn ngữ (Language)',
+        languageSub: 'Chọn ngôn ngữ hiển thị',
+        biometrics: 'Đăng nhập sinh trắc học',
+        biometricsSub: 'Sử dụng FaceID hoặc Vân tay',
+        notifications: 'Thông báo đẩy',
+        notificationsSub: 'Nhận thông báo đơn hàng & ưu đãi',
+        accountSupport: 'Tài khoản & Hỗ trợ',
+        storeProfile: 'Hồ sơ cửa hàng',
+        storeProfileSub: 'Xem và chỉnh sửa thông tin',
+        orderStats: 'Thống kê đơn hàng',
+        orderStatsSub: 'Theo dõi đơn đã đặt và trạng thái',
+        hotline: 'Hotline kho Kingfood',
+        changePassword: 'Đổi mật khẩu',
+        oldPassword: 'Mật khẩu cũ',
+        newPassword: 'Mật khẩu mới',
+        confirmNewPassword: 'Xác nhận mật khẩu mới',
+        appInfo: 'Thông tin App',
+        version: 'Phiên bản',
+        appType: 'Ứng dụng',
+        customerApp: 'Kingfood · Đặt hàng cửa hàng',
+        staffApp: 'Production · Kingfood WMS',
+        logout: 'Đăng xuất',
+        createStaffAccount: 'Tạo tài khoản nhân viên',
+        success: 'Thành công',
+        error: 'Lỗi',
+        passwordChanged: 'Đổi mật khẩu thành công',
+        pleaseFillAll: 'Vui lòng nhập đầy đủ thông tin',
+        passwordsNotMatch: 'Mật khẩu mới không khớp',
+        invalidPassword: 'Mật khẩu không hợp lệ',
+        cannotChangePassword: 'Không thể đổi mật khẩu',
+        oldPasswordIncorrect: 'Mật khẩu cũ không đúng',
+        selectLanguage: 'Chọn ngôn ngữ',
+        cancel: 'Huỷ',
+    },
+    en: {
+        settings: 'Settings',
+        appSettings: 'App Settings',
+        appPreferences: 'Application Preferences',
+        darkMode: 'Dark Mode',
+        darkModeSub: 'Toggle light/dark appearance',
+        language: 'Language',
+        languageSub: 'Select application language',
+        biometrics: 'Biometric Login',
+        biometricsSub: 'Use FaceID or Fingerprint',
+        notifications: 'Push Notifications',
+        notificationsSub: 'Receive order updates & offers',
+        accountSupport: 'Account & Support',
+        storeProfile: 'Store Profile',
+        storeProfileSub: 'View and edit profile info',
+        orderStats: 'Order Statistics',
+        orderStatsSub: 'Track placed orders and status',
+        hotline: 'Kingfood Warehouse Hotline',
+        changePassword: 'Change Password',
+        oldPassword: 'Old Password',
+        newPassword: 'New Password',
+        confirmNewPassword: 'Confirm New Password',
+        appInfo: 'App Information',
+        version: 'Version',
+        appType: 'Application',
+        customerApp: 'Kingfood · Store Ordering',
+        staffApp: 'Production · Kingfood WMS',
+        logout: 'Log Out',
+        createStaffAccount: 'Create Staff Account',
+        success: 'Success',
+        error: 'Error',
+        passwordChanged: 'Password changed successfully',
+        pleaseFillAll: 'Please fill in all fields',
+        passwordsNotMatch: 'New passwords do not match',
+        invalidPassword: 'Invalid password',
+        cannotChangePassword: 'Cannot change password',
+        oldPasswordIncorrect: 'Old password is incorrect',
+        selectLanguage: 'Select Language',
+        cancel: 'Cancel',
+    }
+};
+
+function SettingRow({icon, iconBg, iconColor, name, sub, value, onValueChange, textColor, subColor, borderColor}){
     return(
-        <View style = {styles.settingRow}>
+        <View style = {[styles.settingRow, borderColor && { borderTopColor: borderColor }]}>
             <View style ={[styles.setIcon, {backgroundColor: iconBg}]}>
                 <Ionicons name={icon} size={18} color={iconColor || COLORS.primary} />
             </View>
             <View style = {styles.setLabel}>
-                <Text style = {styles.setName}>{name}</Text>
-                <Text style ={styles.setSub}>{sub}</Text>
+                <Text style = {[styles.setName, textColor && { color: textColor }]}>{name}</Text>
+                <Text style ={[styles.setSub, subColor && { color: subColor }]}>{sub}</Text>
             </View>
             <Switch 
             value = {value}
@@ -31,39 +113,24 @@ function SettingRow({icon, iconBg, iconColor, name, sub, value, onValueChange}){
     );
 }
 
-function InfoRow({label, value}){
+function InfoRow({label, value, textColor, subColor, borderColor}){
     return(
-        <View style = {styles.infoRow}>
-            <Text style = {styles.infoLabel}>{label}</Text>
-            <Text style = {styles.infoValue}>{value}</Text>
+        <View style = {[styles.infoRow, borderColor && { borderTopColor: borderColor }]}>
+            <Text style = {[styles.infoLabel, subColor && { color: subColor }]}>{label}</Text>
+            <Text style = {[styles.infoValue, textColor && { color: textColor }]}>{value}</Text>
         </View>
     )
 }
 
-function CartPersistSetting() {
-    const { persistCart, setPersistCart } = useStoreCart();
-    return (
-        <SettingRow
-            icon="cart-outline"
-            iconBg="#e8f5e9"
-            iconColor={COLORS.primary}
-            name="Lưu giỏ hàng tự động"
-            sub="Giữ sản phẩm đã chọn khi thoát app"
-            value={persistCart}
-            onValueChange={setPersistCart}
-        />
-    );
-}
-
-function LinkRow({icon, iconBg, iconColor, name, sub, onPress}){
+function LinkRow({icon, iconBg, iconColor, name, sub, onPress, textColor, subColor, borderColor}){
     return(
-        <TouchableOpacity style={styles.linkRow} onPress={onPress} activeOpacity={0.75}>
+        <TouchableOpacity style={[styles.linkRow, borderColor && { borderTopColor: borderColor }]} onPress={onPress} activeOpacity={0.75}>
             <View style={[styles.setIcon, {backgroundColor: iconBg}]}>
                 <Ionicons name={icon} size={18} color={iconColor || COLORS.primary} />
             </View>
             <View style={styles.setLabel}>
-                <Text style={styles.setName}>{name}</Text>
-                {sub ? <Text style={styles.setSub}>{sub}</Text> : null}
+                <Text style={[styles.setName, textColor && { color: textColor }]}>{name}</Text>
+                {sub ? <Text style={[styles.setSub, subColor && { color: subColor }]}>{sub}</Text> : null}
             </View>
             <Ionicons name="chevron-forward" size={18} color="#ccc" />
         </TouchableOpacity>
@@ -75,15 +142,20 @@ export default function SettingScreen(){
     const insets = useSafeAreaInsets();
     const isCustomer = userRole === 'store_manager';
 
+    // Application Preferences
+    const [darkMode, setDarkMode] = useState(false);
+    const [language, setLanguage] = useState('vi');
+    const [biometric, setBiometric] = useState(false);
+    const [pushNotify, setPushNotify] = useState(true);
+
+    // Legacy / Staff settings
     const [beepSound, setBeepSound] = useState(true);
     const [vibrate, setVibrate] = useState(true);
     const [lowAlert, setLowAlert] = useState(true);
-    const [offlineMode, setOfflineMode] = useState(true);
+    const [offlineMode, setOfflineMode] = useState(false);
     const [autoSync, setAutoSync] = useState(true);
 
-    const [orderStatusNotify, setOrderStatusNotify] = useState(true);
-    const [orderReminder, setOrderReminder] = useState(true);
-    const [notifySound, setNotifySound] = useState(true);
+    // Password input fields
     const [oldPassword, setOldPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -92,27 +164,29 @@ export default function SettingScreen(){
         async function loadSettings() {
             try {
                 const keys = [
+                    'setting_darkMode',
+                    'setting_language',
+                    'setting_biometric',
+                    'setting_pushNotify',
                     'setting_beepSound',
                     'setting_vibrate',
                     'setting_lowAlert',
                     'setting_offlineMode',
-                    'setting_autoSync',
-                    'setting_orderStatusNotify',
-                    'setting_orderReminder',
-                    'setting_notifySound'
+                    'setting_autoSync'
                 ];
                 const stores = await AsyncStorage.multiGet(keys);
                 stores.forEach(([key, val]) => {
                     if (val !== null) {
                         const bool = val === 'true';
+                        if (key === 'setting_darkMode') setDarkMode(bool);
+                        if (key === 'setting_language') setLanguage(val);
+                        if (key === 'setting_biometric') setBiometric(bool);
+                        if (key === 'setting_pushNotify') setPushNotify(bool);
                         if (key === 'setting_beepSound') setBeepSound(bool);
                         if (key === 'setting_vibrate') setVibrate(bool);
                         if (key === 'setting_lowAlert') setLowAlert(bool);
                         if (key === 'setting_offlineMode') setOfflineMode(bool);
                         if (key === 'setting_autoSync') setAutoSync(bool);
-                        if (key === 'setting_orderStatusNotify') setOrderStatusNotify(bool);
-                        if (key === 'setting_orderReminder') setOrderReminder(bool);
-                        if (key === 'setting_notifySound') setNotifySound(bool);
                     }
                 });
             } catch (err) {
@@ -130,18 +204,55 @@ export default function SettingScreen(){
         }
     };
 
+    const t = TRANSLATIONS[language] || TRANSLATIONS.vi;
+
+    // Dark theme dynamic colors
+    const activeBg = darkMode ? '#121212' : '#f0f4f1';
+    const activeCardBg = darkMode ? '#1e1e1e' : '#fff';
+    const activeTextColor = darkMode ? '#f3f4f6' : '#222';
+    const activeTextGrayColor = darkMode ? '#9ca3af' : '#888';
+    const activeBorderColor = darkMode ? '#2d2d2d' : '#eee';
+    const activeInputBg = darkMode ? '#2d2d2d' : '#fff';
+
+    const showLanguagePicker = () => {
+        Alert.alert(
+            t.selectLanguage,
+            '',
+            [
+                {
+                    text: 'Tiếng Việt',
+                    onPress: () => {
+                        setLanguage('vi');
+                        saveSetting('language', 'vi');
+                    }
+                },
+                {
+                    text: 'English',
+                    onPress: () => {
+                        setLanguage('en');
+                        saveSetting('language', 'en');
+                    }
+                },
+                {
+                    text: t.cancel,
+                    style: 'cancel'
+                }
+            ]
+        );
+    };
+
     const handleChangePassword = async () => {
         if (!oldPassword || !newPassword || !confirmPassword) {
-            Alert.alert('Lỗi', 'Vui lòng nhập đầy đủ thông tin');
+            Alert.alert(t.error, t.pleaseFillAll);
             return;
         }
         if (newPassword !== confirmPassword) {
-            Alert.alert('Lỗi', 'Mật khẩu mới không khớp');
+            Alert.alert(t.error, t.passwordsNotMatch);
             return;
         }
         const passwordError = validateNewPassword(newPassword);
         if (passwordError) {
-            Alert.alert('Mật khẩu không hợp lệ', passwordError);
+            Alert.alert(t.invalidPassword, passwordError);
             return;
         }
         try {
@@ -150,17 +261,17 @@ export default function SettingScreen(){
             } else {
                 await changeUserPassword({ oldPassword, newPassword });
             }
-            Alert.alert('Thành công', 'Đổi mật khẩu thành công');
+            Alert.alert(t.success, t.passwordChanged);
             setOldPassword('');
             setNewPassword('');
             setConfirmPassword('');
         } catch (err) {
-            const msg = err?.message || 'Không thể đổi mật khẩu';
+            const msg = err?.message || t.cannotChangePassword;
             const friendly =
               msg.toLowerCase().includes('old password')
-                ? 'Mật khẩu cũ không đúng'
+                ? t.oldPasswordIncorrect
                 : msg;
-            Alert.alert('Lỗi', friendly);
+            Alert.alert(t.error, friendly);
         }
     };
 
@@ -175,65 +286,150 @@ export default function SettingScreen(){
     };
 
     return(
-        <SafeAreaView style = {styles.safeArea}>
+        <SafeAreaView style = {[styles.safeArea, { backgroundColor: activeBg }]}>
             {/* Header */}
-            <View style = {styles.header}>
+            <View style = {[styles.header, { backgroundColor: activeCardBg, borderBottomColor: activeBorderColor }]}>
                 <TouchableOpacity onPress = {() => router.back()}>
                     <Ionicons name="chevron-back" size={24} color={COLORS.primary} />
                 </TouchableOpacity>
-                <Text style = {styles.headerTitle}>{isCustomer ? 'Cài đặt' : 'Cài đặt app'}</Text>
+                <Text style = {[styles.headerTitle, { color: activeTextColor }]}>{isCustomer ? t.settings : t.appSettings}</Text>
                 <View style = {{width: 28}} />
             </View>
 
             <ScrollView style = {styles.scroll} contentContainerStyle={{ paddingBottom: 16 }}>
                 {isCustomer ? (
                     <>
-                        <View style={styles.card}>
-                            <Text style={styles.cardTitle}>Thông báo đơn hàng</Text>
+                        {/* App Preferences */}
+                        <View style={[styles.card, { backgroundColor: activeCardBg }]}>
+                            <Text style={[styles.cardTitle, { color: activeTextGrayColor }]}>{t.appPreferences}</Text>
                             <SettingRow
-                                icon="volume-medium-outline" iconBg="#e3f2fd" iconColor="#1565c0"
-                                name="Âm thanh đặt hàng thành công"
-                                sub="Phát âm thanh khi đặt hàng thành công"
-                                value={notifySound}
+                                icon="moon-outline" iconBg="#3f51b5" iconColor="#fff"
+                                name={t.darkMode}
+                                sub={t.darkModeSub}
+                                value={darkMode}
                                 onValueChange={(val) => {
-                                    setNotifySound(val);
-                                    saveSetting('notifySound', val);
+                                    setDarkMode(val);
+                                    saveSetting('darkMode', val);
                                 }}
+                                textColor={activeTextColor}
+                                subColor={activeTextGrayColor}
+                                borderColor={activeBorderColor}
+                            />
+                            <LinkRow
+                                icon="language-outline" iconBg="#4caf50" iconColor="#fff"
+                                name={t.language}
+                                sub={language === 'vi' ? 'Tiếng Việt' : 'English'}
+                                onPress={showLanguagePicker}
+                                textColor={activeTextColor}
+                                subColor={activeTextGrayColor}
+                                borderColor={activeBorderColor}
+                            />
+                            <SettingRow
+                                icon="finger-print-outline" iconBg="#00bcd4" iconColor="#fff"
+                                name={t.biometrics}
+                                sub={t.biometricsSub}
+                                value={biometric}
+                                onValueChange={(val) => {
+                                    setBiometric(val);
+                                    saveSetting('biometric', val);
+                                }}
+                                textColor={activeTextColor}
+                                subColor={activeTextGrayColor}
+                                borderColor={activeBorderColor}
+                            />
+                            <SettingRow
+                                icon="notifications-outline" iconBg="#ff9800" iconColor="#fff"
+                                name={t.notifications}
+                                sub={t.notificationsSub}
+                                value={pushNotify}
+                                onValueChange={(val) => {
+                                    setPushNotify(val);
+                                    saveSetting('pushNotify', val);
+                                }}
+                                textColor={activeTextColor}
+                                subColor={activeTextGrayColor}
+                                borderColor={activeBorderColor}
                             />
                         </View>
 
-                        <View style={styles.card}>
-                            <Text style={styles.cardTitle}>Đặt hàng</Text>
-                            <CartPersistSetting />
-                        </View>
-
-                        <View style={styles.card}>
-                            <Text style={styles.cardTitle}>Tài khoản & hỗ trợ</Text>
+                        {/* Account & Support */}
+                        <View style={[styles.card, { backgroundColor: activeCardBg }]}>
+                            <Text style={[styles.cardTitle, { color: activeTextGrayColor }]}>{t.accountSupport}</Text>
                             <LinkRow
                                 icon="person-outline" iconBg="#e8f5e9" iconColor={COLORS.primary}
-                                name="Hồ sơ cửa hàng"
-                                sub={userName || 'Xem và chỉnh sửa thông tin'}
+                                name={t.storeProfile}
+                                sub={userName || t.storeProfileSub}
                                 onPress={() => router.push('/customerprofile')}
+                                textColor={activeTextColor}
+                                subColor={activeTextGrayColor}
+                                borderColor={activeBorderColor}
                             />
                             <LinkRow
                                 icon="stats-chart-outline" iconBg="#e3f2fd" iconColor="#1565c0"
-                                name="Thống kê đơn hàng"
-                                sub="Theo dõi đơn đã đặt và trạng thái"
+                                name={t.orderStats}
+                                sub={t.orderStatsSub}
                                 onPress={() => router.push('/storestatistics')}
+                                textColor={activeTextColor}
+                                subColor={activeTextGrayColor}
+                                borderColor={activeBorderColor}
                             />
                             <LinkRow
                                 icon="call-outline" iconBg="#fff3e0" iconColor="#e65100"
-                                name="Hotline kho Kingfood"
+                                name={t.hotline}
                                 sub="1900 1234 · 8:00 – 21:00"
                                 onPress={() => Linking.openURL('tel:19001234')}
+                                textColor={activeTextColor}
+                                subColor={activeTextGrayColor}
+                                borderColor={activeBorderColor}
                             />
                         </View>
                     </>
                 ) : (
                     userRole === 'staff' ? (
                         <>
-                            <View style = {styles.card}>
-                                <Text style = {styles.cardTitle}>Thông báo & cảnh báo</Text>
+                            {/* App Preferences */}
+                            <View style={[styles.card, { backgroundColor: activeCardBg }]}>
+                                <Text style={[styles.cardTitle, { color: activeTextGrayColor }]}>{t.appPreferences}</Text>
+                                <SettingRow
+                                    icon="moon-outline" iconBg="#3f51b5" iconColor="#fff"
+                                    name={t.darkMode}
+                                    sub={t.darkModeSub}
+                                    value={darkMode}
+                                    onValueChange={(val) => {
+                                        setDarkMode(val);
+                                        saveSetting('darkMode', val);
+                                    }}
+                                    textColor={activeTextColor}
+                                    subColor={activeTextGrayColor}
+                                    borderColor={activeBorderColor}
+                                />
+                                <LinkRow
+                                    icon="language-outline" iconBg="#4caf50" iconColor="#fff"
+                                    name={t.language}
+                                    sub={language === 'vi' ? 'Tiếng Việt' : 'English'}
+                                    onPress={showLanguagePicker}
+                                    textColor={activeTextColor}
+                                    subColor={activeTextGrayColor}
+                                    borderColor={activeBorderColor}
+                                />
+                                <SettingRow
+                                    icon="finger-print-outline" iconBg="#00bcd4" iconColor="#fff"
+                                    name={t.biometrics}
+                                    sub={t.biometricsSub}
+                                    value={biometric}
+                                    onValueChange={(val) => {
+                                        setBiometric(val);
+                                        saveSetting('biometric', val);
+                                    }}
+                                    textColor={activeTextColor}
+                                    subColor={activeTextGrayColor}
+                                    borderColor={activeBorderColor}
+                                />
+                            </View>
+
+                            {/* Notifications & staff specific alerts */}
+                            <View style = {[styles.card, { backgroundColor: activeCardBg }]}>
+                                <Text style = {[styles.cardTitle, { color: activeTextGrayColor }]}>Thông báo & cảnh báo</Text>
                                 <SettingRow
                                 icon="notifications-outline" iconBg="#e8f5e9" iconColor={COLORS.primary}
                                 name='Âm Thanh khi quét mã'
@@ -242,7 +438,11 @@ export default function SettingScreen(){
                                 onValueChange={(val) => {
                                     setBeepSound(val);
                                     saveSetting('beepSound', val);
-                                }} />
+                                }}
+                                textColor={activeTextColor}
+                                subColor={activeTextGrayColor}
+                                borderColor={activeBorderColor}
+                                />
                                 <SettingRow 
                                 icon="alert-circle-outline" iconBg="#ffebee" iconColor={COLORS.error}
                                 name ='Rung khi quét sai'
@@ -251,7 +451,11 @@ export default function SettingScreen(){
                                 onValueChange ={(val) => {
                                     setVibrate(val);
                                     saveSetting('vibrate', val);
-                                }} />
+                                }}
+                                textColor={activeTextColor}
+                                subColor={activeTextGrayColor}
+                                borderColor={activeBorderColor}
+                                />
                                 <SettingRow
                                 icon="warning-outline" iconBg="#fff3e0" iconColor="#e65100"
                                 name ='Cảnh báo khi năng suất thấp'
@@ -260,11 +464,15 @@ export default function SettingScreen(){
                                 onValueChange ={(val) => {
                                     setLowAlert(val);
                                     saveSetting('lowAlert', val);
-                                }} />
+                                }}
+                                textColor={activeTextColor}
+                                subColor={activeTextGrayColor}
+                                borderColor={activeBorderColor}
+                                />
                             </View>
 
-                            <View style = {styles.card}>
-                                <Text style = {styles.cardTitle}>Kết nối & dữ liệu</Text>
+                            <View style = {[styles.card, { backgroundColor: activeCardBg }]}>
+                                <Text style = {[styles.cardTitle, { color: activeTextGrayColor }]}>Kết nối & dữ liệu</Text>
                                 <SettingRow 
                                 icon="wifi-outline" iconBg="#e3f2fd" iconColor="#1565c0"
                                 name ='Chế độ Offline'
@@ -273,7 +481,11 @@ export default function SettingScreen(){
                                 onValueChange = {(val) => {
                                     setOfflineMode(val);
                                     saveSetting('offlineMode', val);
-                                }} />
+                                }}
+                                textColor={activeTextColor}
+                                subColor={activeTextGrayColor}
+                                borderColor={activeBorderColor}
+                                />
                                 <SettingRow 
                                 icon="sync-outline" iconBg="#fff3e0" iconColor="#e65100"
                                 name = 'Tự đồng bộ khi có mạng'
@@ -282,19 +494,24 @@ export default function SettingScreen(){
                                 onValueChange = {(val) => {
                                     setAutoSync(val);
                                     saveSetting('autoSync', val);
-                                }} />
+                                }}
+                                textColor={activeTextColor}
+                                subColor={activeTextGrayColor}
+                                borderColor={activeBorderColor}
+                                />
                             </View>
                         </>
                     ) : null
                 )}
 
-                <View style = {styles.card}>
-                    <Text style = {styles.cardTitle}>Đổi mật khẩu</Text>
-                    <Text style={styles.passwordHint}>{PASSWORD_HINT}</Text>
+                {/* Password card */}
+                <View style = {[styles.card, { backgroundColor: activeCardBg }]}>
+                    <Text style = {[styles.cardTitle, { color: activeTextGrayColor }]}>{t.changePassword}</Text>
+                    <Text style={[styles.passwordHint, { color: activeTextGrayColor }]}>{PASSWORD_HINT}</Text>
                     <TextInput 
-                        style={styles.passwordInput} 
-                        placeholder="Mật khẩu cũ" 
-                        placeholderTextColor="#aaa"
+                        style={[styles.passwordInput, { backgroundColor: activeInputBg, color: activeTextColor, borderColor: activeBorderColor }]} 
+                        placeholder={t.oldPassword} 
+                        placeholderTextColor={activeTextGrayColor}
                         secureTextEntry 
                         autoCapitalize="none"
                         autoCorrect={false}
@@ -302,9 +519,9 @@ export default function SettingScreen(){
                         onChangeText={setOldPassword} 
                     />
                     <TextInput 
-                        style={styles.passwordInput} 
-                        placeholder="Mật khẩu mới" 
-                        placeholderTextColor="#aaa"
+                        style={[styles.passwordInput, { backgroundColor: activeInputBg, color: activeTextColor, borderColor: activeBorderColor }]} 
+                        placeholder={t.newPassword} 
+                        placeholderTextColor={activeTextGrayColor}
                         secureTextEntry 
                         autoCapitalize="none"
                         autoCorrect={false}
@@ -312,9 +529,9 @@ export default function SettingScreen(){
                         onChangeText={setNewPassword} 
                     />
                     <TextInput 
-                        style={styles.passwordInput} 
-                        placeholder="Xác nhận mật khẩu mới" 
-                        placeholderTextColor="#aaa"
+                        style={[styles.passwordInput, { backgroundColor: activeInputBg, color: activeTextColor, borderColor: activeBorderColor }]} 
+                        placeholder={t.confirmNewPassword} 
+                        placeholderTextColor={activeTextGrayColor}
                         secureTextEntry 
                         autoCapitalize="none"
                         autoCorrect={false}
@@ -322,62 +539,66 @@ export default function SettingScreen(){
                         onChangeText={setConfirmPassword} 
                     />
                     <TouchableOpacity style={styles.changePasswordBtn} onPress={handleChangePassword}>
-                        <Text style={styles.changePasswordText}>Đổi mật khẩu</Text>
+                        <Text style={styles.changePasswordText}>{t.changePassword}</Text>
                     </TouchableOpacity>
                 </View>
 
-                <View style = {styles.card}>
-                    <Text style = {styles.cardTitle}>Thông tin App</Text>
-                    <InfoRow label ='Phiên bản' value ='v2.5.0 (Build 450)'/>
+                {/* App Info card */}
+                <View style = {[styles.card, { backgroundColor: activeCardBg }]}>
+                    <Text style = {[styles.cardTitle, { color: activeTextGrayColor }]}>{t.appInfo}</Text>
+                    <InfoRow label={t.version} value='v2.5.0 (Build 450)' textColor={activeTextColor} subColor={activeTextGrayColor} borderColor={activeBorderColor} />
                     <InfoRow
-                        label = 'Ứng dụng'
-                        value = {isCustomer ? 'Kingfood · Đặt hàng cửa hàng' : 'Production · Kingfood WMS'}
+                        label={t.appType}
+                        value={isCustomer ? t.customerApp : t.staffApp}
+                        textColor={activeTextColor}
+                        subColor={activeTextGrayColor}
+                        borderColor={activeBorderColor}
                     />
                 </View>
 
-                 {/* Nút tạo tài khoản — chỉ quản lý kho mới thấy */}
+                 {/* Staff Account creation button — Admin only */}
                 {userRole === 'admin' && (
                     <TouchableOpacity 
-                        style={styles.createAccountBtn}
+                        style={[styles.createAccountBtn, { backgroundColor: activeCardBg, borderColor: activeBorderColor }]}
                         onPress={() => router.push('/createaccount')}
                     >
                         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
                             <Ionicons name="person-add-outline" size={18} color={COLORS.primary} />
-                            <Text style={styles.createAccountText}>Tạo tài khoản nhân viên</Text>
+                            <Text style={styles.createAccountText}>{t.createStaffAccount}</Text>
                         </View>
                     </TouchableOpacity>
                 )}
 
-                 {/* Nút đăng xuất */}
+                 {/* Logout button */}
                 <TouchableOpacity 
-                    style={styles.logoutBtn}
+                    style={[styles.logoutBtn, { backgroundColor: activeCardBg, borderColor: activeBorderColor }]}
                     onPress={handleLogout}
                 >
                     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
                         <Ionicons name="log-out-outline" size={18} color="#e53935" />
-                        <Text style={styles.logoutText}>Đăng xuất</Text>
+                        <Text style={styles.logoutText}>{t.logout}</Text>
                     </View>
                 </TouchableOpacity>
             </ScrollView>
 
             {/* Bottom Nav for customer */}
             {isCustomer && (
-                <View style={[styles.bottomNav, { paddingBottom: Math.max(insets.bottom, 8) }]}>
+                <View style={[styles.bottomNav, { backgroundColor: activeCardBg, borderTopColor: activeBorderColor, paddingBottom: Math.max(insets.bottom, 8) }]}>
                     <TouchableOpacity style={styles.navItem} onPress={() => router.push('/storeorder')}>
-                        <Ionicons name="cart-outline" size={22} color="#aaa" style={{ marginBottom: 2 }} />
-                        <Text style={styles.navLabel}>Đặt hàng</Text>
+                        <Ionicons name="cart-outline" size={22} color={activeTextGrayColor} style={{ marginBottom: 2 }} />
+                        <Text style={[styles.navLabel, { color: activeTextGrayColor }]}>Đặt hàng</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.navItem} onPress={() => router.push('/storestatistics')}>
-                        <Ionicons name="stats-chart-outline" size={22} color="#aaa" style={{ marginBottom: 2 }} />
-                        <Text style={styles.navLabel}>Thống kê</Text>
+                        <Ionicons name="stats-chart-outline" size={22} color={activeTextGrayColor} style={{ marginBottom: 2 }} />
+                        <Text style={[styles.navLabel, { color: activeTextGrayColor }]}>Thống kê</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.navItem}>
                         <Ionicons name="settings" size={22} color={COLORS.primary} style={{ marginBottom: 2 }} />
                         <Text style={[styles.navLabel, styles.navActive]}>Cài đặt</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.navItem} onPress={() => router.push('/customerprofile')}>
-                        <Ionicons name="person-outline" size={22} color="#aaa" style={{ marginBottom: 2 }} />
-                        <Text style={styles.navLabel}>Cá nhân</Text>
+                        <Ionicons name="person-outline" size={22} color={activeTextGrayColor} style={{ marginBottom: 2 }} />
+                        <Text style={[styles.navLabel, { color: activeTextGrayColor }]}>Cá nhân</Text>
                     </TouchableOpacity>
                 </View>
             )}
@@ -412,7 +633,6 @@ const styles = StyleSheet.create({
 
     // Card
     card: {
-        backgroundColor: '#fff',
         borderRadius: 16,
         margin: 12,
         marginBottom: 0,
@@ -505,7 +725,6 @@ const styles = StyleSheet.create({
         margin: 12,
         marginBottom: 0,
         padding: 16,
-        backgroundColor: '#fff',
         borderRadius: 16,
         alignItems: 'center',
         borderWidth: 1.5,
@@ -521,7 +740,6 @@ const styles = StyleSheet.create({
         margin: 12,
         marginBottom: 24,
         padding: 16,
-        backgroundColor: '#fff',
         borderRadius: 16,
         alignItems: 'center',
         borderWidth: 1.5,
@@ -533,10 +751,10 @@ const styles = StyleSheet.create({
         color: '#e53935',
     },
     bottomNav: {
-        flexDirection: 'row', backgroundColor: '#fff', paddingVertical: 10,
-        borderTopWidth: 1, borderTopColor: '#eee',
+        flexDirection: 'row', paddingVertical: 10,
+        borderTopWidth: 1,
     },
     navItem: { flex: 1, alignItems: 'center' },
-    navLabel: { fontSize: 10, color: '#aaa', marginTop: 2 },
+    navLabel: { fontSize: 10, marginTop: 2 },
     navActive: { color: COLORS.primary, fontWeight: '600' },
 });
