@@ -4,8 +4,8 @@ dotenv.config();
 export class AppConfig {
   static readonly PORT = process.env.PORT || 3000;
   static readonly JWT_SECRET = process.env.JWT_SECRET!;
-  static readonly JWT_ACCESS_EXPIRES = "15m";
-  static readonly JWT_REFRESH_EXPIRES = "7d";
+  static readonly JWT_ACCESS_EXPIRES = "365d";
+  static readonly JWT_REFRESH_EXPIRES = "3650d";
   static readonly JWT_RESET_EXPIRES = "3m";
   static readonly SALT_ROUNDS = 10;
   static readonly TABLE_PREFIX = "KingFood_";
