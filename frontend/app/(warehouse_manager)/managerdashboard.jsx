@@ -102,9 +102,11 @@ export default function ManagerDashboardScreen(){
     const [loadingDispatchData, setLoadingDispatchData] = useState(false);
     const [dispatching, setDispatching] = useState(false);
     const [staffSearchQuery, setStaffSearchQuery] = useState('');
+    const [modalOrderFilter, setModalOrderFilter] = useState('all');
 
     const openDispatchModal = async () => {
         setShowDispatchModal(true);
+        setModalOrderFilter('all');
         if (ordersList.length === 0 || staffList.length === 0) {
             setLoadingDispatchData(true);
         }
@@ -116,8 +118,8 @@ export default function ManagerDashboardScreen(){
             ]);
             
             const orders = Array.isArray(ordersRes) ? ordersRes : (ordersRes?.data || []);
-            const processingOrders = orders.filter(o => o.status === 'processing');
-            setOrdersList(processingOrders);
+            const activeOrders = orders.filter(o => o.status === 'pending' || o.status === 'processing');
+            setOrdersList(activeOrders);
 
             const users = Array.isArray(usersRes) ? usersRes : (usersRes?.data || []);
             const staffOnly = users.filter(u => u.role === 'staff');
@@ -238,7 +240,7 @@ export default function ManagerDashboardScreen(){
                 getIncidents().then(res => setIncidents(Array.isArray(res) ? res : [])).catch(e => console.log('Bg incidents error:', e.message)),
                 getOrders().then(res => {
                     const orders = Array.isArray(res) ? res : (res?.data || []);
-                    setOrdersList(orders.filter(o => o.status === 'processing'));
+                    setOrdersList(orders.filter(o => o.status === 'pending' || o.status === 'processing'));
                 }).catch(e => console.log('Bg orders error:', e.message)),
                 getUsers().then(res => {
                     const users = Array.isArray(res) ? res : (res?.data || []);
@@ -334,8 +336,8 @@ export default function ManagerDashboardScreen(){
                 
                 if (ordersRes.status === 'fulfilled') {
                     const orders = Array.isArray(ordersRes.value) ? ordersRes.value : (ordersRes.value?.data || []);
-                    const processingOrders = orders.filter(o => o.status === 'processing');
-                    setOrdersList(processingOrders);
+                    const activeOrders = orders.filter(o => o.status === 'pending' || o.status === 'processing');
+                    setOrdersList(activeOrders);
                 } else {
                     console.log('Orders pre-fetch error:', ordersRes.reason?.message);
                 }
@@ -412,6 +414,36 @@ export default function ManagerDashboardScreen(){
                     <Ionicons name="chevron-forward" size={20} color="#fff" />
                 </TouchableOpacity>
 
+                <TouchableOpacity 
+                    style={{
+                        backgroundColor: darkMode ? '#3b181a' : '#ffebee',
+                        borderWidth: 1.5,
+                        borderColor: darkMode ? '#7f1d1d' : '#ffcdd2',
+                        borderRadius: 16,
+                        padding: 16,
+                        marginBottom: 12,
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        shadowColor: '#e53935',
+                        shadowOpacity: 0.1,
+                        shadowRadius: 6,
+                        elevation: 2,
+                    }}
+                    onPress={() => router.push('/(warehouse_manager)/returns')}
+                >
+                    <View style={{ backgroundColor: darkMode ? '#7f1d1d' : '#ffcdd2', width: 40, height: 40, borderRadius: 20, alignItems: 'center', justifyContent: 'center', marginRight: 12 }}>
+                        <Ionicons name="alert-circle-outline" size={22} color={darkMode ? '#f87171' : '#d32f2f'} />
+                    </View>
+                    <View style={{ flex: 1, marginRight: 8 }}>
+                        <Text style={{ color: darkMode ? '#f87171' : '#c62828', fontSize: 15, fontWeight: '800' }}>Truy xuất QA & Kỷ luật</Text>
+                        <Text style={{ color: darkMode ? '#cbd5e1' : '#555', fontSize: 11, marginTop: 2 }} numberOfLines={2}>
+                            Truy quét lịch sử đóng thùng & Xử phạt nhân viên vi phạm
+                        </Text>
+                    </View>
+                    <Ionicons name="chevron-forward" size={20} color={darkMode ? '#f87171' : '#d32f2f'} />
+                </TouchableOpacity>
+
                 {/* Phân tích trạng thái đơn hàng */}
                 <View style = {[styles.card, { backgroundColor: activeCardBg }]}>
                     <Text style = {[styles.cardTitle, { color: activeTextColor }]}>Phân tích trạng thái đơn hàng</Text>
@@ -484,11 +516,16 @@ export default function ManagerDashboardScreen(){
                     <Text style = {[styles.cardTitle, { color: activeTextColor }]}>Picker xuất sắc nhất hôm nay</Text>
                     {topStaff.length > 0 ? (
                         topStaff.map((staff, idx) => {
-                            const icons = ['🥇', '🥈', '🥉'];
+                            const rankIcons = ['trophy', 'medal', 'ribbon'];
+                            const rankColors = ['#eab308', '#94a3b8', '#b45309'];
                             return (
                                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 10, borderBottomWidth: idx < topStaff.length - 1 ? 0.5 : 0, borderColor: activeBorderColor }} key={staff.staffId}>
                                     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-                                        <Text style={{ fontSize: 16 }}>{icons[idx] || '👤'}</Text>
+                                        {idx < 3 ? (
+                                            <Ionicons name={rankIcons[idx]} size={18} color={rankColors[idx]} />
+                                        ) : (
+                                            <Ionicons name="person-circle-outline" size={18} color={activeTextGrayColor} />
+                                        )}
                                         <Text style={{ fontSize: 14, fontWeight: '600', color: activeTextColor }}>{staff.name}</Text>
                                     </View>
                                     <View style={{ alignItems: 'flex-end' }}>
@@ -574,7 +611,7 @@ export default function ManagerDashboardScreen(){
 
                             <ScrollView style={styles.modalBody} keyboardShouldPersistTaps="handled">
                                 {/* 1. LỰA CHỌN ĐƠN HÀNG */}
-                                <Text style={[styles.sectionTitle, { color: activeTextColor }]}>1. Lựa chọn Đơn đặt hàng đang xử lý: *</Text>
+                                <Text style={[styles.sectionTitle, { color: activeTextColor }]}>1. Lựa chọn Đơn đặt hàng cần điều phối & xử lý: *</Text>
                                 {loadingDispatchData ? (
                                     <ActivityIndicator color={COLORS.primary} size="small" style={{ marginVertical: 12 }} />
                                 ) : selectedPickingOrderId ? (
@@ -627,36 +664,115 @@ export default function ManagerDashboardScreen(){
                                             </View>
                                         );
                                     })()
-                                ) : ordersList.length > 0 ? (
-                                    <View style={{ borderWidth: 1.5, borderColor: activeBorderColor, borderRadius: 12, overflow: 'hidden', backgroundColor: activeCardBg, marginVertical: 8 }}>
-                                        {ordersList.map(order => (
-                                            <TouchableOpacity
-                                                key={order.id}
-                                                style={{
-                                                    padding: 14,
-                                                    borderBottomWidth: 1,
-                                                    borderBottomColor: activeBorderColor,
-                                                    backgroundColor: activeCardBg,
-                                                }}
-                                                onPress={() => handleSelectOrder(order.id)}
-                                            >
-                                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                                                    <Text style={{ fontWeight: '700', fontSize: 13, color: activeTextColor }}>
-                                                        Đơn hàng #{order.id}
-                                                    </Text>
-                                                    <Text style={{ fontSize: 12, fontWeight: '800', color: COLORS.primary }}>
-                                                        {order.totalPrice ? order.totalPrice.toLocaleString() : '0'}đ
-                                                    </Text>
-                                                </View>
-                                                <Text style={{ fontSize: 11, color: activeTextGrayColor, marginTop: 4 }}>
-                                                    Chi nhánh: {order.branch?.name || order.customer?.name || 'Kingfood Partner'} · {order.orderDetails?.length || 0} SKU
-                                                </Text>
-                                            </TouchableOpacity>
-                                        ))}
-                                    </View>
-                                ) : (
-                                    <Text style={{ color: activeTextGrayColor, fontStyle: 'italic', marginVertical: 12 }}>Không có đơn đặt hàng nào đang ở trạng thái Đang Soạn Hàng.</Text>
-                                )}
+                                                                ) : (
+                                     // List Mode with Status Filters
+                                     (() => {
+                                         const filteredOrdersList = ordersList.filter(o => {
+                                             if (modalOrderFilter === 'all') return true;
+                                             return o.status === modalOrderFilter;
+                                         });
+
+                                         return (
+                                             <View style={{ marginVertical: 8 }}>
+                                                 {/* Status Filters segmented control */}
+                                                 <View style={{ flexDirection: 'row', gap: 6, marginBottom: 12, flexWrap: 'wrap' }}>
+                                                     {[
+                                                         { key: 'all', label: 'Tất cả', icon: 'list' },
+                                                         { key: 'pending', label: 'Đơn mới', icon: 'time-outline', color: COLORS.success },
+                                                         { key: 'processing', label: 'Đang soạn', icon: 'cube-outline', color: '#1565c0' },
+                                                     ].map(tab => {
+                                                         const isSelected = modalOrderFilter === tab.key;
+                                                         const isPending = tab.key === 'pending';
+                                                         const isProcessing = tab.key === 'processing';
+                                                         const tabColor = isPending ? COLORS.success : (isProcessing ? '#1565c0' : COLORS.primary);
+                                                         
+                                                         return (
+                                                             <TouchableOpacity
+                                                                 key={tab.key}
+                                                                 style={{
+                                                                     flexDirection: 'row',
+                                                                     alignItems: 'center',
+                                                                     gap: 4,
+                                                                     paddingHorizontal: 10,
+                                                                     paddingVertical: 6,
+                                                                     borderRadius: 20,
+                                                                     borderWidth: 1.5,
+                                                                     borderColor: isSelected ? tabColor : activeBorderColor,
+                                                                     backgroundColor: isSelected 
+                                                                         ? (darkMode ? (isPending ? '#14532d' : (isProcessing ? '#1e3a8a' : '#2d2d2d')) : (isPending ? '#e8f5e9' : (isProcessing ? '#e3f2fd' : COLORS.warningBg)))
+                                                                         : activeCardBg,
+                                                                 }}
+                                                                 onPress={() => setModalOrderFilter(tab.key)}
+                                                             >
+                                                                 <Ionicons 
+                                                                     name={tab.icon} 
+                                                                     size={13} 
+                                                                     color={isSelected ? (darkMode ? '#fff' : tabColor) : activeTextGrayColor} 
+                                                                 />
+                                                                 <Text style={{ 
+                                                                     fontSize: 11, 
+                                                                     fontWeight: '750', 
+                                                                     color: isSelected ? (darkMode ? '#fff' : tabColor) : activeTextGrayColor 
+                                                                 }}>
+                                                                     {tab.label} ({ordersList.filter(o => tab.key === 'all' ? true : o.status === tab.key).length})
+                                                                 </Text>
+                                                             </TouchableOpacity>
+                                                         );
+                                                     })}
+                                                 </View>
+
+                                                 {filteredOrdersList.length > 0 ? (
+                                                     <View style={{ borderWidth: 1.5, borderColor: activeBorderColor, borderRadius: 12, overflow: 'hidden', backgroundColor: activeCardBg }}>
+                                                         {filteredOrdersList.map(order => (
+                                                             <TouchableOpacity
+                                                                 key={order.id}
+                                                                 style={{
+                                                                     padding: 14,
+                                                                     borderBottomWidth: 1,
+                                                                     borderBottomColor: activeBorderColor,
+                                                                     backgroundColor: activeCardBg,
+                                                                 }}
+                                                                 onPress={() => handleSelectOrder(order.id)}
+                                                             >
+                                                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                                                                     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                                                                         <Text style={{ fontWeight: '750', fontSize: 13, color: activeTextColor }}>
+                                                                             Đơn hàng #{order.id}
+                                                                         </Text>
+                                                                         {order.status === 'pending' ? (
+                                                                             <View style={{ backgroundColor: darkMode ? '#14532d' : '#e8f5e9', paddingHorizontal: 6, paddingVertical: 2, borderRadius: 8 }}>
+                                                                                 <Text style={{ fontSize: 9, fontWeight: '800', color: darkMode ? '#4ade80' : COLORS.success }}>Đơn mới</Text>
+                                                                             </View>
+                                                                         ) : (
+                                                                             <View style={{ backgroundColor: darkMode ? '#1e3a8a' : '#e3f2fd', paddingHorizontal: 6, paddingVertical: 2, borderRadius: 8 }}>
+                                                                                 <Text style={{ fontSize: 9, fontWeight: '800', color: darkMode ? '#60a5fa' : '#1565c0' }}>Đang soạn</Text>
+                                                                             </View>
+                                                                         )}
+                                                                     </View>
+                                                                     <Text style={{ fontSize: 12, fontWeight: '800', color: COLORS.primary }}>
+                                                                         {order.totalPrice ? order.totalPrice.toLocaleString() : '0'}đ
+                                                                     </Text>
+                                                                 </View>
+                                                                 <Text style={{ fontSize: 11, color: activeTextGrayColor, marginTop: 4 }}>
+                                                                     Chi nhánh: {order.branch?.name || order.customer?.name || 'Kingfood Partner'} · {order.orderDetails?.length || 0} SKU
+                                                                 </Text>
+                                                             </TouchableOpacity>
+                                                         ))}
+                                                     </View>
+                                                 ) : (
+                                                     <Text style={{ color: activeTextGrayColor, fontStyle: 'italic', marginVertical: 12 }}>
+                                                         {modalOrderFilter === 'pending' 
+                                                             ? 'Không có đơn đặt hàng nào đang chờ xử lý.' 
+                                                             : modalOrderFilter === 'processing' 
+                                                                 ? 'Không có đơn đặt hàng nào đang soạn hàng.' 
+                                                                 : 'Không có đơn đặt hàng nào đang chờ xử lý hoặc đang soạn hàng.'
+                                                         }
+                                                     </Text>
+                                                 )}
+                                             </View>
+                                         );
+                                     })()
+                                 )}
 
                                 {/* 2. PHÂN TÁCH SẢN PHẨM & CHỌN PICKER */}
                                 {selectedPickingOrderId ? (

@@ -48,6 +48,7 @@ function LayoutContent() {
     return (
 
         <>
+            <StatusBar style={darkMode ? 'light' : 'dark'} />
             <Stack
                 screenOptions={{
                     headerShown: false,

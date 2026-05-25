@@ -7,7 +7,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../../constants/colors';
 import { useAuth } from '../../contexts/AuthContext';
 import { useStoreCart } from '../../contexts/StoreCartContext';
-import { getProducts, createOrder, getPublicCategories } from '../../constants/services/api';
+import { getProducts, createOrder, getPublicCategories, getCachedData } from '../../constants/services/api';
 import { OrderConfirmModal, OrderSuccessOverlay } from '../../components/OrderCheckoutOverlay';
 import { notifyOrdersRefresh } from '../../utils/ordersRefresh';
 import { playSound } from '../../utils/soundService';
@@ -112,10 +112,31 @@ const SearchBar = ({ onSearch, isDark, placeholder }) => {
 
 export default function StoreOrderScreen() {
   const { darkMode, language } = useAppPreferences();
-  const [productCatalog, setProductCatalog] = useState([]);
-  const [categories, setCategories] = useState([]);
+  
+  const cachedProdData = getCachedData('/public/products?limit=100');
+  const cachedCatData = getCachedData('/public/categories?limit=100');
+
+  const initialProducts = useMemo(() => {
+    const products = Array.isArray(cachedProdData) ? cachedProdData : (cachedProdData?.items || cachedProdData?.data || []);
+    return products.map(p => ({
+        id: p.id,
+        name: p.name,
+        sku: p.sku || `SKU-${p.id}`,
+        unit: p.unit || 'cái',
+        price: typeof p.price === 'string' ? parseFloat(p.price) : (p.price || 0),
+        image: p.image || '',
+        categoryId: p.categoryId || p.category_id || p.category?.id || null,
+    }));
+  }, [cachedProdData]);
+
+  const initialCategories = useMemo(() => {
+    return Array.isArray(cachedCatData) ? cachedCatData : (cachedCatData?.items || cachedCatData?.data || []);
+  }, [cachedCatData]);
+
+  const [productCatalog, setProductCatalog] = useState(initialProducts);
+  const [categories, setCategories] = useState(initialCategories);
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
-  const [loadingProducts, setLoadingProducts] = useState(true);
+  const [loadingProducts, setLoadingProducts] = useState(initialProducts.length === 0);
   const [submitting, setSubmitting] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);

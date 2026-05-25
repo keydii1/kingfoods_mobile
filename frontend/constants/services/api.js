@@ -121,6 +121,12 @@ export const updateProfile = (data) =>
 // PICKING
 export const getAssignedTasks = () =>
     request ('GET', '/admin/picking/assigned');
+export const getAllTasksAdmin = (params = {}) => {
+    const queryStr = Object.keys(params)
+        .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`)
+        .join('&');
+    return request('GET', `/admin/tasks?limit=1000${queryStr ? `&${queryStr}` : ''}`);
+};
 export const packItem = (taskId, containerCode, quantity) =>
     request ('POST', '/admin/picking/pack', {taskId, containerCode, quantity});
 export const moveItem = (productId, oldContainerCode, newContainerCode, quantity = 1) =>

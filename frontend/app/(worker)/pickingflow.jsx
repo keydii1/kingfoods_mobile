@@ -89,8 +89,12 @@ export default function PickingFlowScreen() {
           unstable_batchedUpdates(() => {
             setPrevLocation(currentTask?.locationCode || currentTask?.location || '');
             const next = tasks[currentIndex + 1];
+            const isSameLocation = next && (
+              (next.locationCode && next.locationCode === currentTask.locationCode) ||
+              (next.location && next.location === currentTask.location)
+            );
             setCurrentIndex(prev => prev + 1);
-            setStep(1);
+            setStep(isSameLocation ? 2 : 1);
             setBarcode('');
             setScanned(false);
             setQuantity(next?.qty || 1);

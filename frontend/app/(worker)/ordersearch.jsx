@@ -88,7 +88,7 @@ export default function OrderSearchScreen() {
     const productName = item.orderDetail?.product?.name || 'Sản phẩm không xác định';
     const branchName = item.orderDetail?.order?.branch?.name || 'Chi nhánh Kingfood';
     const orderId = item.orderDetail?.orderId || '';
-    const locName = item.location?.name || 'Chưa phân khu';
+    const locName = item.location?.name ? item.location.name.replace(/^[🥦🥫🧴❄️\s]+/, '').replace(/^[^a-zA-Z0-9À-ỹđĐ\s]+/, '').trim() : 'Chưa phân khu';
     const progressText = `${item.quantityPicked}/${item.quantityToPick}`;
     const timeStr = item.createdAt
       ? new Date(item.createdAt).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })

@@ -5,7 +5,7 @@ import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../../constants/colors';
 import { useEffect, useState } from 'react';
-import { getProfile, updateProfile } from '../../constants/services/api';
+import { getProfile, updateProfile, getCachedData } from '../../constants/services/api';
 import { useAppPreferences } from '../../contexts/AppPreferencesContext';
 
 const TRANSLATIONS = {
@@ -91,10 +91,15 @@ export default function CustomerProfileScreen() {
   const t = TRANSLATIONS[language] || TRANSLATIONS.vi;
   const insets = useSafeAreaInsets();
 
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const cachedProfile = getCachedData('/client/profile');
+
+  const [user, setUser] = useState(cachedProfile);
+  const [loading, setLoading] = useState(!cachedProfile);
   const [editing, setEditing] = useState(false);
-  const [editForm, setEditForm] = useState({});
+  const [editForm, setEditForm] = useState({
+    name: cachedProfile?.name || '',
+    phoneNumber: cachedProfile?.phoneNumber || '',
+  });
 
   async function fetchProfile() {
     try {

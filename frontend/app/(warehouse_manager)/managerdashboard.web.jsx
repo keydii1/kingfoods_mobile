@@ -1488,10 +1488,10 @@ export default function ManagerDashboardWebScreen() {
                           setPickingAssignments({});
                         }}
                       >
-                        <option value="">-- Click để chọn đơn đặt hàng chi nhánh Đang Xử Lý --</option>
-                        {ordersList.filter(o => o.status === 'processing').map(order => (
+                        <option value="">-- Click để chọn đơn đặt hàng cần điều phối & xử lý --</option>
+                        {ordersList.filter(o => o.status === 'pending' || o.status === 'processing').map(order => (
                           <option key={order.id} value={order.id}>
-                            Đơn đặt hàng #{order.id} - Chi nhánh: {order.customer?.branch?.name || 'Kingfood Partner'} ({order.orderDetails?.length || 0} SKU) - Trị giá: {(parseFloat(order.totalPrice) || 0).toLocaleString()}đ
+                            Đơn đặt hàng #{order.id} [{order.status === 'pending' ? 'ĐƠN MỚI' : 'ĐANG SOẠN'}] - Chi nhánh: {order.customer?.branch?.name || 'Kingfood Partner'} ({order.orderDetails?.length || 0} SKU) - Trị giá: {(parseFloat(order.totalPrice) || 0).toLocaleString()}đ
                           </option>
                         ))}
                       </select>

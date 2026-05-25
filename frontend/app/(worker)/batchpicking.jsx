@@ -93,7 +93,7 @@ export default function BatchPickingScreen() {
                 .filter(t => t.status !== 'completed')
                 .map((t, ti) => ({
                     id: t.id,
-                    location: t.location?.name || '',
+                    location: t.location?.name ? t.location.name.replace(/^[🥦🥫🧴❄️\s]+/, '').replace(/^[^a-zA-Z0-9À-ỹđĐ\s]+/, '').trim() : '',
                     name: `${t.orderDetail?.product?.name || 'Sản phẩm'} (${t.quantityToPick} cái)`,
                     bins: [{
                         color: '#fff3e0',

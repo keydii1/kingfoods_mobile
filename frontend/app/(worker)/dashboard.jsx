@@ -15,7 +15,8 @@ import { COLORS } from '../../constants/colors';
 import { useState, useEffect, useCallback } from 'react';
 import StaffBottomNav from '../../components/StaffBottomNav';
 import { useAuth } from '../../contexts/AuthContext';
-import { getAssignedTasks, getMyProfile } from '../../constants/services/api';
+import { getAssignedTasks, getMyProfile, getCachedData } from '../../constants/services/api';
+import { useMemo } from 'react';
 
 const ZONE_MAP = {
     1: 'Thực phẩm tươi',
@@ -27,9 +28,63 @@ const ZONE_MAP = {
 export default function DashboardScreen() {
     const navigation = useNavigation();
     const { userName, assignedZone } = useAuth();
-    const [tasks, setTasks] = useState([]);
-    const [profile, setProfile] = useState(null);
-    const [loading, setLoading] = useState(true);
+    
+    const cachedProfile = getCachedData('/admin/users/me');
+    const cachedTasks = getCachedData('/admin/picking/assigned');
+
+    const initialTasks = useMemo(() => {
+       const rawTasks = Array.isArray(cachedTasks) ? cachedTasks : [];
+       const groups = {};
+       rawTasks.forEach(task => {
+           const orderId = task.orderDetail?.order?.id ?? task.orderId;
+           if (!orderId) return;
+
+           if (!groups[orderId]) {
+               groups[orderId] = {
+                   id: task.id,
+                   orderId: orderId,
+                   storeName: task.orderDetail?.order?.branch?.name || 'Kingfood Partner',
+                   createdAt: task.createdAt,
+                   tasks: []
+               };
+           }
+           groups[orderId].tasks.push(task);
+       });
+
+       const mapped = Object.values(groups).map(group => {
+           const orderTasks = group.tasks;
+           const totalCount = orderTasks.length;
+           const pickedCount = orderTasks.filter(t => t.status === 'completed').length;
+
+           let status = 'pending';
+           if (orderTasks.every(t => t.status === 'completed')) {
+               status = 'completed';
+           } else if (orderTasks.some(t => t.status === 'completed' || t.status === 'picking')) {
+               status = 'in_progress';
+           }
+
+           return {
+               id: group.id,
+               orderId: group.orderId,
+               storeName: group.storeName,
+               totalCount,
+               pickedCount,
+               status,
+               createdAt: group.createdAt
+           };
+       });
+
+       const todayStr = new Date().toLocaleDateString('en-US');
+       return mapped.filter(task => {
+           if (!task.createdAt) return true;
+           const taskDate = new Date(task.createdAt).toLocaleDateString('en-US');
+           return taskDate === todayStr;
+       });
+    }, [cachedTasks]);
+
+    const [tasks, setTasks] = useState(initialTasks);
+    const [profile, setProfile] = useState(cachedProfile);
+    const [loading, setLoading] = useState(!cachedProfile && initialTasks.length === 0);
     const [refreshing, setRefreshing] = useState(false);
 
     const loadTasks = useCallback(async (silent = false) => {

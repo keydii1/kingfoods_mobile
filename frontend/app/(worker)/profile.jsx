@@ -5,7 +5,7 @@ import { COLORS } from '../../constants/colors';
 import StaffBottomNav from '../../components/StaffBottomNav';
 import { useEffect, useState } from 'react';
 import { Alert } from '../../utils/appAlert';
-import { getMyProfile, updateUser, changeUserPassword, logout as apiLogout } from '../../constants/services/api';
+import { getMyProfile, updateUser, changeUserPassword, logout as apiLogout, getCachedData } from '../../constants/services/api';
 import { useAuth } from '../../contexts/AuthContext';
 import { validateNewPassword, PASSWORD_HINT } from '../../constants/passwordPolicy';
 
@@ -27,8 +27,10 @@ function InfoRow({ label, value, valueColor }) {
 
 export default function ProfileScreen() {
     const { logout, updateName } = useAuth();
-    const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true);
+    const cachedProfile = getCachedData('/admin/users/me');
+    
+    const [user, setUser] = useState(cachedProfile);
+    const [loading, setLoading] = useState(!cachedProfile);
     const [editing, setEditing] = useState(false);
     const [editForm, setEditForm] = useState({});
 

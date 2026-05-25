@@ -4,8 +4,15 @@ import { PickingTask } from "../Entity/PickingTask";
 @Service()
 export class PickingTaskService {
   async getAllTasks(query: any) {
+    const where: any = {};
+    if (query.orderId) {
+      where.orderDetail = {
+        orderId: Number(query.orderId)
+      };
+    }
     return await PickingTask.paginate(query, {
-      relations: ["orderDetail", "orderDetail.order", "orderDetail.product", "assignedUser", "location"]
+      relations: ["orderDetail", "orderDetail.order", "orderDetail.product", "assignedUser", "location"],
+      where
     });
   }
 

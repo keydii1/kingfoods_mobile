@@ -5,7 +5,7 @@ import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import { router, useFocusEffect } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../../constants/colors';
-import { getClientStatistics, cancelClientOrder, BASE_URL } from '../../constants/services/api';
+import { getClientStatistics, cancelClientOrder, BASE_URL, getCachedData } from '../../constants/services/api';
 import { getOrderStatusMeta, canCustomerCancelOrder } from '../../constants/orderStatus';
 import { subscribeOrdersRefresh, notifyOrdersRefresh } from '../../utils/ordersRefresh';
 import { useAppPreferences } from '../../contexts/AppPreferencesContext';
@@ -113,11 +113,15 @@ export default function StoreStatisticsScreen() {
     return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
   };
 
-  const [topProducts, setTopProducts] = useState([]);
-  const [orders, setOrders] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [startDate, setStartDate] = useState(getFirstDayOfMonth());
-  const [endDate, setEndDate] = useState(getTodayStr());
+  const startPreset = getFirstDayOfMonth();
+  const endPreset = getTodayStr();
+  const cachedStats = getCachedData(`/client/orders/statistics?startDate=${startPreset}&endDate=${endPreset}`);
+
+  const [topProducts, setTopProducts] = useState(cachedStats?.topProducts || []);
+  const [orders, setOrders] = useState([...(cachedStats?.orders || [])].sort((a, b) => b.id - a.id));
+  const [loading, setLoading] = useState(!cachedStats);
+  const [startDate, setStartDate] = useState(startPreset);
+  const [endDate, setEndDate] = useState(endPreset);
   const [activePreset, setActivePreset] = useState('month');
   const [selectedStatus, setSelectedStatus] = useState('all');
   const hasLoadedRef = useRef(false);
