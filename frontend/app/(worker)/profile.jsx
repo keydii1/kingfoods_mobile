@@ -8,25 +8,138 @@ import { Alert } from '../../utils/appAlert';
 import { getMyProfile, updateUser, changeUserPassword, logout as apiLogout, getCachedData } from '../../constants/services/api';
 import { useAuth } from '../../contexts/AuthContext';
 import { validateNewPassword, PASSWORD_HINT } from '../../constants/passwordPolicy';
+import { useAppPreferences } from '../../contexts/AppPreferencesContext';
 
 const ZONE_MAP = {
-    1: 'Thực phẩm tươi',
-    2: 'Đồ khô & Gia vị',
-    3: 'Hoá mỹ phẩm',
-    4: 'Đồ đông lạnh'
+    vi: {
+        1: 'Thực phẩm tươi',
+        2: 'Đồ khô & Gia vị',
+        3: 'Hoá mỹ phẩm',
+        4: 'Đồ đông lạnh'
+    },
+    en: {
+        1: 'Fresh Food',
+        2: 'Dry Goods & Spices',
+        3: 'Cosmetics & Chemicals',
+        4: 'Frozen Food'
+    }
 };
 
-function InfoRow({ label, value, valueColor }) {
+const TRANSLATIONS = {
+  vi: {
+    headerTitle: 'Hồ sơ cá nhân',
+    cancel: 'Hủy',
+    edit: 'Sửa',
+    save: 'Lưu thay đổi',
+    accountInfo: 'Thông tin tài khoản',
+    fullName: 'Họ và Tên',
+    username: 'Tên đăng nhập',
+    email: 'Email liên hệ',
+    phone: 'Số điện thoại',
+    warehouseZone: 'Khu vực kho',
+    changePassword: 'Đổi mật khẩu',
+    oldPassword: 'Mật khẩu cũ',
+    newPassword: 'Mật khẩu mới',
+    confirmNewPassword: 'Xác nhận mật khẩu mới',
+    updateBtn: 'Đổi mật khẩu',
+    updatingBtn: 'Đang cập nhật...',
+    logoutBtn: 'Đăng xuất tài khoản',
+    errorTitle: 'Lỗi',
+    successTitle: 'Thành công',
+    emptyNameErr: 'Họ và tên không được để trống',
+    emptyUsernameErr: 'Tên đăng nhập không được để trống',
+    updateSuccess: 'Cập nhật hồ sơ thành công',
+    updateFailed: 'Không thể cập nhật hồ sơ',
+    fillAllErr: 'Vui lòng nhập đầy đủ thông tin',
+    passNotMatchErr: 'Mật khẩu mới không khớp',
+    passInvalidTitle: 'Mật khẩu không hợp lệ',
+    changePassSuccess: 'Đổi mật khẩu thành công',
+    changePassFailed: 'Không thể đổi mật khẩu',
+    oldPassIncorrect: 'Mật khẩu cũ không đúng',
+    logoutTitle: 'Đăng xuất',
+    logoutConfirm: 'Bạn có chắc chắn muốn đăng xuất?',
+    unassignedZone: 'Chưa phân khu',
+    shiftMorning: 'Ca Sáng',
+    empCode: 'Mã NV',
+    shiftLabel: 'Ca làm',
+    staff: 'Nhân viên kho',
+    notUpdated: 'Chưa cập nhật',
+    namePlaceholder: 'Nhập họ và tên...',
+    usernamePlaceholder: 'Nhập tên đăng nhập...',
+    emailPlaceholder: 'Nhập email liên hệ...',
+    phonePlaceholder: 'Nhập số điện thoại...',
+  },
+  en: {
+    headerTitle: 'Personal Profile',
+    cancel: 'Cancel',
+    edit: 'Edit',
+    save: 'Save Changes',
+    accountInfo: 'Account Information',
+    fullName: 'Full Name',
+    username: 'Username',
+    email: 'Contact Email',
+    phone: 'Phone Number',
+    warehouseZone: 'Warehouse Zone',
+    changePassword: 'Change Password',
+    oldPassword: 'Old Password',
+    newPassword: 'New Password',
+    confirmNewPassword: 'Confirm New Password',
+    updateBtn: 'Change Password',
+    updatingBtn: 'Updating...',
+    logoutBtn: 'Logout Account',
+    errorTitle: 'Error',
+    successTitle: 'Success',
+    emptyNameErr: 'Full name cannot be empty',
+    emptyUsernameErr: 'Username cannot be empty',
+    updateSuccess: 'Profile updated successfully',
+    updateFailed: 'Unable to update profile',
+    fillAllErr: 'Please fill in all fields',
+    passNotMatchErr: 'New password does not match',
+    passInvalidTitle: 'Invalid Password',
+    changePassSuccess: 'Password changed successfully',
+    changePassFailed: 'Unable to change password',
+    oldPassIncorrect: 'Old password is incorrect',
+    logoutTitle: 'Logout',
+    logoutConfirm: 'Are you sure you want to logout?',
+    unassignedZone: 'Unassigned Zone',
+    shiftMorning: 'Morning Shift',
+    empCode: 'Staff ID',
+    shiftLabel: 'Shift',
+    staff: 'Warehouse Picker',
+    notUpdated: 'Not updated',
+    namePlaceholder: 'Enter full name...',
+    usernamePlaceholder: 'Enter username...',
+    emailPlaceholder: 'Enter contact email...',
+    phonePlaceholder: 'Enter phone number...',
+  }
+};
+
+function InfoRow({ label, value, valueColor, activeTextColor, activeTextGrayColor, activeBorderColor }) {
     return (
-        <View style={styles.infoRow}>
-            <Text style={styles.infoLabel}>{label}</Text>
-            <Text style={[styles.infoValue, valueColor && { color: valueColor }]}>{value}</Text>
+        <View style={[styles.infoRow, { borderBottomColor: activeBorderColor }]}>
+            <Text style={[styles.infoLabel, { color: activeTextGrayColor }]}>{label}</Text>
+            <Text style={[styles.infoValue, { color: activeTextColor }, valueColor && { color: valueColor }]}>{value}</Text>
         </View>
     );
 }
 
+
 export default function ProfileScreen() {
     const { logout, updateName } = useAuth();
+    const { darkMode, language } = useAppPreferences();
+
+    const activeBg = darkMode ? '#121212' : '#f8fafc';
+    const activeHeaderBg = darkMode ? '#1e1e1e' : '#fff';
+    const activeBorderColor = darkMode ? '#2d2d2d' : '#f1f5f9';
+    const activeTextColor = darkMode ? '#f3f4f6' : '#0f172a';
+    const activeCardBg = darkMode ? '#1e1e1e' : '#fff';
+    const activeTextGrayColor = darkMode ? '#9ca3af' : '#64748b';
+    const activeInputBg = darkMode ? '#2d2d2d' : '#f8fafc';
+    const activeInputText = darkMode ? '#f3f4f6' : '#0f172a';
+    const activeInputBorder = darkMode ? '#3d3d3d' : '#e2e8f0';
+
+    const t = TRANSLATIONS[language];
+
     const cachedProfile = getCachedData('/admin/users/me');
     
     const [user, setUser] = useState(cachedProfile);
@@ -68,11 +181,11 @@ export default function ProfileScreen() {
 
     const saveEdit = async () => {
         if (!editForm.name?.trim()) {
-            Alert.alert('Lỗi', 'Họ và tên không được để trống');
+            Alert.alert(t.errorTitle, t.emptyNameErr);
             return;
         }
         if (!editForm.username?.trim()) {
-            Alert.alert('Lỗi', 'Tên đăng nhập không được để trống');
+            Alert.alert(t.errorTitle, t.emptyUsernameErr);
             return;
         }
         try {
@@ -90,40 +203,40 @@ export default function ProfileScreen() {
             }));
             updateName(updatePayload.name);
             setEditing(false);
-            Alert.alert('Thành công', 'Cập nhật hồ sơ thành công');
+            Alert.alert(t.successTitle, t.updateSuccess);
         } catch (err) {
-            Alert.alert('Lỗi', err.message || 'Không thể cập nhật hồ sơ');
+            Alert.alert(t.errorTitle, err.message || t.updateFailed);
         }
     };
 
     const handleChangePassword = async () => {
         if (!oldPassword || !newPassword || !confirmPassword) {
-            Alert.alert('Lỗi', 'Vui lòng nhập đầy đủ thông tin');
+            Alert.alert(t.errorTitle, t.fillAllErr);
             return;
         }
         if (newPassword !== confirmPassword) {
-            Alert.alert('Lỗi', 'Mật khẩu mới không khớp');
+            Alert.alert(t.errorTitle, t.passNotMatchErr);
             return;
         }
         const passwordError = validateNewPassword(newPassword);
         if (passwordError) {
-            Alert.alert('Mật khẩu không hợp lệ', passwordError);
+            Alert.alert(t.passInvalidTitle, passwordError);
             return;
         }
 
         setChangingPassword(true);
         try {
             await changeUserPassword({ oldPassword, newPassword });
-            Alert.alert('Thành công', 'Đổi mật khẩu thành công');
+            Alert.alert(t.successTitle, t.changePassSuccess);
             setOldPassword('');
             setNewPassword('');
             setConfirmPassword('');
         } catch (err) {
-            const msg = err?.message || 'Không thể đổi mật khẩu';
+            const msg = err?.message || t.changePassFailed;
             const friendly = msg.toLowerCase().includes('old password')
-                ? 'Mật khẩu cũ không đúng'
+                ? t.oldPassIncorrect
                 : msg;
-            Alert.alert('Lỗi', friendly);
+            Alert.alert(t.errorTitle, friendly);
         } finally {
             setChangingPassword(false);
         }
@@ -131,12 +244,12 @@ export default function ProfileScreen() {
 
     const handleLogout = () => {
         Alert.alert(
-            'Đăng xuất',
-            'Bạn có chắc chắn muốn đăng xuất?',
+            t.logoutTitle,
+            t.logoutConfirm,
             [
-                { text: 'Hủy', style: 'cancel' },
+                { text: t.cancel, style: 'cancel' },
                 {
-                    text: 'Đăng xuất',
+                    text: t.logoutTitle,
                     style: 'destructive',
                     onPress: async () => {
                         try {
@@ -153,27 +266,27 @@ export default function ProfileScreen() {
 
     if (loading) {
         return (
-            <SafeAreaView style={[styles.safeArea, { justifyContent: 'center', alignItems: 'center' }]}>
+            <SafeAreaView style={[styles.safeArea, { backgroundColor: activeBg, justifyContent: 'center', alignItems: 'center' }]}>
                 <ActivityIndicator color={COLORS.primary} size="large" />
             </SafeAreaView>
         );
     }
 
     return (
-        <SafeAreaView style={styles.safeArea}>
+        <SafeAreaView style={[styles.safeArea, { backgroundColor: activeBg }]}>
             {/* Header */}
-            <View style={styles.header}>
+            <View style={[styles.header, { backgroundColor: activeHeaderBg, borderBottomColor: activeBorderColor }]}>
                 <View style={{ width: 40 }} />
-                <Text style={styles.headerTitle}>Hồ sơ cá nhân</Text>
+                <Text style={[styles.headerTitle, { color: activeTextColor }]}>{t.headerTitle}</Text>
                 <TouchableOpacity onPress={editing ? cancelEdit : startEdit} activeOpacity={0.7}>
-                    <Text style={styles.editBtn}>{editing ? 'Hủy' : 'Sửa'}</Text>
+                    <Text style={styles.editBtn}>{editing ? t.cancel : t.edit}</Text>
                 </TouchableOpacity>
             </View>
 
             <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
                     <>
                         {/* Banner */}
-                        <View style={styles.banner}>
+                        <View style={[styles.banner, darkMode && { backgroundColor: '#1e1e1e' }]}>
                             {editing ? (
                                 <TextInput
                                     style={[styles.name, styles.editInput, { color: '#fff', borderBottomColor: 'rgba(255,255,255,0.5)' }]}
@@ -182,92 +295,92 @@ export default function ProfileScreen() {
                                     placeholderTextColor="rgba(255,255,255,0.5)"
                                 />
                             ) : (
-                                <Text style={styles.name}>{user?.name || 'Nhân viên kho'}</Text>
+                                <Text style={styles.name}>{user?.name || t.staff}</Text>
                             )}
                             <Text style={styles.idText}>
-                                Mã NV: {user?.username || `KF-NV-${user?.id}`} · Ca làm: Ca Sáng
+                                {t.empCode}: {user?.username || `KF-NV-${user?.id}`} · {t.shiftLabel}: {t.shiftMorning}
                             </Text>
                             <View style={styles.badgeRow}>
                                 <View style={styles.badge}>
                                     <Text style={styles.badgeText}>
-                                        {user?.assignedLocationId ? ZONE_MAP[user.assignedLocationId] : (user?.zone || 'Chưa phân khu')}
+                                        {user?.assignedLocationId ? ZONE_MAP[language][user.assignedLocationId] : (user?.zone || t.unassignedZone)}
                                     </Text>
                                 </View>
                             </View>
                             {editing && (
                                 <TouchableOpacity style={[styles.badge, { backgroundColor: '#fff', marginTop: 14 }]} onPress={saveEdit} activeOpacity={0.9}>
-                                    <Text style={[styles.badgeText, { color: COLORS.primary, fontWeight: '700' }]}>Lưu thay đổi</Text>
+                                    <Text style={[styles.badgeText, { color: COLORS.primary, fontWeight: '700' }]}>{t.save}</Text>
                                 </TouchableOpacity>
                             )}
                         </View>
 
                         {/* Thông tin cá nhân */}
-                        <View style={styles.card}>
-                            <Text style={styles.cardTitle}>Thông tin tài khoản</Text>
+                        <View style={[styles.card, { backgroundColor: activeCardBg, borderColor: activeBorderColor }]}>
+                            <Text style={[styles.cardTitle, { color: activeTextColor }]}>{t.accountInfo}</Text>
                             {editing ? (
                                 <>
-                                    <Text style={styles.fieldLabel}>Họ và Tên</Text>
+                                    <Text style={[styles.fieldLabel, { color: activeTextGrayColor }]}>{t.fullName}</Text>
                                     <TextInput
-                                        style={styles.input}
+                                        style={[styles.input, { backgroundColor: activeInputBg, color: activeInputText, borderColor: activeInputBorder }]}
                                         value={editForm.name}
                                         onChangeText={t => setEditForm(f => ({ ...f, name: t }))}
-                                        placeholder="Nhập họ và tên..."
-                                        placeholderTextColor="#aaa"
+                                        placeholder={t.namePlaceholder}
+                                        placeholderTextColor={darkMode ? '#64748b' : '#aaa'}
                                     />
 
-                                    <Text style={styles.fieldLabel}>Tên đăng nhập</Text>
+                                    <Text style={[styles.fieldLabel, { color: activeTextGrayColor }]}>{t.username}</Text>
                                     <TextInput
-                                        style={styles.input}
+                                        style={[styles.input, { backgroundColor: activeInputBg, color: activeInputText, borderColor: activeInputBorder }]}
                                         value={editForm.username}
                                         onChangeText={t => setEditForm(f => ({ ...f, username: t }))}
-                                        placeholder="Nhập tên đăng nhập..."
-                                        placeholderTextColor="#aaa"
+                                        placeholder={t.usernamePlaceholder}
+                                        placeholderTextColor={darkMode ? '#64748b' : '#aaa'}
                                         autoCapitalize="none"
                                         autoCorrect={false}
                                     />
 
-                                    <Text style={styles.fieldLabel}>Email liên hệ</Text>
+                                    <Text style={[styles.fieldLabel, { color: activeTextGrayColor }]}>{t.email}</Text>
                                     <TextInput
-                                        style={styles.input}
+                                        style={[styles.input, { backgroundColor: activeInputBg, color: activeInputText, borderColor: activeInputBorder }]}
                                         value={editForm.email}
                                         onChangeText={t => setEditForm(f => ({ ...f, email: t }))}
-                                        placeholder="Nhập email liên hệ..."
-                                        placeholderTextColor="#aaa"
+                                        placeholder={t.emailPlaceholder}
+                                        placeholderTextColor={darkMode ? '#64748b' : '#aaa'}
                                         keyboardType="email-address"
                                         autoCapitalize="none"
                                         autoCorrect={false}
                                     />
 
-                                    <Text style={styles.fieldLabel}>Số điện thoại</Text>
+                                    <Text style={[styles.fieldLabel, { color: activeTextGrayColor }]}>{t.phone}</Text>
                                     <TextInput
-                                        style={styles.input}
+                                        style={[styles.input, { backgroundColor: activeInputBg, color: activeInputText, borderColor: activeInputBorder }]}
                                         value={editForm.phoneNumber}
                                         onChangeText={t => setEditForm(f => ({ ...f, phoneNumber: t }))}
-                                        placeholder="Nhập số điện thoại..."
-                                        placeholderTextColor="#aaa"
+                                        placeholder={t.phonePlaceholder}
+                                        placeholderTextColor={darkMode ? '#64748b' : '#aaa'}
                                         keyboardType="phone-pad"
                                     />
                                 </>
                             ) : (
                                 <>
-                                    <InfoRow label='Họ và Tên' value={user?.name || 'Nhân viên kho'} />
-                                    <InfoRow label='Tên đăng nhập' value={user?.username || ''} />
-                                    <InfoRow label='Email liên hệ' value={user?.email || 'Chưa cập nhật'} />
-                                    <InfoRow label='Số điện thoại' value={user?.phoneNumber || 'Chưa cập nhật'} />
-                                    <InfoRow label='Khu vực kho' value={user?.assignedLocationId ? ZONE_MAP[user.assignedLocationId] : (user?.zone || 'Chưa phân khu')} />
+                                    <InfoRow label={t.fullName} value={user?.name || t.staff} activeTextColor={activeTextColor} activeTextGrayColor={activeTextGrayColor} activeBorderColor={activeBorderColor} />
+                                    <InfoRow label={t.username} value={user?.username || ''} activeTextColor={activeTextColor} activeTextGrayColor={activeTextGrayColor} activeBorderColor={activeBorderColor} />
+                                    <InfoRow label={t.email} value={user?.email || t.notUpdated} activeTextColor={activeTextColor} activeTextGrayColor={activeTextGrayColor} activeBorderColor={activeBorderColor} />
+                                    <InfoRow label={t.phone} value={user?.phoneNumber || t.notUpdated} activeTextColor={activeTextColor} activeTextGrayColor={activeTextGrayColor} activeBorderColor={activeBorderColor} />
+                                    <InfoRow label={t.warehouseZone} value={user?.assignedLocationId ? ZONE_MAP[language][user.assignedLocationId] : (user?.zone || t.unassignedZone)} activeTextColor={activeTextColor} activeTextGrayColor={activeTextGrayColor} activeBorderColor={activeBorderColor} />
                                 </>
                             )}
                         </View>
 
                         {/* Đổi mật khẩu trực tiếp */}
-                        <View style={styles.card}>
-                            <Text style={styles.cardTitle}>Đổi mật khẩu</Text>
-                            <Text style={styles.hintText}>{PASSWORD_HINT}</Text>
+                        <View style={[styles.card, { backgroundColor: activeCardBg, borderColor: activeBorderColor }]}>
+                            <Text style={[styles.cardTitle, { color: activeTextColor }]}>{t.changePassword}</Text>
+                            <Text style={[styles.hintText, { color: activeTextGrayColor }]}>{PASSWORD_HINT}</Text>
 
                             <TextInput
-                                style={styles.input}
-                                placeholder="Mật khẩu cũ"
-                                placeholderTextColor="#aaa"
+                                style={[styles.input, { backgroundColor: activeInputBg, color: activeInputText, borderColor: activeInputBorder }]}
+                                placeholder={t.oldPassword}
+                                placeholderTextColor={darkMode ? '#64748b' : '#aaa'}
                                 secureTextEntry
                                 value={oldPassword}
                                 onChangeText={setOldPassword}
@@ -276,9 +389,9 @@ export default function ProfileScreen() {
                             />
 
                             <TextInput
-                                style={styles.input}
-                                placeholder="Mật khẩu mới"
-                                placeholderTextColor="#aaa"
+                                style={[styles.input, { backgroundColor: activeInputBg, color: activeInputText, borderColor: activeInputBorder }]}
+                                placeholder={t.newPassword}
+                                placeholderTextColor={darkMode ? '#64748b' : '#aaa'}
                                 secureTextEntry
                                 value={newPassword}
                                 onChangeText={setNewPassword}
@@ -287,9 +400,9 @@ export default function ProfileScreen() {
                             />
 
                             <TextInput
-                                style={styles.input}
-                                placeholder="Xác nhận mật khẩu mới"
-                                placeholderTextColor="#aaa"
+                                style={[styles.input, { backgroundColor: activeInputBg, color: activeInputText, borderColor: activeInputBorder }]}
+                                placeholder={t.confirmNewPassword}
+                                placeholderTextColor={darkMode ? '#64748b' : '#aaa'}
                                 secureTextEntry
                                 value={confirmPassword}
                                 onChangeText={setConfirmPassword}
@@ -304,14 +417,14 @@ export default function ProfileScreen() {
                                 activeOpacity={0.8}
                             >
                                 <Text style={styles.submitBtnText}>
-                                    {changingPassword ? 'Đang cập nhật...' : 'Đổi mật khẩu'}
+                                    {changingPassword ? t.updatingBtn : t.updateBtn}
                                 </Text>
                             </TouchableOpacity>
                         </View>
 
                         {/* Nút Đăng xuất */}
-                        <TouchableOpacity style={styles.logoutBtn} onPress={handleLogout} activeOpacity={0.8}>
-                            <Text style={styles.logoutBtnText}>Đăng xuất tài khoản</Text>
+                        <TouchableOpacity style={[styles.logoutBtn, darkMode && { backgroundColor: 'rgba(239, 68, 68, 0.1)', borderColor: 'rgba(239, 68, 68, 0.2)' }]} onPress={handleLogout} activeOpacity={0.8}>
+                            <Text style={styles.logoutBtnText}>{t.logoutBtn}</Text>
                         </TouchableOpacity>
                     </>
             </ScrollView>

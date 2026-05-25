@@ -14,19 +14,112 @@ import { useAppPreferences } from '../../contexts/AppPreferencesContext';
 import * as ImagePicker from 'expo-image-picker';
 import * as ImageManipulator from 'expo-image-manipulator';
 
-const issueTypes = [
-  { key: 'missing', label: 'Thiếu hàng', icon: 'cube-outline', color: '#ffb74d' },
-  { key: 'damage', label: 'Hỏng hóc', icon: 'construct-outline', color: '#e57373' },
-  { key: 'equipment', label: 'Thiết bị', icon: 'settings-outline', color: '#64b5f6' },
-  { key: 'safety', label: 'An toàn', icon: 'shield-half-outline', color: '#81c784' },
-  { key: 'other', label: 'Khác', icon: 'document-text-outline', color: '#90a4ae' },
+const cleanLocationName = (name) => {
+    if (!name) return '';
+    return name.replace(/^[🥦🥫🧴❄️\s]+/, '').replace(/^[^a-zA-Z0-9À-ỹđĐ\s]+/, '').trim();
+};
+
+const TRANSLATIONS = {
+  vi: {
+    headerTitle: 'Báo cáo sự cố',
+    newIncident: 'Khai báo sự cố mới',
+    incidentType: 'Loại sự cố *',
+    summaryLabel: 'Tóm gọn sự cố *',
+    summaryPlaceholder: 'Ví dụ: Thiếu 5 lon Coca-Cola ở kệ A12',
+    locationLabel: 'Vị trí sự cố (Khu vực / Kệ hàng)',
+    locationPlaceholder: 'Ví dụ: Khu A - Kệ 12.02.A',
+    detailLabel: 'Nội dung chi tiết *',
+    detailPlaceholder: 'Mô tả chi tiết tình trạng sự cố để quản lý nắm rõ thông tin...',
+    proofPhoto: 'Ảnh minh chứng sự cố',
+    deletePhoto: 'Xoá ảnh',
+    takePhoto: 'Chụp ảnh',
+    choosePhoto: 'Thư viện',
+    submitBtn: 'Gửi báo cáo sự cố',
+    emptyStateTitle: 'Hệ thống vận hành ổn định!',
+    emptyStateAll: 'Không ghi nhận sự cố nào phát sinh. Kho hàng Kingfood hiện đang hoạt động vô cùng an toàn và ổn định.',
+    emptyStatePending: 'Tuyệt vời! Không có sự cố tồn đọng nào cần xử lý lúc này.',
+    emptyStateResolved: 'Chưa có sự cố nào được xử lý thành công.',
+    resolvedBadge: 'Đã xử lý',
+    pendingBadge: 'Chờ xử lý',
+    reportedBy: 'Báo cáo bởi',
+    resolveBtn: 'Xử lý xong',
+    all: 'Tất cả',
+    pending: 'Chờ xử lý',
+    resolved: 'Đã xử lý',
+    cameraPermissionErr: 'Cần quyền camera để chụp ảnh minh chứng',
+    libraryPermissionErr: 'Cần quyền thư viện để chọn ảnh minh chứng',
+    fillRequiredErr: 'Vui lòng chọn loại sự cố, nhập tóm gọn và mô tả chi tiết',
+    successTitle: 'Thành công',
+    reportSuccess: 'Báo cáo sự cố đã được gửi và lưu trữ thành công!',
+    resolveSuccess: 'Sự cố đã được xử lý thành công!',
+    errorTitle: 'Lỗi',
+    resolveFailed: 'Không thể xử lý sự cố',
+    unassignedZone: 'Chưa phân khu',
+    defaultReporter: 'Nhân viên kho',
+    missingLabel: 'Thiếu hàng',
+    damageLabel: 'Hỏng hóc',
+    equipmentLabel: 'Thiết bị',
+    safetyLabel: 'An toàn',
+    otherLabel: 'Khác',
+  },
+  en: {
+    headerTitle: 'Incident Report',
+    newIncident: 'Report New Incident',
+    incidentType: 'Incident Type *',
+    summaryLabel: 'Incident Summary *',
+    summaryPlaceholder: 'e.g. Missing 5 cans of Coca-Cola on Shelf A12',
+    locationLabel: 'Incident Location (Zone / Shelf)',
+    locationPlaceholder: 'e.g. Zone A - Shelf 12.02.A',
+    detailLabel: 'Detailed Description *',
+    detailPlaceholder: 'Describe the details of the incident so managers can understand...',
+    proofPhoto: 'Proof Photo of Incident',
+    deletePhoto: 'Delete Photo',
+    takePhoto: 'Take Photo',
+    choosePhoto: 'Gallery',
+    submitBtn: 'Submit Incident Report',
+    emptyStateTitle: 'System Operating Smoothly!',
+    emptyStateAll: 'No incidents recorded. Kingfood warehouse is operating safely and stably.',
+    emptyStatePending: 'Wonderful! No pending incidents to resolve at this time.',
+    emptyStateResolved: 'No incidents successfully resolved yet.',
+    resolvedBadge: 'Resolved',
+    pendingBadge: 'Pending',
+    reportedBy: 'Reported by',
+    resolveBtn: 'Mark Resolved',
+    all: 'All',
+    pending: 'Pending',
+    resolved: 'Resolved',
+    cameraPermissionErr: 'Camera permission required to take proof photo',
+    libraryPermissionErr: 'Gallery permission required to select proof photo',
+    fillRequiredErr: 'Please select incident type, enter summary and description',
+    successTitle: 'Success',
+    reportSuccess: 'Incident report has been submitted and stored successfully!',
+    resolveSuccess: 'Incident has been resolved successfully!',
+    errorTitle: 'Error',
+    resolveFailed: 'Could not resolve incident',
+    unassignedZone: 'Unassigned Zone',
+    defaultReporter: 'Warehouse Staff',
+    missingLabel: 'Missing Items',
+    damageLabel: 'Damaged Goods',
+    equipmentLabel: 'Equipment Issues',
+    safetyLabel: 'Safety Issues',
+    otherLabel: 'Other Issues',
+  }
+};
+
+const getIssueTypes = (lang) => [
+  { key: 'missing', label: lang === 'vi' ? 'Thiếu hàng' : 'Missing Items', icon: 'cube-outline', color: '#ffb74d' },
+  { key: 'damage', label: lang === 'vi' ? 'Hỏng hóc' : 'Damaged Goods', icon: 'construct-outline', color: '#e57373' },
+  { key: 'equipment', label: lang === 'vi' ? 'Thiết bị' : 'Equipment Issues', icon: 'settings-outline', color: '#64b5f6' },
+  { key: 'safety', label: lang === 'vi' ? 'An toàn' : 'Safety Issues', icon: 'shield-half-outline', color: '#81c784' },
+  { key: 'other', label: lang === 'vi' ? 'Khác' : 'Other Issues', icon: 'document-text-outline', color: '#90a4ae' },
 ];
 
-const filters = [
-  { key: 'all', label: 'Tất cả' },
-  { key: 'pending', label: 'Chờ xử lý' },
-  { key: 'resolved', label: 'Đã xử lý' },
+const getFilters = (lang) => [
+  { key: 'all', label: lang === 'vi' ? 'Tất cả' : 'All' },
+  { key: 'pending', label: lang === 'vi' ? 'Chờ xử lý' : 'Pending' },
+  { key: 'resolved', label: lang === 'vi' ? 'Đã xử lý' : 'Resolved' },
 ];
+
 
 const incidentImages = {
   missing: require('../../assets/images/incident_missing.png'),
@@ -36,7 +129,7 @@ const incidentImages = {
 
 export default function IncidentReportScreen() {
   const { userRole } = useAuth();
-  const { darkMode } = useAppPreferences();
+  const { darkMode, language } = useAppPreferences();
 
   const activeBg = darkMode ? '#121212' : '#f0f4f1';
   const activeHeaderBg = darkMode ? '#1e1e1e' : '#fff';
@@ -45,6 +138,10 @@ export default function IncidentReportScreen() {
   const activeCardBg = darkMode ? '#1e1e1e' : '#fff';
   const activeTextGrayColor = darkMode ? '#9ca3af' : '#666';
   const activeInputBg = darkMode ? '#2d2d2d' : '#f8f9fa';
+
+  const t = TRANSLATIONS[language];
+  const issueTypes = getIssueTypes(language);
+  const filters = getFilters(language);
 
   const [photoUri, setPhotoUri] = useState(null);
   const [photoBase64, setPhotoBase64] = useState(null);
@@ -58,7 +155,7 @@ export default function IncidentReportScreen() {
   const initialReports = Array.isArray(cachedIncidents) ? cachedIncidents.map(r => {
     const typeObj = issueTypes.find(t => t.key === r.reason?.split(':')[0]?.trim()?.toLowerCase()) || 
                     issueTypes.find(t => t.label === r.reason) || 
-                    { label: r.reason || 'Khác', icon: 'alert-circle-outline', color: '#666' };
+                    { label: r.reason || t.otherLabel, icon: 'alert-circle-outline', color: '#666' };
     
     return {
       id: r.id || r._id,
@@ -67,8 +164,8 @@ export default function IncidentReportScreen() {
       icon: typeObj.icon,
       iconColor: typeObj.color,
       detail: r.reason?.includes(':') ? r.reason.substring(r.reason.indexOf(':') + 1).trim() : (r.reason || 'Sự cố phát sinh'),
-      by: r.reporter?.name || r.reporter?.fullName || r.reporter?.username || 'Nhân viên kho',
-      time: r.createdAt ? new Date(r.createdAt).toLocaleString('vi-VN', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit' }) : '',
+      by: r.reporter?.name || r.reporter?.fullName || r.reporter?.username || t.defaultReporter,
+      time: r.createdAt ? new Date(r.createdAt).toLocaleString(language === 'vi' ? 'vi-VN' : 'en-US', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit' }) : '',
       status: r.status === 'resolved' ? 'resolved' : 'pending',
       photoUrl: r.photoUrl || '',
     };
@@ -82,7 +179,7 @@ export default function IncidentReportScreen() {
   const handleTakePhoto = async () => {
     const { status } = await ImagePicker.requestCameraPermissionsAsync();
     if (status !== 'granted') {
-      Alert.alert('Lỗi', 'Cần quyền camera để chụp ảnh minh chứng');
+      Alert.alert(t.errorTitle, t.cameraPermissionErr);
       return;
     }
     const result = await ImagePicker.launchCameraAsync({
@@ -108,7 +205,7 @@ export default function IncidentReportScreen() {
   const handleChoosePhoto = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== 'granted') {
-      Alert.alert('Lỗi', 'Cần quyền thư viện để chọn ảnh minh chứng');
+      Alert.alert(t.errorTitle, t.libraryPermissionErr);
       return;
     }
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -144,7 +241,7 @@ export default function IncidentReportScreen() {
         // Map types back to user-friendly label or fallback
         const typeObj = issueTypes.find(t => t.key === r.reason?.split(':')[0]?.trim()?.toLowerCase()) || 
                         issueTypes.find(t => t.label === r.reason) || 
-                        { label: r.reason || 'Khác', icon: 'alert-circle-outline', color: '#666' };
+                        { label: r.reason || t.otherLabel, icon: 'alert-circle-outline', color: '#666' };
         
         return {
           id: r.id || r._id,
@@ -153,8 +250,8 @@ export default function IncidentReportScreen() {
           icon: typeObj.icon,
           iconColor: typeObj.color,
           detail: r.reason?.includes(':') ? r.reason.substring(r.reason.indexOf(':') + 1).trim() : (r.reason || 'Sự cố phát sinh'),
-          by: r.reporter?.name || r.reporter?.fullName || r.reporter?.username || 'Nhân viên kho',
-          time: r.createdAt ? new Date(r.createdAt).toLocaleString('vi-VN', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit' }) : '',
+          by: r.reporter?.name || r.reporter?.fullName || r.reporter?.username || t.defaultReporter,
+          time: r.createdAt ? new Date(r.createdAt).toLocaleString(language === 'vi' ? 'vi-VN' : 'en-US', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit' }) : '',
           status: r.status === 'resolved' ? 'resolved' : 'pending',
           photoUrl: r.photoUrl || '',
         };
@@ -169,7 +266,7 @@ export default function IncidentReportScreen() {
 
   const submitReport = async () => {
     if (!selectedType || !summary || !detail) {
-      Alert.alert('Lỗi', 'Vui lòng chọn loại sự cố, nhập tóm gọn và mô tả chi tiết');
+      Alert.alert(t.errorTitle, t.fillRequiredErr);
       return;
     }
     setSubmitting(true);
@@ -181,7 +278,7 @@ export default function IncidentReportScreen() {
       await reportIncident(1, reasonText, photoBase64 || '');
       
       playSound('success'); // Play premium success beep
-      Alert.alert('Thành công', 'Báo cáo sự cố đã được gửi và lưu trữ thành công!');
+      Alert.alert(t.successTitle, t.reportSuccess);
       
       setSelectedType('');
       setSummary('');
@@ -195,7 +292,7 @@ export default function IncidentReportScreen() {
       // Refresh real list
       fetchReports();
     } catch (err) {
-      Alert.alert('Lỗi', err.message || 'Không gửi được báo cáo');
+      Alert.alert(t.errorTitle, err.message || 'Không gửi được báo cáo');
     } finally {
       setSubmitting(false);
     }
@@ -205,12 +302,12 @@ export default function IncidentReportScreen() {
     try {
       await resolveIncident(id);
       playSound('success');
-      Alert.alert('Thành công', 'Sự cố đã được xử lý thành công!');
+      Alert.alert(t.successTitle, t.resolveSuccess);
       setReports(prev => prev.map(r =>
         r.id === id ? { ...r, status: 'resolved' } : r
       ));
     } catch (err) {
-      Alert.alert('Lỗi!', err.message || 'Không thể xử lý sự cố');
+      Alert.alert(t.errorTitle, err.message || t.resolveFailed);
     }
   };
 
@@ -231,7 +328,7 @@ export default function IncidentReportScreen() {
       {/* Header */}
       <View style={[styles.header, { backgroundColor: activeHeaderBg, borderBottomColor: activeBorderColor }]}>
         <View style={{ width: 32 }} />
-        <Text style={[styles.headerTitle, { color: activeTextColor }]}>Báo cáo sự cố</Text>
+        <Text style={[styles.headerTitle, { color: activeTextColor }]}>{t.headerTitle}</Text>
         <TouchableOpacity 
           style={[styles.addBtnContainer, { backgroundColor: darkMode ? '#2d2d2d' : '#e8f5e9' }]} 
           onPress={() => {
@@ -283,10 +380,10 @@ export default function IncidentReportScreen() {
         // Premium Reporting Form using pre-defined styles
         <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 32 }}>
           <View style={[styles.formCard, { backgroundColor: activeCardBg }]}>
-            <Text style={[styles.formTitle, { color: activeTextColor, marginBottom: 16 }]}>Khai báo sự cố mới</Text>
+            <Text style={[styles.formTitle, { color: activeTextColor, marginBottom: 16 }]}>{t.newIncident}</Text>
             
             {/* Loại sự cố */}
-            <Text style={[styles.formLabel, { color: activeTextGrayColor }]}>Loại sự cố *</Text>
+            <Text style={[styles.formLabel, { color: activeTextGrayColor }]}>{t.incidentType}</Text>
             <View style={styles.typeGrid}>
               {issueTypes.map(type => {
                 const isSelected = selectedType === type.key;
@@ -315,10 +412,10 @@ export default function IncidentReportScreen() {
             </View>
 
             {/* Tóm gọn sự cố */}
-            <Text style={[styles.formLabel, { color: activeTextGrayColor }]}>Tóm gọn sự cố *</Text>
+            <Text style={[styles.formLabel, { color: activeTextGrayColor }]}>{t.summaryLabel}</Text>
             <TextInput
               style={[styles.input, { backgroundColor: activeInputBg, color: activeTextColor, borderColor: activeBorderColor }]}
-              placeholder="Ví dụ: Thiếu 5 lon Coca-Cola ở kệ A12"
+              placeholder={t.summaryPlaceholder}
               placeholderTextColor={darkMode ? '#64748b' : '#888'}
               value={summary}
               onChangeText={setSummary}
@@ -326,10 +423,10 @@ export default function IncidentReportScreen() {
             />
 
             {/* Vị trí */}
-            <Text style={[styles.formLabel, { color: activeTextGrayColor }]}>Vị trí sự cố (Khu vực / Kệ hàng)</Text>
+            <Text style={[styles.formLabel, { color: activeTextGrayColor }]}>{t.locationLabel}</Text>
             <TextInput
               style={[styles.input, { backgroundColor: activeInputBg, color: activeTextColor, borderColor: activeBorderColor }]}
-              placeholder="Ví dụ: Khu A - Kệ 12.02.A"
+              placeholder={t.locationPlaceholder}
               placeholderTextColor={darkMode ? '#64748b' : '#888'}
               value={location}
               onChangeText={setLocation}
@@ -337,10 +434,10 @@ export default function IncidentReportScreen() {
             />
 
             {/* Chi tiết sự cố */}
-            <Text style={[styles.formLabel, { color: activeTextGrayColor }]}>Nội dung chi tiết *</Text>
+            <Text style={[styles.formLabel, { color: activeTextGrayColor }]}>{t.detailLabel}</Text>
             <TextInput
               style={[styles.input, styles.detailInput, { backgroundColor: activeInputBg, color: activeTextColor, borderColor: activeBorderColor }]}
-              placeholder="Mô tả chi tiết tình trạng sự cố để quản lý nắm rõ thông tin..."
+              placeholder={t.detailPlaceholder}
               placeholderTextColor={darkMode ? '#64748b' : '#888'}
               value={detail}
               onChangeText={setDetail}
@@ -349,7 +446,7 @@ export default function IncidentReportScreen() {
             />
 
             {/* Ảnh minh chứng */}
-            <Text style={[styles.formLabel, { color: activeTextGrayColor }]}>Ảnh minh chứng sự cố</Text>
+            <Text style={[styles.formLabel, { color: activeTextGrayColor }]}>{t.proofPhoto}</Text>
             {photoUri ? (
               <View style={styles.photoContainer}>
                 <Image source={{ uri: photoUri }} style={styles.photoPreview} />
@@ -362,18 +459,18 @@ export default function IncidentReportScreen() {
                   activeOpacity={0.7}
                 >
                   <Ionicons name="trash-outline" size={16} color="#fff" style={{ marginRight: 4 }} />
-                  <Text style={{ color: '#fff', fontSize: 12, fontWeight: '700' }}>Xoá ảnh</Text>
+                  <Text style={{ color: '#fff', fontSize: 12, fontWeight: '700' }}>{t.deletePhoto}</Text>
                 </TouchableOpacity>
               </View>
             ) : (
               <View style={styles.photoRow}>
                 <TouchableOpacity style={[styles.photoSelectBtn, { backgroundColor: activeCardBg, borderColor: activeBorderColor }]} onPress={handleTakePhoto} activeOpacity={0.7}>
                   <Ionicons name="camera-outline" size={18} color={COLORS.primary} />
-                  <Text style={[styles.photoSelectText, { color: activeTextColor }]}>Chụp ảnh</Text>
+                  <Text style={[styles.photoSelectText, { color: activeTextColor }]}>{t.takePhoto}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={[styles.photoSelectBtn, { backgroundColor: activeCardBg, borderColor: activeBorderColor }]} onPress={handleChoosePhoto} activeOpacity={0.7}>
                   <Ionicons name="images-outline" size={18} color={COLORS.primary} />
-                  <Text style={[styles.photoSelectText, { color: activeTextColor }]}>Thư viện</Text>
+                  <Text style={[styles.photoSelectText, { color: activeTextColor }]}>{t.choosePhoto}</Text>
                 </TouchableOpacity>
               </View>
             )}
@@ -388,7 +485,7 @@ export default function IncidentReportScreen() {
               {submitting ? (
                 <ActivityIndicator color="#fff" size="small" />
               ) : (
-                <Text style={styles.submitBtnText}>Gửi báo cáo sự cố</Text>
+                <Text style={styles.submitBtnText}>{t.submitBtn}</Text>
               )}
             </TouchableOpacity>
           </View>
@@ -425,7 +522,7 @@ export default function IncidentReportScreen() {
                       styles.statusBadgeText, 
                       isResolved ? { color: '#2e7d32' } : { color: '#e65100' }
                     ]}>
-                      {isResolved ? 'Đã xử lý' : 'Chờ xử lý'}
+                      {isResolved ? t.resolvedBadge : t.pendingBadge}
                     </Text>
                   </View>
                 </View>
@@ -451,14 +548,14 @@ export default function IncidentReportScreen() {
                 
                 <View style={styles.reportFooter}>
                   <View style={{ gap: 2 }}>
-                    <Text style={[styles.reportBy, { color: activeTextGrayColor }]}>Báo cáo bởi: {r.by}</Text>
+                    <Text style={[styles.reportBy, { color: activeTextGrayColor }]}>{t.reportedBy}: {r.by}</Text>
                     <Text style={[styles.reportTime, { color: darkMode ? '#64748b' : '#aaa' }]}>{r.time}</Text>
                   </View>
 
                   {(userRole === 'admin' || userRole === 'warehouse_manager') && !isResolved && (
                     <TouchableOpacity style={styles.actionBtn} onPress={() => handleResolve(r.id)}>
                       <Ionicons name="checkmark-circle-outline" size={16} color="#fff" />
-                      <Text style={styles.actionBtnText}>Xử lý xong</Text>
+                      <Text style={styles.actionBtnText}>{t.resolveBtn}</Text>
                     </TouchableOpacity>
                   )}
                 </View>
@@ -471,13 +568,13 @@ export default function IncidentReportScreen() {
             <View style={styles.emptyIconBg}>
               <Ionicons name="shield-checkmark" size={60} color={COLORS.primary} />
             </View>
-            <Text style={[styles.emptyTitle, { color: activeTextColor }]}>Hệ thống vận hành ổn định!</Text>
+            <Text style={[styles.emptyTitle, { color: activeTextColor }]}>{t.emptyStateTitle}</Text>
             <Text style={[styles.emptySub, { color: activeTextGrayColor }]}>
               {activeFilter === 'all' 
-                ? 'Không ghi nhận sự cố nào phát sinh. Kho hàng Kingfood hiện đang hoạt động vô cùng an toàn và ổn định.' 
+                ? t.emptyStateAll 
                 : activeFilter === 'pending'
-                  ? 'Tuyệt vời! Không có sự cố tồn đọng nào cần xử lý lúc này.'
-                  : 'Chưa có sự cố nào được xử lý thành công.'
+                  ? t.emptyStatePending
+                  : t.emptyStateResolved
               }
             </Text>
 

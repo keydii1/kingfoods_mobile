@@ -4,20 +4,21 @@ import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../constants/colors';
 import { useAppPreferences } from '../contexts/AppPreferencesContext';
 
-const tabs = [
-  { key: 'dashboard', icon: 'home', iconOutline: 'home-outline', label: 'Trang chủ', route: '/dashboard' },
-  { key: 'search', icon: 'cube', iconOutline: 'cube-outline', label: 'Soạn hàng', route: '/ordersearch' },
-  { key: 'incident', icon: 'alert-circle', iconOutline: 'alert-circle-outline', label: 'Sự cố', route: '/incidentreport' },
-  { key: 'profile', icon: 'person-circle', iconOutline: 'person-circle-outline', label: 'Tài khoản', route: '/profile' },
+const getTabs = (lang) => [
+  { key: 'dashboard', icon: 'home', iconOutline: 'home-outline', label: lang === 'vi' ? 'Trang chủ' : 'Home', route: '/dashboard' },
+  { key: 'search', icon: 'cube', iconOutline: 'cube-outline', label: lang === 'vi' ? 'Soạn hàng' : 'Picking', route: '/ordersearch' },
+  { key: 'incident', icon: 'alert-circle', iconOutline: 'alert-circle-outline', label: lang === 'vi' ? 'Sự cố' : 'Incidents', route: '/incidentreport' },
+  { key: 'profile', icon: 'person-circle', iconOutline: 'person-circle-outline', label: lang === 'vi' ? 'Tài khoản' : 'Account', route: '/profile' },
 ];
 
 export default function StaffBottomNav({ active }) {
   const pathname = usePathname();
-  const { darkMode } = useAppPreferences();
+  const { darkMode, language } = useAppPreferences();
 
   const activeNavBg = darkMode ? '#1e1e1e' : '#fff';
   const activeBorderColor = darkMode ? '#2d2d2d' : '#f1f5f9';
   const inactiveTextColor = darkMode ? '#9ca3af' : '#94a3b8';
+  const tabs = getTabs(language);
 
   return (
     <View style={[styles.bottomNav, { backgroundColor: activeNavBg, borderTopColor: activeBorderColor }]}>
@@ -53,9 +54,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
     borderTopWidth: 1,
-    borderTopColor: '#f1f5f9',
     paddingVertical: 10,
-    backgroundColor: '#fff',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: -4 },
     shadowOpacity: 0.02,
@@ -63,6 +62,7 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   navItem: { alignItems: 'center', flex: 1 },
-  navLabel: { fontSize: 10, color: '#94a3b8', fontWeight: '600' },
+  navLabel: { fontSize: 10, fontWeight: '600' },
   navActive: { color: COLORS.primary, fontWeight: '800' },
 });
+

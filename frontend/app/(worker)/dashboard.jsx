@@ -12,22 +12,84 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../../constants/colors';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import StaffBottomNav from '../../components/StaffBottomNav';
 import { useAuth } from '../../contexts/AuthContext';
+import { useAppPreferences } from '../../contexts/AppPreferencesContext';
 import { getAssignedTasks, getMyProfile, getCachedData } from '../../constants/services/api';
-import { useMemo } from 'react';
+
+const cleanLocationName = (name) => {
+    if (!name) return '';
+    return name.replace(/^[🥦🥫🧴❄️\s]+/, '').replace(/^[^a-zA-Z0-9À-ỹđĐ\s]+/, '').trim();
+};
 
 const ZONE_MAP = {
-    1: 'Thực phẩm tươi',
-    2: 'Đồ khô & Gia vị',
-    3: 'Hoá mỹ phẩm',
-    4: 'Đồ đông lạnh'
+    vi: {
+        1: 'Thực phẩm tươi',
+        2: 'Đồ khô & Gia vị',
+        3: 'Hoá mỹ phẩm',
+        4: 'Đồ đông lạnh'
+    },
+    en: {
+        1: 'Fresh Food',
+        2: 'Dry Goods & Spices',
+        3: 'Cosmetics & Chemicals',
+        4: 'Frozen Food'
+    }
+};
+
+const TRANSLATIONS = {
+    vi: {
+        hello: 'Xin chào',
+        staff: 'Nhân viên',
+        unassignedZone: 'Chưa phân khu',
+        shiftMorning: 'Ca Sáng',
+        todayOrders: 'Đơn hôm nay',
+        pendingProgress: 'Chờ & Đang làm',
+        completed: 'Đã hoàn thành',
+        todayList: 'Danh sách đơn hàng ngày hôm nay',
+        emptyTasks: 'Hôm nay bạn chưa có đơn hàng nào được phân công',
+        emptyTasksSub: 'Các đơn hàng được quản lý giao sẽ xuất hiện tại đây.',
+        orderHash: 'Đơn hàng #',
+        partner: 'Đối tác',
+        sku: 'SKU',
+        startPicking: 'Bắt đầu làm',
+        loading: 'Đang tải dữ liệu...',
+    },
+    en: {
+        hello: 'Hello',
+        staff: 'Staff',
+        unassignedZone: 'Unassigned Zone',
+        shiftMorning: 'Morning Shift',
+        todayOrders: "Today's Orders",
+        pendingProgress: 'Pending & Picking',
+        completed: 'Completed',
+        todayList: "Today's Assigned Orders",
+        emptyTasks: 'No tasks assigned to you today',
+        emptyTasksSub: 'Assigned orders from managers will appear here.',
+        orderHash: 'Order #',
+        partner: 'Partner',
+        sku: 'SKU',
+        startPicking: 'Start Picking',
+        loading: 'Loading data...',
+    }
 };
 
 export default function DashboardScreen() {
     const navigation = useNavigation();
     const { userName, assignedZone } = useAuth();
+    const { darkMode, language } = useAppPreferences();
+
+    const activeBg = darkMode ? '#121212' : '#f6f9f6';
+    const activeHeaderBg = darkMode ? '#1e1e1e' : COLORS.primary;
+    const activeBorderColor = darkMode ? '#2d2d2d' : '#f0f2f0';
+    const activeTextColor = darkMode ? '#f3f4f6' : '#222';
+    const activeCardBg = darkMode ? '#1e1e1e' : '#fff';
+    const activeTextGrayColor = darkMode ? '#9ca3af' : '#666';
+    const activeBadgeBg = darkMode ? '#2d2d2d' : '#edf2f7';
+    const activeTitleColor = darkMode ? '#cbd5e1' : '#2d3748';
+
+    const t = TRANSLATIONS[language];
     
     const cachedProfile = getCachedData('/admin/users/me');
     const cachedTasks = getCachedData('/admin/picking/assigned');
@@ -107,13 +169,13 @@ export default function DashboardScreen() {
                 if (!orderId) return;
 
                 if (!groups[orderId]) {
-                    groups[orderId] = {
-                        id: task.id, // pass first task ID so productlist.jsx can fetch the order group
-                        orderId: orderId,
-                        storeName: task.orderDetail?.order?.branch?.name || 'Kingfood Partner',
-                        createdAt: task.createdAt,
-                        tasks: []
-                    };
+                     groups[orderId] = {
+                         id: task.id, // pass first task ID so productlist.jsx can fetch the order group
+                         orderId: orderId,
+                         storeName: task.orderDetail?.order?.branch?.name || 'Kingfood Partner',
+                         createdAt: task.createdAt,
+                         tasks: []
+                     };
                 }
                 groups[orderId].tasks.push(task);
             });
@@ -180,9 +242,25 @@ export default function DashboardScreen() {
 
     // Helper: status styles
     const getStatusTheme = (status) => {
-        if (status === 'completed') return { bg: '#e8f5e9', text: '#2e7d32', label: 'Hoàn thành' };
-        if (status === 'in_progress') return { bg: '#fff3e0', text: '#ef6c00', label: 'Đang làm' };
-        return { bg: '#f5f5f5', text: '#616161', label: 'Chờ xử lý' };
+        if (status === 'completed') {
+            return {
+                bg: darkMode ? 'rgba(46, 125, 50, 0.15)' : '#e8f5e9',
+                text: darkMode ? '#81c784' : '#2e7d32',
+                label: language === 'vi' ? 'Hoàn thành' : 'Completed'
+            };
+        }
+        if (status === 'in_progress') {
+            return {
+                bg: darkMode ? 'rgba(239, 108, 0, 0.15)' : '#fff3e0',
+                text: darkMode ? '#ffb74d' : '#ef6c00',
+                label: language === 'vi' ? 'Đang làm' : 'In Progress'
+            };
+        }
+        return {
+            bg: darkMode ? 'rgba(97, 97, 97, 0.15)' : '#f5f5f5',
+            text: darkMode ? '#cbd5e1' : '#616161',
+            label: language === 'vi' ? 'Chờ xử lý' : 'Pending'
+        };
     };
 
     // Progress color by percentage
@@ -198,25 +276,25 @@ export default function DashboardScreen() {
     const completedToday = tasks.filter(t => t.status === 'completed').length;
     const pendingToday = totalToday - completedToday;
 
-    const displayZone = profile?.assignedLocationId ? ZONE_MAP[profile.assignedLocationId] : (assignedZone || 'Chưa phân khu');
+    const displayZone = profile?.assignedLocationId ? ZONE_MAP[language][profile.assignedLocationId] : (assignedZone || t.unassignedZone);
 
     if (loading) {
         return (
-            <SafeAreaView style={[styles.safeArea, { justifyContent: 'center', alignItems: 'center' }]}>
+            <SafeAreaView style={[styles.safeArea, { backgroundColor: activeBg, justifyContent: 'center', alignItems: 'center' }]}>
                 <ActivityIndicator color={COLORS.primary} size="large" />
             </SafeAreaView>
         );
     }
 
     return (
-        <SafeAreaView style={styles.safeArea}>
+        <SafeAreaView style={[styles.safeArea, { backgroundColor: activeBg }]}>
             <ScrollView
                 style={styles.scrollArea}
                 contentContainerStyle={styles.scrollContent}
                 refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => loadTasks(true)} tintColor={COLORS.primary} />}
             >
                 {/* Stunning Gradient-like Header Banner */}
-                <View style={styles.banner}>
+                <View style={[styles.banner, darkMode && { backgroundColor: '#1e1e1e', shadowColor: '#000' }]}>
                     <View style={styles.bannerTop}>
                         <View style={styles.profileSection}>
                             <View style={styles.avatarCircle}>
@@ -225,8 +303,8 @@ export default function DashboardScreen() {
                                 </Text>
                             </View>
                             <View style={styles.profileInfo}>
-                                <Text style={styles.greeting}>Xin chào</Text>
-                                <Text style={styles.name}>{userName || 'Nhân viên'}</Text>
+                                <Text style={styles.greeting}>{t.hello}</Text>
+                                <Text style={styles.name}>{userName || t.staff}</Text>
                                 <View style={styles.zoneBadge}>
                                     <Ionicons name="location-sharp" size={12} color="#fff" />
                                     <Text style={styles.zoneText}>{displayZone}</Text>
@@ -235,38 +313,38 @@ export default function DashboardScreen() {
                         </View>
 
                         <View style={styles.shiftTime}>
-                            <View style={styles.shiftBadge}>
+                            <View style={[styles.shiftBadge, darkMode && { backgroundColor: '#2d2d2d' }]}>
                                 <Ionicons name="time-outline" size={12} color={COLORS.primary} />
-                                <Text style={styles.shiftLabel}>Ca Sáng</Text>
+                                <Text style={[styles.shiftLabel, darkMode && { color: '#ffb74d' }]}>{t.shiftMorning}</Text>
                             </View>
-                            <Text style={styles.shiftValue}>08:00–16:00</Text>
+                            <Text style={[styles.shiftValue, darkMode && { color: '#cbd5e1' }]}>08:00–16:00</Text>
                         </View>
                     </View>
 
                     {/* KPI Widget Cards */}
                     <View style={styles.kpiContainer}>
-                        <View style={styles.kpiCard}>
-                            <View style={[styles.kpiIconBg, { backgroundColor: '#e3f2fd' }]}>
+                        <View style={[styles.kpiCard, { backgroundColor: activeCardBg }]}>
+                            <View style={[styles.kpiIconBg, { backgroundColor: darkMode ? '#1c2d42' : '#e3f2fd' }]}>
                                 <Ionicons name="clipboard-outline" size={20} color="#1565c0" />
                             </View>
-                            <Text style={styles.kpiValue}>{totalToday}</Text>
-                            <Text style={styles.kpiLabel}>Đơn hôm nay</Text>
+                            <Text style={[styles.kpiValue, { color: activeTextColor }]}>{totalToday}</Text>
+                            <Text style={[styles.kpiLabel, { color: activeTextGrayColor }]}>{t.todayOrders}</Text>
                         </View>
 
-                        <View style={styles.kpiCard}>
-                            <View style={[styles.kpiIconBg, { backgroundColor: '#fff3e0' }]}>
+                        <View style={[styles.kpiCard, { backgroundColor: activeCardBg }]}>
+                            <View style={[styles.kpiIconBg, { backgroundColor: darkMode ? '#4a3219' : '#fff3e0' }]}>
                                 <Ionicons name="hourglass-outline" size={20} color="#ef6c00" />
                             </View>
-                            <Text style={styles.kpiValue}>{pendingToday}</Text>
-                            <Text style={styles.kpiLabel}>Chờ & Đang làm</Text>
+                            <Text style={[styles.kpiValue, { color: activeTextColor }]}>{pendingToday}</Text>
+                            <Text style={[styles.kpiLabel, { color: activeTextGrayColor }]}>{t.pendingProgress}</Text>
                         </View>
 
-                        <View style={styles.kpiCard}>
-                            <View style={[styles.kpiIconBg, { backgroundColor: '#e8f5e9' }]}>
+                        <View style={[styles.kpiCard, { backgroundColor: activeCardBg }]}>
+                            <View style={[styles.kpiIconBg, { backgroundColor: darkMode ? '#1d3e24' : '#e8f5e9' }]}>
                                 <Ionicons name="checkmark-done-sharp" size={20} color="#2e7d32" />
                             </View>
-                            <Text style={styles.kpiValue}>{completedToday}</Text>
-                            <Text style={styles.kpiLabel}>Đã hoàn thành</Text>
+                            <Text style={[styles.kpiValue, { color: activeTextColor }]}>{completedToday}</Text>
+                            <Text style={[styles.kpiLabel, { color: activeTextGrayColor }]}>{t.completed}</Text>
                         </View>
                     </View>
                 </View>
@@ -274,19 +352,19 @@ export default function DashboardScreen() {
                 {/* Main List Section */}
                 <View style={styles.mainContent}>
                     <View style={styles.sectionHeader}>
-                        <Text style={styles.sectionTitle}>Danh sách đơn hàng ngày hôm nay</Text>
-                        <View style={styles.dateTag}>
-                            <Text style={styles.dateTagText}>
-                                {new Date().toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit' })}
+                        <Text style={[styles.sectionTitle, { color: activeTitleColor }]}>{t.todayList}</Text>
+                        <View style={[styles.dateTag, { backgroundColor: activeBadgeBg }]}>
+                            <Text style={[styles.dateTagText, { color: activeTextColor }]}>
+                                {new Date().toLocaleDateString(language === 'vi' ? 'vi-VN' : 'en-US', { day: '2-digit', month: '2-digit' })}
                             </Text>
                         </View>
                     </View>
 
                     {tasks.length === 0 ? (
-                        <View style={styles.emptyCard}>
-                            <Ionicons name="sparkles-outline" size={48} color="#ccc" style={{ marginBottom: 12 }} />
-                            <Text style={styles.emptyText}>Hôm nay bạn chưa có đơn hàng nào được phân công</Text>
-                            <Text style={styles.emptySub}>Các đơn hàng được quản lý giao sẽ xuất hiện tại đây.</Text>
+                        <View style={[styles.emptyCard, { backgroundColor: activeCardBg, borderColor: activeBorderColor }]}>
+                            <Ionicons name="sparkles-outline" size={48} color={darkMode ? '#444' : '#ccc'} style={{ marginBottom: 12 }} />
+                            <Text style={[styles.emptyText, { color: activeTextColor }]}>{t.emptyTasks}</Text>
+                            <Text style={[styles.emptySub, { color: activeTextGrayColor }]}>{t.emptyTasksSub}</Text>
                         </View>
                     ) : (
                         tasks.map((task, index) => {
@@ -295,7 +373,7 @@ export default function DashboardScreen() {
                             return (
                                 <TouchableOpacity
                                     key={task.id || index}
-                                    style={styles.orderCard}
+                                    style={[styles.orderCard, { backgroundColor: activeCardBg, borderColor: activeBorderColor }]}
                                     activeOpacity={0.9}
                                     onPress={() => router.push({
                                         pathname: '/(worker)/productlist',
@@ -304,14 +382,14 @@ export default function DashboardScreen() {
                                 >
                                     <View style={styles.orderHead}>
                                         <View style={styles.orderTitleRow}>
-                                            <View style={styles.orderIconBg}>
+                                            <View style={[styles.orderIconBg, darkMode && { backgroundColor: '#2d2d2d' }]}>
                                                 <Ionicons name="receipt" size={18} color={COLORS.primary} />
                                             </View>
                                             <View>
-                                                <Text style={styles.orderId}>Đơn hàng #{task.orderId}</Text>
+                                                <Text style={[styles.orderId, { color: activeTextColor }]}>{t.orderHash}{task.orderId}</Text>
                                                 <View style={styles.storeRow}>
-                                                    <Ionicons name="business" size={13} color="#888" />
-                                                    <Text style={styles.orderStore}>{task.storeName}</Text>
+                                                    <Ionicons name="business" size={13} color={activeTextGrayColor} />
+                                                    <Text style={[styles.orderStore, { color: activeTextGrayColor }]}>{task.storeName}</Text>
                                                 </View>
                                             </View>
                                         </View>
@@ -322,16 +400,16 @@ export default function DashboardScreen() {
                                         </View>
                                     </View>
 
-                                    <View style={styles.orderDivider} />
+                                    <View style={[styles.orderDivider, { backgroundColor: activeBorderColor }]} />
 
                                     <View style={styles.orderFooter}>
-                                        <View style={styles.skuBadge}>
-                                            <Text style={styles.skuText}>
-                                                {task.pickedCount}/{task.totalCount} SKU
+                                        <View style={[styles.skuBadge, { backgroundColor: activeBadgeBg }]}>
+                                            <Text style={[styles.skuText, { color: activeTextColor }]}>
+                                                {task.pickedCount}/{task.totalCount} {t.sku}
                                             </Text>
                                         </View>
                                         <View style={styles.progressBarContainer}>
-                                            <View style={styles.progressBar}>
+                                            <View style={[styles.progressBar, { backgroundColor: activeBadgeBg }]}>
                                                 <View style={[
                                                     styles.progressFill,
                                                     {
@@ -347,8 +425,8 @@ export default function DashboardScreen() {
                                     </View>
 
                                     {/* Action indicator */}
-                                    <View style={styles.actionArrow}>
-                                        <Text style={styles.actionText}>Bắt đầu làm</Text>
+                                    <View style={[styles.actionArrow, { borderTopColor: activeBorderColor }]}>
+                                        <Text style={styles.actionText}>{t.startPicking}</Text>
                                         <Ionicons name="chevron-forward-outline" size={14} color={COLORS.primary} />
                                     </View>
                                 </TouchableOpacity>
