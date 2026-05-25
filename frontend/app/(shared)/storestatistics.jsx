@@ -141,7 +141,7 @@ export default function StoreStatisticsScreen() {
     } catch (err) {
       console.log('Fetch stats error:', err.message);
       if (!silent) {
-        Alert.alert(t.error, 'Không thể kết nối đến máy chủ.');
+        Alert.alert(t.error, language === 'en' ? 'Cannot connect to the server.' : 'Không thể kết nối đến máy chủ.');
         setOrders([]);
         setTopProducts([]);
       }

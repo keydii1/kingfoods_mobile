@@ -55,7 +55,10 @@ export default function OrderDetailScreen() {
       const res = await getClientOrderDetail(orderId);
       setOrder(res);
     } catch (err) {
-      Alert.alert('Lỗi', err.message || 'Không tải được chi tiết đơn hàng');
+      Alert.alert(
+        language === 'en' ? 'Error' : 'Lỗi',
+        err.message || (language === 'en' ? 'Cannot load order details' : 'Không tải được chi tiết đơn hàng')
+      );
       if (router.canGoBack()) {
         router.back();
       } else {
@@ -73,18 +76,20 @@ export default function OrderDetailScreen() {
   const handleCancel = () => {
     if (order?.status === 'processing') {
       Alert.alert(
-        'Không thể huỷ đơn',
-        'Đơn hàng đã được duyệt và đang trong quá trình xử lý/chuẩn bị lấy hàng, không thể huỷ lúc này.'
+        language === 'en' ? 'Cannot Cancel Order' : 'Không thể huỷ đơn',
+        language === 'en' 
+          ? 'The order has been approved and is being processed/picked, it cannot be cancelled at this time.'
+          : 'Đơn hàng đã được duyệt và đang trong quá trình xử lý/chuẩn bị lấy hàng, không thể huỷ lúc này.'
       );
       return;
     }
     Alert.alert(
-      'Huỷ đơn hàng',
-      `Bạn có chắc muốn huỷ đơn #${orderId}?`,
+      language === 'en' ? 'Cancel Order' : 'Huỷ đơn hàng',
+      language === 'en' ? `Are you sure you want to cancel order #${orderId}?` : `Bạn có chắc muốn huỷ đơn #${orderId}?`,
       [
-        { text: 'Không', style: 'cancel' },
+        { text: language === 'en' ? 'No' : 'Không', style: 'cancel' },
         {
-          text: 'Huỷ đơn',
+          text: language === 'en' ? 'Cancel' : 'Huỷ đơn',
           style: 'destructive',
           onPress: async () => {
             setCancelling(true);
@@ -92,9 +97,15 @@ export default function OrderDetailScreen() {
               await cancelClientOrder(orderId);
               setOrder((prev) => (prev ? { ...prev, status: 'cancelled' } : prev));
               notifyOrdersRefresh();
-              Alert.alert('Thành công', 'Đơn hàng đã được huỷ');
+              Alert.alert(
+                language === 'en' ? 'Success' : 'Thành công',
+                language === 'en' ? 'Order cancelled successfully' : 'Đơn hàng đã được huỷ'
+              );
             } catch (err) {
-              Alert.alert('Lỗi', err.message || 'Không thể huỷ đơn');
+              Alert.alert(
+                language === 'en' ? 'Error' : 'Lỗi',
+                err.message || (language === 'en' ? 'Cannot cancel order' : 'Không thể huỷ đơn')
+              );
             } finally {
               setCancelling(false);
             }
@@ -156,7 +167,7 @@ export default function OrderDetailScreen() {
     );
   };
 
-  const statusMeta = getOrderStatusMeta(order?.status);
+  const statusMeta = getOrderStatusMeta(order?.status, language);
   const canCancel = order && canCustomerCancelOrder(order.status);
   const details = order?.orderDetails || [];
 
@@ -180,7 +191,7 @@ export default function OrderDetailScreen() {
         }}>
           <Ionicons name="chevron-back" size={24} color={COLORS.primary} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Chi tiết đơn #{orderId}</Text>
+        <Text style={styles.headerTitle}>{language === 'en' ? `Order Details #${orderId}` : `Chi tiết đơn #${orderId}`}</Text>
         <View style={{ width: 28 }} />
       </View>
 
@@ -198,21 +209,21 @@ export default function OrderDetailScreen() {
             {(parseFloat(order?.totalPrice) || 0).toLocaleString()}đ
           </Text>
           <Text style={styles.itemsCount}>
-            {details.length} loại sản phẩm ·{' '}
-            {details.reduce((s, d) => s + (d.quantity || 0), 0)} SP
+            {details.length} {language === 'en' ? 'types of products' : 'loại sản phẩm'} ·{' '}
+            {details.reduce((s, d) => s + (d.quantity || 0), 0)} {language === 'en' ? 'Items' : 'SP'}
           </Text>
         </View>
 
         {/* Order Progress Timeline */}
         <View style={styles.timelineCard}>
-          <Text style={styles.timelineTitle}>Trạng thái đơn hàng</Text>
+          <Text style={styles.timelineTitle}>{language === 'en' ? 'Order Status' : 'Trạng thái đơn hàng'}</Text>
           
           {order?.status === 'cancelled' ? (
             <View style={styles.cancelledAlert}>
               <Ionicons name="close-circle-outline" size={24} color="#e53935" />
               <View>
-                <Text style={styles.cancelledTitle}>Đơn hàng đã bị hủy</Text>
-                <Text style={styles.cancelledSub}>Đơn hàng này không thể xử lý tiếp.</Text>
+                <Text style={styles.cancelledTitle}>{language === 'en' ? 'Order Cancelled' : 'Đơn hàng đã bị hủy'}</Text>
+                <Text style={styles.cancelledSub}>{language === 'en' ? 'This order has been cancelled and cannot be processed.' : 'Đơn hàng này không thể xử lý tiếp.'}</Text>
               </View>
             </View>
           ) : (
@@ -222,7 +233,7 @@ export default function OrderDetailScreen() {
                 <View style={[styles.stepNode, styles.stepNodeDone]}>
                   <Ionicons name="checkmark" size={14} color="#fff" />
                 </View>
-                <Text style={[styles.stepLabel, styles.stepLabelDone]}>Đã đặt</Text>
+                <Text style={[styles.stepLabel, styles.stepLabelDone]}>{language === 'en' ? 'Placed' : 'Đã đặt'}</Text>
               </View>
               
               <View style={[styles.stepLine, ['processing', 'shipped', 'delivered'].includes(order?.status) && styles.stepLineDone]} />
@@ -244,7 +255,7 @@ export default function OrderDetailScreen() {
                   styles.stepLabel,
                   ['processing', 'shipped', 'delivered'].includes(order?.status) && styles.stepLabelDone,
                   order?.status === 'pending' && styles.stepLabelActive
-                ]}>Duyệt đơn</Text>
+                ]}>{language === 'en' ? 'Approved' : 'Duyệt đơn'}</Text>
               </View>
 
               <View style={[styles.stepLine, ['shipped', 'delivered'].includes(order?.status) && styles.stepLineDone]} />
@@ -266,7 +277,7 @@ export default function OrderDetailScreen() {
                   styles.stepLabel,
                   ['shipped', 'delivered'].includes(order?.status) && styles.stepLabelDone,
                   order?.status === 'processing' && styles.stepLabelActive
-                ]}>Đang giao</Text>
+                ]}>{language === 'en' ? 'Shipped' : 'Đang giao'}</Text>
               </View>
 
               <View style={[styles.stepLine, order?.status === 'delivered' && styles.stepLineDone]} />
@@ -288,7 +299,7 @@ export default function OrderDetailScreen() {
                   styles.stepLabel,
                   order?.status === 'delivered' && styles.stepLabelDone,
                   order?.status === 'shipped' && styles.stepLabelActive
-                ]}>Đã nhận</Text>
+                ]}>{language === 'en' ? 'Delivered' : 'Đã nhận'}</Text>
               </View>
             </View>
           )}
@@ -342,7 +353,9 @@ export default function OrderDetailScreen() {
           >
             <Ionicons name="close-circle-outline" size={20} color={order?.status === 'processing' ? '#9e9e9e' : '#e53935'} />
             <Text style={[styles.cancelBtnText, order?.status === 'processing' && { color: '#9e9e9e' }]}>
-              {cancelling ? 'Đang huỷ...' : 'Huỷ đơn hàng'}
+              {cancelling 
+                ? (language === 'en' ? 'Cancelling...' : 'Đang huỷ...') 
+                : (language === 'en' ? 'Cancel Order' : 'Huỷ đơn hàng')}
             </Text>
           </TouchableOpacity>
         )}

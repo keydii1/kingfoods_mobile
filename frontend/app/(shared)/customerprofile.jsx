@@ -196,7 +196,7 @@ export default function CustomerProfileScreen() {
                 <Text style={styles.name}>{user?.name || t.notUpdated}</Text>
               )}
               <Text style={styles.branchSub}>
-                {user?.branch?.name || 'Chi nhánh Kingfood'}
+                {user?.branch?.name || (language === 'en' ? 'Kingfood Branch' : 'Chi nhánh Kingfood')}
               </Text>
               
               {editing && (

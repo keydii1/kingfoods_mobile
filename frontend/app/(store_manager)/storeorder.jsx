@@ -69,6 +69,10 @@ const TRANSLATIONS = {
     loading: 'Đang tải danh mục thực phẩm...',
     noProducts: 'Không tìm thấy sản phẩm nào phù hợp',
     sending: 'Đang gửi...',
+    emptyCartTitle: 'Giỏ hàng trống',
+    emptyCartMsg: 'Vui lòng thêm sản phẩm trước khi đặt hàng',
+    errorTitle: 'Lỗi',
+    orderFailMsg: 'Không đặt được hàng',
   },
   en: {
     order: 'Order',
@@ -85,6 +89,10 @@ const TRANSLATIONS = {
     loading: 'Loading products catalog...',
     noProducts: 'No matching products found',
     sending: 'Sending...',
+    emptyCartTitle: 'Empty Cart',
+    emptyCartMsg: 'Please add products to your cart before placing an order',
+    errorTitle: 'Error',
+    orderFailMsg: 'Failed to place order',
   }
 };
 
@@ -203,7 +211,7 @@ export default function StoreOrderScreen() {
 
   const openConfirm = () => {
     if (cart.length === 0) {
-      Alert.alert('Giỏ hàng trống', 'Vui lòng thêm sản phẩm trước khi đặt hàng');
+      Alert.alert(t.emptyCartTitle, t.emptyCartMsg);
       return;
     }
     setShowConfirm(true);
@@ -224,7 +232,7 @@ export default function StoreOrderScreen() {
       setShowSuccess(true);
       playSound('success'); // Play physical success sound!
     } catch (err) {
-      Alert.alert('Lỗi', err.message || 'Không đặt được hàng');
+      Alert.alert(t.errorTitle, err.message || t.orderFailMsg);
     } finally {
       setSubmitting(false);
     }
