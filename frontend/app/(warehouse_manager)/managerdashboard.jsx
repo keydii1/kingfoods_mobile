@@ -1142,7 +1142,7 @@ const styles = StyleSheet.create({
     zoneName: {
         fontSize: 13,
         color: '#444',
-        width: 90,
+        width: 115,
     },
     zoneBar: {
         flex: 1,
