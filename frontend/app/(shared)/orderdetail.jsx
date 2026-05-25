@@ -206,7 +206,7 @@ export default function OrderDetailScreen() {
             {formatVietnamDate(order?.createdAt)}
           </Text>
           <Text style={styles.totalText}>
-            {(parseFloat(order?.totalPrice) || 0).toLocaleString()}đ
+            {(parseFloat(order?.totalPrice) || 0).toLocaleString()}{language === 'en' ? ' VND' : 'đ'}
           </Text>
           <Text style={styles.itemsCount}>
             {details.length} {language === 'en' ? 'types of products' : 'loại sản phẩm'} ·{' '}
@@ -335,7 +335,7 @@ export default function OrderDetailScreen() {
                 {(
                   (parseFloat(line.product?.price) || 0) * (line.quantity || 0)
                 ).toLocaleString()}
-                đ
+                {language === 'en' ? ' VND' : 'đ'}
               </Text>
             </View>
           ))}

@@ -418,10 +418,10 @@ export default function StoreStatisticsScreen() {
 
             {filteredOrders.length > 0 ? (
               filteredOrders.map((o) => {
-                const meta = getOrderStatusMeta(o.status);
+                const meta = getOrderStatusMeta(o.status, language);
                 const cancellable = canCustomerCancelOrder(o.status);
                 const itemCount = o.orderDetails?.length || 0;
-                const total = `${(parseFloat(o.totalPrice) || 0).toLocaleString()}đ`;
+                const total = language === 'en' ? `${(parseFloat(o.totalPrice) || 0).toLocaleString()} VND` : `${(parseFloat(o.totalPrice) || 0).toLocaleString()}đ`;
                 const date = formatVietnamDateOnly(o.createdAt);
 
                 return (

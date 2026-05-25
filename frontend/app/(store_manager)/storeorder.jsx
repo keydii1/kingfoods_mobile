@@ -366,7 +366,7 @@ export default function StoreOrderScreen() {
               )}
               <View style={styles.productInfo}>
                 <Text style={[styles.productName, { color: activeTextColor }]}>{translateProductName(product.name, language)}</Text>
-                <Text style={styles.productPrice}>{product.price.toLocaleString()}đ / {translateUnit(product.unit, language)}</Text>
+                <Text style={styles.productPrice}>{product.price.toLocaleString()}{language === 'en' ? ' VND' : 'đ'} / {translateUnit(product.unit, language)}</Text>
               </View>
               <View style={styles.productAdd}>
                 <Text style={styles.productAddBtn}>+</Text>
@@ -381,7 +381,7 @@ export default function StoreOrderScreen() {
           <View style={styles.cartBar}>
             <View style={styles.cartInfo}>
               <Text style={[styles.cartCount, { color: activeTextColor }]}>{totalItems} {t.items}</Text>
-              <Text style={styles.cartTotal}>{totalAmount.toLocaleString()}đ</Text>
+              <Text style={styles.cartTotal}>{totalAmount.toLocaleString()}{language === 'en' ? ' VND' : 'đ'}</Text>
             </View>
             <TouchableOpacity
               style={[styles.orderBtn, submitting && { opacity: 0.7 }]}
@@ -391,7 +391,7 @@ export default function StoreOrderScreen() {
               <Text style={styles.orderBtnText} numberOfLines={1}>
                 {submitting
                   ? t.sending
-                  : `${t.order} · ${totalItems} ${t.sp} · ${totalAmount.toLocaleString()}đ`}
+                  : `${t.order} · ${totalItems} ${t.sp} · ${totalAmount.toLocaleString()}${language === 'en' ? ' VND' : 'đ'}`}
               </Text>
             </TouchableOpacity>
           </View>
