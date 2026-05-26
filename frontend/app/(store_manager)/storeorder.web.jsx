@@ -214,7 +214,7 @@ export default function StoreOrderWebScreen() {
   const [favoritesList, setFavoritesList] = useState([]);
 
   // Promotions
-  const [promotionsList] = useState([
+  const [promotionsList, setPromotionsList] = useState([
     {
       id: 'promo-1',
       title: 'Lễ hội trái cây mùa hè',
@@ -244,38 +244,117 @@ export default function StoreOrderWebScreen() {
     }
   ]);
 
-  // Store Rack Incident Logger
-  const [storeIncidents, setStoreIncidents] = useState([
-    { id: 1, product: 'Cam Sành Kingfood', type: 'Dập nát khi vận chuyển', severity: 'Cao', status: 'pending', date: '2026-05-19' },
-    { id: 2, product: 'Sữa TH True Milk', type: 'Móp méo vỏ hộp', severity: 'Trung bình', status: 'resolved', date: '2026-05-18' }
-  ]);
+  // Store Rack Incident Logger with localStorage persistence
+  const [storeIncidents, setStoreIncidents] = useState(() => {
+    try {
+      const stored = localStorage.getItem('storeIncidents');
+      return stored ? JSON.parse(stored) : [
+        { id: 1, product: 'Cam sành túi lưới 2kg', type: 'Dập nát khi vận chuyển', severity: 'Cao', status: 'pending', date: '2026-05-19' },
+        { id: 2, product: 'Sữa tươi TH True Milk ít đường hộp 1L', type: 'Móp méo vỏ hộp', severity: 'Trung bình', status: 'resolved', date: '2026-05-18' }
+      ];
+    } catch {
+      return [
+        { id: 1, product: 'Cam sành túi lưới 2kg', type: 'Dập nát khi vận chuyển', severity: 'Cao', status: 'pending', date: '2026-05-19' },
+        { id: 2, product: 'Sữa tươi TH True Milk ít đường hộp 1L', type: 'Móp méo vỏ hộp', severity: 'Trung bình', status: 'resolved', date: '2026-05-18' }
+      ];
+    }
+  });
   const [incidentForm, setIncidentForm] = useState({ product: '', type: 'Thiếu hàng trưng bày', severity: 'Trung bình', details: '' });
   const [submittingIncident, setSubmittingIncident] = useState(false);
 
-  // Supplier Support Desk
-  const [supportTickets, setSupportTickets] = useState([
-    { id: 101, topic: 'Sai lệch số lượng đơn hàng #12', type: 'Giao hàng', date: '2026-05-19', status: 'processing' },
-    { id: 102, topic: 'Lỗi thanh toán hóa đơn sỉ', type: 'Thanh toán', date: '2026-05-15', status: 'resolved' }
-  ]);
+  // Supplier Support Desk with localStorage persistence
+  const [supportTickets, setSupportTickets] = useState(() => {
+    try {
+      const stored = localStorage.getItem('supportTickets');
+      return stored ? JSON.parse(stored) : [
+        { id: 101, topic: 'Sai lệch số lượng đơn hàng #12', type: 'Giao hàng', date: '2026-05-19', status: 'processing' },
+        { id: 102, topic: 'Lỗi thanh toán hóa đơn sỉ', type: 'Thanh toán', date: '2026-05-15', status: 'resolved' }
+      ];
+    } catch {
+      return [
+        { id: 101, topic: 'Sai lệch số lượng đơn hàng #12', type: 'Giao hàng', date: '2026-05-19', status: 'processing' },
+        { id: 102, topic: 'Lỗi thanh toán hóa đơn sỉ', type: 'Thanh toán', date: '2026-05-15', status: 'resolved' }
+      ];
+    }
+  });
   const [supportForm, setSupportForm] = useState({ topic: '', type: 'Giao nhận', message: '' });
   const [submittingTicket, setSubmittingTicket] = useState(false);
 
   // BRAND NEW RETAIL REPLENISHMENT EXPIRED EXPANSIONS
-  
-  // 1. Demand forecast lists
-  const [forecastList] = useState([
-    { name: 'Cam Sành Kingfood', sku: 'FRUIT-CAM-SANH', salesRate: '45kg/tuần', stock: 5, timeLimit: '1 ngày', recommendQty: 40, unit: 'kg' },
-    { name: 'Sữa tươi TH True Milk Organic', sku: 'MILK-TH-TRUE', salesRate: '60 hộp/tuần', stock: 8, timeLimit: '1 ngày', recommendQty: 50, unit: 'hộp' },
-    { name: 'Coca-Cola Lon 320ml', sku: 'BEV-COCA-COLA', salesRate: '120 lon/tuần', stock: 95, timeLimit: '5 ngày', recommendQty: 30, unit: 'lon' },
-    { name: 'Bánh Quy Oreo Socola', sku: 'SNK-OREO', salesRate: '80 hộp/tuần', stock: 68, timeLimit: '6 ngày', recommendQty: 20, unit: 'hộp' }
-  ]);
+  const [forecastList, setForecastList] = useState([]);
+  const [shelfFreshness, setShelfFreshness] = useState([]);
 
-  // 2. Shelf Freshness & Expiration status tracking
-  const [shelfFreshness, setShelfFreshness] = useState([
-    { id: 1, name: 'Cam Sành Kingfood', expiryDate: '2026-05-21', daysLeft: 2, status: 'critical', price: 35000 },
-    { id: 2, name: 'Sữa tươi TH True Milk Organic', expiryDate: '2026-05-24', daysLeft: 5, status: 'warning', price: 42000 },
-    { id: 3, name: 'Bánh Quy Oreo Socola', expiryDate: '2026-09-18', daysLeft: 120, status: 'safe', price: 28000 }
-  ]);
+  // Sync incidents and tickets to localStorage
+  useEffect(() => {
+    try {
+      localStorage.setItem('storeIncidents', JSON.stringify(storeIncidents));
+    } catch (e) {}
+  }, [storeIncidents]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('supportTickets', JSON.stringify(supportTickets));
+    } catch (e) {}
+  }, [supportTickets]);
+
+  // Sync dynamic products to forecast, shelfFreshness, promotions
+  useEffect(() => {
+    if (productCatalog.length > 0) {
+      const findProduct = (keywords) => {
+        return productCatalog.find(p => 
+          keywords.some(kw => p.name.toLowerCase().includes(kw.toLowerCase()))
+        ) || productCatalog[0];
+      };
+
+      const camSanh = findProduct(['Cam sành', 'Cam']);
+      const milk = findProduct(['TH True', 'Sữa tươi']);
+      const coca = findProduct(['Coca', 'Nước ngọt']);
+      const hen = findProduct(['Heineken', 'Bia']);
+
+      setForecastList([
+        { name: camSanh.name, sku: camSanh.sku, salesRate: '45kg/tuần', stock: 5, timeLimit: '1 ngày', recommendQty: 40, unit: camSanh.unit },
+        { name: milk.name, sku: milk.sku, salesRate: '60 hộp/tuần', stock: 8, timeLimit: '1 ngày', recommendQty: 50, unit: milk.unit },
+        { name: coca.name, sku: coca.sku, salesRate: '120 lon/tuần', stock: 95, timeLimit: '5 ngày', recommendQty: 30, unit: coca.unit },
+        { name: hen.name, sku: hen.sku, salesRate: '80 lon/tuần', stock: 68, timeLimit: '6 ngày', recommendQty: 20, unit: hen.unit }
+      ]);
+
+      setShelfFreshness([
+        { id: camSanh.id, name: camSanh.name, expiryDate: '2026-05-21', daysLeft: 2, status: 'critical', price: camSanh.price },
+        { id: milk.id, name: milk.name, expiryDate: '2026-05-24', daysLeft: 5, status: 'warning', price: milk.price },
+        { id: hen.id, name: hen.name, expiryDate: '2026-09-18', daysLeft: 120, status: 'safe', price: hen.price }
+      ]);
+
+      setPromotionsList([
+        {
+          id: 'promo-1',
+          title: 'Lễ hội trái cây mùa hè',
+          desc: `Giảm giá cực đậm 15% mặt hàng ${camSanh.name} tươi ngon loại 1.`,
+          badge: 'GIẢM 15%',
+          targetSku: camSanh.sku,
+          bannerBg: '#fff3e0',
+          tagColor: '#e65100',
+        },
+        {
+          id: 'promo-2',
+          title: 'Tuần lễ Sữa tươi Organic',
+          desc: `Bổ sung dinh dưỡng cho gia đình, mua 10 lốc ${milk.name} tặng ngay 1 lốc sữa chua.`,
+          badge: 'MUA 10 TẶNG 1',
+          targetSku: milk.sku,
+          bannerBg: '#e3f2fd',
+          tagColor: '#0d47a1',
+        },
+        {
+          id: 'promo-3',
+          title: 'Bão deal nước ngọt giải khát',
+          desc: `Ưu đãi mua sỉ ${coca.name} lon tiện lợi phục vụ mùa nóng bức.`,
+          badge: 'CÀNG MUA CÀNG RẺ',
+          targetSku: coca.sku,
+          bannerBg: '#ffebee',
+          tagColor: '#c62828',
+        }
+      ]);
+    }
+  }, [productCatalog]);
 
   // Initial loads
   useEffect(() => {

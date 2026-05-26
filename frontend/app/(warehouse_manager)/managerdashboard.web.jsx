@@ -162,8 +162,6 @@ export default function ManagerDashboardWebScreen() {
     'FRUIT-TAO-DO': 14, // Low Stock Alert!
   });
 
-
-
   // Interactive Zone Map Blueprint Occupancy
   const [shelfOccupancies, setShelfOccupancies] = useState([
     { shelf: 'A1', desc: 'Bánh Kẹo khô', rate: 95, color: '#D32F2F', label: 'Quá tải (>90%)' },
@@ -180,12 +178,64 @@ export default function ManagerDashboardWebScreen() {
   const [runningRouting, setRunningRouting] = useState(false);
 
   // BRAND NEW supplier wholesale PO replenishment forecast
-  const [poForecastList] = useState([
-    { name: 'Cam Sành Kingfood', sku: 'FRUIT-CAM-SANH', monthlyUsage: '1,200kg', currentStock: 75, limitDays: '3 ngày', recommendedPO: '1,500kg' },
-    { name: 'Sữa tươi TH True Milk Organic', sku: 'MILK-TH-TRUE', monthlyUsage: '1,800 hộp', currentStock: 92, limitDays: '4 ngày', recommendedPO: '2,000 hộp' },
-    { name: 'Bánh Quy Oreo Socola', sku: 'SNK-OREO', monthlyUsage: '800 hộp', currentStock: 540, limitDays: '20 ngày', recommendedPO: '500 hộp' }
-  ]);
+  const [poForecastList, setPoForecastList] = useState([]);
   const [issuingPO, setIssuingPO] = useState({});
+
+  // Sync locationsList to shelfOccupancies
+  useEffect(() => {
+    if (locationsList.length > 0) {
+      const occupancies = locationsList.map((loc) => {
+        const rate = Math.floor(15 + (loc.id * 17) % 80);
+        let color = '#1E5E3A';
+        let label = 'Bình thường';
+        if (rate > 90) {
+          color = '#D32F2F';
+          label = 'Quá tải (>90%)';
+        } else if (rate < 30) {
+          color = '#475569';
+          label = 'Trống rộng';
+        }
+        return {
+          shelf: loc.name || loc.code,
+          desc: `Kệ lưu trữ Zone ${loc.zone}`,
+          rate,
+          color,
+          label
+        };
+      });
+      setShelfOccupancies(occupancies);
+    }
+  }, [locationsList]);
+
+  // Sync productsList and warehouseStocks to poForecastList
+  useEffect(() => {
+    if (productsList.length > 0) {
+      const findProduct = (keywords) => {
+        return productsList.find(p => 
+          keywords.some(kw => p.name.toLowerCase().includes(kw.toLowerCase()))
+        ) || productsList[0];
+      };
+
+      const camSanh = findProduct(['Cam sành', 'Cam']);
+      const milk = findProduct(['TH True', 'Sữa tươi']);
+      const coca = findProduct(['Coca', 'Nước ngọt']);
+
+      const getStock = (p) => {
+        const skuCode = p.sku || `SKU-${p.id}`;
+        return warehouseStocks[skuCode] ?? 75;
+      };
+
+      const stockCam = getStock(camSanh);
+      const stockMilk = getStock(milk);
+      const stockCoca = getStock(coca);
+
+      setPoForecastList([
+        { name: camSanh.name, sku: camSanh.sku || `SKU-${camSanh.id}`, monthlyUsage: '1,200 ' + (camSanh.unit || 'kg'), currentStock: stockCam, limitDays: stockCam < 15 ? '3 ngày' : '25 ngày', recommendedPO: '1,500 ' + (camSanh.unit || 'kg') },
+        { name: milk.name, sku: milk.sku || `SKU-${milk.id}`, monthlyUsage: '1,800 ' + (milk.unit || 'hộp'), currentStock: stockMilk, limitDays: stockMilk < 15 ? '4 ngày' : '30 ngày', recommendedPO: '2,000 ' + (milk.unit || 'hộp') },
+        { name: coca.name, sku: coca.sku || `SKU-${coca.id}`, monthlyUsage: '800 ' + (coca.unit || 'lon'), currentStock: stockCoca, limitDays: stockCoca < 15 ? '5 ngày' : '20 ngày', recommendedPO: '1,000 ' + (coca.unit || 'lon') }
+      ]);
+    }
+  }, [productsList, warehouseStocks]);
 
   // Fetch logic
   useEffect(() => {
@@ -294,6 +344,24 @@ export default function ManagerDashboardWebScreen() {
       const res = await getProducts();
       const items = Array.isArray(res) ? res : (res?.items || res?.data || []);
       setProductsList(items);
+
+      // Initialize warehouseStocks for each real product dynamically
+      setWarehouseStocks(prev => {
+        const newStocks = { ...prev };
+        items.forEach(p => {
+          const skuCode = p.sku || `SKU-${p.id}`;
+          if (newStocks[skuCode] === undefined) {
+            // Seed a stable stock level based on product ID so it's not totally random
+            // Let some products be low stock to trigger warnings (< 15)
+            if (p.id % 4 === 0) {
+              newStocks[skuCode] = Math.floor(5 + (p.id % 10)); // Low stock: 5 - 14
+            } else {
+              newStocks[skuCode] = Math.floor(40 + (p.id % 200)); // Normal stock: 40 - 239
+            }
+          }
+        });
+        return newStocks;
+      });
     } catch (err) {
       console.log('Products error:', err.message);
     } finally {
@@ -1052,19 +1120,27 @@ export default function ManagerDashboardWebScreen() {
                         <View style={styles.overviewTable}>
                           <View style={styles.overviewTableHeader}>
                             <Text style={[styles.othCell, { flex: 2.5 }]}>Họ và tên</Text>
-                            <Text style={[styles.othCell, { flex: 1.5, textAlign: 'center' }]}>Đơn hoàn tất</Text>
+                            <Text style={[styles.othCell, { flex: 1.5, textAlign: 'center' }]}>Hiệu suất</Text>
                             <Text style={[styles.othCell, { flex: 1.5, textAlign: 'center' }]}>SKU đã nhặt</Text>
-                            <Text style={[styles.othCell, { flex: 1.5, textAlign: 'center' }]}>Khu vực Zone</Text>
+                            <Text style={[styles.othCell, { flex: 1.5, textAlign: 'center' }]}>Khu vực kệ</Text>
                           </View>
 
-                          {stats.staffPerformance.map((item, idx) => (
-                            <View key={idx} style={styles.overviewTableRow}>
-                              <Text style={[styles.otdCell, { flex: 2.5, fontWeight: '800' }]}>{item.name || item.fullName || item.username}</Text>
-                              <Text style={[styles.otdCell, { flex: 1.5, textAlign: 'center', fontWeight: 'bold' }]}>{item.ordersCompleted}</Text>
-                              <Text style={[styles.otdCell, { flex: 1.5, textAlign: 'center', fontWeight: 'bold', color: GREEN_THEME.primary }]}>{item.itemsPicked}</Text>
-                              <Text style={[styles.otdCell, { flex: 1.5, textAlign: 'center', fontWeight: '800' }]}>Zone {item.assignedZone}</Text>
-                            </View>
-                          ))}
+                          {stats.staffPerformance.map((item, idx) => {
+                            const loc = locationsList.find(l => l.id === item.assignedLocationId);
+                            const zoneText = loc ? loc.name : (item.assignedZone ? `Zone ${item.assignedZone}` : 'Chưa phân');
+                            return (
+                              <View key={idx} style={styles.overviewTableRow}>
+                                <Text style={[styles.otdCell, { flex: 2.5, fontWeight: '800' }]}>{item.name || item.username}</Text>
+                                <Text style={[styles.otdCell, { flex: 1.5, textAlign: 'center', fontWeight: 'bold' }]}>
+                                  {item.pickingSpeed ? `${item.pickingSpeed} sp/h` : '—'}
+                                </Text>
+                                <Text style={[styles.otdCell, { flex: 1.5, textAlign: 'center', fontWeight: 'bold', color: GREEN_THEME.primary }]}>
+                                  {item.totalItemsPicked ?? 0}
+                                </Text>
+                                <Text style={[styles.otdCell, { flex: 1.5, textAlign: 'center', fontWeight: '800' }]}>{zoneText}</Text>
+                              </View>
+                            );
+                          })}
                         </View>
                       )}
                     </View>
@@ -1082,17 +1158,22 @@ export default function ManagerDashboardWebScreen() {
                         </View>
                       ) : (
                         <ScrollView style={styles.incidentOverviewList}>
-                          {incidentsList.filter(i => i.status !== 'resolved').map((inc, idx) => (
-                            <View key={inc.id || idx} style={styles.incidentRow}>
-                              <View style={{ flex: 1 }}>
-                                <Text style={styles.incidentProdName}>{inc.productName || inc.product_name}</Text>
-                                <Text style={styles.incidentSub}>Kệ: Khu {inc.location} · Người báo: {inc.reportedBy}</Text>
+                          {incidentsList.filter(i => i.status !== 'resolved').map((inc, idx) => {
+                            const prodName = inc.task?.orderDetail?.product?.name || inc.productName || inc.product_name || 'Hàng hoá sỉ';
+                            const locName = inc.task?.location?.name || inc.task?.location?.code || inc.location || '—';
+                            const reporterName = inc.reporter?.name || inc.reporter?.fullName || inc.reporter?.username || inc.reportedBy || 'Staff';
+                            return (
+                              <View key={inc.id || idx} style={styles.incidentRow}>
+                                <View style={{ flex: 1 }}>
+                                  <Text style={styles.incidentProdName}>{prodName}</Text>
+                                  <Text style={styles.incidentSub}>Kệ: {locName} · Người báo: {reporterName}</Text>
+                                </View>
+                                <TouchableOpacity style={styles.resolveBtnSmall} onPress={() => handleResolveIncident(inc.id || inc._id)}>
+                                  <Text style={styles.resolveBtnTextSmall}>Xong</Text>
+                                </TouchableOpacity>
                               </View>
-                              <TouchableOpacity style={styles.resolveBtnSmall} onPress={() => handleResolveIncident(inc.id || inc._id)}>
-                                <Text style={styles.resolveBtnTextSmall}>Xong</Text>
-                              </TouchableOpacity>
-                            </View>
-                          ))}
+                            );
+                          })}
                         </ScrollView>
                       )}
                     </View>
@@ -2446,30 +2527,35 @@ export default function ManagerDashboardWebScreen() {
                       <Text style={[styles.thCell, { flex: 1.5, textAlign: 'center' }]}>Thao tác</Text>
                     </View>
 
-                    {incidentsList.map((incident, idx) => (
-                      <View key={incident.id || incident._id || idx} style={styles.tableWebRow}>
-                        <Text style={[styles.tdCell, { flex: 1, fontWeight: '800' }]}>#{incident.id || idx + 1}</Text>
-                        <Text style={[styles.tdCell, { flex: 3, fontWeight: '750' }]} numberOfLines={1}>{incident.productName || incident.product_name}</Text>
-                        <Text style={[styles.tdCell, { flex: 1.5, color: GREEN_THEME.primary, fontWeight: '800' }]}>Khu {incident.location || '—'}</Text>
-                        <Text style={[styles.tdCell, { flex: 2 }]}>{incident.reportedBy || 'Staff'}</Text>
-                        <View style={[styles.tdCell, { flex: 1.5, alignItems: 'center' }]}>
-                          <View style={[styles.alertPill, { backgroundColor: incident.status === 'resolved' ? '#e8f5e9' : '#ffebee' }]}>
-                            <Text style={{ fontSize: 10, fontWeight: '800', color: incident.status === 'resolved' ? GREEN_THEME.primary : GREEN_THEME.error }}>
-                              {incident.status === 'resolved' ? 'Đã xử lý' : 'Đang thiếu'}
-                            </Text>
+                    {incidentsList.map((incident, idx) => {
+                      const prodName = incident.task?.orderDetail?.product?.name || incident.productName || incident.product_name || 'Hàng hoá sỉ';
+                      const locName = incident.task?.location?.name || incident.task?.location?.code || incident.location || '—';
+                      const reporterName = incident.reporter?.name || incident.reporter?.fullName || incident.reporter?.username || incident.reportedBy || 'Staff';
+                      return (
+                        <View key={incident.id || incident._id || idx} style={styles.tableWebRow}>
+                          <Text style={[styles.tdCell, { flex: 1, fontWeight: '800' }]}>#{incident.id || idx + 1}</Text>
+                          <Text style={[styles.tdCell, { flex: 3, fontWeight: '750' }]} numberOfLines={1}>{prodName}</Text>
+                          <Text style={[styles.tdCell, { flex: 1.5, color: GREEN_THEME.primary, fontWeight: '800' }]}>{locName}</Text>
+                          <Text style={[styles.tdCell, { flex: 2 }]}>{reporterName}</Text>
+                          <View style={[styles.tdCell, { flex: 1.5, alignItems: 'center' }]}>
+                            <View style={[styles.alertPill, { backgroundColor: incident.status === 'resolved' ? '#e8f5e9' : '#ffebee' }]}>
+                              <Text style={{ fontSize: 10, fontWeight: '800', color: incident.status === 'resolved' ? GREEN_THEME.primary : GREEN_THEME.error }}>
+                                {incident.status === 'resolved' ? 'Đã xử lý' : 'Đang thiếu'}
+                              </Text>
+                            </View>
+                          </View>
+                          <View style={[styles.tdCell, { flex: 1.5, alignItems: 'center' }]}>
+                            {incident.status !== 'resolved' ? (
+                              <TouchableOpacity style={styles.resolveActionBtn} onPress={() => handleResolveIncident(incident.id || incident._id)}>
+                                <Text style={styles.resolveActionBtnText}>Giải quyết</Text>
+                              </TouchableOpacity>
+                            ) : (
+                              <Text style={{ color: GREEN_THEME.textMuted, fontSize: 11 }}>Hoàn tất</Text>
+                            )}
                           </View>
                         </View>
-                        <View style={[styles.tdCell, { flex: 1.5, alignItems: 'center' }]}>
-                          {incident.status !== 'resolved' ? (
-                            <TouchableOpacity style={styles.resolveActionBtn} onPress={() => handleResolveIncident(incident.id || incident._id)}>
-                              <Text style={styles.resolveActionBtnText}>Giải quyết</Text>
-                            </TouchableOpacity>
-                          ) : (
-                            <Text style={{ color: GREEN_THEME.textMuted, fontSize: 11 }}>Hoàn tất</Text>
-                          )}
-                        </View>
-                      </View>
-                    ))}
+                      );
+                    })}
                   </View>
                 </ScrollView>
               )}
