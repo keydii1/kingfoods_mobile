@@ -4850,3 +4850,107 @@
 2026-05-24 22:37:06:376 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 8953ms[39m
 2026-05-24 22:37:08:378 [32minfo[39m: [32mGET /api/v1/admin/locations?limit=1000 304 - 121ms[39m
 2026-05-24 22:37:10:3710 [32minfo[39m: [32mGET /api/v1/admin/customers?page=1&limit=200 304 - 455ms[39m
+2026-05-26 23:13:28:1328 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 23:13:28 26/5/2026[39m
+[32m      * URL: http://localhost:9999[39m
+[32m      * Port: 9999[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-26 23:14:02:142 [32minfo[39m: [32mPOST /api/v1/auth/customer/login 200 - 279ms[39m
+2026-05-26 23:14:03:143 [32minfo[39m: [32mGET /api/v1/public/products?limit=100 200 - 690ms[39m
+2026-05-26 23:14:03:143 [32minfo[39m: [32mGET /api/v1/public/categories?limit=100 200 - 689ms[39m
+2026-05-26 23:14:25:1425 [32minfo[39m: [32mPOST /api/v1/client/orders 201 - 1915ms[39m
+2026-05-26 23:14:29:1429 [32minfo[39m: [32mGET /api/v1/client/orders/statistics?startDate=2026-05-01&endDate=2026-05-26 200 - 526ms[39m
+2026-05-26 23:14:31:1431 [32minfo[39m: [32mGET /api/v1/client/orders/statistics?startDate=2026-05-26&endDate=2026-05-26 200 - 130ms[39m
+2026-05-26 23:14:32:1432 [32minfo[39m: [32mGET /api/v1/client/orders/statistics?startDate=2026-05-26&endDate=2026-05-26 200 - 134ms[39m
+2026-05-26 23:14:34:1434 [32minfo[39m: [32mGET /api/v1/client/orders/detail/1075 200 - 285ms[39m
+2026-05-26 23:14:48:1448 [32minfo[39m: [32mGET /api/v1/client/orders/detail/1074 200 - 307ms[39m
+2026-05-26 23:15:45:1545 [32minfo[39m: [32mGET /api/v1/public/categories?limit=100 304 - 122ms[39m
+2026-05-26 23:15:46:1546 [32minfo[39m: [32mGET /api/v1/public/products?limit=100 200 - 537ms[39m
+2026-05-26 23:15:58:1558 [32minfo[39m: [32mPOST /api/v1/client/orders 201 - 2407ms[39m
+2026-05-26 23:16:02:162 [32minfo[39m: [32mGET /api/v1/client/profile 200 - 262ms[39m
+2026-05-26 23:16:07:167 [32minfo[39m: [32mPOST /api/v1/auth/user/logout 200 - 2ms[39m
+2026-05-26 23:16:18:1618 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 241ms[39m
+2026-05-26 23:16:18:1618 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 200 - 135ms[39m
+2026-05-26 23:16:21:1621 [32minfo[39m: [32mGET /api/v1/admin/users 200 - 1508ms[39m
+2026-05-26 23:16:21:1621 [32minfo[39m: [32mGET /api/v1/admin/orders 200 - 2876ms[39m
+2026-05-26 23:16:28:1628 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 200 - 10075ms[39m
+2026-05-26 23:17:23:1723 [32minfo[39m: [32mPOST /api/v1/admin/picking/assign 200 - 3748ms[39m
+2026-05-26 23:17:23:1723 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 258ms[39m
+2026-05-26 23:17:24:1724 [32minfo[39m: [32mGET /api/v1/admin/users 200 - 1079ms[39m
+2026-05-26 23:17:26:1726 [32minfo[39m: [32mGET /api/v1/admin/orders 200 - 3107ms[39m
+2026-05-26 23:17:32:1732 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 200 - 9227ms[39m
+2026-05-26 23:17:37:1737 [32minfo[39m: [32mGET /api/v1/admin/locations?limit=1000 200 - 122ms[39m
+2026-05-26 23:17:52:1752 [32minfo[39m: [32mGET /api/v1/admin/tasks?limit=1000&orderId=1072 200 - 245ms[39m
+2026-05-26 23:18:53:1853 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 110ms[39m
+2026-05-26 23:18:53:1853 [32minfo[39m: [32mGET /api/v1/admin/users 304 - 955ms[39m
+2026-05-26 23:18:57:1857 [32minfo[39m: [32mGET /api/v1/admin/orders 200 - 4681ms[39m
+2026-05-26 23:19:13:1913 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 20171ms[39m
+2026-05-26 23:19:14:1914 [32minfo[39m: [32mPOST /api/v1/auth/user/logout 200 - 2ms[39m
+2026-05-26 23:19:23:1923 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 353ms[39m
+2026-05-26 23:19:23:1923 [32minfo[39m: [32mGET /api/v1/admin/users/me 200 - 1ms[39m
+2026-05-26 23:19:23:1923 [32minfo[39m: [32mGET /api/v1/admin/users/me 200 - 1ms[39m
+2026-05-26 23:19:24:1924 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 615ms[39m
+2026-05-26 23:19:24:1924 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 1029ms[39m
+2026-05-26 23:21:26:2126 [32minfo[39m: [32mPOST /api/v1/admin/picking/pack 200 - 3892ms[39m
+2026-05-26 23:21:50:2150 [32minfo[39m: [32mPOST /api/v1/admin/picking/pack 200 - 3766ms[39m
+2026-05-26 23:21:51:2151 [31merror[39m: [31m[POST /api/v1/admin/picking/pack] [400] Nhiệm vụ này đã hoàn thành trước đó[39m
+2026-05-26 23:21:51:2151 [32minfo[39m: [32mPOST /api/v1/admin/picking/pack 400 - 472ms[39m
+2026-05-26 23:22:04:224 [32minfo[39m: [32mPOST /api/v1/admin/picking/pack 200 - 1627ms[39m
+2026-05-26 23:22:18:2218 [32minfo[39m: [32mPOST /api/v1/admin/picking/pack 200 - 1624ms[39m
+2026-05-26 23:22:21:2221 [32minfo[39m: [32mPOST /api/v1/admin/picking/pack 200 - 3783ms[39m
+2026-05-26 23:22:46:2246 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 2ms[39m
+2026-05-26 23:22:47:2247 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 1076ms[39m
+2026-05-26 23:22:47:2247 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 1024ms[39m
+2026-05-26 23:23:03:233 [32minfo[39m: [32mPOST /api/v1/admin/picking/pack 200 - 2078ms[39m
+2026-05-26 23:23:04:234 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 3ms[39m
+2026-05-26 23:23:05:235 [32minfo[39m: [32mGET /api/v1/admin/users/me 304 - 1ms[39m
+2026-05-26 23:23:05:235 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 598ms[39m
+2026-05-26 23:23:06:236 [32minfo[39m: [32mGET /api/v1/admin/picking/assigned 200 - 1098ms[39m
+2026-05-27 01:07:21:721 [31merror[39m: [31m[POST /api/v1/auth/customer/login] [400] email must be a valid email[39m
+2026-05-27 01:07:21:721 [32minfo[39m: [32mPOST /api/v1/auth/customer/login 400 - 33ms[39m
+2026-05-27 01:07:28:728 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 384ms[39m
+2026-05-27 01:07:47:747 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 200 - 19514ms[39m
+2026-05-27 01:07:48:748 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 200 - 307ms[39m
+2026-05-27 01:08:01:81 [32minfo[39m: [32mGET /api/v1/admin/locations?limit=1000 200 - 169ms[39m
+2026-05-27 01:08:02:82 [32minfo[39m: [32mGET /api/v1/public/products?limit=100 200 - 614ms[39m
+2026-05-27 01:08:02:82 [32minfo[39m: [32mGET /api/v1/admin/users 200 - 1060ms[39m
+2026-05-27 01:08:02:82 [32minfo[39m: [32mGET /api/v1/admin/containers?limit=1000 200 - 311ms[39m
+2026-05-27 01:08:02:82 [32minfo[39m: [32mGET /api/v1/admin/orders 200 - 8744ms[39m
+2026-05-27 01:08:05:85 [32minfo[39m: [32mGET /api/v1/admin/customers?page=1&limit=1000 200 - 441ms[39m
+2026-05-27 01:08:12:812 [32minfo[39m: [32mGET /api/v1/admin/orders 304 - 9421ms[39m
+2026-05-27 02:04:25:425 [32minfo[39m: [32m[39m
+[32m      **************************************************[39m
+[32m      * SERVER STARTED SUCCESSFULLY[39m
+[32m      * Time: 02:04:25 27/5/2026[39m
+[32m      * URL: http://localhost:9999[39m
+[32m      * Port: 9999[39m
+[32m      * Env: development[39m
+[32m      **************************************************[39m
+[32m    [39m
+2026-05-27 02:04:33:433 [31merror[39m: [31m[POST /api/v1/auth/customer/login] [400] email must be a valid email[39m
+2026-05-27 02:04:33:433 [32minfo[39m: [32mPOST /api/v1/auth/customer/login 400 - 10ms[39m
+2026-05-27 02:04:36:436 [32minfo[39m: [32mPOST /api/v1/auth/user/login 200 - 269ms[39m
+2026-05-27 02:04:46:446 [32minfo[39m: [32mGET /api/v1/admin/dashboard/stats 304 - 10349ms[39m
+2026-05-27 02:04:47:447 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 158ms[39m
+2026-05-27 02:05:32:532 [32minfo[39m: [32mGET /api/v1/admin/orders 304 - 2618ms[39m
+2026-05-27 02:05:38:538 [32minfo[39m: [32mGET /api/v1/admin/locations?limit=1000 304 - 162ms[39m
+2026-05-27 02:05:39:539 [32minfo[39m: [32mGET /api/v1/admin/users 304 - 1381ms[39m
+2026-05-27 02:06:05:65 [32minfo[39m: [32mGET /api/v1/admin/containers?limit=1000 304 - 630ms[39m
+2026-05-27 02:06:18:618 [32minfo[39m: [32mGET /api/v1/admin/customers?page=1&limit=1000 304 - 943ms[39m
+2026-05-27 02:06:57:657 [32minfo[39m: [32mGET /api/v1/admin/picking/incidents 304 - 218ms[39m
+2026-05-27 02:06:58:658 [32minfo[39m: [32mGET /api/v1/admin/locations?limit=1000 304 - 204ms[39m
+2026-05-27 02:06:59:659 [32minfo[39m: [32mGET /api/v1/admin/users 304 - 1029ms[39m
+2026-05-27 02:07:20:720 [32minfo[39m: [32mGET /api/v1/admin/containers?limit=1000 304 - 629ms[39m
+2026-05-27 02:07:23:723 [32minfo[39m: [32mGET /api/v1/public/products?limit=100 304 - 840ms[39m
+2026-05-27 02:07:27:727 [32minfo[39m: [32mPOST /api/v1/auth/user/logout 200 - 2ms[39m
+2026-05-27 02:07:28:728 [32minfo[39m: [32mGET /api/v1/admin/orders 304 - 4401ms[39m
+2026-05-27 02:07:31:731 [32minfo[39m: [32mPOST /api/v1/auth/customer/login 200 - 286ms[39m
+2026-05-27 02:07:32:732 [32minfo[39m: [32mGET /api/v1/public/products?limit=100 304 - 813ms[39m
+2026-05-27 02:07:34:734 [32minfo[39m: [32mGET /api/v1/admin/orders 304 - 5501ms[39m
+2026-05-27 02:08:01:81 [32minfo[39m: [32mGET /api/v1/client/orders 200 - 653ms[39m
+2026-05-27 02:08:04:84 [32minfo[39m: [32mGET /api/v1/client/orders/statistics?startDate=2026-05-01&endDate=2026-05-27 200 - 847ms[39m
+2026-05-27 02:08:25:825 [32minfo[39m: [32mGET /api/v1/client/profile 200 - 419ms[39m

@@ -778,3 +778,6 @@
 2026-05-24 22:28:56:2856 [31merror[39m: [31m[GET /api/v1/admin/users] [401] Invalid or expired token[39m
 2026-05-24 22:28:56:2856 [31merror[39m: [31m[GET /api/v1/admin/locations?limit=1000] [401] Invalid or expired token[39m
 2026-05-24 22:28:56:2856 [31merror[39m: [31m[GET /api/v1/admin/dashboard/stats] [401] Invalid or expired token[39m
+2026-05-26 23:21:51:2151 [31merror[39m: [31m[POST /api/v1/admin/picking/pack] [400] Nhiệm vụ này đã hoàn thành trước đó[39m
+2026-05-27 01:07:21:721 [31merror[39m: [31m[POST /api/v1/auth/customer/login] [400] email must be a valid email[39m
+2026-05-27 02:04:33:433 [31merror[39m: [31m[POST /api/v1/auth/customer/login] [400] email must be a valid email[39m
