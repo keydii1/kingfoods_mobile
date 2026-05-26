@@ -10,7 +10,6 @@ import {logout as apiLogout, changeUserPassword, changeCustomerPassword} from '.
 import { validateNewPassword, PASSWORD_HINT } from '../../constants/passwordPolicy';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useAppPreferences } from '../../contexts/AppPreferencesContext';
-import * as LocalAuthentication from 'expo-local-authentication';
 import ManagerBottomNav from '../../components/ManagerBottomNav';
 import StaffBottomNav from '../../components/StaffBottomNav';
 
@@ -24,8 +23,6 @@ const TRANSLATIONS = {
         darkModeSub: 'Chuyển đổi giao diện sáng/tối',
         language: 'Ngôn ngữ (Language)',
         languageSub: 'Chọn ngôn ngữ hiển thị',
-        biometrics: 'Đăng nhập sinh trắc học',
-        biometricsSub: 'Sử dụng FaceID hoặc Vân tay',
         notifications: 'Thông báo đẩy',
         notificationsSub: 'Nhận thông báo đơn hàng & ưu đãi',
         accountSupport: 'Tài khoản & Hỗ trợ',
@@ -54,12 +51,6 @@ const TRANSLATIONS = {
         cannotChangePassword: 'Không thể đổi mật khẩu',
         oldPasswordIncorrect: 'Mật khẩu cũ không đúng',
         selectLanguage: 'Chọn ngôn ngữ',
-        biometricNotSupported: 'Thiết bị không hỗ trợ sinh trắc học (FaceID/Vân tay)',
-        biometricNotEnrolled: 'Bạn chưa đăng ký FaceID/Vân tay trên thiết bị. Vui lòng vào Cài đặt > FaceID để thiết lập.',
-        biometricAuthFailed: 'Xác thực sinh trắc học thất bại. Vui lòng thử lại.',
-        biometricEnabledNote: 'Đã bật! Lần đăng nhập tiếp theo bạn có thể dùng FaceID/Vân tay.',
-        biometricDisabled: 'Đã tắt đăng nhập sinh trắc học. Thông tin đã lưu sẽ bị xoá.',
-        notice: 'Thông báo',
         cancel: 'Huỷ',
     },
     en: {
@@ -70,8 +61,6 @@ const TRANSLATIONS = {
         darkModeSub: 'Toggle light/dark appearance',
         language: 'Language',
         languageSub: 'Select application language',
-        biometrics: 'Biometric Login',
-        biometricsSub: 'Use FaceID or Fingerprint',
         notifications: 'Push Notifications',
         notificationsSub: 'Receive order updates & offers',
         accountSupport: 'Account & Support',
@@ -100,12 +89,6 @@ const TRANSLATIONS = {
         cannotChangePassword: 'Cannot change password',
         oldPasswordIncorrect: 'Old password is incorrect',
         selectLanguage: 'Select Language',
-        biometricNotSupported: 'This device does not support biometrics (FaceID/Fingerprint)',
-        biometricNotEnrolled: 'No FaceID/Fingerprint enrolled on this device. Please go to Settings > FaceID to set up.',
-        biometricAuthFailed: 'Biometric authentication failed. Please try again.',
-        biometricEnabledNote: 'Enabled! You can use FaceID/Fingerprint on your next login.',
-        biometricDisabled: 'Biometric login disabled. Saved credentials have been removed.',
-        notice: 'Notice',
         cancel: 'Cancel',
     }
 };
@@ -161,11 +144,9 @@ export default function SettingScreen(){
     const {
         darkMode,
         language,
-        biometric,
         pushNotify,
         setDarkMode,
         setLanguage,
-        setBiometric,
         setPushNotify,
     } = useAppPreferences();
 
@@ -250,35 +231,6 @@ export default function SettingScreen(){
                 }
             ]
         );
-    };
-
-    const handleBiometricToggle = async (val) => {
-        if (val) {
-            // Turning ON: only check hardware + enrollment
-            // Face ID actual verification happens at login time (security-critical moment)
-            try {
-                const hasHardware = await LocalAuthentication.hasHardwareAsync();
-                if (!hasHardware) {
-                    Alert.alert(t.error, t.biometricNotSupported);
-                    return;
-                }
-                const isEnrolled = await LocalAuthentication.isEnrolledAsync();
-                if (!isEnrolled) {
-                    Alert.alert(t.error, t.biometricNotEnrolled);
-                    return;
-                }
-                // Enable biometric login
-                setBiometric(true);
-                Alert.alert(t.notice, t.biometricEnabledNote);
-            } catch (err) {
-                console.log('Biometric toggle error:', err);
-                Alert.alert(t.error, t.biometricNotSupported);
-            }
-        } else {
-            // Turning OFF — credentials are wiped by AppPreferencesContext.setBiometric(false)
-            setBiometric(false);
-            Alert.alert(t.notice, t.biometricDisabled);
-        }
     };
 
     const handleChangePassword = async () => {

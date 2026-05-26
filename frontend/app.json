@@ -9,10 +9,7 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true,
-      "infoPlist": {
-        "NSFaceIDUsageDescription": "Sử dụng FaceID để đăng nhập nhanh vào ứng dụng Kingfood"
-      }
+      "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
@@ -21,9 +18,7 @@
         "backgroundImage": "./assets/images/android-icon-background.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png",
         "permissions": [
-          "android.permission.CAMERA",
-          "android.permission.USE_BIOMETRIC",
-          "android.permission.USE_FINGERPRINT"
+          "android.permission.CAMERA"
         ]
       },
       "edgeToEdgeEnabled": true,
@@ -66,14 +61,7 @@
         }
       ],
       "expo-audio",
-      "expo-video",
-      [
-        "expo-local-authentication",
-        {
-          "faceIDPermission": "Sử dụng FaceID để đăng nhập nhanh vào ứng dụng Kingfood"
-        }
-      ],
-      "expo-secure-store"
+      "expo-video"
     ],
     "experiments": {
       "typedRoutes": true,
