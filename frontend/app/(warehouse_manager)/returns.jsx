@@ -166,12 +166,18 @@ export default function ReturnsScreen() {
                 {/* Search Bar */}
                 <View style={[styles.searchCard, { backgroundColor: activeCardBg, borderColor: activeBorderColor }]}>
                     <Text style={[styles.searchLabel, { color: activeTextColor }]}>
-                        {searchType === 'container' ? 'Nhập mã Thùng hàng sỉ cần truy xuất:' : 'Nhập mã số Đơn hàng cần truy xuất:'}
+                        {searchType === 'container' 
+                            ? (isEn ? 'Enter Wholesale Container code to retrieve:' : 'Nhập mã Thùng hàng sỉ cần truy xuất:') 
+                            : (isEn ? 'Enter Order ID to retrieve:' : 'Nhập mã số Đơn hàng cần truy xuất:')
+                        }
                     </Text>
                     <View style={styles.searchRow}>
                         <TextInput
                             style={[styles.searchInput, { backgroundColor: activeInputBg, color: activeTextColor, borderColor: activeBorderColor }]}
-                            placeholder={searchType === 'container' ? 'Ví dụ: C001, C002...' : 'Ví dụ: 1067, 1066...'}
+                            placeholder={searchType === 'container' 
+                                ? (isEn ? 'e.g., KFOOD-CON-001, KFOOD-CON-002...' : 'Ví dụ: KFOOD-CON-001, KFOOD-CON-002...') 
+                                : (isEn ? 'e.g., 1072, 1073...' : 'Ví dụ: 1072, 1073...')
+                            }
                             placeholderTextColor={darkMode ? '#64748b' : '#aaa'}
                             value={searchQuery}
                             onChangeText={setSearchQuery}
