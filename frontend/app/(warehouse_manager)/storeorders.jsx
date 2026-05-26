@@ -409,36 +409,14 @@ export default function StoreOrdersScreen() {
                       onPress={() => handleReject(selectedOrder.id || selectedOrder._id)}
                     >
                       <Ionicons name="close-circle-outline" size={20} color="#fff" style={{ marginRight: 4 }} />
-                      <Text style={styles.btnText}>Từ chối</Text>
+                      <Text style={styles.btnText}>{isEn ? 'Reject' : 'Từ chối'}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity 
                       style={[styles.actionBtn, styles.btnConfirm]} 
                       onPress={() => handleConfirm(selectedOrder.id || selectedOrder._id)}
                     >
                       <Ionicons name="checkmark-circle-outline" size={20} color="#fff" style={{ marginRight: 4 }} />
-                      <Text style={styles.btnText}>Xác nhận duyệt</Text>
-                    </TouchableOpacity>
-                  </View>
-                ) : selectedOrder.status === 'processing' ? (
-                  <View style={styles.actionRow}>
-                    <TouchableOpacity 
-                      style={[styles.actionBtn, styles.btnGoToTask, { flex: 1 }]} 
-                      onPress={() => {
-                        setSelectedOrder(null);
-                        router.push({ pathname: '/(worker)/productlist', params: { taskId: selectedOrder.id || selectedOrder._id } });
-                      }}
-                    >
-                      <Ionicons name="eye-outline" size={18} color="#fff" style={{ marginRight: 4 }} />
-                      <Text style={styles.btnText}>Xem soạn</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity 
-                      style={[styles.actionBtn, { flex: 1.5, backgroundColor: COLORS.primary }]} 
-                      onPress={() => {
-                        openAssignModal(selectedOrder);
-                      }}
-                    >
-                      <Ionicons name="people-outline" size={18} color="#fff" style={{ marginRight: 4 }} />
-                      <Text style={styles.btnText}>Giao việc nhân viên</Text>
+                      <Text style={styles.btnText}>{isEn ? 'Approve' : 'Xác nhận duyệt'}</Text>
                     </TouchableOpacity>
                   </View>
                 ) : (
@@ -446,7 +424,7 @@ export default function StoreOrdersScreen() {
                     style={[styles.actionBtn, styles.btnCloseFooter, { width: '100%' }]} 
                     onPress={() => setSelectedOrder(null)}
                   >
-                    <Text style={styles.btnText}>Đóng</Text>
+                    <Text style={styles.btnText}>{isEn ? 'Close' : 'Đóng'}</Text>
                   </TouchableOpacity>
                 )}
               </View>
