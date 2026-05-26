@@ -9,6 +9,11 @@ import {COLORS} from '../../constants/colors';
 import ManagerBottomNav from '../../components/ManagerBottomNav';
 import { useAppPreferences } from '../../contexts/AppPreferencesContext';
 
+const cleanLocationName = (name) => {
+    if (!name) return '';
+    return name.replace(/^[🥦🥫🧴❄️\s]+/, '').replace(/^[^a-zA-Z0-9À-ỹđĐ\s]+/, '').trim();
+};
+
 // MockData 2 khu vực
 const teams = [
     {
@@ -388,7 +393,7 @@ export default function TeamScreen(){
                                     role: user.role,
                                     isActiveTask: user.role === 'staff' ? (user.activePickingTasksCount || 0) > 0 : false,
                                     activeTasks: user.activePickingTasksCount || 0,
-                                    location: locName,
+                                    location: cleanLocationName(locName),
                                     sku: perf.pickingSpeed !== undefined ? perf.pickingSpeed : null,
                                     skuColor: perf.warning ? COLORS.error : COLORS.primary,
                                     status: perf.totalItemsPicked > 0 ? 'good' : (perf.pickingSpeed !== undefined ? 'warn' : 'offline'),
