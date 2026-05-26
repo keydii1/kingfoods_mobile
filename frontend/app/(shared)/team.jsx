@@ -62,7 +62,8 @@ const teams = [
 
 // Component dành cho 1 thành viên - Premium Card Redesign
 function MemberRow({member, onEdit, onDelete}){
-    const { darkMode } = useAppPreferences();
+    const { language, darkMode } = useAppPreferences();
+    const isEn = language === 'en';
 
     const activeCardBg = darkMode ? '#1e1e1e' : '#fff';
     const activeBorderColor = darkMode ? '#2d2d2d' : '#e2e8f0';
@@ -96,17 +97,17 @@ function MemberRow({member, onEdit, onDelete}){
     } else {
         // Dành cho dữ liệu thật từ API
         if (member.role !== 'staff') {
-            statusLabel = 'Quản lý';
+            statusLabel = isEn ? 'Manager' : 'Quản lý';
             statusBg = darkMode ? '#1e3a8a' : '#eff6ff';
             statusColor = darkMode ? '#60a5fa' : '#1d4ed8';
             dotColor = '#3b82f6';
         } else if (member.isActiveTask) {
-            statusLabel = `Đang làm (${member.activeTasks} đơn)`;
+            statusLabel = isEn ? `Working (${member.activeTasks} tasks)` : `Đang làm (${member.activeTasks} đơn)`;
             statusBg = darkMode ? '#7c2d12' : '#fff7ed';
             statusColor = darkMode ? '#fb923c' : '#c2410c';
             dotColor = '#f97316';
         } else {
-            statusLabel = 'Đang rảnh';
+            statusLabel = isEn ? 'Idle' : 'Đang rảnh';
             statusBg = darkMode ? '#14532d' : '#f0fdf4';
             statusColor = darkMode ? '#4ade80' : '#166534';
             dotColor = '#22c55e';
@@ -129,7 +130,7 @@ function MemberRow({member, onEdit, onDelete}){
                             backgroundColor: member.role === 'staff' ? (darkMode ? '#14532d' : '#f0fdf4') : (darkMode ? '#1e3a8a' : '#eff6ff'),
                             color: member.role === 'staff' ? (darkMode ? '#4ade80' : COLORS.primary) : (darkMode ? '#60a5fa' : '#2563eb')
                         }]}>
-                            {member.role === 'staff' ? 'Nhân viên kho' : 'Quản lý'}
+                            {member.role === 'staff' ? (isEn ? 'Warehouse Picker' : 'Nhân viên kho') : (isEn ? 'Manager' : 'Quản lý')}
                         </Text>
                     </View>
                 </View>
@@ -175,7 +176,7 @@ function MemberRow({member, onEdit, onDelete}){
                         {member.sku !== null && member.sku !== undefined ? member.sku : '-'}
                     </Text>
                     <Text style={[styles.kpiUnit, { color: activeTextGrayColor }]}>
-                        {member.status === 'break' ? 'Nghỉ' : 'sp/giờ'}
+                        {member.status === 'break' ? (isEn ? 'Break' : 'Nghỉ') : (isEn ? 'pcs/hr' : 'sp/giờ')}
                     </Text>
                 </View>
             </View>
@@ -196,7 +197,8 @@ export default function TeamScreen(){
     const [editName, setEditName] = useState('');
     const [activeFilter, setActiveFilter] = useState('all'); // 'all', 'working', 'idle'
 
-    const { darkMode } = useAppPreferences();
+    const { language, darkMode } = useAppPreferences();
+    const isEn = language === 'en';
 
     const activeBg = darkMode ? '#121212' : '#f0f4f1';
     const activeHeaderBg = darkMode ? '#1e1e1e' : '#fff';
@@ -240,24 +242,24 @@ export default function TeamScreen(){
             const updated = await updateUser(editingUser._id || editingUser.id, { name: editName });
             setUsers(prev => prev.map(u => (u._id || u.id) === (editingUser._id || editingUser.id) ? { ...u, name: editName, fullName: editName } : u));
             setEditingUser(null);
-            Alert.alert('Thành công', 'Cập nhật thông tin thành công');
+            Alert.alert(isEn ? 'Success' : 'Thành công', isEn ? 'Information updated successfully' : 'Cập nhật thông tin thành công');
         } catch {
-            Alert.alert('Lỗi', 'Không thể cập nhật thông tin');
+            Alert.alert(isEn ? 'Error' : 'Lỗi', isEn ? 'Failed to update information' : 'Không thể cập nhật thông tin');
         }
     };
 
     const handleDeleteUser = (user) => {
         Alert.alert(
-            'Xoá nhân viên',
-            `Xoá "${user.name || user.fullName || user.username}"?`,
+            isEn ? 'Delete Staff' : 'Xoá nhân viên',
+            isEn ? `Delete "${user.name || user.fullName || user.username}"?` : `Xoá "${user.name || user.fullName || user.username}"?`,
             [
-                { text: 'Huỷ', style: 'cancel' },
-                { text: 'Xoá', style: 'destructive', onPress: async () => {
+                { text: isEn ? 'Cancel' : 'Huỷ', style: 'cancel' },
+                { text: isEn ? 'Delete' : 'Xoá', style: 'destructive', onPress: async () => {
                     try {
                         await deleteUser(user._id || user.id);
                         setUsers(prev => prev.filter(u => (u._id || u.id) !== (user._id || user.id)));
                     } catch {
-                        Alert.alert('Lỗi', 'Không thể xoá nhân viên');
+                        Alert.alert(isEn ? 'Error' : 'Lỗi', isEn ? 'Failed to delete staff' : 'Không thể xoá nhân viên');
                     }
                 }},
             ]
@@ -305,7 +307,7 @@ export default function TeamScreen(){
                 <View style = {{ width: 80 }} />
                 <Text style = {[styles.headerTitle, { color: activeTextColor }]}>Team Overview</Text>
                 <View style = {[styles.badge, { backgroundColor: darkMode ? '#1e293b' : '#e3f2fd' }]}>
-                    <Text style = {[styles.badgeText, { color: darkMode ? '#60a5fa' : '#1565c0' }]}>Trưởng nhóm</Text>
+                    <Text style = {[styles.badgeText, { color: darkMode ? '#60a5fa' : '#1565c0' }]}>{isEn ? 'Team Lead' : 'Trưởng nhóm'}</Text>
                 </View>
             </View>
             {/* Body */}
@@ -314,51 +316,55 @@ export default function TeamScreen(){
                 <View style = {[styles.alert, darkMode && { backgroundColor: '#1e293b', borderLeftColor: '#3b82f6', borderLeftWidth: 4 }]}>
                     <Ionicons name="people-outline" size={24} color={COLORS.primary} style={{ marginRight: 6 }} />
                     <View style = {styles.alertBody}>
-                        <Text style = {[styles.alertTitle, darkMode && { color: '#60a5fa' }]}>{activeStats.totalActive} nhân viên vẫn còn đang hoạt động</Text>
-                        <Text style = {[styles.alertSub, { color: darkMode ? '#cbd5e1' : '#555' }]}>{activeStats.zoneDetails}Tổng năng suất: {activeStats.totalSKU} sp/giờ</Text>
+                        <Text style = {[styles.alertTitle, darkMode && { color: '#60a5fa' }]}>
+                            {isEn ? `${activeStats.totalActive} staff active` : `${activeStats.totalActive} nhân viên vẫn còn đang hoạt động`}
+                        </Text>
+                        <Text style = {[styles.alertSub, { color: darkMode ? '#cbd5e1' : '#555' }]}>
+                            {activeStats.zoneDetails}{isEn ? `Total productivity: ${activeStats.totalSKU} pcs/hr` : `Tổng năng suất: ${activeStats.totalSKU} sp/giờ`}
+                        </Text>
                     </View>
                 </View>
                 {/* Filter Row */}
                 {users.length > 0 && (
                     <View style={styles.filterRow}>
                         <TouchableOpacity
-                            style={[
-                                styles.filterBtn, 
-                                { backgroundColor: darkMode ? '#1e1e1e' : '#fff', borderColor: darkMode ? '#2d2d2d' : '#e2e8f0' },
-                                activeFilter === 'all' && styles.filterBtnActive
-                            ]}
-                            onPress={() => setActiveFilter('all')}
-                        >
-                            <Text style={[styles.filterText, { color: darkMode ? '#9ca3af' : '#64748b' }, activeFilter === 'all' && styles.filterTextActive]}>
-                                Tất cả ({users.length})
-                            </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={[
-                                styles.filterBtn, 
-                                { backgroundColor: darkMode ? '#1e1e1e' : '#fff', borderColor: darkMode ? '#2d2d2d' : '#e2e8f0' },
-                                activeFilter === 'working' && styles.filterBtnActive
-                            ]}
-                            onPress={() => setActiveFilter('working')}
-                        >
-                            <Text style={[styles.filterText, { color: darkMode ? '#9ca3af' : '#64748b' }, activeFilter === 'working' && styles.filterTextActive]}>
-                                Đang làm ({users.filter(u => (u.activePickingTasksCount || 0) > 0).length})
-                            </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={[
-                                styles.filterBtn, 
-                                { backgroundColor: darkMode ? '#1e1e1e' : '#fff', borderColor: darkMode ? '#2d2d2d' : '#e2e8f0' },
-                                activeFilter === 'idle' && styles.filterBtnActive
-                            ]}
-                            onPress={() => setActiveFilter('idle')}
-                        >
-                            <Text style={[styles.filterText, { color: darkMode ? '#9ca3af' : '#64748b' }, activeFilter === 'idle' && styles.filterTextActive]}>
-                                Đang rảnh ({users.filter(u => (u.activePickingTasksCount || 0) === 0).length})
-                            </Text>
-                        </TouchableOpacity>
-                    </View>
-                )}
+                             style={[
+                                 styles.filterBtn, 
+                                 { backgroundColor: darkMode ? '#1e1e1e' : '#fff', borderColor: darkMode ? '#2d2d2d' : '#e2e8f0' },
+                                 activeFilter === 'all' && styles.filterBtnActive
+                             ]}
+                             onPress={() => setActiveFilter('all')}
+                         >
+                             <Text style={[styles.filterText, { color: darkMode ? '#9ca3af' : '#64748b' }, activeFilter === 'all' && styles.filterTextActive]}>
+                                 {isEn ? 'All' : 'Tất cả'} ({users.length})
+                             </Text>
+                         </TouchableOpacity>
+                         <TouchableOpacity
+                             style={[
+                                 styles.filterBtn, 
+                                 { backgroundColor: darkMode ? '#1e1e1e' : '#fff', borderColor: darkMode ? '#2d2d2d' : '#e2e8f0' },
+                                 activeFilter === 'working' && styles.filterBtnActive
+                             ]}
+                             onPress={() => setActiveFilter('working')}
+                         >
+                             <Text style={[styles.filterText, { color: darkMode ? '#9ca3af' : '#64748b' }, activeFilter === 'working' && styles.filterTextActive]}>
+                                 {isEn ? 'Active' : 'Đang làm'} ({users.filter(u => (u.activePickingTasksCount || 0) > 0).length})
+                             </Text>
+                         </TouchableOpacity>
+                         <TouchableOpacity
+                             style={[
+                                 styles.filterBtn, 
+                                 { backgroundColor: darkMode ? '#1e1e1e' : '#fff', borderColor: darkMode ? '#2d2d2d' : '#e2e8f0' },
+                                 activeFilter === 'idle' && styles.filterBtnActive
+                             ]}
+                             onPress={() => setActiveFilter('idle')}
+                         >
+                             <Text style={[styles.filterText, { color: darkMode ? '#9ca3af' : '#64748b' }, activeFilter === 'idle' && styles.filterTextActive]}>
+                                 {isEn ? 'Idle' : 'Đang rảnh'} ({users.filter(u => (u.activePickingTasksCount || 0) === 0).length})
+                             </Text>
+                         </TouchableOpacity>
+                     </View>
+                 )}
 
                 {/* Danh sách từng khu vực */}
                 {
@@ -369,7 +375,7 @@ export default function TeamScreen(){
                         return true;
                     }).map(user =>{
                         const perf = perfMap[user.id] || {};
-                        const locName = locMap[user.assignedLocationId] || 'Chưa phân công';
+                        const locName = locMap[user.assignedLocationId] || (isEn ? 'Unassigned' : 'Chưa phân công');
                         return (
                             <MemberRow
                                 key = {user._id || user.id}
@@ -397,10 +403,29 @@ export default function TeamScreen(){
                 <View key = {team.zone} style = {styles.card}>
                     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 12 }}>
                         <Ionicons name={team.icon} size={18} color={COLORS.primary} />
-                        <Text style = {styles.cardTitle}>{team.zone}</Text>
+                        <Text style = {styles.cardTitle}>
+                            {isEn 
+                                ? (team.zone === 'Khu Bánh & Kẹo' ? 'Bakery & Sweets Zone' : team.zone === 'Khu Đồ Uống' ? 'Beverages Zone' : team.zone) 
+                                : team.zone
+                            }
+                        </Text>
                     </View>
                     {team.members.map((member) => (
-                        <MemberRow key = {member.id || member._id} member ={member}/>
+                        <MemberRow 
+                            key = {member.id || member._id} 
+                            member ={{
+                                ...member,
+                                order: member.order ? (
+                                    isEn 
+                                        ? member.order
+                                            .replace('Đang làm', 'Working')
+                                            .replace('sp', 'pcs')
+                                            .replace('Nghỉ giải lao · Trở lại', 'On break · Back at')
+                                            .replace('Hoàn thành', 'Completed')
+                                        : member.order
+                                ) : undefined
+                            }}
+                        />
                     ))}
                 </View>
             ))}
@@ -412,21 +437,21 @@ export default function TeamScreen(){
             {editingUser && (
                 <View style={styles.overlay}>
                     <View style={styles.editModal}>
-                        <Text style={styles.editModalTitle}>Sửa tên nhân viên</Text>
+                        <Text style={styles.editModalTitle}>{isEn ? 'Edit Staff Name' : 'Sửa tên nhân viên'}</Text>
                         <TextInput
                             style={styles.editInput}
                             value={editName}
                             onChangeText={setEditName}
-                            placeholder="Nhập tên mới"
+                            placeholder={isEn ? "Enter new name" : "Nhập tên mới"}
                             autoCapitalize="none"
                             autoCorrect={false}
                         />
                         <View style={styles.editActions}>
                             <TouchableOpacity style={styles.editCancelBtn} onPress={() => setEditingUser(null)}>
-                                <Text style={styles.editCancelText}>Huỷ</Text>
+                                <Text style={styles.editCancelText}>{isEn ? 'Cancel' : 'Huỷ'}</Text>
                             </TouchableOpacity>
                             <TouchableOpacity style={styles.editSaveBtn} onPress={confirmEditUser}>
-                                <Text style={styles.editSaveText}>Lưu</Text>
+                                <Text style={styles.editSaveText}>{isEn ? 'Save' : 'Lưu'}</Text>
                             </TouchableOpacity>
                         </View>
                     </View>

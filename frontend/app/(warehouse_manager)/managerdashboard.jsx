@@ -79,7 +79,8 @@ export default function ManagerDashboardScreen(){
     const cachedStats = getCachedData('/admin/dashboard/stats');
     const cachedIncidents = getCachedData('/admin/picking/incidents');
 
-    const { darkMode } = useAppPreferences();
+    const { language, darkMode } = useAppPreferences();
+    const isEn = language === 'en';
 
     const activeBg = darkMode ? '#121212' : '#f0f4f1';
     const activeHeaderBg = darkMode ? '#1e1e1e' : '#fff';
@@ -175,7 +176,7 @@ export default function ManagerDashboardScreen(){
 
     const handleDispatchTasks = async () => {
         if (!selectedPickingOrderId) {
-            Alert.alert('Lỗi', 'Vui lòng chọn một đơn hàng để giao việc');
+            Alert.alert(isEn ? 'Error' : 'Lỗi', isEn ? 'Please select an order to assign' : 'Vui lòng chọn một đơn hàng để giao việc');
             return;
         }
 
@@ -194,18 +195,27 @@ export default function ManagerDashboardScreen(){
 
             const staffId = assign?.staffId;
             if (!staffId) {
-                Alert.alert('Lỗi phân công', `Vui lòng chọn Nhân viên soạn sản phẩm: ${item.product?.name || 'Sản phẩm'}`);
+                Alert.alert(
+                    isEn ? 'Assignment Error' : 'Lỗi phân công',
+                    isEn ? `Please select a picker for product: ${item.product?.name || 'Product'}` : `Vui lòng chọn Nhân viên soạn sản phẩm: ${item.product?.name || 'Sản phẩm'}`
+                );
                 return;
             }
 
             const quantity = parseInt(assign?.quantity || item.quantity);
             if (isNaN(quantity) || quantity <= 0) {
-                Alert.alert('Lỗi phân công', `Số lượng soạn sản phẩm "${item.product?.name}" phải lớn hơn 0`);
+                Alert.alert(
+                    isEn ? 'Assignment Error' : 'Lỗi phân công',
+                    isEn ? `Picking quantity for product "${item.product?.name}" must be greater than 0` : `Số lượng soạn sản phẩm "${item.product?.name}" phải lớn hơn 0`
+                );
                 return;
             }
 
             if (quantity > item.quantity) {
-                Alert.alert('Lỗi phân công', `Số lượng soạn sản phẩm "${item.product?.name}" không thể lớn hơn số lượng khách đặt (${item.quantity})`);
+                Alert.alert(
+                    isEn ? 'Assignment Error' : 'Lỗi phân công',
+                    isEn ? `Picking quantity for product "${item.product?.name}" cannot exceed the requested quantity (${item.quantity})` : `Số lượng soạn sản phẩm "${item.product?.name}" không thể lớn hơn số lượng khách đặt (${item.quantity})`
+                );
                 return;
             }
 
@@ -217,7 +227,10 @@ export default function ManagerDashboardScreen(){
         }
 
         if (tasks.length === 0) {
-            Alert.alert('Lỗi phân công', 'Vui lòng chọn ít nhất một sản phẩm để giao việc');
+            Alert.alert(
+                isEn ? 'Assignment Error' : 'Lỗi phân công',
+                isEn ? 'Please select at least one product to assign' : 'Vui lòng chọn ít nhất một sản phẩm để giao việc'
+            );
             return;
         }
 
@@ -233,7 +246,10 @@ export default function ManagerDashboardScreen(){
             setPickingAssignments({});
             setDispatching(false);
             
-            Alert.alert('Phân công thành công', `Đã chia nhỏ và tạo thành công ${tasks.length} lệnh nhặt hàng (Picking Tasks) trực tiếp gửi đến thiết bị của các nhân viên được chọn!`);
+            Alert.alert(
+                isEn ? 'Assignment Successful' : 'Phân công thành công',
+                isEn ? `Successfully split and created ${tasks.length} picking tasks sent directly to the selected staff's devices!` : `Đã chia nhỏ và tạo thành công ${tasks.length} lệnh nhặt hàng (Picking Tasks) trực tiếp gửi đến thiết bị của các nhân viên được chọn!`
+            );
             
             Promise.all([
                 getDashboardStatus().then(res => setStats(res)).catch(e => console.log('Bg stats error:', e.message)),
@@ -249,7 +265,10 @@ export default function ManagerDashboardScreen(){
             ]);
         } catch (err) {
             setDispatching(false);
-            Alert.alert('Lỗi phân công', err.message || 'Không thể tạo phân công nhiệm vụ');
+            Alert.alert(
+                isEn ? 'Assignment Error' : 'Lỗi phân công',
+                err.message || (isEn ? 'Failed to create picking task assignments' : 'Không thể tạo phân công nhiệm vụ')
+            );
         }
     };
 
@@ -264,13 +283,13 @@ export default function ManagerDashboardScreen(){
 
     const displayKpis = [
         { icon: 'checkmark-circle-outline', value: String(totalPickedItems),
-          label: 'Sản phẩm đã pick', color: darkMode ? '#14532d' : COLORS.successBg, textColor: darkMode ? '#4ade80' : COLORS.primary },
+          label: isEn ? 'SKUs Picked' : 'Sản phẩm đã pick', color: darkMode ? '#14532d' : COLORS.successBg, textColor: darkMode ? '#4ade80' : COLORS.primary },
         { icon: 'people-outline', value: `${activeWorkers}/${totalWorkers}`,
-          label: 'NV hoạt động', color: darkMode ? '#1e3a8a' : '#e3f2fd', textColor: darkMode ? '#60a5fa' : '#1565c0' },
+          label: isEn ? 'Active Staff' : 'NV hoạt động', color: darkMode ? '#1e3a8a' : '#e3f2fd', textColor: darkMode ? '#60a5fa' : '#1565c0' },
         { icon: 'warning-outline', value: String(pendingIncidentsCount),
-          label: 'Báo thiếu', color: darkMode ? '#7c2d12' : COLORS.warningBg, textColor: darkMode ? '#fb923c' : '#e65100' },
+          label: isEn ? 'Shortages' : 'Báo thiếu', color: darkMode ? '#7c2d12' : COLORS.warningBg, textColor: darkMode ? '#fb923c' : '#e65100' },
         { icon: 'cube-outline', value: String(pendingOrders),
-          label: 'Đơn tồn', color: darkMode ? '#581c87' : '#f3e5f5', textColor: darkMode ? '#c084fc' : '#7b1fa2' },
+          label: isEn ? 'Pending Orders' : 'Đơn tồn', color: darkMode ? '#581c87' : '#f3e5f5', textColor: darkMode ? '#c084fc' : '#7b1fa2' },
     ];
 
     const maxHourPicked = Math.max(...(s.hourlyProductivity?.map(h => h.totalItemsPicked) || [1]));
@@ -282,8 +301,8 @@ export default function ManagerDashboardScreen(){
     const underperformingStaff = s.staffPerformance?.filter(p => p.warning && p.totalItemsPicked > 0) || [];
 
     const displayShortages = incidents.filter(inc => inc.status === 'pending').slice(0, 3).map(inc => {
-        let productName = 'Sản phẩm';
-        let locationName = 'Chưa định vị';
+        let productName = isEn ? 'Product' : 'Sản phẩm';
+        let locationName = isEn ? 'Unassigned' : 'Chưa định vị';
 
         if (inc.task?.orderDetail?.product?.name) {
             productName = inc.task.orderDetail.product.name;
@@ -301,14 +320,14 @@ export default function ManagerDashboardScreen(){
             }
         }
 
-        const reporterName = inc.reporter?.name || inc.reporter?.fullName || inc.reporter?.username || inc.reportedBy || 'Nhân viên';
+        const reporterName = inc.reporter?.name || inc.reporter?.fullName || inc.reporter?.username || inc.reportedBy || (isEn ? 'Staff' : 'Nhân viên');
 
         return {
             id: inc.id || inc._id,
             icon: 'warning',
             name: productName,
             loc: locationName,
-            who: `${reporterName} · ${inc.createdAt ? new Date(inc.createdAt).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) : ''}`,
+            who: `${reporterName} · ${inc.createdAt ? new Date(inc.createdAt).toLocaleTimeString(isEn ? 'en-US' : 'vi-VN', { hour: '2-digit', minute: '2-digit' }) : ''}`,
         };
     });
 
@@ -407,8 +426,8 @@ export default function ManagerDashboardScreen(){
                             <Ionicons name="git-pull-request" size={22} color="#fff" />
                         </View>
                         <View>
-                            <Text style={{ color: '#fff', fontSize: 15, fontWeight: '800' }}>Bàn Điều Phối & Chia Lệnh</Text>
-                            <Text style={{ color: 'rgba(255, 255, 255, 0.8)', fontSize: 11, marginTop: 2 }}>Phân tách sỉ & giao việc trực tiếp cho Picker</Text>
+                            <Text style={{ color: '#fff', fontSize: 15, fontWeight: '800' }}>{isEn ? 'Dispatch Desk & Tasks' : 'Bàn Điều Phối & Chia Lệnh'}</Text>
+                            <Text style={{ color: 'rgba(255, 255, 255, 0.8)', fontSize: 11, marginTop: 2 }}>{isEn ? 'Split wholesale & assign tasks directly to Pickers' : 'Phân tách sỉ & giao việc trực tiếp cho Picker'}</Text>
                         </View>
                     </View>
                     <Ionicons name="chevron-forward" size={20} color="#fff" />
@@ -436,9 +455,9 @@ export default function ManagerDashboardScreen(){
                         <Ionicons name="alert-circle-outline" size={22} color={darkMode ? '#f87171' : '#d32f2f'} />
                     </View>
                     <View style={{ flex: 1, marginRight: 8 }}>
-                        <Text style={{ color: darkMode ? '#f87171' : '#c62828', fontSize: 15, fontWeight: '800' }}>Truy xuất QA & Kỷ luật</Text>
+                        <Text style={{ color: darkMode ? '#f87171' : '#c62828', fontSize: 15, fontWeight: '800' }}>{isEn ? 'QA Lookup & Discipline' : 'Truy xuất QA & Kỷ luật'}</Text>
                         <Text style={{ color: darkMode ? '#cbd5e1' : '#555', fontSize: 11, marginTop: 2 }} numberOfLines={2}>
-                            Truy quét lịch sử đóng thùng & Xử phạt nhân viên vi phạm
+                            {isEn ? 'Scan packing history & penalize violating staff' : 'Truy quét lịch sử đóng thùng & Xử phạt nhân viên vi phạm'}
                         </Text>
                     </View>
                     <Ionicons name="chevron-forward" size={20} color={darkMode ? '#f87171' : '#d32f2f'} />
@@ -446,7 +465,7 @@ export default function ManagerDashboardScreen(){
 
                 {/* Phân tích trạng thái đơn hàng */}
                 <View style = {[styles.card, { backgroundColor: activeCardBg }]}>
-                    <Text style = {[styles.cardTitle, { color: activeTextColor }]}>Phân tích trạng thái đơn hàng</Text>
+                    <Text style = {[styles.cardTitle, { color: activeTextColor }]}>{isEn ? 'Order Status Analysis' : 'Phân tích trạng thái đơn hàng'}</Text>
                     <View style = {styles.orderStatsGrid}>
                         <View style = {[styles.orderStatBox, { backgroundColor: darkMode ? '#2d2d2d' : '#f8f9fa' }]}>
                             <View style = {[styles.orderStatIconContainer, { backgroundColor: darkMode ? '#1e3a8a' : '#e3f2fd' }]}>
@@ -454,7 +473,7 @@ export default function ManagerDashboardScreen(){
                             </View>
                             <View style = {styles.orderStatInfo}>
                                 <Text style = {[styles.orderStatValue, { color: activeTextColor }]}>{s.ordersByStatus?.pending ?? 0}</Text>
-                                <Text style = {[styles.orderStatLabel, { color: activeTextGrayColor }]}>Chờ xử lý / Đơn mới</Text>
+                                <Text style = {[styles.orderStatLabel, { color: activeTextGrayColor }]}>{isEn ? 'Pending / New' : 'Chờ xử lý / Đơn mới'}</Text>
                             </View>
                         </View>
                         <View style = {[styles.orderStatBox, { backgroundColor: darkMode ? '#2d2d2d' : '#f8f9fa' }]}>
@@ -463,7 +482,7 @@ export default function ManagerDashboardScreen(){
                             </View>
                             <View style = {styles.orderStatInfo}>
                                 <Text style = {[styles.orderStatValue, { color: activeTextColor }]}>{s.ordersByStatus?.processing ?? 0}</Text>
-                                <Text style = {[styles.orderStatLabel, { color: activeTextGrayColor }]}>Đang soạn hàng</Text>
+                                <Text style = {[styles.orderStatLabel, { color: activeTextGrayColor }]}>{isEn ? 'Picking' : 'Đang soạn hàng'}</Text>
                             </View>
                         </View>
                         <View style = {[styles.orderStatBox, { backgroundColor: darkMode ? '#2d2d2d' : '#f8f9fa' }]}>
@@ -472,7 +491,7 @@ export default function ManagerDashboardScreen(){
                             </View>
                             <View style = {styles.orderStatInfo}>
                                 <Text style = {[styles.orderStatValue, { color: activeTextColor }]}>{(s.ordersByStatus?.delivered ?? 0) + (s.ordersByStatus?.shipped ?? 0)}</Text>
-                                <Text style = {[styles.orderStatLabel, { color: activeTextGrayColor }]}>Thành công</Text>
+                                <Text style = {[styles.orderStatLabel, { color: activeTextGrayColor }]}>{isEn ? 'Completed' : 'Thành công'}</Text>
                             </View>
                         </View>
                         <View style = {[styles.orderStatBox, { backgroundColor: darkMode ? '#2d2d2d' : '#f8f9fa' }]}>
@@ -481,7 +500,7 @@ export default function ManagerDashboardScreen(){
                             </View>
                             <View style = {styles.orderStatInfo}>
                                 <Text style = {[styles.orderStatValue, { color: activeTextColor }]}>{s.ordersByStatus?.cancelled ?? 0}</Text>
-                                <Text style = {[styles.orderStatLabel, { color: activeTextGrayColor }]}>Đã huỷ</Text>
+                                <Text style = {[styles.orderStatLabel, { color: activeTextGrayColor }]}>{isEn ? 'Cancelled' : 'Đã huỷ'}</Text>
                             </View>
                         </View>
                     </View>
@@ -489,7 +508,7 @@ export default function ManagerDashboardScreen(){
 
                 {/* Live Hourly Productivity Chart */}
                 <View style = {[styles.card, { backgroundColor: activeCardBg }]}>
-                    <Text style = {[styles.cardTitle, { color: activeTextColor }]}>Năng suất soạn hàng theo giờ</Text>
+                    <Text style = {[styles.cardTitle, { color: activeTextColor }]}>{isEn ? 'Hourly Picking Productivity' : 'Năng suất soạn hàng theo giờ'}</Text>
                     {s.hourlyProductivity && s.hourlyProductivity.length > 0 ? (
                         s.hourlyProductivity.slice(0, 4).map((h) => {
                             const pct = Math.round((h.totalItemsPicked / maxHourPicked) * 100) || 0;
@@ -500,20 +519,20 @@ export default function ManagerDashboardScreen(){
                                     <View style = {[styles.zoneBar, { backgroundColor: darkMode ? '#2d2d2d' : '#f0f0f0' }]}>
                                         <View style = {[styles.zoneBarFill, {width: `${pct}%`, backgroundColor: COLORS.primary}]}/> 
                                     </View>
-                                    <Text style = {[styles.zonePct, {color: COLORS.primary, width: 70}]} >{h.totalItemsPicked} sp</Text>
+                                    <Text style = {[styles.zonePct, {color: COLORS.primary, width: 70}]} >{h.totalItemsPicked} {isEn ? 'pcs' : 'sp'}</Text>
                                 </View>
                             );
                         })
                     ) : (
                         <View style={{ alignItems: 'center', paddingVertical: 15 }}>
-                            <Text style={{ fontSize: 13, color: activeTextGrayColor }}>Chưa ghi nhận năng suất soạn hàng theo giờ</Text>
+                            <Text style={{ fontSize: 13, color: activeTextGrayColor }}>{isEn ? 'No hourly picking productivity recorded yet' : 'Chưa ghi nhận năng suất soạn hàng theo giờ'}</Text>
                         </View>
                     )}
                 </View>
 
                 {/* Top Picking Staff Leaderboard */}
                 <View style = {[styles.card, { backgroundColor: activeCardBg }]}>
-                    <Text style = {[styles.cardTitle, { color: activeTextColor }]}>Picker xuất sắc nhất hôm nay</Text>
+                    <Text style = {[styles.cardTitle, { color: activeTextColor }]}>{isEn ? "Today's Best Pickers" : 'Picker xuất sắc nhất hôm nay'}</Text>
                     {topStaff.length > 0 ? (
                         topStaff.map((staff, idx) => {
                             const rankIcons = ['trophy', 'medal', 'ribbon'];
@@ -529,15 +548,15 @@ export default function ManagerDashboardScreen(){
                                         <Text style={{ fontSize: 14, fontWeight: '600', color: activeTextColor }}>{staff.name}</Text>
                                     </View>
                                     <View style={{ alignItems: 'flex-end' }}>
-                                        <Text style={{ fontSize: 13, fontWeight: '700', color: COLORS.primary }}>{staff.pickingSpeed} sp/giờ</Text>
-                                        <Text style={{ fontSize: 10, color: activeTextGrayColor }}>Đã soạn: {staff.totalItemsPicked} sp</Text>
+                                        <Text style={{ fontSize: 13, fontWeight: '700', color: COLORS.primary }}>{staff.pickingSpeed} {isEn ? 'pcs/hr' : 'sp/giờ'}</Text>
+                                        <Text style={{ fontSize: 10, color: activeTextGrayColor }}>{isEn ? `Picked: ${staff.totalItemsPicked} pcs` : `Đã soạn: ${staff.totalItemsPicked} sp`}</Text>
                                     </View>
                                 </View>
                             );
                         })
                     ) : (
                         <View style={{ alignItems: 'center', paddingVertical: 10 }}>
-                            <Text style={{ fontSize: 13, color: activeTextGrayColor }}>Chưa có số liệu picker</Text>
+                            <Text style={{ fontSize: 13, color: activeTextGrayColor }}>{isEn ? 'No picker data available' : 'Chưa có số liệu picker'}</Text>
                         </View>
                     )}
                 </View>
@@ -547,10 +566,15 @@ export default function ManagerDashboardScreen(){
                     <View style = {[styles.alert, darkMode && { backgroundColor: '#7c2d12', borderLeftColor: '#fb923c' }]}>
                         <Ionicons name="warning-outline" size={24} color={darkMode ? '#fb923c' : "#e65100"} style={{ marginRight: 4 }} />
                         <View style = {styles.alertBody}>
-                            <Text style = {[styles.alertTitle, { color: darkMode ? '#fb923c' : '#e65100' }]}>{underperformingStaff.length} nhân viên dưới mức năng suất</Text>
+                            <Text style = {[styles.alertTitle, { color: darkMode ? '#fb923c' : '#e65100' }]}>
+                                {isEn ? `${underperformingStaff.length} underperforming staff` : `${underperformingStaff.length} nhân viên dưới mức năng suất`}
+                            </Text>
                             <Text style={[styles.alertSub, { color: darkMode ? '#cbd5e1' : '#666' }]}>
-                                {underperformingStaff.slice(0, 3).map(p => `${p.name} (${p.pickingSpeed} sp/giờ)`).join(', ')}
-                                {underperformingStaff.length > 3 ? ` và ${underperformingStaff.length - 3} nhân viên khác` : ''} đang dưới định mức tối thiểu 6.5 sp/giờ.
+                                {underperformingStaff.slice(0, 3).map(p => `${p.name} (${p.pickingSpeed} ${isEn ? 'pcs/hr' : 'sp/giờ'})`).join(', ')}
+                                {underperformingStaff.length > 3 
+                                    ? (isEn ? ` and ${underperformingStaff.length - 3} other staff` : ` và ${underperformingStaff.length - 3} nhân viên khác`) 
+                                    : ''
+                                } {isEn ? 'are below the minimum rate of 6.5 pcs/hr.' : 'đang dưới định mức tối thiểu 6.5 sp/giờ.'}
                             </Text>
                         </View>
                     </View>
@@ -558,9 +582,14 @@ export default function ManagerDashboardScreen(){
                     <View style = {[styles.alert, { backgroundColor: darkMode ? '#14532d' : '#e8f5e9', borderLeftColor: COLORS.success }]}>
                         <Ionicons name="checkmark-circle-outline" size={24} color={darkMode ? '#4ade80' : COLORS.primary} style={{ marginRight: 4 }} />
                         <View style = {styles.alertBody}>
-                            <Text style = {[styles.alertTitle, { color: darkMode ? '#4ade80' : COLORS.primary }]}>Năng suất Picker hoàn hảo!</Text>
+                            <Text style = {[styles.alertTitle, { color: darkMode ? '#4ade80' : COLORS.primary }]}>
+                                {isEn ? 'Perfect Picker Productivity!' : 'Năng suất Picker hoàn hảo!'}
+                            </Text>
                             <Text style={[styles.alertSub, { color: darkMode ? '#cbd5e1' : '#666' }]}>
-                                Tất cả nhân viên soạn hàng đều đạt hiệu suất tiêu chuẩn (trên 6.5 sp/giờ).
+                                {isEn 
+                                    ? 'All picking staff have met standard performance (over 6.5 pcs/hr).' 
+                                    : 'Tất cả nhân viên soạn hàng đều đạt hiệu suất tiêu chuẩn (trên 6.5 sp/giờ).'
+                                }
                             </Text>
                         </View>
                     </View>
@@ -568,7 +597,7 @@ export default function ManagerDashboardScreen(){
 
                 {/* Sản phẩm còn thiếu */}
                 <View style = {[styles.card, { backgroundColor: activeCardBg }]}>
-                    <Text style = {[styles.cardTitle, { color: activeTextColor }]}>Sản phẩm báo thiếu tại kệ</Text>
+                    <Text style = {[styles.cardTitle, { color: activeTextColor }]}>{isEn ? 'Shortages Reported at Shelves' : 'Sản phẩm báo thiếu tại kệ'}</Text>
                     {displayShortages.length > 0 ? (
                         displayShortages.map((item) => (
                             <ShortageItem key = {item.id} item = {item} />
@@ -577,7 +606,7 @@ export default function ManagerDashboardScreen(){
                         <View style={{ alignItems: 'center', paddingVertical: 20 }}>
                             <Ionicons name="checkmark-circle" size={40} color={COLORS.primary} />
                             <Text style={{ fontSize: 13, color: activeTextGrayColor, marginTop: 8, fontWeight: '500' }}>
-                                Không có báo thiếu nào cần xử lý!
+                                {isEn ? 'No shortages to handle!' : 'Không có báo thiếu nào cần xử lý!'}
                             </Text>
                         </View>
                     )}
@@ -601,8 +630,8 @@ export default function ManagerDashboardScreen(){
                             {/* Modal Header */}
                             <View style={[styles.modalHeader, { borderBottomColor: activeBorderColor }]}>
                                 <View style={{ flex: 1, marginRight: 8 }}>
-                                    <Text style={[styles.modalTitle, { color: activeTextColor }]}>Bàn Điều Phối & Chia Task</Text>
-                                    <Text style={[styles.modalSub, { color: activeTextGrayColor }]}>Phân tách đơn sỉ & giao việc cho nhân viên kho</Text>
+                                    <Text style={[styles.modalTitle, { color: activeTextColor }]}>{isEn ? 'Dispatch Desk & Tasks' : 'Bàn Điều Phối & Chia Task'}</Text>
+                                    <Text style={[styles.modalSub, { color: activeTextGrayColor }]}>{isEn ? 'Split wholesale orders & assign tasks to pickers' : 'Phân tách đơn sỉ & giao việc cho nhân viên kho'}</Text>
                                 </View>
                                 <TouchableOpacity onPress={() => setShowDispatchModal(false)} style={styles.closeBtn}>
                                     <Ionicons name="close-circle" size={28} color={darkMode ? '#666' : "#aaa"} />
@@ -611,7 +640,9 @@ export default function ManagerDashboardScreen(){
 
                             <ScrollView style={styles.modalBody} keyboardShouldPersistTaps="handled">
                                 {/* 1. LỰA CHỌN ĐƠN HÀNG */}
-                                <Text style={[styles.sectionTitle, { color: activeTextColor }]}>1. Lựa chọn Đơn đặt hàng cần điều phối & xử lý: *</Text>
+                                <Text style={[styles.sectionTitle, { color: activeTextColor }]}>
+                                    {isEn ? '1. Select order to dispatch & process: *' : '1. Lựa chọn Đơn đặt hàng cần điều phối & xử lý: *'}
+                                </Text>
                                 {loadingDispatchData ? (
                                     <ActivityIndicator color={COLORS.primary} size="small" style={{ marginVertical: 12 }} />
                                 ) : selectedPickingOrderId ? (
@@ -635,14 +666,14 @@ export default function ManagerDashboardScreen(){
                                                     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
                                                         <Ionicons name="receipt" size={16} color={COLORS.primary} />
                                                         <Text style={{ fontWeight: '800', fontSize: 14, color: COLORS.primary }}>
-                                                            Đơn hàng #{order.id}
+                                                            {isEn ? `Order #${order.id}` : `Đơn hàng #${order.id}`}
                                                         </Text>
                                                     </View>
                                                     <Text style={{ fontSize: 12, fontWeight: '700', color: activeTextColor, marginTop: 4 }}>
                                                         {order.branch?.name || order.customer?.name || 'Kingfood Partner'}
                                                     </Text>
                                                     <Text style={{ fontSize: 11, color: activeTextGrayColor, marginTop: 2 }}>
-                                                        Tổng tiền: <Text style={{ fontWeight: '750', color: activeTextColor }}>{order.totalPrice ? order.totalPrice.toLocaleString() : '0'}đ</Text> · <Text style={{ fontWeight: '750', color: COLORS.primary }}>{order.orderDetails?.length || 0} SKU</Text>
+                                                        {isEn ? 'Total: ' : 'Tổng tiền: '}<Text style={{ fontWeight: '750', color: activeTextColor }}>{order.totalPrice ? order.totalPrice.toLocaleString() : '0'}đ</Text> · <Text style={{ fontWeight: '750', color: COLORS.primary }}>{order.orderDetails?.length || 0} SKU</Text>
                                                     </Text>
                                                 </View>
                                                 <TouchableOpacity 
@@ -659,7 +690,7 @@ export default function ManagerDashboardScreen(){
                                                         setPickingAssignments({});
                                                     }}
                                                 >
-                                                    <Text style={{ fontSize: 12, fontWeight: '750', color: COLORS.primary }}>Thay đổi</Text>
+                                                    <Text style={{ fontSize: 12, fontWeight: '750', color: COLORS.primary }}>{isEn ? 'Change' : 'Thay đổi'}</Text>
                                                 </TouchableOpacity>
                                             </View>
                                         );
@@ -677,9 +708,9 @@ export default function ManagerDashboardScreen(){
                                                  {/* Status Filters segmented control */}
                                                  <View style={{ flexDirection: 'row', gap: 6, marginBottom: 12, flexWrap: 'wrap' }}>
                                                      {[
-                                                         { key: 'all', label: 'Tất cả', icon: 'list' },
-                                                         { key: 'pending', label: 'Đơn mới', icon: 'time-outline', color: COLORS.success },
-                                                         { key: 'processing', label: 'Đang soạn', icon: 'cube-outline', color: '#1565c0' },
+                                                         { key: 'all', label: isEn ? 'All' : 'Tất cả', icon: 'list' },
+                                                         { key: 'pending', label: isEn ? 'New' : 'Đơn mới', icon: 'time-outline', color: COLORS.success },
+                                                         { key: 'processing', label: isEn ? 'Picking' : 'Đang soạn', icon: 'cube-outline', color: '#1565c0' },
                                                      ].map(tab => {
                                                          const isSelected = modalOrderFilter === tab.key;
                                                          const isPending = tab.key === 'pending';
@@ -737,15 +768,15 @@ export default function ManagerDashboardScreen(){
                                                                  <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                                                                      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
                                                                          <Text style={{ fontWeight: '750', fontSize: 13, color: activeTextColor }}>
-                                                                             Đơn hàng #{order.id}
+                                                                             {isEn ? `Order #${order.id}` : `Đơn hàng #${order.id}`}
                                                                          </Text>
                                                                          {order.status === 'pending' ? (
                                                                              <View style={{ backgroundColor: darkMode ? '#14532d' : '#e8f5e9', paddingHorizontal: 6, paddingVertical: 2, borderRadius: 8 }}>
-                                                                                 <Text style={{ fontSize: 9, fontWeight: '800', color: darkMode ? '#4ade80' : COLORS.success }}>Đơn mới</Text>
+                                                                                 <Text style={{ fontSize: 9, fontWeight: '800', color: darkMode ? '#4ade80' : COLORS.success }}>{isEn ? 'New' : 'Đơn mới'}</Text>
                                                                              </View>
                                                                          ) : (
                                                                              <View style={{ backgroundColor: darkMode ? '#1e3a8a' : '#e3f2fd', paddingHorizontal: 6, paddingVertical: 2, borderRadius: 8 }}>
-                                                                                 <Text style={{ fontSize: 9, fontWeight: '800', color: darkMode ? '#60a5fa' : '#1565c0' }}>Đang soạn</Text>
+                                                                                 <Text style={{ fontSize: 9, fontWeight: '800', color: darkMode ? '#60a5fa' : '#1565c0' }}>{isEn ? 'Picking' : 'Đang soạn'}</Text>
                                                                              </View>
                                                                          )}
                                                                      </View>
@@ -754,7 +785,7 @@ export default function ManagerDashboardScreen(){
                                                                      </Text>
                                                                  </View>
                                                                  <Text style={{ fontSize: 11, color: activeTextGrayColor, marginTop: 4 }}>
-                                                                     Chi nhánh: {order.branch?.name || order.customer?.name || 'Kingfood Partner'} · {order.orderDetails?.length || 0} SKU
+                                                                     {isEn ? 'Branch: ' : 'Chi nhánh: '}{order.branch?.name || order.customer?.name || 'Kingfood Partner'} · {order.orderDetails?.length || 0} SKU
                                                                  </Text>
                                                              </TouchableOpacity>
                                                          ))}
@@ -762,10 +793,10 @@ export default function ManagerDashboardScreen(){
                                                  ) : (
                                                      <Text style={{ color: activeTextGrayColor, fontStyle: 'italic', marginVertical: 12 }}>
                                                          {modalOrderFilter === 'pending' 
-                                                             ? 'Không có đơn đặt hàng nào đang chờ xử lý.' 
+                                                             ? (isEn ? 'No pending orders found.' : 'Không có đơn đặt hàng nào đang chờ xử lý.') 
                                                              : modalOrderFilter === 'processing' 
-                                                                 ? 'Không có đơn đặt hàng nào đang soạn hàng.' 
-                                                                 : 'Không có đơn đặt hàng nào đang chờ xử lý hoặc đang soạn hàng.'
+                                                                 ? (isEn ? 'No picking orders found.' : 'Không có đơn đặt hàng nào đang soạn hàng.') 
+                                                                 : (isEn ? 'No pending or picking orders found.' : 'Không có đơn đặt hàng nào đang chờ xử lý hoặc đang soạn hàng.')
                                                          }
                                                      </Text>
                                                  )}
@@ -778,9 +809,11 @@ export default function ManagerDashboardScreen(){
                                 {selectedPickingOrderId ? (
                                     <View style={{ marginTop: 16 }}>
                                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-                                            <Text style={[styles.sectionTitle, { color: activeTextColor }]}>2. Phân chia sản phẩm & Chọn nhân viên:</Text>
+                                            <Text style={[styles.sectionTitle, { color: activeTextColor }]}>
+                                                {isEn ? '2. Split products & Choose staff:' : '2. Phân chia sản phẩm & Chọn nhân viên:'}
+                                            </Text>
                                             <View style={{ backgroundColor: COLORS.primary, paddingHorizontal: 10, paddingVertical: 4, borderRadius: 12 }}>
-                                                <Text style={{ fontSize: 11, fontWeight: '700', color: '#fff' }}>Đơn #{selectedPickingOrderId}</Text>
+                                                <Text style={{ fontSize: 11, fontWeight: '700', color: '#fff' }}>{isEn ? `Order #${selectedPickingOrderId}` : `Đơn #${selectedPickingOrderId}`}</Text>
                                             </View>
                                         </View>
 
@@ -799,7 +832,7 @@ export default function ManagerDashboardScreen(){
                                         }}>
                                             <Ionicons name="search" size={16} color={activeTextGrayColor} />
                                             <TextInput
-                                                placeholder="Tìm tên nhân viên hoặc username..."
+                                                placeholder={isEn ? "Search staff by name or username..." : "Tìm tên nhân viên hoặc username..."}
                                                 placeholderTextColor={darkMode ? '#6b7280' : "#94a3b8"}
                                                 value={staffSearchQuery}
                                                 onChangeText={setStaffSearchQuery}
@@ -861,20 +894,20 @@ export default function ManagerDashboardScreen(){
                                                         <View style={{ flex: 1 }}>
                                                             <Text style={{ fontWeight: '700', fontSize: 13, color: activeTextColor }}>{product.name}</Text>
                                                             <Text style={{ fontSize: 11, color: activeTextGrayColor, marginTop: 2 }}>
-                                                                SKU: {product.sku || `SKU-${product.id}`} · <Text style={{ fontWeight: '700', color: COLORS.primary }}>{product.category?.name || 'Khu vực kệ'}</Text>
+                                                                SKU: {product.sku || `SKU-${product.id}`} · <Text style={{ fontWeight: '700', color: COLORS.primary }}>{product.category?.name || (isEn ? 'Shelf Zone' : 'Khu vực kệ')}</Text>
                                                             </Text>
                                                         </View>
 
                                                         <View style={{ alignItems: 'flex-end' }}>
-                                                            <Text style={{ fontSize: 11, color: activeTextGrayColor }}>Yêu cầu</Text>
-                                                            <Text style={{ fontSize: 14, fontWeight: '800', color: activeTextColor }}>{item.quantity} {product.unit || 'cái'}</Text>
+                                                            <Text style={{ fontSize: 11, color: activeTextGrayColor }}>{isEn ? 'Required' : 'Yêu cầu'}</Text>
+                                                            <Text style={{ fontSize: 14, fontWeight: '800', color: activeTextColor }}>{item.quantity} {isEn ? (product.unit === 'cái' ? 'pcs' : product.unit) : (product.unit || 'cái')}</Text>
                                                         </View>
                                                     </View>
 
                                                     {/* Assignment Picker Row */}
                                                     {isChecked && (
                                                         <View style={{ marginTop: 12, borderTopWidth: 1, borderTopColor: activeBorderColor, paddingTop: 10 }}>
-                                                            <Text style={{ fontSize: 11, fontWeight: '700', color: activeTextColor, marginBottom: 6 }}>Nhân viên Picker phụ trách:</Text>
+                                                            <Text style={{ fontSize: 11, fontWeight: '700', color: activeTextColor, marginBottom: 6 }}>{isEn ? 'Assigned Picker:' : 'Nhân viên Picker phụ trách:'}</Text>
                                                             
                                                             {(() => {
                                                                 const filteredStaff = staffList.filter(s => {
@@ -884,11 +917,11 @@ export default function ManagerDashboardScreen(){
                                                                 });
 
                                                                 if (staffList.length === 0) {
-                                                                    return <Text style={{ fontStyle: 'italic', color: '#ff9800', fontSize: 11, marginVertical: 4 }}>Chưa có nhân viên Picker nào</Text>;
+                                                                    return <Text style={{ fontStyle: 'italic', color: '#ff9800', fontSize: 11, marginVertical: 4 }}>{isEn ? 'No pickers available' : 'Chưa có nhân viên Picker nào'}</Text>;
                                                                 }
 
                                                                 if (filteredStaff.length === 0) {
-                                                                    return <Text style={{ fontStyle: 'italic', color: activeTextGrayColor, fontSize: 11, marginVertical: 4 }}>Không tìm thấy nhân viên phù hợp</Text>;
+                                                                    return <Text style={{ fontStyle: 'italic', color: activeTextGrayColor, fontSize: 11, marginVertical: 4 }}>{isEn ? 'No matching staff found' : 'Không tìm thấy nhân viên phù hợp'}</Text>;
                                                                 }
 
                                                                 return (
@@ -950,12 +983,12 @@ export default function ManagerDashboardScreen(){
                                                                                         paddingHorizontal: 4, 
                                                                                         borderRadius: 4 
                                                                                     }}>
-                                                                                        {isFree ? '🟢 Rảnh' : `🔴 Bận (${activeTasks})`}
+                                                                                        {isFree ? (isEn ? '🟢 Idle' : '🟢 Rảnh') : (isEn ? `🔴 Busy (${activeTasks})` : `🔴 Bận (${activeTasks})`)}
                                                                                     </Text>
 
                                                                                     {isZoneMatch && (
                                                                                         <Text style={{ fontSize: 9, fontWeight: '700', color: COLORS.primary, backgroundColor: darkMode ? '#7c2d12' : '#ffe5db', paddingHorizontal: 4, borderRadius: 4 }}>
-                                                                                            Khu vực Kệ
+                                                                                            {isEn ? 'Shelf Zone' : 'Khu vực Kệ'}
                                                                                         </Text>
                                                                                     )}
                                                                                 </TouchableOpacity>
@@ -967,7 +1000,7 @@ export default function ManagerDashboardScreen(){
 
                                                             {/* Quantity adjustment */}
                                                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 10 }}>
-                                                                <Text style={{ fontSize: 11, fontWeight: '700', color: activeTextColor }}>Số lượng giao nhặt:</Text>
+                                                                <Text style={{ fontSize: 11, fontWeight: '700', color: activeTextColor }}>{isEn ? 'Quantity to pick:' : 'Số lượng giao nhặt:'}</Text>
                                                                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
                                                                     <TouchableOpacity
                                                                         onPress={() => {
@@ -1023,7 +1056,7 @@ export default function ManagerDashboardScreen(){
                                         ) : (
                                             <>
                                                 <Ionicons name="flash" size={18} color="#fff" style={{ marginRight: 6 }} />
-                                                <Text style={styles.btnText}>Kích hoạt & Gửi lệnh Picking sỉ</Text>
+                                                <Text style={styles.btnText}>{isEn ? 'Activate & Send Wholesale Picking' : 'Kích hoạt & Gửi lệnh Picking sỉ'}</Text>
                                             </>
                                         )}
                                     </TouchableOpacity>

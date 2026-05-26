@@ -4,21 +4,23 @@ import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../constants/colors';
 import { useAppPreferences } from '../contexts/AppPreferencesContext';
 
-const tabs = [
-  { key: 'dashboard', icon: 'stats-chart', iconOutline: 'stats-chart-outline', label: 'Dashboard', route: '/managerdashboard' },
-  { key: 'team', icon: 'people', iconOutline: 'people-outline', label: 'Nhân viên', route: '/team' },
-  { key: 'storelist', icon: 'business', iconOutline: 'business-outline', label: 'Cửa hàng', route: '/storelist' },
-  { key: 'incident', icon: 'warning', iconOutline: 'warning-outline', label: 'Sự cố', route: '/incidentreport' },
-  { key: 'setting', icon: 'settings', iconOutline: 'settings-outline', label: 'Cài đặt', route: '/setting' },
+const getTabs = (lang) => [
+  { key: 'dashboard', icon: 'stats-chart', iconOutline: 'stats-chart-outline', label: lang === 'vi' ? 'Dashboard' : 'Dashboard', route: '/managerdashboard' },
+  { key: 'team', icon: 'people', iconOutline: 'people-outline', label: lang === 'vi' ? 'Nhân viên' : 'Staff', route: '/team' },
+  { key: 'storelist', icon: 'business', iconOutline: 'business-outline', label: lang === 'vi' ? 'Cửa hàng' : 'Stores', route: '/storelist' },
+  { key: 'incident', icon: 'warning', iconOutline: 'warning-outline', label: lang === 'vi' ? 'Sự cố' : 'Incidents', route: '/incidentreport' },
+  { key: 'setting', icon: 'settings', iconOutline: 'settings-outline', label: lang === 'vi' ? 'Cài đặt' : 'Settings', route: '/setting' },
 ];
 
 export default function ManagerBottomNav({ active }) {
   const pathname = usePathname();
-  const { darkMode } = useAppPreferences();
+  const { darkMode, language } = useAppPreferences();
 
   const activeNavBg = darkMode ? '#1e1e1e' : '#fff';
   const activeBorderColor = darkMode ? '#2d2d2d' : '#eee';
   const inactiveTextColor = darkMode ? '#9ca3af' : '#888';
+  const tabs = getTabs(language);
+
 
   return (
     <View style={[styles.bottomNav, { backgroundColor: activeNavBg, borderTopColor: activeBorderColor }]}>

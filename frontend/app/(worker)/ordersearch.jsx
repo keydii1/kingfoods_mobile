@@ -9,6 +9,11 @@ import { getAssignedTasks } from '../../constants/services/api';
 import StaffBottomNav from '../../components/StaffBottomNav';
 import { useAppPreferences } from '../../contexts/AppPreferencesContext';
 
+const cleanLocationName = (name) => {
+    if (!name) return '';
+    return name.replace(/^[🥦🥫🧴❄️\s]+/, '').replace(/^[^a-zA-Z0-9À-ỹđĐ\s]+/, '').trim();
+};
+
 const TRANSLATIONS = {
   vi: {
     headerTitle: 'Tìm kiếm nhiệm vụ hôm nay',
