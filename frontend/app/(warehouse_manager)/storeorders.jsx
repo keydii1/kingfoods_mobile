@@ -7,6 +7,7 @@ import { COLORS } from '../../constants/colors';
 import { getOrders, updateOrderStatus, deleteOrder, getUsers, assignPickingTask, BASE_URL } from '../../constants/services/api';
 import { Ionicons } from '@expo/vector-icons';
 import { playSound } from '../../utils/soundService';
+import { useAppPreferences } from '../../contexts/AppPreferencesContext';
 
 // Timezone date helpers for Vietnam (UTC+7)
 const formatVietnamDate = (dateStr) => {
@@ -62,6 +63,8 @@ const filters = [
 ];
 
 export default function StoreOrdersScreen() {
+  const { language, darkMode } = useAppPreferences();
+  const isEn = language === 'en';
   const { customerId, storeName, initialFilter } = useLocalSearchParams();
   const [orders, setOrders] = useState([]);
   const [branchName, setBranchName] = useState(storeName || 'Cửa hàng');
@@ -509,17 +512,29 @@ export default function StoreOrdersScreen() {
                           </Text>
                           
                           {/* Availability Tag */}
-                          <Text style={{ 
-                            fontSize: 10, 
-                            fontWeight: '700', 
-                            color: isFree ? COLORS.success : COLORS.error, 
+                          <View style={{ 
+                            flexDirection: 'row',
+                            alignItems: 'center',
                             backgroundColor: isFree ? COLORS.successBg : COLORS.errorBg, 
-                            paddingHorizontal: 5, 
+                            paddingHorizontal: 6,
+                            paddingVertical: 2,
                             borderRadius: 4,
-                            paddingVertical: 2
+                            gap: 4
                           }}>
-                            {isFree ? '🟢 Rảnh' : `🔴 Bận (${activeTasks})`}
-                          </Text>
+                            <View style={{
+                              width: 6,
+                              height: 6,
+                              borderRadius: 3,
+                              backgroundColor: isFree ? COLORS.success : COLORS.error
+                            }} />
+                            <Text style={{ 
+                              fontSize: 10, 
+                              fontWeight: '700', 
+                              color: isFree ? COLORS.success : COLORS.error, 
+                            }}>
+                              {isFree ? (isEn ? 'Idle' : 'Rảnh') : (isEn ? `Busy (${activeTasks})` : `Bận (${activeTasks})`)}
+                            </Text>
+                          </View>
                         </TouchableOpacity>
                       );
                     })}

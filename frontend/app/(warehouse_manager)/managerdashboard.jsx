@@ -975,16 +975,29 @@ export default function ManagerDashboardScreen(){
                                                                                         {staff.name || staff.username}
                                                                                     </Text>
                                                                                     
-                                                                                    <Text style={{ 
-                                                                                        fontSize: 9, 
-                                                                                        fontWeight: '700', 
-                                                                                        color: isFree ? COLORS.success : COLORS.error, 
-                                                                                        backgroundColor: isFree ? (darkMode ? '#14532d' : COLORS.successBg) : (darkMode ? '#7f1d1d' : COLORS.errorBg), 
-                                                                                        paddingHorizontal: 4, 
-                                                                                        borderRadius: 4 
-                                                                                    }}>
-                                                                                        {isFree ? (isEn ? '🟢 Idle' : '🟢 Rảnh') : (isEn ? `🔴 Busy (${activeTasks})` : `🔴 Bận (${activeTasks})`)}
-                                                                                    </Text>
+                                                                                     <View style={{ 
+                                                                                         flexDirection: 'row',
+                                                                                         alignItems: 'center',
+                                                                                         backgroundColor: isFree ? (darkMode ? '#14532d' : COLORS.successBg) : (darkMode ? '#7f1d1d' : COLORS.errorBg), 
+                                                                                         paddingHorizontal: 6,
+                                                                                         paddingVertical: 2,
+                                                                                         borderRadius: 4,
+                                                                                         gap: 4
+                                                                                     }}>
+                                                                                         <View style={{
+                                                                                             width: 6,
+                                                                                             height: 6,
+                                                                                             borderRadius: 3,
+                                                                                             backgroundColor: isFree ? (darkMode ? '#4ade80' : COLORS.success) : (darkMode ? '#f87171' : COLORS.error)
+                                                                                         }} />
+                                                                                         <Text style={{ 
+                                                                                             fontSize: 9, 
+                                                                                             fontWeight: '700', 
+                                                                                             color: isFree ? (darkMode ? '#4ade80' : COLORS.success) : (darkMode ? '#f87171' : COLORS.error), 
+                                                                                         }}>
+                                                                                             {isFree ? (isEn ? 'Idle' : 'Rảnh') : (isEn ? `Busy (${activeTasks})` : `Bận (${activeTasks})`)}
+                                                                                         </Text>
+                                                                                     </View>
 
                                                                                     {isZoneMatch && (
                                                                                         <Text style={{ fontSize: 9, fontWeight: '700', color: COLORS.primary, backgroundColor: darkMode ? '#7c2d12' : '#ffe5db', paddingHorizontal: 4, borderRadius: 4 }}>

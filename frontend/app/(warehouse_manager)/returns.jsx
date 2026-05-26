@@ -16,7 +16,8 @@ const cleanLocationName = (name) => {
 };
 
 export default function ReturnsScreen() {
-    const { darkMode } = useAppPreferences();
+    const { language, darkMode } = useAppPreferences();
+    const isEn = language === 'en';
 
     const activeBg = darkMode ? '#121212' : '#f0f4f1';
     const activeHeaderBg = darkMode ? '#1e1e1e' : '#fff';
@@ -252,10 +253,18 @@ export default function ReturnsScreen() {
                                     <Text style={[styles.metaValue, { color: COLORS.primary }]}>{traceResult.containerInfo?.currentUsage} cái</Text>
                                 </View>
                                 <View style={styles.metaItem}>
-                                    <Text style={[styles.metaLabel, { color: activeTextGrayColor }]}>Trạng thái</Text>
-                                    <Text style={[styles.metaValue, { color: traceResult.containerInfo?.status === 'active' ? COLORS.success : COLORS.error }]}>
-                                        {traceResult.containerInfo?.status === 'active' ? '🟢 Đang hoạt động' : '🔴 Niêm phong'}
-                                    </Text>
+                                    <Text style={[styles.metaLabel, { color: activeTextGrayColor }]}>{isEn ? 'Status' : 'Trạng thái'}</Text>
+                                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 2 }}>
+                                        <View style={{
+                                            width: 6,
+                                            height: 6,
+                                            borderRadius: 3,
+                                            backgroundColor: traceResult.containerInfo?.status === 'active' ? COLORS.success : COLORS.error
+                                        }} />
+                                        <Text style={[styles.metaValue, { color: traceResult.containerInfo?.status === 'active' ? COLORS.success : COLORS.error, marginTop: 0 }]}>
+                                            {traceResult.containerInfo?.status === 'active' ? (isEn ? 'Active' : 'Đang hoạt động') : (isEn ? 'Sealed' : 'Niêm phong')}
+                                        </Text>
+                                    </View>
                                 </View>
                             </View>
                         </View>
