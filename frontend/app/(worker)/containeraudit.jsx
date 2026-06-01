@@ -95,6 +95,14 @@ export default function ContainerAuditScreen(){
         }
         fetchTrace();
     },[containerCode])
+    if (loading) {
+        return (
+            <SafeAreaView style={[styles.safeArea, { justifyContent: 'center', alignItems: 'center' }]}>
+                <ActivityIndicator color={COLORS.primary} size="large" />
+            </SafeAreaView>
+        );
+    }
+
     return(
          <SafeAreaView style={styles.safeArea}>
 
@@ -109,11 +117,6 @@ export default function ContainerAuditScreen(){
                 </View>
             </View>
             {/* Body */}
-            {loading ? (
-                <View style={styles.loadingContainer}>
-                    <ActivityIndicator color={COLORS.primary} size="large" />
-                </View>
-            ) : (
             <ScrollView style = {styles.scroll}>
                 {/* Card thùng hàng */}
                 <View style = {styles.binCard}>
@@ -150,7 +153,6 @@ export default function ContainerAuditScreen(){
                     <Text style = {styles.btnOutlineText}>Bổ sung hàng còn thiếu</Text>
                 </TouchableOpacity>
             </ScrollView>
-            )}
             <StaffBottomNav />
             </SafeAreaView>
 

@@ -1,5 +1,5 @@
-﻿import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView, TextInput, ActivityIndicator, Image, Animated } from 'react-native';
+import { useState, useEffect, useMemo, useCallback } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, TextInput, ActivityIndicator, Image } from 'react-native';
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../contexts/AuthContext';
@@ -14,10 +14,9 @@ import {
   getProfile, 
   updateProfile,
   changeCustomerPassword,
-  logout as apiLogout,
-  getIncidents
+  logout as apiLogout
 } from '../../constants/services/api';
-import { getOrderStatusMeta, canCustomerCancelOrder, ORDER_STATUS } from '../../constants/orderStatus';
+import { getOrderStatusMeta, canCustomerCancelOrder } from '../../constants/orderStatus';
 import { validateNewPassword, PASSWORD_HINT } from '../../constants/passwordPolicy';
 import { playSound } from '../../utils/soundService';
 
@@ -149,7 +148,7 @@ const SearchBarWeb = ({ onSearch }) => {
 
 export default function StoreOrderWebScreen() {
   const { userName, logout } = useAuth();
-  const { cart, addToCart, removeFromCart, clearCart, persistCart } = useStoreCart();
+  const { cart, addToCart, removeFromCart, clearCart, persistCart, updateCartQty } = useStoreCart();
 
   const [activeTab, setActiveTab] = useState('order');
 
@@ -199,12 +198,6 @@ export default function StoreOrderWebScreen() {
   });
   const [activePreset, setActivePreset] = useState('month');
 
-  // History filters
-  const [historyStartDate, setHistoryStartDate] = useState('');
-  const [historyEndDate, setHistoryEndDate] = useState('');
-  const [historyPreset, setHistoryPreset] = useState('');
-  const [selectedStatus, setSelectedStatus] = useState('all');
-
   // Account
   const [profileUser, setProfileUser] = useState(null);
   const [loadingProfile, setLoadingProfile] = useState(false);
@@ -220,57 +213,8 @@ export default function StoreOrderWebScreen() {
   // Favorites list
   const [favoritesList, setFavoritesList] = useState([]);
 
-  // Favorites date filter
-  const [favPreset, setFavPreset] = useState('all');
-  const [favStartDate, setFavStartDate] = useState('');
-  const [favEndDate, setFavEndDate] = useState('');
-  const [favToastVisible, setFavToastVisible] = useState(false);
-  const [favToastType, setFavToastType] = useState('success'); // 'success' | 'remove'
-  const favToastAnim = useRef(new Animated.Value(0)).current;
-
-  const favToastTimeoutRef = useRef(null);
-
-  const showFavToast = useCallback((type) => {
-    if (favToastTimeoutRef.current) clearTimeout(favToastTimeoutRef.current);
-    setFavToastVisible(true);
-    setFavToastType(type);
-    favToastAnim.setValue(0);
-    Animated.timing(favToastAnim, {
-      toValue: 1,
-      duration: 300,
-      useNativeDriver: true,
-    }).start();
-    favToastTimeoutRef.current = setTimeout(() => {
-      Animated.timing(favToastAnim, {
-        toValue: 0,
-        duration: 300,
-        useNativeDriver: true,
-      }).start(() => setFavToastVisible(false));
-    }, 2000);
-  }, [favToastAnim]);
-
-  const applyFavPreset = useCallback((preset) => {
-    setFavPreset(preset);
-    if (preset === 'custom') return;
-    const now = new Date();
-    const end = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-    let start = '';
-    if (preset === '7days') {
-      const d = new Date(); d.setDate(d.getDate() - 7);
-      start = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-    } else if (preset === '2weeks') {
-      const d = new Date(); d.setDate(d.getDate() - 14);
-      start = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-    } else if (preset === '1month') {
-      const d = new Date(); d.setMonth(d.getMonth() - 1);
-      start = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-    }
-    setFavStartDate(start);
-    setFavEndDate(end);
-  }, []);
-
   // Promotions
-  const [promotionsList] = useState([
+  const [promotionsList, setPromotionsList] = useState([
     {
       id: 'promo-1',
       title: 'Lễ hội trái cây mùa hè',
@@ -300,50 +244,122 @@ export default function StoreOrderWebScreen() {
     }
   ]);
 
-  // Store Rack Incident Logger
-  const [storeIncidents, setStoreIncidents] = useState([]);
+  // Store Rack Incident Logger with localStorage persistence
+  const [storeIncidents, setStoreIncidents] = useState(() => {
+    try {
+      const stored = localStorage.getItem('storeIncidents');
+      return stored ? JSON.parse(stored) : [
+        { id: 1, product: 'Cam sành túi lưới 2kg', type: 'Dập nát khi vận chuyển', severity: 'Cao', status: 'pending', date: '2026-05-19' },
+        { id: 2, product: 'Sữa tươi TH True Milk ít đường hộp 1L', type: 'Móp méo vỏ hộp', severity: 'Trung bình', status: 'resolved', date: '2026-05-18' }
+      ];
+    } catch {
+      return [
+        { id: 1, product: 'Cam sành túi lưới 2kg', type: 'Dập nát khi vận chuyển', severity: 'Cao', status: 'pending', date: '2026-05-19' },
+        { id: 2, product: 'Sữa tươi TH True Milk ít đường hộp 1L', type: 'Móp méo vỏ hộp', severity: 'Trung bình', status: 'resolved', date: '2026-05-18' }
+      ];
+    }
+  });
   const [incidentForm, setIncidentForm] = useState({ product: '', type: 'Thiếu hàng trưng bày', severity: 'Trung bình', details: '' });
   const [submittingIncident, setSubmittingIncident] = useState(false);
-  const [loadingIncidents, setLoadingIncidents] = useState(false);
 
-  const fetchStoreIncidents = useCallback(async () => {
-    setLoadingIncidents(true);
+  // Supplier Support Desk with localStorage persistence
+  const [supportTickets, setSupportTickets] = useState(() => {
     try {
-      const res = await getIncidents();
-      setStoreIncidents(res?.data || []);
-    } catch (err) {
-      console.log('Fetch incidents error:', err.message);
-    } finally {
-      setLoadingIncidents(false);
+      const stored = localStorage.getItem('supportTickets');
+      return stored ? JSON.parse(stored) : [
+        { id: 101, topic: 'Sai lệch số lượng đơn hàng #12', type: 'Giao hàng', date: '2026-05-19', status: 'processing' },
+        { id: 102, topic: 'Lỗi thanh toán hóa đơn sỉ', type: 'Thanh toán', date: '2026-05-15', status: 'resolved' }
+      ];
+    } catch {
+      return [
+        { id: 101, topic: 'Sai lệch số lượng đơn hàng #12', type: 'Giao hàng', date: '2026-05-19', status: 'processing' },
+        { id: 102, topic: 'Lỗi thanh toán hóa đơn sỉ', type: 'Thanh toán', date: '2026-05-15', status: 'resolved' }
+      ];
     }
-  }, []);
-
-  // Supplier Support Desk
-  const [supportTickets, setSupportTickets] = useState([
-    { id: 101, topic: 'Sai lệch số lượng đơn hàng #12', type: 'Giao hàng', date: '2026-05-19', status: 'processing' },
-    { id: 102, topic: 'Lỗi thanh toán hóa đơn sỉ', type: 'Thanh toán', date: '2026-05-15', status: 'resolved' }
-  ]);
+  });
   const [supportForm, setSupportForm] = useState({ topic: '', type: 'Giao nhận', message: '' });
   const [submittingTicket, setSubmittingTicket] = useState(false);
 
-  // 2. Shelf Freshness & Expiration status tracking
-  const [shelfFreshness, setShelfFreshness] = useState([
-    { id: 1, name: 'Cam Sành Kingfood', expiryDate: '2026-05-21', daysLeft: 2, status: 'critical', price: 35000 },
-    { id: 2, name: 'Sữa tươi TH True Milk Organic', expiryDate: '2026-05-24', daysLeft: 5, status: 'warning', price: 42000 },
-    { id: 3, name: 'Bánh Quy Oreo Socola', expiryDate: '2026-09-18', daysLeft: 120, status: 'safe', price: 28000 }
-  ]);
+  // BRAND NEW RETAIL REPLENISHMENT EXPIRED EXPANSIONS
+  const [forecastList, setForecastList] = useState([]);
+  const [shelfFreshness, setShelfFreshness] = useState([]);
+
+  // Sync incidents and tickets to localStorage
+  useEffect(() => {
+    try {
+      localStorage.setItem('storeIncidents', JSON.stringify(storeIncidents));
+    } catch (e) {}
+  }, [storeIncidents]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('supportTickets', JSON.stringify(supportTickets));
+    } catch (e) {}
+  }, [supportTickets]);
+
+  // Sync dynamic products to forecast, shelfFreshness, promotions
+  useEffect(() => {
+    if (productCatalog.length > 0) {
+      const findProduct = (keywords) => {
+        return productCatalog.find(p => 
+          keywords.some(kw => p.name.toLowerCase().includes(kw.toLowerCase()))
+        ) || productCatalog[0];
+      };
+
+      const camSanh = findProduct(['Cam sành', 'Cam']);
+      const milk = findProduct(['TH True', 'Sữa tươi']);
+      const coca = findProduct(['Coca', 'Nước ngọt']);
+      const hen = findProduct(['Heineken', 'Bia']);
+
+      setForecastList([
+        { name: camSanh.name, sku: camSanh.sku, salesRate: '45kg/tuần', stock: 5, timeLimit: '1 ngày', recommendQty: 40, unit: camSanh.unit },
+        { name: milk.name, sku: milk.sku, salesRate: '60 hộp/tuần', stock: 8, timeLimit: '1 ngày', recommendQty: 50, unit: milk.unit },
+        { name: coca.name, sku: coca.sku, salesRate: '120 lon/tuần', stock: 95, timeLimit: '5 ngày', recommendQty: 30, unit: coca.unit },
+        { name: hen.name, sku: hen.sku, salesRate: '80 lon/tuần', stock: 68, timeLimit: '6 ngày', recommendQty: 20, unit: hen.unit }
+      ]);
+
+      setShelfFreshness([
+        { id: camSanh.id, name: camSanh.name, expiryDate: '2026-05-21', daysLeft: 2, status: 'critical', price: camSanh.price },
+        { id: milk.id, name: milk.name, expiryDate: '2026-05-24', daysLeft: 5, status: 'warning', price: milk.price },
+        { id: hen.id, name: hen.name, expiryDate: '2026-09-18', daysLeft: 120, status: 'safe', price: hen.price }
+      ]);
+
+      setPromotionsList([
+        {
+          id: 'promo-1',
+          title: 'Lễ hội trái cây mùa hè',
+          desc: `Giảm giá cực đậm 15% mặt hàng ${camSanh.name} tươi ngon loại 1.`,
+          badge: 'GIẢM 15%',
+          targetSku: camSanh.sku,
+          bannerBg: '#fff3e0',
+          tagColor: '#e65100',
+        },
+        {
+          id: 'promo-2',
+          title: 'Tuần lễ Sữa tươi Organic',
+          desc: `Bổ sung dinh dưỡng cho gia đình, mua 10 lốc ${milk.name} tặng ngay 1 lốc sữa chua.`,
+          badge: 'MUA 10 TẶNG 1',
+          targetSku: milk.sku,
+          bannerBg: '#e3f2fd',
+          tagColor: '#0d47a1',
+        },
+        {
+          id: 'promo-3',
+          title: 'Bão deal nước ngọt giải khát',
+          desc: `Ưu đãi mua sỉ ${coca.name} lon tiện lợi phục vụ mùa nóng bức.`,
+          badge: 'CÀNG MUA CÀNG RẺ',
+          targetSku: coca.sku,
+          bannerBg: '#ffebee',
+          tagColor: '#c62828',
+        }
+      ]);
+    }
+  }, [productCatalog]);
 
   // Initial loads
   useEffect(() => {
     fetchCatalog();
   }, []);
-
-  // Fetch incidents when tab becomes active
-  useEffect(() => {
-    if (activeTab === 'store-incidents') {
-      fetchStoreIncidents();
-    }
-  }, [activeTab]);
 
   const fetchCatalog = async () => {
     try {
@@ -429,32 +445,6 @@ export default function StoreOrderWebScreen() {
     }
   };
 
-
-  // History filter functions
-  const applyHistoryPreset = (preset) => {
-    if (historyPreset === preset) {
-      setHistoryPreset('');
-      setHistoryStartDate('');
-      setHistoryEndDate('');
-      return;
-    }
-    setHistoryPreset(preset);
-    const d = new Date();
-    const end = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-    let start = end;
-    if (preset === 'week') {
-      const past = new Date(); past.setDate(past.getDate() - 7);
-      start = `${past.getFullYear()}-${String(past.getMonth() + 1).padStart(2, '0')}-${String(past.getDate()).padStart(2, '0')}`;
-    } else if (preset === 'month') {
-      start = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-01`;
-    }
-    setHistoryStartDate(start);
-    setHistoryEndDate(end);
-  };
-
-  const handleHistoryFilter = () => {
-    setHistoryPreset('');
-  };
   // Quick SKU input
   const handleQuickSkuAdd = () => {
     if (!quickSkuText.trim()) return;
@@ -656,113 +646,6 @@ export default function StoreOrderWebScreen() {
     }, 500);
   };
 
-  // Print a history order invoice
-  const handlePrintHistoryOrder = useCallback(() => {
-    const order = selectedOrder;
-    if (!order) return;
-    const printWindow = window.open('', '_blank', 'width=950,height=850');
-    if (!printWindow) {
-      Alert.alert('Trình chặn Pop-up', 'Vui lòng bật quyền hiển thị Pop-up cho trang web này để in hóa đơn.');
-      return;
-    }
-
-    const itemsHtml = (order.orderDetails || []).map((d, idx) => {
-      const p = parseFloat(d.product?.price || d.price) || 0;
-      return `
-        <tr style="border-bottom: 1px solid #cbd5e1; height: 38px;">
-          <td style="text-align: center; padding: 6px;">${idx + 1}</td>
-          <td style="font-weight: 700; padding: 6px;">${d.product?.name || 'Sản phẩm'}</td>
-          <td style="text-align: center; padding: 6px;">${d.product?.unit || 'cái'}</td>
-          <td style="text-align: right; padding: 6px;">${p.toLocaleString()}đ</td>
-          <td style="text-align: center; font-weight: bold; padding: 6px;">${d.quantity}</td>
-          <td style="text-align: right; font-weight: bold; padding: 6px;">${(p * d.quantity).toLocaleString()}đ</td>
-        </tr>
-      `;
-    }).join('');
-
-    const subtotal = getOrderTotal(order);
-    const vat = subtotal * 0.08;
-    const total = subtotal * 1.08;
-
-    printWindow.document.write(`
-      <html>
-        <head>
-          <title>Hóa đơn #${order.id}</title>
-          <style>
-            body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; color: #0f172a; padding: 40px; margin: 0; background: #fff; }
-            .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
-            .brand-name { font-size: 15px; font-weight: 900; letter-spacing: 0.5px; }
-            .brand-addr, .brand-contact { font-size: 11px; color: #475569; margin-top: 3px; }
-            .meta-label { font-size: 11px; color: #475569; margin-top: 3px; }
-            .title { font-size: 20px; font-weight: 900; text-align: center; margin-top: 15px; }
-            .subtitle { font-size: 10px; color: #64748b; text-align: center; font-weight: bold; margin-top: 4px; margin-bottom: 25px; }
-            table { width: 100%; border-collapse: collapse; border: 1.5px solid #0f172a; margin-bottom: 25px; }
-            th { background-color: #f1f5f9; border-bottom: 1.5px solid #0f172a; padding: 8px; font-size: 10px; font-weight: 900; text-align: left; text-transform: uppercase; }
-            td { padding: 8px; font-size: 11px; }
-            .summary-block { display: flex; justify-content: flex-end; margin-top: 20px; }
-            .calcs { width: 350px; }
-            .calc-row { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 6px; }
-            .calc-row-total { display: flex; justify-content: space-between; font-size: 15px; font-weight: 900; border-top: 1.5px solid #0f172a; padding-top: 6px; margin-top: 6px; }
-          </style>
-        </head>
-        <body>
-          <div class="header">
-            <div>
-              <div class="brand-name">CÔNG TY CỔ PHẦN KINGFOOD MARKET</div>
-              <div class="brand-addr">Địa chỉ: 12 Hùng Vương, Phường 4, Quận 5, TP. Hồ Chí Minh</div>
-              <div class="brand-contact">Tổng đài sỉ: 1900 6363 · Email: wholesale@kingfoodmarket.com</div>
-            </div>
-            <div style="text-align: right;">
-              <div class="meta-label">Mã đơn hàng: <b>#${order.id}</b></div>
-              <div class="meta-label">Ngày đặt: <b>${formatOrderDate(order.createdAt)}</b></div>
-              <div class="meta-label">Trạng thái: <b>${getOrderStatusMeta(order.status).label}</b></div>
-            </div>
-          </div>
-          <div style="border-top: 1.5px solid #0f172a; height: 3px; margin-bottom: 15px;"></div>
-          <div class="title">HÓA ĐƠN BÁN SỈ</div>
-          <div class="subtitle">(WHOLESALE INVOICE)</div>
-          <table>
-            <thead>
-              <tr>
-                <th style="width: 40px; text-align: center;">STT</th>
-                <th>Tên sản phẩm</th>
-                <th style="width: 60px; text-align: center;">Đơn vị</th>
-                <th style="width: 90px; text-align: right;">Đơn giá</th>
-                <th style="width: 60px; text-align: center;">Số lượng</th>
-                <th style="width: 110px; text-align: right;">Thành tiền</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${itemsHtml}
-            </tbody>
-          </table>
-          <div class="summary-block">
-            <div class="calcs">
-              <div class="calc-row">
-                <span>Cộng tiền hàng (Subtotal):</span>
-                <b>${subtotal.toLocaleString()}đ</b>
-              </div>
-              <div class="calc-row">
-                <span>Thuế suất giá trị gia tăng (VAT 8%):</span>
-                <b>${vat.toLocaleString()}đ</b>
-              </div>
-              <div class="calc-row-total">
-                <span>TỔNG CỘNG TIỀN THANH TOÁN (TOTAL):</span>
-                <span style="color: #F26522;">${total.toLocaleString()}đ</span>
-              </div>
-            </div>
-          </div>
-          <div style="border-top: 1px dashed #cbd5e1; margin-top: 30px; padding-top: 10px; font-size: 10px; color: #64748b; text-align: center;">
-            Hóa đơn được tạo từ hệ thống WMS Kingfood Market
-          </div>
-        </body>
-      </html>
-    `);
-    printWindow.document.close();
-    printWindow.focus();
-    setTimeout(() => printWindow.print(), 500);
-  }, [selectedOrder]);
-
   // Submit order checkout
   const handleCheckout = async () => {
     if (cart.length === 0) return;
@@ -785,17 +668,6 @@ export default function StoreOrderWebScreen() {
     }
   };
 
-  // Helper: compute order total from details
-  const getOrderTotal = useCallback((order) => {
-    const t = parseFloat(order.totalPrice);
-    if (t && t > 0) return t;
-    if (!order.orderDetails) return 0;
-    return order.orderDetails.reduce((sum, d) => {
-      const p = parseFloat(d.product?.price || d.price) || 0;
-      return sum + p * (d.quantity || 0);
-    }, 0);
-  }, []);
-
   // Reorder history order
   const handleReorder = (order) => {
     clearCart();
@@ -805,7 +677,7 @@ export default function StoreOrderWebScreen() {
           id: detail.product.id,
           name: detail.product.name,
           sku: detail.product.sku,
-          price: parseFloat(detail.product.price) || 0,
+          price: parseFloat(detail.price) || 0,
           unit: detail.product.unit || 'cái',
         };
         for (let i = 0; i < detail.quantity; i++) {
@@ -920,10 +792,12 @@ export default function StoreOrderWebScreen() {
     setTimeout(() => {
       setStoreIncidents(prev => [
         {
-          id: Date.now(),
-          reason: `${incidentForm.product.trim()} || ${incidentForm.type} || ${incidentForm.severity} || ${incidentForm.details.trim()}`,
+          id: prev.length + 1,
+          product: incidentForm.product.trim(),
+          type: incidentForm.type,
+          severity: incidentForm.severity,
           status: 'pending',
-          createdAt: new Date().toISOString()
+          date: new Date().toISOString().split('T')[0]
         },
         ...prev
       ]);
@@ -954,6 +828,24 @@ export default function StoreOrderWebScreen() {
       setSubmittingTicket(false);
       Alert.alert('Khởi tạo Ticket hỗ trợ', 'Yêu cầu hỗ trợ đã được chuyển tiếp đến Tổng đài điều phối Kingfood.');
     }, 800);
+  };
+
+  // RETAIL EXPANSION INTERACTIVE ACTIONS
+  
+  // 1. One-click Auto replenishment cart filler
+  const handleApplyForecastReplenish = () => {
+    forecastList.forEach(item => {
+      // Find corresponding product catalog item
+      const match = productCatalog.find(p => p.sku === item.sku);
+      if (match) {
+        // Add recommended quantity
+        for (let i = 0; i < item.recommendQty; i++) {
+          addToCart(match);
+        }
+      }
+    });
+    Alert.alert('Tiếp tế tự động', 'Đã tự động tính toán nhu cầu và thêm toàn bộ số lượng đề xuất bổ sung hàng hoá vào Giỏ hàng chi nhánh thành công!');
+    handleTabChange('order');
   };
 
   // 2. Shelf product Markdown clearance promo
@@ -992,41 +884,34 @@ export default function StoreOrderWebScreen() {
     });
   }, [productCatalog, searchDebounced, selectedCategory]);
 
-  const filteredOrders = useMemo(() => {
-    let list = orders;
-    if (selectedStatus !== 'all') {
-      list = list.filter(o => o.status === selectedStatus);
-    }
-    if (historyStartDate) {
-      list = list.filter(o => (o.createdAt || '').split(' ')[0] >= historyStartDate);
-    }
-    if (historyEndDate) {
-      list = list.filter(o => (o.createdAt || '').split(' ')[0] <= historyEndDate);
-    }
-    return list;
-  }, [orders, selectedStatus, historyStartDate, historyEndDate]);
-
   return (
-    <View style={styles.webContainer} className="web-container">
+    <View style={styles.webContainer}>
       
       {/* HTML specific print directives */}
       <style dangerouslySetInnerHTML={{__html: `
         @media print {
-          body, .webContainer { background-color: #fff !important; }
-          #print-area, #print-area * { visibility: visible; }
-          #print-area { position: absolute; left: 0; top: 0; width: 100vw; background-color: #fff !important; padding: 30px !important; }
-          .no-print { display: none !important; }
+          body, .webContainer {
+            background-color: #fff !important;
+          }
+          #print-area, #print-area * {
+            visibility: visible;
+          }
+          #print-area {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100vw;
+            background-color: #fff !important;
+            padding: 30px !important;
+          }
+          .no-print {
+            display: none !important;
+          }
         }
-        * { box-sizing: border-box; }
-        html, body { margin: 0; padding: 0; overflow: hidden; height: 100%; }
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
       `}} />
 
       {/* 1. Kingfood Orange Sidebar */}
-      <View style={styles.sidebar} className="web-sidebar no-print">
+      <View style={[styles.sidebar, { className: 'no-print' }]}>
         <View style={styles.sidebarHeader}>
           <View style={styles.logoCircle}>
             <Ionicons name="storefront" size={24} color={ORANGE_THEME.primary} />
@@ -1062,7 +947,16 @@ export default function StoreOrderWebScreen() {
             <Text style={[styles.menuLabel, activeTab === 'stats' && styles.menuLabelActive]}>Báo cáo chi tiêu</Text>
           </TouchableOpacity>
 
-          {/* ADVANCED BRAND NEW OPERATIONS TAB 1: SHELF EXPIRATION MARKDOWN BARCODES */}
+          {/* ADVANCED BRAND NEW OPERATIONS TAB 1: CURATED AUTO-REPLENISHMENT FORECAST */}
+          <TouchableOpacity 
+            style={[styles.menuItem, activeTab === 'replenishment-forecast' && styles.menuItemActive]} 
+            onPress={() => handleTabChange('replenishment-forecast')}
+          >
+            <Ionicons name="bulb" size={20} color={activeTab === 'replenishment-forecast' ? '#fff' : ORANGE_THEME.textMuted} />
+            <Text style={[styles.menuLabel, activeTab === 'replenishment-forecast' && styles.menuLabelActive]}>Dự phóng đặt hàng</Text>
+          </TouchableOpacity>
+
+          {/* ADVANCED BRAND NEW OPERATIONS TAB 2: SHELF EXPIRATION MARKDOWN BARCODES */}
           <TouchableOpacity 
             style={[styles.menuItem, activeTab === 'shelf-life' && styles.menuItemActive]} 
             onPress={() => handleTabChange('shelf-life')}
@@ -1131,8 +1025,8 @@ export default function StoreOrderWebScreen() {
       </View>
 
       {/* 2. Main content area */}
-      <View style={styles.mainContent} className="web-main">
-        <View style={styles.topbar} className="web-topbar no-print">
+      <View style={styles.mainContent}>
+        <View style={[styles.topbar, { className: 'no-print' }]}>
           <View>
             <Text style={styles.topbarHeading}>Chào ngày mới, {userName}! 🛒</Text>
             <Text style={styles.topbarSub}>Đặt mua hàng tươi ngon, đồng bộ năng suất trực tiếp đến tổng kho.</Text>
@@ -1146,14 +1040,14 @@ export default function StoreOrderWebScreen() {
         </View>
 
         {/* Dynamic tabs render */}
-        <View style={styles.workspace} className="web-workspace">
+        <View style={styles.workspace}>
           
           {/* TAB 1: ORDER WORKSPACE */}
           {activeTab === 'order' && (
-            <View style={styles.splitLayout} className="web-split">
+            <View style={styles.splitLayout}>
               
               {/* Product Catalog list left side */}
-              <View style={styles.catalogSide} className="web-catalog">
+              <View style={styles.catalogSide}>
                 
                 {/* Search banner */}
                 <View style={styles.searchBannerCard}>
@@ -1165,8 +1059,8 @@ export default function StoreOrderWebScreen() {
                   <View style={styles.filterControllerRow}>
                     <SearchBarWeb onSearch={handleSearch} />
 
-                    {/* Chips wrap */}
-                    <View style={styles.categoryWrap}>
+                    {/* Chips scroll */}
+                    <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.categoryScroll}>
                       {categories.map(cat => (
                         <TouchableOpacity 
                           key={cat} 
@@ -1178,7 +1072,7 @@ export default function StoreOrderWebScreen() {
                           </Text>
                         </TouchableOpacity>
                       ))}
-                    </View>
+                    </ScrollView>
                   </View>
                 </View>
 
@@ -1189,7 +1083,7 @@ export default function StoreOrderWebScreen() {
                     <Text style={{ marginTop: 12, color: ORANGE_THEME.textMuted }}>Đang tải danh mục thực phẩm...</Text>
                   </View>
                 ) : (
-                  <ScrollView style={styles.catalogItemsScroll} contentContainerStyle={styles.catalogGrid} className="web-product-grid">
+                  <ScrollView style={styles.catalogItemsScroll} contentContainerStyle={styles.catalogGrid}>
                     {filteredProducts.length === 0 ? (
                       <View style={styles.emptySearch}>
                         <Ionicons name="basket-outline" size={64} color="#e2e8f0" />
@@ -1200,7 +1094,7 @@ export default function StoreOrderWebScreen() {
                         const inCart = cart.find(c => c.product.id === product.id);
                         const isFav = favoritesList.find(f => f.id === product.id);
                         return (
-                          <View key={product.id} style={styles.productCard} className="web-product-card">
+                          <View key={product.id} style={styles.productCard}>
                             {/* Favorite Heart Badge */}
                             <TouchableOpacity style={styles.favoriteHeartBadge} onPress={() => handleToggleFavorite(product)}>
                               <Ionicons name={isFav ? "heart" : "heart-outline"} size={18} color={isFav ? "#e53935" : ORANGE_THEME.textMuted} />
@@ -1229,7 +1123,22 @@ export default function StoreOrderWebScreen() {
                                     <TouchableOpacity style={styles.qtyBtnSmall} onPress={() => removeFromCart(product.id)}>
                                       <Text style={styles.qtyBtnTextSmall}>−</Text>
                                     </TouchableOpacity>
-                                    <Text style={styles.qtyValSmall}>{inCart.qty}</Text>
+                                    <TextInput
+                                      style={styles.qtyValSmallInput}
+                                      value={String(inCart.qty)}
+                                      onChangeText={(val) => {
+                                        const cleanVal = val.replace(/[^0-9]/g, '');
+                                        const parsed = cleanVal === '' ? 0 : parseInt(cleanVal, 10);
+                                        updateCartQty(product.id, parsed);
+                                      }}
+                                      onBlur={() => {
+                                        if (inCart.qty === 0) {
+                                          removeFromCart(product.id);
+                                        }
+                                      }}
+                                      keyboardType="number-pad"
+                                      selectTextOnFocus
+                                    />
                                     <TouchableOpacity style={styles.qtyBtnSmall} onPress={() => addToCart(product)}>
                                       <Text style={styles.qtyBtnTextSmall}>+</Text>
                                     </TouchableOpacity>
@@ -1252,7 +1161,7 @@ export default function StoreOrderWebScreen() {
               </View>
 
               {/* Shopping Cart panel right side */}
-              <View style={styles.cartSide} className="web-cart">
+              <View style={styles.cartSide}>
                 <View style={styles.cartSideHeader}>
                   <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <View style={styles.cartIconCircle}>
@@ -1261,11 +1170,6 @@ export default function StoreOrderWebScreen() {
                     <Text style={styles.cartSideTitle}>Giỏ hàng chi nhánh</Text>
                   </View>
                   <Text style={styles.cartBadgeWeb}>{totalItems} mặt hàng</Text>
-                  {cart.length > 0 && (
-                    <TouchableOpacity onPress={clearCart} style={{ marginLeft: 8 }}>
-                      <Ionicons name="trash-outline" size={16} color="#ef4444" />
-                    </TouchableOpacity>
-                  )}
                 </View>
 
                 {cart.length === 0 ? (
@@ -1287,7 +1191,22 @@ export default function StoreOrderWebScreen() {
                             <TouchableOpacity style={styles.qtyArrow} onPress={() => removeFromCart(item.product.id)}>
                               <Text style={styles.qtyArrowText}>−</Text>
                             </TouchableOpacity>
-                            <Text style={styles.qtyArrowVal}>{item.qty}</Text>
+                            <TextInput
+                              style={styles.qtyArrowValInput}
+                              value={String(item.qty)}
+                              onChangeText={(val) => {
+                                const cleanVal = val.replace(/[^0-9]/g, '');
+                                const parsed = cleanVal === '' ? 0 : parseInt(cleanVal, 10);
+                                updateCartQty(item.product.id, parsed);
+                              }}
+                              onBlur={() => {
+                                if (item.qty === 0) {
+                                  removeFromCart(item.product.id);
+                                }
+                              }}
+                              keyboardType="number-pad"
+                              selectTextOnFocus
+                            />
                             <TouchableOpacity style={styles.qtyArrow} onPress={() => addToCart(item.product)}>
                               <Text style={styles.qtyArrowText}>+</Text>
                             </TouchableOpacity>
@@ -1359,88 +1278,18 @@ export default function StoreOrderWebScreen() {
                   </TouchableOpacity>
                 </View>
 
-                {/* History filter: date + status */}
-                <View style={{ padding: 16, borderBottomWidth: 1.5, borderBottomColor: '#f1f5f9' }}>
-                  <View style={styles.filterFormRow}>
-                    <View style={styles.filterFormGroup}>
-                      <Text style={styles.filterInputLabel}>Từ ngày</Text>
-                      <TextInput
-                        style={styles.filterInputWeb}
-                        placeholder="YYYY-MM-DD"
-                        value={historyStartDate}
-                        onChangeText={setHistoryStartDate}
-                      />
-                    </View>
-                    <View style={styles.filterFormGroup}>
-                      <Text style={styles.filterInputLabel}>Đến ngày</Text>
-                      <TextInput
-                        style={styles.filterInputWeb}
-                        placeholder="YYYY-MM-DD"
-                        value={historyEndDate}
-                        onChangeText={setHistoryEndDate}
-                      />
-                    </View>
-                    <TouchableOpacity style={styles.submitFilterBtn} onPress={handleHistoryFilter}>
-                      <Ionicons name="search" size={16} color="#fff" />
-                      <Text style={{ color: '#fff', fontWeight: '700', marginLeft: 4 }}>Lọc</Text>
-                    </TouchableOpacity>
-                    <View style={styles.presetGroupRow}>
-                      <TouchableOpacity
-                        style={[styles.presetBtnWeb, historyPreset === 'today' && styles.presetBtnActiveWeb]}
-                        onPress={() => applyHistoryPreset('today')}
-                      >
-                        <Text style={[styles.presetBtnText, historyPreset === 'today' && styles.presetBtnTextActive]}>Hôm nay</Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        style={[styles.presetBtnWeb, historyPreset === 'week' && styles.presetBtnActiveWeb]}
-                        onPress={() => applyHistoryPreset('week')}
-                      >
-                        <Text style={[styles.presetBtnText, historyPreset === 'week' && styles.presetBtnTextActive]}>Tuần này</Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        style={[styles.presetBtnWeb, historyPreset === 'month' && styles.presetBtnActiveWeb]}
-                        onPress={() => applyHistoryPreset('month')}
-                      >
-                        <Text style={[styles.presetBtnText, historyPreset === 'month' && styles.presetBtnTextActive]}>Tháng này</Text>
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-
-                  <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 16, marginBottom: 4 }}>
-                    <View style={{ flex: 1, height: 1, backgroundColor: '#e2e8f0' }} />
-                    <Text style={{ fontSize: 11, fontWeight: '700', color: '#94a3b8', marginHorizontal: 12 }}>LỌC TRẠNG THÁI</Text>
-                    <View style={{ flex: 1, height: 1, backgroundColor: '#e2e8f0' }} />
-                  </View>
-                  <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginTop: 4 }}>
-                    {[
-                      { key: 'all', label: 'Tất cả' },
-                      ...Object.entries(ORDER_STATUS).map(([key, meta]) => ({ key, label: meta.label }))
-                    ].map(s => (
-                      <TouchableOpacity
-                        key={s.key}
-                        style={[styles.statusChip, selectedStatus === s.key && styles.statusChipActive]}
-                        onPress={() => setSelectedStatus(selectedStatus === s.key ? 'all' : s.key)}
-                      >
-                        <Text style={[styles.statusChipText, selectedStatus === s.key && styles.statusChipTextActive]}>
-                          {s.label}
-                        </Text>
-                      </TouchableOpacity>
-                    ))}
-                  </View>
-                </View>
-
                 {loadingOrders ? (
                   <View style={styles.loadingWrapper}>
                     <ActivityIndicator size="large" color={ORANGE_THEME.primary} />
                   </View>
-                ) : filteredOrders.length === 0 ? (
+                ) : orders.length === 0 ? (
                   <View style={styles.loadingWrapper}>
                     <Ionicons name="document-text-outline" size={48} color="#cbd5e1" />
-                    <Text style={{ color: ORANGE_THEME.textMuted, marginTop: 12 }}>{historyStartDate || historyEndDate || selectedStatus !== 'all' ? 'Không tìm thấy đơn hàng phù hợp với bộ lọc.' : 'Chi nhánh chưa tạo đơn đặt hàng nào.'}</Text>
+                    <Text style={{ color: ORANGE_THEME.textMuted, marginTop: 12 }}>Chi nhánh chưa tạo đơn đặt hàng nào.</Text>
                   </View>
                 ) : (
                   <ScrollView style={styles.historyListScroll}>
-                    {filteredOrders.map(order => {
+                    {orders.map(order => {
                       const meta = getOrderStatusMeta(order.status);
                       const isSelected = selectedOrder?.id === order.id;
                       const dateText = formatOrderDate(order.createdAt);
@@ -1465,7 +1314,7 @@ export default function StoreOrderWebScreen() {
 
                           <View style={styles.historyCardFooter}>
                             <Text style={styles.historyCardTotalLabel}>Thanh toán:</Text>
-                            <Text style={styles.historyCardTotalVal}>{getOrderTotal(order).toLocaleString()}đ</Text>
+                            <Text style={styles.historyCardTotalVal}>{(parseFloat(order.totalPrice) || 0).toLocaleString()}đ</Text>
                           </View>
                         </TouchableOpacity>
                       );
@@ -1487,20 +1336,20 @@ export default function StoreOrderWebScreen() {
                       </View>
 
                       {/* Web-only action items */}
-                      <View style={{ flexDirection: 'row', gap: 8 }} className="invoice-actions">
+                      <View style={{ flexDirection: 'row', gap: 8 }}>
                         
-                        <TouchableOpacity style={[styles.cancelBtnWeb, { backgroundColor: ORANGE_THEME.primary }]} className="cancel-btn" onPress={() => handleReorder(selectedOrder)}>
+                        <TouchableOpacity style={[styles.cancelBtnWeb, { backgroundColor: ORANGE_THEME.primary }]} onPress={() => handleReorder(selectedOrder)}>
                           <Ionicons name="copy-outline" size={16} color="#fff" style={{ marginRight: 4 }} />
                           <Text style={styles.cancelBtnTextWeb}>Đặt lại đơn này</Text>
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={[styles.cancelBtnWeb, { backgroundColor: '#475569' }]} className="cancel-btn" onPress={handlePrintHistoryOrder}>
+                        <TouchableOpacity style={[styles.cancelBtnWeb, { backgroundColor: '#475569' }]} onPress={handlePrintInvoice}>
                           <Ionicons name="print-outline" size={16} color="#fff" style={{ marginRight: 4 }} />
                           <Text style={styles.cancelBtnTextWeb}>In Hóa Đơn</Text>
                         </TouchableOpacity>
 
                         {canCustomerCancelOrder(selectedOrder.status) && (
-                          <TouchableOpacity style={[styles.cancelBtnWeb, { backgroundColor: '#e53935' }]} className="cancel-btn" onPress={() => handleCancelOrder(selectedOrder)}>
+                          <TouchableOpacity style={[styles.cancelBtnWeb, { backgroundColor: '#e53935' }]} onPress={() => handleCancelOrder(selectedOrder)}>
                             <Ionicons name="close-circle-outline" size={16} color="#fff" style={{ marginRight: 4 }} />
                             <Text style={styles.cancelBtnTextWeb}>Yêu cầu huỷ đơn</Text>
                           </TouchableOpacity>
@@ -1562,7 +1411,7 @@ export default function StoreOrderWebScreen() {
                       <View style={styles.invoiceStatBox}>
                         <Text style={styles.statBoxLabel}>Tổng giá trị tiền hàng</Text>
                         <Text style={[styles.statBoxValue, { color: ORANGE_THEME.primary, fontWeight: '800' }]}>
-                          {getOrderTotal(selectedOrder).toLocaleString()}đ
+                          {(parseFloat(selectedOrder.totalPrice) || 0).toLocaleString()}đ
                         </Text>
                       </View>
                     </View>
@@ -1625,14 +1474,14 @@ export default function StoreOrderWebScreen() {
             <ScrollView style={{ flex: 1, backgroundColor: '#f8fafc' }} contentContainerStyle={{ padding: 32 }}>
               
               {/* Date controller panel */}
-              <View style={styles.statsControllerBox} className="stats-panel">
+              <View style={styles.statsControllerBox}>
                 <View style={styles.statsPanelTitleRow}>
                   <Ionicons name="funnel-outline" size={18} color={ORANGE_THEME.primary} />
                   <Text style={styles.statsControllerHeading}>Lọc báo cáo chi tiêu đơn hàng</Text>
                 </View>
 
-                <View style={styles.filterFormRow} className="filter-row">
-                  <View style={styles.filterFormGroup} className="filter-date-group">
+                <View style={styles.filterFormRow}>
+                  <View style={styles.filterFormGroup}>
                     <Text style={styles.filterInputLabel}>Từ ngày đặt</Text>
                     <TextInput 
                       style={styles.filterInputWeb}
@@ -1689,7 +1538,7 @@ export default function StoreOrderWebScreen() {
                 </View>
               ) : (
                 <>
-                  <View style={styles.statsKpiGrid} className="stats-cards">
+                  <View style={styles.statsKpiGrid}>
                     <View style={styles.statsKpiCard}>
                       <Ionicons name="cart-outline" size={24} color={ORANGE_THEME.primary} style={styles.kpiCardIcon} />
                       <Text style={styles.kpiCardLabel}>Tổng Số Đơn Đặt</Text>
@@ -1727,7 +1576,7 @@ export default function StoreOrderWebScreen() {
                       ) : (
                         <View style={styles.topProductsListWeb}>
                           {topProducts.slice(0, 5).map((item, index) => (
-                            <View key={item.name ?? index} style={styles.topProductItemRowWeb}>
+                            <View key={index} style={styles.topProductItemRowWeb}>
                               <View style={[styles.topRankBadge, index === 0 ? styles.rankGold : index === 1 ? styles.rankSilver : index === 2 ? styles.rankBronze : {}]}>
                                 <Text style={styles.topRankText}>{index + 1}</Text>
                               </View>
@@ -1781,7 +1630,57 @@ export default function StoreOrderWebScreen() {
             </ScrollView>
           )}
 
-          {/* ADVANCED BRAND NEW OPERATIONS TAB 1: SHELF EXPIRATION MARKDOWN BARCODES VIEW */}
+          {/* ADVANCED BRAND NEW OPERATIONS TAB 1: CURATED AUTO-REPLENISHMENT FORECAST VIEW */}
+          {activeTab === 'replenishment-forecast' && (
+            <ScrollView style={{ flex: 1, backgroundColor: '#f8fafc' }} contentContainerStyle={{ padding: 28 }}>
+              <View style={[styles.profileHeadingRow, { justifyContent: 'space-between' }]}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                  <Ionicons name="bulb" size={24} color={ORANGE_THEME.primary} />
+                  <Text style={styles.profileSectionTitle}>Dự phóng Tiêu Thụ & Tự động Đề Xuất Đặt Hàng Chi Nhánh</Text>
+                </View>
+                
+                <TouchableOpacity style={styles.submitFilterBtn} onPress={handleApplyForecastReplenish}>
+                  <Ionicons name="cart-outline" size={16} color="#fff" style={{ marginRight: 4 }} />
+                  <Text style={{ color: '#fff', fontSize: 13, fontWeight: '850' }}>Tự động tiếp tế vào giỏ hàng</Text>
+                </TouchableOpacity>
+              </View>
+
+              <View style={styles.tableWebContainer}>
+                <View style={styles.tableWebHeader}>
+                  <Text style={[styles.thCell, { flex: 5 }]}>Sản phẩm thực phẩm</Text>
+                  <Text style={[styles.thCell, { flex: 2, textAlign: 'center' }]}>Tần suất tiêu thụ</Text>
+                  <Text style={[styles.thCell, { flex: 2, textAlign: 'center' }]}>Tồn kho tại kệ chi nhánh</Text>
+                  <Text style={[styles.thCell, { flex: 2, textAlign: 'center' }]}>Dự báo hết hàng</Text>
+                  <Text style={[styles.thCell, { flex: 2, textAlign: 'center' }]}>Đề xuất đặt sỉ bổ sung</Text>
+                </View>
+
+                {forecastList.map((item, idx) => {
+                  const isUrgent = item.stock < 15;
+                  return (
+                    <View key={idx} style={styles.tableWebRow}>
+                      <Text style={[styles.tdCell, { flex: 5, fontWeight: '900' }]}>{item.name}</Text>
+                      <Text style={[styles.tdCell, { flex: 2, textAlign: 'center', fontWeight: '700' }]}>{item.salesRate}</Text>
+                      <Text style={[styles.tdCell, { flex: 2, textAlign: 'center', fontWeight: '800', color: isUrgent ? '#d32f2f' : '#334155' }]}>
+                        {item.stock} {item.unit}
+                      </Text>
+                      <View style={[styles.tdCell, { flex: 2, alignItems: 'center' }]}>
+                        <View style={[styles.alertPill, { backgroundColor: isUrgent ? '#ffebee' : '#f1f5f9' }]}>
+                          <Text style={{ fontSize: 10, fontWeight: '900', color: isUrgent ? '#d32f2f' : '#475569' }}>
+                            {item.timeLimit}
+                          </Text>
+                        </View>
+                      </View>
+                      <Text style={[styles.tdCell, { flex: 2, textAlign: 'center', fontWeight: '900', color: ORANGE_THEME.primary }]}>
+                        +{item.recommendQty} {item.unit}
+                      </Text>
+                    </View>
+                  );
+                })}
+              </View>
+            </ScrollView>
+          )}
+
+          {/* ADVANCED BRAND NEW OPERATIONS TAB 2: SHELF EXPIRATION MARKDOWN BARCODES VIEW */}
           {activeTab === 'shelf-life' && (
             <ScrollView style={{ flex: 1, backgroundColor: '#f8fafc' }} contentContainerStyle={{ padding: 28 }}>
               <View style={styles.profileHeadingRow}>
@@ -1804,7 +1703,7 @@ export default function StoreOrderWebScreen() {
                   const isWarning = s.status === 'warning';
 
                   return (
-                    <View key={s.id ?? s.name ?? idx} style={styles.tableWebRow}>
+                    <View key={idx} style={styles.tableWebRow}>
                       <Text style={[styles.tdCell, { flex: 3, fontWeight: '900' }]}>{s.name}</Text>
                       <Text style={[styles.tdCell, { flex: 2, fontFamily: 'monospace' }]}>{s.expiryDate}</Text>
                       <Text style={[styles.tdCell, { flex: 2, textAlign: 'center', fontWeight: '800' }]}>
@@ -1840,67 +1739,6 @@ export default function StoreOrderWebScreen() {
           {/* TAB 4: CURATED FAVORITES CATALOG */}
           {activeTab === 'favorites' && (
             <ScrollView style={{ flex: 1, backgroundColor: '#f8fafc' }} contentContainerStyle={{ padding: 28 }}>
-              {/* Date filter */}
-              <View style={styles.favFilterBox}>
-                <View style={styles.favFilterRow} className="fav-presets">
-                  <TouchableOpacity
-                    style={[styles.favPresetBtn, favPreset === '7days' && styles.favPresetBtnActive]}
-                    onPress={() => applyFavPreset('7days')}
-                  >
-                    <Text style={[styles.favPresetText, favPreset === '7days' && styles.favPresetTextActive]}>7 ngày</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={[styles.favPresetBtn, favPreset === '2weeks' && styles.favPresetBtnActive]}
-                    onPress={() => applyFavPreset('2weeks')}
-                  >
-                    <Text style={[styles.favPresetText, favPreset === '2weeks' && styles.favPresetTextActive]}>2 tuần</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={[styles.favPresetBtn, favPreset === '1month' && styles.favPresetBtnActive]}
-                    onPress={() => applyFavPreset('1month')}
-                  >
-                    <Text style={[styles.favPresetText, favPreset === '1month' && styles.favPresetTextActive]}>1 tháng</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={[styles.favPresetBtn, favPreset === 'custom' && styles.favPresetBtnActive]}
-                    onPress={() => applyFavPreset('custom')}
-                  >
-                    <Text style={[styles.favPresetText, favPreset === 'custom' && styles.favPresetTextActive]}>Tùy chọn</Text>
-                  </TouchableOpacity>
-                </View>
-
-                {favPreset === 'custom' && (
-                  <View style={styles.favCustomDateRow}>
-                    <View style={styles.favDateGroup}>
-                      <Text style={styles.favDateLabel}>Từ ngày</Text>
-                      <View style={styles.favDateInputWrapper}>
-                        <Ionicons name="calendar-outline" size={16} color={ORANGE_THEME.textMuted} style={{ marginRight: 6 }} />
-                        <input
-                          type="date"
-                          className="fav-date-picker"
-                          style={styles.favDatePicker}
-                          value={favStartDate}
-                          onChange={(e) => setFavStartDate(e.target.value)}
-                        />
-                      </View>
-                    </View>
-                    <View style={styles.favDateGroup}>
-                      <Text style={styles.favDateLabel}>Đến ngày</Text>
-                      <View style={styles.favDateInputWrapper}>
-                        <Ionicons name="calendar-outline" size={16} color={ORANGE_THEME.textMuted} style={{ marginRight: 6 }} />
-                        <input
-                          type="date"
-                          className="fav-date-picker"
-                          style={styles.favDatePicker}
-                          value={favEndDate}
-                          onChange={(e) => setFavEndDate(e.target.value)}
-                        />
-                      </View>
-                    </View>
-                  </View>
-                )}
-              </View>
-
               <View style={styles.profileHeadingRow}>
                 <Ionicons name="heart" size={24} color="#e53935" />
                 <Text style={styles.profileSectionTitle}>Danh mục sản phẩm chi nhánh thường xuyên đặt hàng sỉ</Text>
@@ -1912,11 +1750,11 @@ export default function StoreOrderWebScreen() {
                   <Text style={{ color: ORANGE_THEME.textMuted, marginTop: 12 }}>Chưa lưu sản phẩm thường đặt nào.</Text>
                 </View>
               ) : (
-                <View style={styles.catalogGrid} className="web-product-grid">
+                <View style={styles.catalogGrid}>
                   {favoritesList.map(product => {
                     const inCart = cart.find(c => c.product.id === product.id);
                     return (
-                      <View key={product.id} style={styles.productCard} className="web-product-card">
+                      <View key={product.id} style={styles.productCard}>
                         {product.image ? (
                           <Image source={{ uri: product.image }} style={styles.productImage} resizeMode="cover" />
                         ) : (
@@ -1934,16 +1772,31 @@ export default function StoreOrderWebScreen() {
 
                             {inCart ? (
                               <View style={styles.cardQtyController}>
-                                <TouchableOpacity style={styles.qtyBtnSmall} onPress={() => { removeFromCart(product.id); showFavToast('remove'); }}>
+                                <TouchableOpacity style={styles.qtyBtnSmall} onPress={() => removeFromCart(product.id)}>
                                   <Text style={styles.qtyBtnTextSmall}>−</Text>
                                 </TouchableOpacity>
-                                <Text style={styles.qtyValSmall}>{inCart.qty}</Text>
-                                <TouchableOpacity style={styles.qtyBtnSmall} onPress={() => { addToCart(product); showFavToast('success'); }}>
+                                <TextInput
+                                  style={styles.qtyValSmallInput}
+                                  value={String(inCart.qty)}
+                                  onChangeText={(val) => {
+                                    const cleanVal = val.replace(/[^0-9]/g, '');
+                                    const parsed = cleanVal === '' ? 0 : parseInt(cleanVal, 10);
+                                    updateCartQty(product.id, parsed);
+                                  }}
+                                  onBlur={() => {
+                                    if (inCart.qty === 0) {
+                                      removeFromCart(product.id);
+                                    }
+                                  }}
+                                  keyboardType="number-pad"
+                                  selectTextOnFocus
+                                />
+                                <TouchableOpacity style={styles.qtyBtnSmall} onPress={() => addToCart(product)}>
                                   <Text style={styles.qtyBtnTextSmall}>+</Text>
                                 </TouchableOpacity>
                               </View>
                             ) : (
-                              <TouchableOpacity style={styles.addBtnSmall} onPress={() => { addToCart(product); showFavToast('success'); }}>
+                              <TouchableOpacity style={styles.addBtnSmall} onPress={() => addToCart(product)}>
                                 <Ionicons name="add" size={14} color="#fff" />
                                 <Text style={styles.addBtnTextSmall}>Thêm</Text>
                               </TouchableOpacity>
@@ -1954,24 +1807,6 @@ export default function StoreOrderWebScreen() {
                     );
                   })}
                 </View>
-              )}
-
-              {/* Toast */}
-              {favToastVisible && (
-                <Animated.View style={[styles.favToastContainer, { opacity: favToastAnim }]}>
-                  <View style={[styles.favToastBox, favToastType === 'remove' && styles.favToastBoxRemove]}>
-                    <Ionicons
-                      name={favToastType === 'success' ? 'checkmark-circle' : 'checkmark-circle'}
-                      size={22}
-                      color={'#16a34a'}
-                    />
-                    <Text style={styles.favToastText}>
-                      {favToastType === 'success'
-                        ? 'Thêm sản phẩm thành công vào giỏ hàng'
-                        : 'Đã trừ sản phẩm khỏi giỏ hàng'}
-                    </Text>
-                  </View>
-                </Animated.View>
               )}
             </ScrollView>
           )}
@@ -2025,24 +1860,12 @@ export default function StoreOrderWebScreen() {
             <View style={styles.splitLayout}>
               
               <View style={[styles.catalogSide, { flex: 6, backgroundColor: '#fff', borderRightWidth: 1.5, borderRightColor: '#e2e8f0', padding: 24 }]}>
-                <View style={[styles.profileHeadingRow, { justifyContent: 'space-between' }]}>
-                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-                    <Ionicons name="warning-outline" size={24} color={ORANGE_THEME.primary} />
-                    <Text style={styles.profileSectionTitle}>Nhật ký Báo cáo Sự cố kệ hàng & Vận chuyển</Text>
-                  </View>
-                  <TouchableOpacity style={styles.refreshBtnRow} onPress={fetchStoreIncidents}>
-                    <Ionicons name="refresh" size={14} color={ORANGE_THEME.primary} style={{ marginRight: 4 }} />
-                    <Text style={{ fontSize: 13, fontWeight: '700', color: ORANGE_THEME.primary }}>Tải lại</Text>
-                  </TouchableOpacity>
+                <View style={styles.profileHeadingRow}>
+                  <Ionicons name="warning-outline" size={24} color={ORANGE_THEME.primary} />
+                  <Text style={styles.profileSectionTitle}>Nhật ký Báo cáo Sự cố kệ hàng & Vận chuyển</Text>
                 </View>
 
                 <ScrollView style={{ flex: 1 }}>
-                  {loadingIncidents ? (
-                    <View style={{ padding: 40, alignItems: 'center' }}>
-                      <ActivityIndicator size="large" color={ORANGE_THEME.primary} />
-                      <Text style={{ marginTop: 12, color: ORANGE_THEME.textMuted, fontSize: 13 }}>Đang tải danh sách sự cố...</Text>
-                    </View>
-                  ) : (
                   <View style={styles.tableWebContainer}>
                     <View style={styles.tableWebHeader}>
                       <Text style={[styles.thCell, { flex: 1.5 }]}>ID sự cố</Text>
@@ -2052,22 +1875,12 @@ export default function StoreOrderWebScreen() {
                       <Text style={[styles.thCell, { flex: 2, textAlign: 'center' }]}>Trạng thái WMS</Text>
                     </View>
 
-                    {storeIncidents.length === 0 ? (
-                      <View style={{ padding: 40, alignItems: 'center' }}>
-                        <Ionicons name="checkmark-circle-outline" size={48} color="#cbd5e1" />
-                        <Text style={{ marginTop: 12, color: ORANGE_THEME.textMuted, fontSize: 13 }}>Chưa có báo cáo sự cố nào</Text>
-                      </View>
-                    ) : (storeIncidents.map(inc => {
-                      const parts = (inc.reason || '').split(' || ');
-                      const product = parts[0] || '';
-                      const type = parts[1] || inc.reason;
-                      const severity = parts[2] || 'Trung bình';
-                      return (
+                    {storeIncidents.map(inc => (
                       <View key={inc.id} style={styles.tableWebRow}>
                         <Text style={[styles.tdCell, { flex: 1.5, fontWeight: 'bold' }]}>#RACK-{inc.id}</Text>
-                        <Text style={[styles.tdCell, { flex: 3.5, fontWeight: '700' }]}>{product}</Text>
-                        <Text style={[styles.tdCell, { flex: 2.5 }]}>{type}</Text>
-                        <Text style={[styles.tdCell, { flex: 1.5, textAlign: 'center', fontWeight: 'bold', color: severity === 'Cao' ? '#d32f2f' : '#f57c00' }]}>{severity}</Text>
+                        <Text style={[styles.tdCell, { flex: 3.5, fontWeight: '700' }]}>{inc.product}</Text>
+                        <Text style={[styles.tdCell, { flex: 2.5 }]}>{inc.type}</Text>
+                        <Text style={[styles.tdCell, { flex: 1.5, textAlign: 'center', fontWeight: 'bold', color: inc.severity === 'Cao' ? '#d32f2f' : '#f57c00' }]}>{inc.severity}</Text>
                         <View style={[styles.tdCell, { flex: 2, alignItems: 'center' }]}>
                           <View style={[styles.alertPill, { backgroundColor: inc.status === 'resolved' ? '#e8f5e9' : '#fff3e0' }]}>
                             <Text style={{ fontSize: 10, fontWeight: '850', color: inc.status === 'resolved' ? '#2e7d32' : '#e65100' }}>
@@ -2076,9 +1889,8 @@ export default function StoreOrderWebScreen() {
                           </View>
                         </View>
                       </View>
-                    )}))}
+                    ))}
                   </View>
-                  )}
                 </ScrollView>
               </View>
 
@@ -2587,6 +2399,7 @@ const styles = StyleSheet.create({
     height: '100vh',
     width: '100vw',
     backgroundColor: '#f8fafc',
+    overflow: 'hidden',
   },
   
   // Left Sidebar
@@ -2604,7 +2417,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 12,
     marginBottom: 36,
-    flexShrink: 0,
   },
   logoCircle: {
     width: 44,
@@ -2630,7 +2442,6 @@ const styles = StyleSheet.create({
   menuGroup: {
     flex: 1,
     gap: 10,
-    overflow: 'auto',
   },
   menuItem: {
     flexDirection: 'row',
@@ -2660,7 +2471,6 @@ const styles = StyleSheet.create({
     borderTopColor: '#f1f5f9',
     paddingTop: 20,
     gap: 16,
-    flexShrink: 0,
   },
   managerCard: {
     flexDirection: 'row',
@@ -2717,7 +2527,7 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   topbar: {
-    minHeight: 90,
+    height: 90,
     backgroundColor: '#fff',
     borderBottomWidth: 1.5,
     borderBottomColor: '#e2e8f0',
@@ -2764,6 +2574,7 @@ const styles = StyleSheet.create({
 
   workspace: {
     flex: 1,
+    overflow: 'hidden',
   },
 
   loadingWrapper: {
@@ -2827,16 +2638,15 @@ const styles = StyleSheet.create({
     color: ORANGE_THEME.textDark,
     outlineWidth: 0,
   },
-  categoryWrap: {
+  categoryScroll: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 8,
   },
   categoryChip: {
     paddingVertical: 6,
     paddingHorizontal: 14,
     borderRadius: 20,
     backgroundColor: '#f1f5f9',
+    marginRight: 8,
     borderWidth: 1.5,
     borderColor: '#e2e8f0',
   },
@@ -2897,12 +2707,12 @@ const styles = StyleSheet.create({
   },
   productImage: {
     width: '100%',
-    aspectRatio: 1.6,
+    height: 140,
     backgroundColor: '#f8fafc',
   },
   productImagePlaceholder: {
     width: '100%',
-    aspectRatio: 1.6,
+    height: 140,
     backgroundColor: ORANGE_THEME.bgLight,
     alignItems: 'center',
     justifyContent: 'center',
@@ -2921,7 +2731,7 @@ const styles = StyleSheet.create({
     fontWeight: '850',
     color: ORANGE_THEME.textDark,
     marginTop: 4,
-    minHeight: 36,
+    height: 36,
   },
   productSkuLabel: {
     fontSize: 10,
@@ -2986,6 +2796,19 @@ const styles = StyleSheet.create({
     fontWeight: '850',
     color: ORANGE_THEME.textDark,
     paddingHorizontal: 6,
+  },
+  qtyValSmallInput: {
+    fontSize: 11,
+    fontWeight: '850',
+    color: ORANGE_THEME.textDark,
+    width: 32,
+    height: 20,
+    borderWidth: 1,
+    borderColor: '#cbd5e1',
+    borderRadius: 4,
+    textAlign: 'center',
+    paddingHorizontal: 2,
+    backgroundColor: '#fff',
   },
 
   // Cart Side
@@ -3122,6 +2945,19 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     color: ORANGE_THEME.textDark,
     paddingHorizontal: 4,
+  },
+  qtyArrowValInput: {
+    fontSize: 11,
+    fontWeight: '800',
+    color: ORANGE_THEME.textDark,
+    width: 32,
+    height: 20,
+    borderWidth: 1,
+    borderColor: '#cbd5e1',
+    borderRadius: 4,
+    textAlign: 'center',
+    paddingHorizontal: 2,
+    backgroundColor: '#fff',
   },
   cartRowSub: {
     fontSize: 12,
@@ -3291,12 +3127,6 @@ const styles = StyleSheet.create({
     fontSize: 11,
     color: ORANGE_THEME.textMuted,
     marginTop: 4,
-  },
-  invoicePlaceholderContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 40,
   },
   cancelBtnWeb: {
     flexDirection: 'row',
@@ -3492,126 +3322,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: 38,
   },
-  profileHeadingRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-    marginBottom: 20,
-  },
-  profileSectionTitle: {
-    fontSize: 18,
-    fontWeight: '900',
-    color: ORANGE_THEME.textDark,
-    flex: 1,
-  },
-
-  // Favorites date filter
-  favFilterBox: {
-    backgroundColor: '#fff',
-    borderRadius: 20,
-    padding: 20,
-    borderWidth: 1.5,
-    borderColor: '#cbd5e1',
-    marginBottom: 20,
-  },
-  favFilterRow: {
-    flexDirection: 'row',
-    gap: 10,
-    flexWrap: 'wrap',
-  },
-  favPresetBtn: {
-    backgroundColor: '#f1f5f9',
-    paddingVertical: 8,
-    paddingHorizontal: 18,
-    borderRadius: 20,
-    borderWidth: 1.5,
-    borderColor: '#cbd5e1',
-  },
-  favPresetBtnActive: {
-    backgroundColor: ORANGE_THEME.bgLight,
-    borderColor: ORANGE_THEME.primary,
-  },
-  favPresetText: {
-    fontSize: 13,
-    color: ORANGE_THEME.textMuted,
-    fontWeight: '700',
-  },
-  favPresetTextActive: {
-    color: ORANGE_THEME.primary,
-    fontWeight: '900',
-  },
-  favCustomDateRow: {
-    flexDirection: 'row',
-    gap: 14,
-    marginTop: 16,
-  },
-  favDateGroup: {
-    flex: 1,
-  },
-  favDateLabel: {
-    fontSize: 11,
-    fontWeight: '800',
-    color: ORANGE_THEME.textMuted,
-    marginBottom: 6,
-  },
-  // Date picker
-  favDateInputWrapper: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#fff',
-    borderWidth: 1.5,
-    borderColor: '#cbd5e1',
-    borderRadius: 12,
-    paddingVertical: 10,
-    paddingHorizontal: 14,
-  },
-  favDatePicker: {
-    flex: 1,
-    fontSize: 13,
-    color: ORANGE_THEME.textDark,
-    fontWeight: '600',
-    outlineWidth: 0,
-    borderWidth: 0,
-    fontFamily: 'inherit',
-    backgroundColor: 'transparent',
-    minHeight: 20,
-  },
-
-  // Favorites toast
-  favToastContainer: {
-    position: 'absolute',
-    top: 16,
-    right: 16,
-    zIndex: 9999,
-    pointerEvents: 'none',
-  },
-  favToastBox: {
-    backgroundColor: '#f0fdf4',
-    borderRadius: 12,
-    paddingVertical: 12,
-    paddingHorizontal: 18,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-    borderWidth: 1.5,
-    borderColor: '#86efac',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 12,
-    elevation: 8,
-    minWidth: 280,
-  },
-  favToastText: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: '#166534',
-    flex: 1,
-  },
-
   presetGroupRow: {
     flexDirection: 'row',
     gap: 8,
+    marginLeft: 16,
+    alignSelf: 'center',
   },
   presetBtnWeb: {
     backgroundColor: '#f1f5f9',
@@ -3631,29 +3346,6 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   presetBtnTextActive: {
-    color: ORANGE_THEME.primary,
-    fontWeight: '900',
-  },
-
-  // History status filter chips
-  statusChip: {
-    paddingVertical: 6,
-    paddingHorizontal: 14,
-    borderRadius: 20,
-    backgroundColor: '#f1f5f9',
-    borderWidth: 1.5,
-    borderColor: '#e2e8f0',
-  },
-  statusChipActive: {
-    backgroundColor: ORANGE_THEME.bgLight,
-    borderColor: ORANGE_THEME.primary,
-  },
-  statusChipText: {
-    fontSize: 11,
-    color: ORANGE_THEME.textMuted,
-    fontWeight: '700',
-  },
-  statusChipTextActive: {
     color: ORANGE_THEME.primary,
     fontWeight: '900',
   },
@@ -4281,4 +3973,3 @@ const styles = StyleSheet.create({
     color: '#334155',
   },
 });
-

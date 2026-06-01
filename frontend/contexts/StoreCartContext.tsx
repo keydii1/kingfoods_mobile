@@ -28,6 +28,7 @@ interface StoreCartContextType {
   addToCart: (product: CartProduct) => void;
   removeFromCart: (productId: string | number) => void;
   clearCart: () => void;
+  updateCartQty: (productId: string | number, qty: number) => void;
 }
 
 const STORAGE_KEY = 'kingfood_store_cart';
@@ -41,6 +42,7 @@ const StoreCartContext = createContext<StoreCartContextType>({
   addToCart: () => {},
   removeFromCart: () => {},
   clearCart: () => {},
+  updateCartQty: () => {},
 });
 
 function storageKey(userId: string | null) {
@@ -142,8 +144,19 @@ export function StoreCartProvider({ children }: { children: ReactNode }) {
     });
   }, []);
 
+  const updateCartQty = useCallback((productId: string | number, qty: number) => {
+    setCart(prev => {
+      if (qty <= 0) {
+        return prev.filter(c => c.product.id !== productId);
+      }
+      return prev.map(c =>
+        c.product.id === productId ? { ...c, qty } : c
+      );
+    });
+  }, []);
+
   const clearCart = useCallback(() => {
-    setCart([]);
+    setCart(() => []);
     if (userId) {
       AsyncStorage.removeItem(storageKey(userId)).catch(() => {});
     }
@@ -151,7 +164,7 @@ export function StoreCartProvider({ children }: { children: ReactNode }) {
 
   return (
     <StoreCartContext.Provider
-      value={{ cart, hydrated, persistCart, setPersistCart, addToCart, removeFromCart, clearCart }}
+      value={{ cart, hydrated, persistCart, setPersistCart, addToCart, removeFromCart, clearCart, updateCartQty }}
     >
       {children}
     </StoreCartContext.Provider>
@@ -168,5 +181,6 @@ export function useStoreCart() {
     addToCart: ctx.addToCart,
     removeFromCart: ctx.removeFromCart,
     clearCart: ctx.clearCart,
+    updateCartQty: ctx.updateCartQty,
   };
 }

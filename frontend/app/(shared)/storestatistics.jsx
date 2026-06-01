@@ -1,13 +1,15 @@
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, ActivityIndicator, TextInput } from 'react-native';
 import { Alert } from '../../utils/appAlert';
-import { useState, useCallback, useRef } from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router, useFocusEffect } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../../constants/colors';
-import { getClientStatistics, cancelClientOrder, BASE_URL } from '../../constants/services/api';
+import { getClientStatistics, cancelClientOrder, BASE_URL, getCachedData } from '../../constants/services/api';
 import { getOrderStatusMeta, canCustomerCancelOrder } from '../../constants/orderStatus';
 import { subscribeOrdersRefresh, notifyOrdersRefresh } from '../../utils/ordersRefresh';
+import { useAppPreferences } from '../../contexts/AppPreferencesContext';
+import { translateProductName, translateUnit } from '../../utils/translator';
 
 // Timezone date helper for Vietnam (UTC+7)
 const formatVietnamDateOnly = (dateStr) => {
@@ -27,15 +29,80 @@ const formatVietnamDateOnly = (dateStr) => {
   return `${d}/${m}/${y}`;
 };
 
-const defaultKpis = [
-  { icon: 'cube-outline', value: '0', label: 'Đơn đã đặt', color: '#e8f5e9', textColor: COLORS.primary },
-  { icon: 'checkmark-circle-outline', value: '0', label: 'Đã giao', color: '#e3f2fd', textColor: '#1565c0' },
-  { icon: 'hourglass-outline', value: '0', label: 'Chờ xác nhận', color: '#fff3e0', textColor: '#e65100' },
-  { icon: 'time-outline', value: '0', label: 'Đang xử lý', color: '#e3f2fd', textColor: '#1565c0' },
-  { icon: 'close-circle-outline', value: '0', label: 'Đã huỷ', color: '#ffebee', textColor: '#e53935' },
-];
+const TRANSLATIONS = {
+  vi: {
+    stats: 'Thống kê',
+    statsTitle: 'Thống kê cửa hàng',
+    order: 'Đặt hàng',
+    settings: 'Cài đặt',
+    profile: 'Cá nhân',
+    fromDate: 'Từ ngày',
+    toDate: 'Đến ngày',
+    filter: 'Lọc',
+    today: 'Hôm nay',
+    week: '7 ngày qua',
+    month: 'Tháng này',
+    topProducts: 'Top sản phẩm đặt nhiều nhất',
+    ordersPeriod: 'Đơn hàng trong giai đoạn',
+    noProductData: 'Không có dữ liệu sản phẩm trong khoảng thời gian này',
+    noOrdersFound: 'Không tìm thấy đơn hàng nào',
+    cancelOrder: 'Huỷ đơn hàng',
+    cancelConfirm: 'Huỷ đơn #',
+    cancel: 'Huỷ',
+    stay: 'Không',
+    success: 'Thành công',
+    error: 'Lỗi',
+    cancelSuccess: 'Đơn hàng đã được huỷ',
+    cancelFail: 'Không thể huỷ đơn',
+    formatError: 'Định dạng sai',
+    formatErrorMsg: 'Vui lòng nhập ngày theo định dạng YYYY-MM-DD (Ví dụ: 2026-05-18)',
+    placed: 'Đơn đã đặt',
+    processing: 'Đang xử lý',
+    delivered: 'Đã giao',
+    cancelled: 'Đã huỷ',
+    pending: 'Chờ xác nhận',
+    items: 'sản phẩm',
+  },
+  en: {
+    stats: 'Statistics',
+    statsTitle: 'Store Statistics',
+    order: 'Order',
+    settings: 'Settings',
+    profile: 'Profile',
+    fromDate: 'From Date',
+    toDate: 'To Date',
+    filter: 'Filter',
+    today: 'Today',
+    week: 'Last 7 days',
+    month: 'This month',
+    topProducts: 'Most Ordered Products',
+    ordersPeriod: 'Orders in Period',
+    noProductData: 'No product data in this period',
+    noOrdersFound: 'No orders found',
+    cancelOrder: 'Cancel Order',
+    cancelConfirm: 'Cancel order #',
+    cancel: 'Cancel',
+    stay: 'No',
+    success: 'Success',
+    error: 'Error',
+    cancelSuccess: 'Order successfully cancelled',
+    cancelFail: 'Cannot cancel order',
+    formatError: 'Invalid Format',
+    formatErrorMsg: 'Please enter date in YYYY-MM-DD format (e.g. 2026-05-18)',
+    placed: 'Placed Orders',
+    processing: 'Processing',
+    delivered: 'Delivered',
+    cancelled: 'Cancelled',
+    pending: 'Pending',
+    items: 'products',
+  }
+};
 
 export default function StoreStatisticsScreen() {
+  const { darkMode, language } = useAppPreferences();
+  const t = TRANSLATIONS[language] || TRANSLATIONS.vi;
+  const insets = useSafeAreaInsets();
+
   const getFirstDayOfMonth = () => {
     const d = new Date();
     return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-01`;
@@ -46,15 +113,24 @@ export default function StoreStatisticsScreen() {
     return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
   };
 
-  const [topProducts, setTopProducts] = useState([]);
-  const [orders, setOrders] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [startDate, setStartDate] = useState(getFirstDayOfMonth());
-  const [endDate, setEndDate] = useState(getTodayStr());
+  const startPreset = getFirstDayOfMonth();
+  const endPreset = getTodayStr();
+  const cachedStats = getCachedData(`/client/orders/statistics?startDate=${startPreset}&endDate=${endPreset}`);
+
+  const [topProducts, setTopProducts] = useState(cachedStats?.topProducts || []);
+  const [orders, setOrders] = useState([...(cachedStats?.orders || [])].sort((a, b) => b.id - a.id));
+  const [loading, setLoading] = useState(!cachedStats);
+  const [startDate, setStartDate] = useState(startPreset);
+  const [endDate, setEndDate] = useState(endPreset);
   const [activePreset, setActivePreset] = useState('month');
+  const [selectedStatus, setSelectedStatus] = useState('all');
   const hasLoadedRef = useRef(false);
 
   const fetchStats = useCallback(async (start = startDate, end = endDate, silent = false) => {
+    const regex = /^\d{4}-\d{2}-\d{2}$/;
+    if (!regex.test(start) || !regex.test(end)) {
+      return;
+    }
     if (!silent) setLoading(true);
     try {
       const res = await getClientStatistics(start, end);
@@ -65,14 +141,14 @@ export default function StoreStatisticsScreen() {
     } catch (err) {
       console.log('Fetch stats error:', err.message);
       if (!silent) {
-        Alert.alert('Lỗi', 'Không thể kết nối đến máy chủ.');
+        Alert.alert(t.error, language === 'en' ? 'Cannot connect to the server.' : 'Không thể kết nối đến máy chủ.');
         setOrders([]);
         setTopProducts([]);
       }
     } finally {
       if (!silent) setLoading(false);
     }
-  }, [startDate, endDate]);
+  }, [startDate, endDate, t.error]);
 
   useFocusEffect(
     useCallback(() => {
@@ -88,7 +164,7 @@ export default function StoreStatisticsScreen() {
   const handleFilterPress = () => {
     const regex = /^\d{4}-\d{2}-\d{2}$/;
     if (!regex.test(startDate) || !regex.test(endDate)) {
-      Alert.alert('Định dạng sai', 'Vui lòng nhập ngày theo định dạng YYYY-MM-DD (Ví dụ: 2026-05-18)');
+      Alert.alert(t.formatError, t.formatErrorMsg);
       return;
     }
     setActivePreset('');
@@ -114,17 +190,22 @@ export default function StoreStatisticsScreen() {
   };
 
   const displayKpis = [
-    { icon: 'cube-outline', value: String(orders.length),
-      label: 'Đơn đã đặt', color: '#e8f5e9', textColor: COLORS.primary },
-    { icon: 'hourglass-outline', value: String(orders.filter(o => o.status === 'pending').length),
-      label: 'Chờ xác nhận', color: '#fff3e0', textColor: '#e65100' },
-    { icon: 'time-outline', value: String(orders.filter(o => o.status === 'processing').length),
-      label: 'Đang xử lý', color: '#e3f2fd', textColor: '#1565c0' },
-    { icon: 'checkmark-circle-outline', value: String(orders.filter(o => o.status === 'delivered').length),
-      label: 'Đã giao', color: '#e8f5e9', textColor: COLORS.primary },
-    { icon: 'close-circle-outline', value: String(orders.filter(o => o.status === 'cancelled').length),
-      label: 'Đã huỷ', color: '#ffebee', textColor: '#e53935' },
+    { key: 'all', icon: 'cube-outline', value: String(orders.length),
+      label: t.placed, color: darkMode ? '#1e2a1e' : '#e8f5e9', textColor: COLORS.primary },
+    { key: 'pending', icon: 'hourglass-outline', value: String(orders.filter(o => o.status === 'pending').length),
+      label: t.pending, color: darkMode ? '#33230a' : '#fff3e0', textColor: '#e65100' },
+    { key: 'processing', icon: 'time-outline', value: String(orders.filter(o => o.status === 'processing').length),
+      label: t.processing, color: darkMode ? '#1a2436' : '#e3f2fd', textColor: '#1565c0' },
+    { key: 'delivered', icon: 'checkmark-circle-outline', value: String(orders.filter(o => o.status === 'delivered').length),
+      label: t.delivered, color: darkMode ? '#1e2a1e' : '#e8f5e9', textColor: COLORS.primary },
+    { key: 'cancelled', icon: 'close-circle-outline', value: String(orders.filter(o => o.status === 'cancelled').length),
+      label: t.cancelled, color: darkMode ? '#3b181a' : '#ffebee', textColor: '#e53935' },
   ];
+
+  const filteredOrders = useMemo(() => {
+    if (selectedStatus === 'all') return orders;
+    return orders.filter(o => o.status === selectedStatus);
+  }, [orders, selectedStatus]);
 
   const openOrderDetail = (order) => {
     router.push({
@@ -136,12 +217,12 @@ export default function StoreStatisticsScreen() {
   const handleQuickCancel = (order) => {
     const id = order.id;
     Alert.alert(
-      'Huỷ đơn hàng',
-      `Huỷ đơn #${id}?`,
+      t.cancelOrder,
+      `${t.cancelConfirm}${id}?`,
       [
-        { text: 'Không', style: 'cancel' },
+        { text: t.stay, style: 'cancel' },
         {
-          text: 'Huỷ đơn',
+          text: t.cancel,
           style: 'destructive',
           onPress: async () => {
             try {
@@ -151,9 +232,9 @@ export default function StoreStatisticsScreen() {
               );
               notifyOrdersRefresh();
               fetchStats(startDate, endDate, true);
-              Alert.alert('Thành công', 'Đơn hàng đã được huỷ');
+              Alert.alert(t.success, t.cancelSuccess);
             } catch (err) {
-              Alert.alert('Lỗi', err.message || 'Không thể huỷ đơn');
+              Alert.alert(t.error, err.message || t.cancelFail);
             }
           },
         },
@@ -161,26 +242,42 @@ export default function StoreStatisticsScreen() {
     );
   };
 
+  // Dark Mode variables
+  const activeBg = darkMode ? '#121212' : '#f0f4f1';
+  const activeCardBg = darkMode ? '#1e1e1e' : '#fff';
+  const activeTextColor = darkMode ? '#f3f4f6' : '#222';
+  const activeTextGrayColor = darkMode ? '#9ca3af' : '#888';
+  const activeBorderColor = darkMode ? '#2d2d2d' : '#eee';
+  const activeInputBg = darkMode ? '#2d2d2d' : '#f5f7f6';
+
+  if (loading) {
+    return (
+      <SafeAreaView style={[styles.safeArea, { backgroundColor: activeBg, justifyContent: 'center', alignItems: 'center' }]}>
+        <ActivityIndicator color={COLORS.primary} size="large" />
+      </SafeAreaView>
+    );
+  }
+
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView style={[styles.safeArea, { backgroundColor: activeBg }]} edges={['top', 'left', 'right']}>
       {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()}>
+      <View style={[styles.header, { backgroundColor: activeCardBg, borderBottomColor: activeBorderColor }]}>
+        <TouchableOpacity onPress={() => router.replace('/storeorder')}>
           <Ionicons name="chevron-back" size={24} color={COLORS.primary} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Thống kê cửa hàng</Text>
+        <Text style={[styles.headerTitle, { color: activeTextColor }]}>{t.statsTitle}</Text>
         <View style={{ width: 28 }} />
       </View>
 
       {/* Date Filter Panel */}
-      <View style={styles.filterCard}>
+      <View style={[styles.filterCard, { backgroundColor: activeCardBg }]}>
         <View style={styles.dateInputsRow}>
           <View style={styles.dateField}>
-            <Text style={styles.dateLabel}>Từ ngày</Text>
+            <Text style={[styles.dateLabel, { color: activeTextGrayColor }]}>{t.fromDate}</Text>
             <TextInput
-              style={styles.dateInput}
+              style={[styles.dateInput, { backgroundColor: activeInputBg, color: activeTextColor, borderColor: activeBorderColor }]}
               placeholder="YYYY-MM-DD"
-              placeholderTextColor="#999"
+              placeholderTextColor={activeTextGrayColor}
               value={startDate}
               onChangeText={setStartDate}
               autoCapitalize="none"
@@ -190,11 +287,11 @@ export default function StoreStatisticsScreen() {
             />
           </View>
           <View style={styles.dateField}>
-            <Text style={styles.dateLabel}>Đến ngày</Text>
+            <Text style={[styles.dateLabel, { color: activeTextGrayColor }]}>{t.toDate}</Text>
             <TextInput
-              style={styles.dateInput}
+              style={[styles.dateInput, { backgroundColor: activeInputBg, color: activeTextColor, borderColor: activeBorderColor }]}
               placeholder="YYYY-MM-DD"
-              placeholderTextColor="#999"
+              placeholderTextColor={activeTextGrayColor}
               value={endDate}
               onChangeText={setEndDate}
               autoCapitalize="none"
@@ -203,107 +300,148 @@ export default function StoreStatisticsScreen() {
               keyboardType="numeric"
             />
           </View>
-          <TouchableOpacity style={styles.filterBtn} onPress={handleFilterPress}>
-            <Ionicons name="funnel-outline" size={14} color="#fff" />
-            <Text style={styles.filterBtnText}>Lọc</Text>
-          </TouchableOpacity>
         </View>
 
         {/* Preset Badges */}
         <View style={styles.presetRow}>
           <TouchableOpacity 
-            style={[styles.presetBadge, activePreset === 'today' && styles.presetActive]} 
+            style={[styles.presetBadge, { backgroundColor: darkMode ? '#2d2d2d' : '#f0f3f1' }, activePreset === 'today' && styles.presetActive]} 
             onPress={() => applyPreset('today')}
           >
-            <Text style={[styles.presetText, activePreset === 'today' && styles.presetTextActive]}>Hôm nay</Text>
+            <Text style={[styles.presetText, { color: activeTextGrayColor }, activePreset === 'today' && styles.presetTextActive]}>{t.today}</Text>
           </TouchableOpacity>
           <TouchableOpacity 
-            style={[styles.presetBadge, activePreset === 'week' && styles.presetActive]} 
+            style={[styles.presetBadge, { backgroundColor: darkMode ? '#2d2d2d' : '#f0f3f1' }, activePreset === 'week' && styles.presetActive]} 
             onPress={() => applyPreset('week')}
           >
-            <Text style={[styles.presetText, activePreset === 'week' && styles.presetTextActive]}>7 ngày qua</Text>
+            <Text style={[styles.presetText, { color: activeTextGrayColor }, activePreset === 'week' && styles.presetTextActive]}>{t.week}</Text>
           </TouchableOpacity>
           <TouchableOpacity 
-            style={[styles.presetBadge, activePreset === 'month' && styles.presetActive]} 
+            style={[styles.presetBadge, { backgroundColor: darkMode ? '#2d2d2d' : '#f0f3f1' }, activePreset === 'month' && styles.presetActive]} 
             onPress={() => applyPreset('month')}
           >
-            <Text style={[styles.presetText, activePreset === 'month' && styles.presetTextActive]}>Tháng này</Text>
+            <Text style={[styles.presetText, { color: activeTextGrayColor }, activePreset === 'month' && styles.presetTextActive]}>{t.month}</Text>
           </TouchableOpacity>
         </View>
       </View>
 
-      {loading ? (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-          <ActivityIndicator size="large" color={COLORS.primary} />
-        </View>
-      ) : (
-        <ScrollView style={styles.scroll}>
+      <ScrollView style={styles.scroll} contentContainerStyle={{ padding: 16 }}>
           {/* KPI Grid */}
           <View style={styles.kpiGrid}>
-            {displayKpis.map((item, index) => (
-              <View key={item.label} style={[styles.kpiCard, { backgroundColor: item.color }]}>
-                <Ionicons name={item.icon} size={24} color={item.textColor} style={{ marginBottom: 4 }} />
-                <Text style={[styles.kpiValue, { color: item.textColor }]}>{item.value}</Text>
-                <Text style={styles.kpiLabel}>{item.label}</Text>
-              </View>
-            ))}
+            {displayKpis.map((item, index) => {
+              const isActive = selectedStatus === item.key;
+              return (
+                <TouchableOpacity 
+                  key={item.key} 
+                  style={[
+                    styles.kpiCard, 
+                    { backgroundColor: item.color },
+                    isActive && { borderWidth: 2, borderColor: item.textColor }
+                  ]}
+                  onPress={() => setSelectedStatus(item.key === selectedStatus ? 'all' : item.key)}
+                  activeOpacity={0.8}
+                >
+                  <Ionicons name={item.icon} size={24} color={item.textColor} style={{ marginBottom: 4 }} />
+                  <Text style={[styles.kpiValue, { color: item.textColor }]}>{item.value}</Text>
+                  <Text style={[styles.kpiLabel, darkMode && { color: '#9ca3af' }]}>{item.label}</Text>
+                </TouchableOpacity>
+              );
+            })}
           </View>
 
           {/* Top sản phẩm */}
-          <View style={styles.card}>
+          <View style={[styles.card, { backgroundColor: activeCardBg }]}>
             <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 14 }}>
-              <Ionicons name="flame-outline" size={20} color="#222" style={{ marginRight: 6 }} />
-              <Text style={styles.cardTitle}>Top sản phẩm đặt nhiều nhất</Text>
+              <Ionicons name="flame-outline" size={20} color={activeTextColor} style={{ marginRight: 6 }} />
+              <Text style={[styles.cardTitle, { color: activeTextColor }]}>{t.topProducts}</Text>
             </View>
             {topProducts.length > 0 ? (
               topProducts.map((p, i) => (
                 <View key={i} style={styles.topRow}>
                   <Text style={styles.topRank}>{i + 1}</Text>
                   <View style={styles.topInfo}>
-                    <Text style={styles.topName}>{p.name}</Text>
-                    <Text style={styles.topQty}>{p.qty} {p.unit}</Text>
+                    <Text style={[styles.topName, { color: activeTextColor }]}>{translateProductName(p.name, language)}</Text>
+                    <Text style={[styles.topQty, { color: activeTextGrayColor }]}>{p.qty} {translateUnit(p.unit, language)}</Text>
                   </View>
                 </View>
               ))
             ) : (
               <View style={{ paddingVertical: 12, alignItems: 'center' }}>
-                <Text style={{ fontSize: 13, color: '#999' }}>Không có dữ liệu sản phẩm trong khoảng thời gian này</Text>
+                <Text style={{ fontSize: 13, color: activeTextGrayColor }}>{t.noProductData}</Text>
               </View>
             )}
           </View>
 
           {/* Đơn hàng gần đây */}
-          <View style={styles.card}>
+          <View style={[styles.card, { backgroundColor: activeCardBg }]}>
             <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 14 }}>
-              <Ionicons name="document-text-outline" size={20} color="#222" style={{ marginRight: 6 }} />
-              <Text style={styles.cardTitle}>Đơn hàng trong giai đoạn</Text>
+              <Ionicons name="document-text-outline" size={20} color={activeTextColor} style={{ marginRight: 6 }} />
+              <Text style={[styles.cardTitle, { color: activeTextColor }]}>{t.ordersPeriod}</Text>
             </View>
-            {orders.length > 0 ? (
-              orders.map((o) => {
-                const meta = getOrderStatusMeta(o.status);
+
+            {/* Premium Status Filters Tab Bar */}
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginBottom: 14, flexDirection: 'row' }}>
+              {[
+                { key: 'all', label: 'Tất cả', count: orders.length },
+                { key: 'pending', label: 'Chờ xác nhận', count: orders.filter(o => o.status === 'pending').length },
+                { key: 'processing', label: 'Đang xử lý', count: orders.filter(o => o.status === 'processing').length },
+                { key: 'delivered', label: 'Đã hoàn thành', count: orders.filter(o => o.status === 'delivered').length },
+                { key: 'cancelled', label: 'Đã hủy', count: orders.filter(o => o.status === 'cancelled').length },
+              ].map(tab => {
+                const isActive = selectedStatus === tab.key;
+                return (
+                  <TouchableOpacity
+                    key={tab.key}
+                    style={{
+                      paddingHorizontal: 12,
+                      paddingVertical: 6,
+                      borderRadius: 12,
+                      backgroundColor: isActive ? COLORS.primary : (darkMode ? '#2d2d2d' : '#f0f3f1'),
+                      marginRight: 8,
+                      borderWidth: 1.5,
+                      borderColor: isActive ? COLORS.primary : (darkMode ? '#3d3d3d' : '#e2e8e3'),
+                    }}
+                    onPress={() => setSelectedStatus(tab.key)}
+                    activeOpacity={0.8}
+                  >
+                    <Text style={{
+                      fontSize: 11,
+                      fontWeight: '700',
+                      color: isActive ? '#fff' : (darkMode ? '#d1d5db' : '#555'),
+                    }}>
+                      {tab.label} ({tab.count})
+                    </Text>
+                  </TouchableOpacity>
+                );
+              })}
+            </ScrollView>
+
+            {filteredOrders.length > 0 ? (
+              filteredOrders.map((o) => {
+                const meta = getOrderStatusMeta(o.status, language);
                 const cancellable = canCustomerCancelOrder(o.status);
                 const itemCount = o.orderDetails?.length || 0;
-                const total = `${(parseFloat(o.totalPrice) || 0).toLocaleString()}đ`;
+                const total = language === 'en' ? `${(parseFloat(o.totalPrice) || 0).toLocaleString()} VND` : `${(parseFloat(o.totalPrice) || 0).toLocaleString()}đ`;
                 const date = formatVietnamDateOnly(o.createdAt);
 
                 return (
                   <TouchableOpacity
                     key={o.id}
-                    style={styles.orderRow}
+                    style={[styles.orderRow, { borderBottomColor: activeBorderColor }]}
                     onPress={() => openOrderDetail(o)}
                     activeOpacity={0.75}
                   >
                     <View style={styles.orderInfo}>
-                      <Text style={styles.orderId}>#{o.id}</Text>
-                      <Text style={styles.orderDate}>
-                        {date} · {itemCount} sản phẩm
+                      <Text style={[styles.orderId, { color: activeTextColor }]}>#{o.id}</Text>
+                      <Text style={[styles.orderDate, { color: activeTextGrayColor }]}>
+                        {date} · {itemCount} {t.items}
                       </Text>
                       {cancellable && (
                         <TouchableOpacity
                           style={styles.cancelLink}
                           onPress={() => handleQuickCancel(o)}
                         >
-                          <Text style={styles.cancelLinkText}>Huỷ đơn</Text>
+                          <Text style={styles.cancelLinkText}>{t.cancel}</Text>
                         </TouchableOpacity>
                       )}
                     </View>
@@ -321,30 +459,29 @@ export default function StoreStatisticsScreen() {
               })
             ) : (
               <View style={{ paddingVertical: 12, alignItems: 'center' }}>
-                <Text style={{ fontSize: 13, color: '#999' }}>Không tìm thấy đơn hàng nào</Text>
+                <Text style={{ fontSize: 13, color: activeTextGrayColor }}>{t.noOrdersFound}</Text>
               </View>
             )}
           </View>
         </ScrollView>
-      )}
 
       {/* Bottom Nav */}
-      <View style={styles.bottomNav}>
+      <View style={[styles.bottomNav, { backgroundColor: activeCardBg, borderTopColor: activeBorderColor, paddingBottom: Math.max(insets.bottom, 8) }]}>
         <TouchableOpacity style={styles.navItem} onPress={() => router.push('/storeorder')}>
-          <Ionicons name="cart-outline" size={22} color="#aaa" style={{ marginBottom: 2 }} />
-          <Text style={styles.navLabel}>Đặt hàng</Text>
+          <Ionicons name="cart-outline" size={22} color={activeTextGrayColor} style={{ marginBottom: 2 }} />
+          <Text style={[styles.navLabel, { color: activeTextGrayColor }]}>{t.order}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.navItem}>
           <Ionicons name="stats-chart" size={22} color={COLORS.primary} style={{ marginBottom: 2 }} />
-          <Text style={[styles.navLabel, styles.navActive]}>Thống kê</Text>
+          <Text style={[styles.navLabel, styles.navActive]}>{t.stats}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.navItem} onPress={() => router.push('/setting')}>
-          <Ionicons name="settings-outline" size={22} color="#aaa" style={{ marginBottom: 2 }} />
-          <Text style={styles.navLabel}>Cài đặt</Text>
+          <Ionicons name="settings-outline" size={22} color={activeTextGrayColor} style={{ marginBottom: 2 }} />
+          <Text style={[styles.navLabel, { color: activeTextGrayColor }]}>{t.settings}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.navItem} onPress={() => router.push('/customerprofile')}>
-          <Ionicons name="person-outline" size={22} color="#aaa" style={{ marginBottom: 2 }} />
-          <Text style={styles.navLabel}>Cá nhân</Text>
+          <Ionicons name="person-outline" size={22} color={activeTextGrayColor} style={{ marginBottom: 2 }} />
+          <Text style={[styles.navLabel, { color: activeTextGrayColor }]}>{t.profile}</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -355,10 +492,10 @@ const styles = StyleSheet.create({
   safeArea: { flex: 1, backgroundColor: '#f0f4f1' },
   header: {
     flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
-    padding: 16, backgroundColor: '#fff', borderBottomWidth: 1, borderBottomColor: '#eee',
+    padding: 16, borderBottomWidth: 1,
   },
   headerTitle: { fontSize: 16, fontWeight: '700', color: '#222' },
-  scroll: { flex: 1, padding: 16 },
+  scroll: { flex: 1 },
   kpiGrid: {
     flexDirection: 'row', flexWrap: 'wrap', gap: 10, marginBottom: 12,
   },
@@ -368,7 +505,7 @@ const styles = StyleSheet.create({
   kpiValue: { fontSize: 22, fontWeight: '900' },
   kpiLabel: { fontSize: 10, color: '#888', textAlign: 'center' },
   card: {
-    backgroundColor: '#fff', borderRadius: 16, padding: 16, marginBottom: 12,
+    borderRadius: 16, padding: 16, marginBottom: 12,
   },
   cardTitle: { fontSize: 14, fontWeight: '700', color: '#222' },
   topRow: {
@@ -386,7 +523,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingVertical: 12,
     borderBottomWidth: 0.5,
-    borderBottomColor: '#eee',
     gap: 8,
   },
   orderInfo: { flex: 1 },
@@ -404,14 +540,14 @@ const styles = StyleSheet.create({
   },
   orderStatus: { fontSize: 11, fontWeight: '700' },
   bottomNav: {
-    flexDirection: 'row', backgroundColor: '#fff', paddingVertical: 10,
-    borderTopWidth: 1, borderTopColor: '#eee',
+    flexDirection: 'row', paddingVertical: 10,
+    borderTopWidth: 1,
   },
   navItem: { flex: 1, alignItems: 'center' },
-  navLabel: { fontSize: 10, color: '#aaa', marginTop: 2 },
+  navLabel: { fontSize: 10, marginTop: 2 },
   navActive: { color: COLORS.primary, fontWeight: '600' },
   filterCard: {
-    backgroundColor: '#fff', padding: 14, marginHorizontal: 16, marginTop: 12, borderRadius: 16,
+    padding: 14, marginHorizontal: 16, marginTop: 12, borderRadius: 16,
     shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.05, shadowRadius: 8, elevation: 2,
   },
   dateInputsRow: {
@@ -424,8 +560,8 @@ const styles = StyleSheet.create({
     fontSize: 10, fontWeight: '600', color: '#666', marginBottom: 4, marginLeft: 2,
   },
   dateInput: {
-    backgroundColor: '#f5f7f6', borderWidth: 1, borderColor: '#e0e5e2', borderRadius: 10,
-    paddingVertical: 8, paddingHorizontal: 10, fontSize: 13, color: '#333', fontWeight: '500',
+    borderWidth: 1, borderRadius: 10,
+    paddingVertical: 8, paddingHorizontal: 10, fontSize: 13, fontWeight: '500',
   },
   filterBtn: {
     backgroundColor: COLORS.primary, paddingVertical: 9, paddingHorizontal: 14, borderRadius: 10,
@@ -438,13 +574,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row', gap: 8, marginTop: 10,
   },
   presetBadge: {
-    backgroundColor: '#f0f3f1', paddingVertical: 5, paddingHorizontal: 10, borderRadius: 20,
+    paddingVertical: 5, paddingHorizontal: 10, borderRadius: 20,
   },
   presetActive: {
-    backgroundColor: '#e8f5e9', borderWidth: 1, borderColor: COLORS.primary,
+    borderWidth: 1, borderColor: COLORS.primary,
   },
   presetText: {
-    fontSize: 11, color: '#666', fontWeight: '500',
+    fontSize: 11, fontWeight: '500',
   },
   presetTextActive: {
     color: COLORS.primary, fontWeight: '600',

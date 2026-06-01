@@ -121,6 +121,14 @@ export default function NotificationScreen(){
     const displaySections = apiSections.length > 0 ? apiSections : sections;
     const unreadCount = displaySections.reduce((sum, sec) => sum + sec.data.filter(i => i.unread).length, 0);
 
+    if (loading) {
+        return (
+            <SafeAreaView style={[styles.safeArea, { justifyContent: 'center', alignItems: 'center' }]}>
+                <ActivityIndicator color={COLORS.primary} size="large" />
+            </SafeAreaView>
+        );
+    }
+
     return(
         <SafeAreaView style = {styles.safeArea}>
             {/* Header */}
@@ -134,12 +142,7 @@ export default function NotificationScreen(){
                     </View>
             </View>
             {/* Danh sách thông báo */}
-            {loading ? (
-                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                    <ActivityIndicator color={COLORS.primary} size="large" />
-                </View>
-            ) : (
-                       <SectionList
+            <SectionList
                 style={{ flex: 1 }}
                 sections={displaySections}
                 keyExtractor={(item) => item.id}
@@ -153,7 +156,6 @@ export default function NotificationScreen(){
                 )}
                 contentContainerStyle={styles.list}
             />
-            )}
         </SafeAreaView>
     );
 }

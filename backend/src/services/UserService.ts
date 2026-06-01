@@ -3,6 +3,8 @@ import { User, UserRole, UserStatus } from "../Entity/User";
 import { BadRequest } from "../core/ErrorResponse";
 import * as bcrypt from "bcrypt";
 import { AppConfig } from "../config/AppConfig";
+import { In } from "typeorm";
+import { PickingTask, PickingTaskStatus } from "../Entity/PickingTask";
 
 @Service()
 export class UserService {
@@ -42,7 +44,25 @@ export class UserService {
   }
 
   async getListUser() {
-    return await User.find({ relations: ["assignedLocation"] });
+    const users = await User.find({ relations: ["assignedLocation"] });
+    const usersWithTasks = await Promise.all(
+      users.map(async (user) => {
+        let activeTasksCount = 0;
+        if (user.role === UserRole.STAFF) {
+          activeTasksCount = await PickingTask.count({
+            where: {
+              assignedUserId: user.id,
+              status: In([PickingTaskStatus.PENDING, PickingTaskStatus.PICKING])
+            }
+          });
+        }
+        return {
+          ...user,
+          activePickingTasksCount: activeTasksCount
+        };
+      })
+    );
+    return usersWithTasks;
   }
 
   async getUser(id: number) {

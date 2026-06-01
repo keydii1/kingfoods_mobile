@@ -166,6 +166,27 @@ export class PickingService {
         task.status = task.quantityPicked === task.quantityToPick ? PickingTaskStatus.COMPLETED : PickingTaskStatus.PICKING;
         await transactionalEntityManager.save(task);
 
+        // Check if all picking tasks for this order are completed
+        const allTasksForOrder = await transactionalEntityManager.createQueryBuilder(PickingTask, "pTask")
+          .innerJoinAndSelect("pTask.orderDetail", "orderDetail")
+          .where("orderDetail.orderId = :orderId", { orderId: task.orderDetail.orderId })
+          .getMany();
+
+        const allCompleted = allTasksForOrder.every(t => {
+          if (t.id === task.id) {
+            return task.status === PickingTaskStatus.COMPLETED;
+          }
+          return t.status === PickingTaskStatus.COMPLETED;
+        });
+
+        if (allCompleted) {
+          const order = await transactionalEntityManager.findOne(Order, { where: { id: task.orderDetail.orderId } });
+          if (order) {
+            order.status = OrderStatus.DELIVERED;
+            await transactionalEntityManager.save(order);
+          }
+        }
+
         // Cập nhật dung lượng Container
         container.currentUsage += quantity;
         container.status = ContainerStatus.ACTIVE;

@@ -7,21 +7,72 @@ import { COLORS } from '../../constants/colors';
 import { Alert } from '../../utils/appAlert';
 import { getAssignedTasks } from '../../constants/services/api';
 import StaffBottomNav from '../../components/StaffBottomNav';
+import { useAppPreferences } from '../../contexts/AppPreferencesContext';
 
-const statusConfig = {
-  pending: { label: 'Chờ lấy', color: '#ffeebf', textColor: '#b78103' },
-  picking: { label: 'Đang lấy', color: '#e3f2fd', textColor: '#1565c0' },
-  completed: { label: 'Hoàn thành', color: '#e8f5e9', textColor: COLORS.primary },
+const cleanLocationName = (name) => {
+    if (!name) return '';
+    return name.replace(/^[🥦🥫🧴❄️\s]+/, '').replace(/^[^a-zA-Z0-9À-ỹđĐ\s]+/, '').trim();
 };
 
-const FILTER_TABS = [
-  { key: 'all', label: 'Tất cả' },
-  { key: 'pending', label: 'Chờ lấy' },
-  { key: 'picking', label: 'Đang lấy' },
-  { key: 'completed', label: 'Hoàn tất' },
-];
+const TRANSLATIONS = {
+  vi: {
+    headerTitle: 'Tìm kiếm nhiệm vụ hôm nay',
+    searchPlaceholder: 'Tìm theo sản phẩm, mã đơn hoặc chi nhánh...',
+    emptyTasks: 'Không tìm thấy nhiệm vụ nào trong hôm nay',
+    completedAlert: 'Nhiệm vụ này đã hoàn tất!',
+    unassignedZone: 'Chưa phân khu',
+    taskTitle: 'Nhiệm vụ',
+    orderText: 'Đơn',
+    sp: 'sp',
+    all: 'Tất cả',
+    pending: 'Chờ lấy',
+    picking: 'Đang lấy',
+    completed: 'Hoàn tất',
+    errorTitle: 'Lỗi',
+    errorDesc: 'Không thể tải danh sách nhiệm vụ',
+  },
+  en: {
+    headerTitle: "Search Today's Tasks",
+    searchPlaceholder: 'Search by product, order ID or branch...',
+    emptyTasks: 'No tasks found today',
+    completedAlert: 'This task is already completed!',
+    unassignedZone: 'Unassigned Zone',
+    taskTitle: 'Task',
+    orderText: 'Order',
+    sp: 'pcs',
+    all: 'All',
+    pending: 'Pending',
+    picking: 'Picking',
+    completed: 'Completed',
+    errorTitle: 'Error',
+    errorDesc: 'Unable to load task list',
+  }
+};
+
 
 export default function OrderSearchScreen() {
+  const { darkMode, language } = useAppPreferences();
+
+  const activeBg = darkMode ? '#121212' : '#f9fafb';
+  const activeHeaderBg = darkMode ? '#1e1e1e' : '#fff';
+  const activeBorderColor = darkMode ? '#2d2d2d' : '#f1f5f9';
+  const activeTextColor = darkMode ? '#f3f4f6' : COLORS.text;
+  const activeCardBg = darkMode ? '#1e1e1e' : '#fff';
+  const activeTextGrayColor = darkMode ? '#9ca3af' : '#64748b';
+  const activeInputBg = darkMode ? '#2d2d2d' : '#f1f5f9';
+  const activeInputText = darkMode ? '#f3f4f6' : COLORS.text;
+  const activeTabBg = darkMode ? '#2d2d2d' : '#f1f5f9';
+  const activeTabBorder = darkMode ? '#3d3d3d' : '#e2e8f0';
+
+  const t = TRANSLATIONS[language];
+
+  const FILTER_TABS = [
+    { key: 'all', label: t.all },
+    { key: 'pending', label: t.pending },
+    { key: 'picking', label: t.picking },
+    { key: 'completed', label: t.completed },
+  ];
+
   const [tasks, setTasks] = useState([]);
   const [query, setQuery] = useState('');
   const [loading, setLoading] = useState(true);
@@ -37,7 +88,7 @@ export default function OrderSearchScreen() {
       const res = await getAssignedTasks();
       setTasks(Array.isArray(res) ? res : []);
     } catch (err) {
-      Alert.alert('Lỗi', 'Không thể tải danh sách nhiệm vụ');
+      Alert.alert(t.errorTitle, t.errorDesc);
     } finally {
       setLoading(false);
     }
@@ -74,7 +125,7 @@ export default function OrderSearchScreen() {
 
   const handleTaskPress = (task) => {
     if (task.status === 'completed') {
-      Alert.alert('Nhiệm vụ', 'Nhiệm vụ này đã hoàn tất!');
+      Alert.alert(t.taskTitle, t.completedAlert);
       return;
     }
     router.push({
@@ -83,53 +134,65 @@ export default function OrderSearchScreen() {
     });
   };
 
+  const getStatusTheme = (status) => {
+    if (darkMode) {
+      if (status === 'completed') return { label: t.completed, bg: 'rgba(46, 125, 50, 0.15)', text: '#81c784' };
+      if (status === 'picking') return { label: t.picking, bg: 'rgba(21, 101, 192, 0.15)', text: '#64b5f6' };
+      return { label: t.pending, bg: 'rgba(183, 129, 3, 0.15)', text: '#ffd54f' };
+    } else {
+      if (status === 'completed') return { label: t.completed, bg: '#e8f5e9', text: COLORS.primary };
+      if (status === 'picking') return { label: t.picking, bg: '#e3f2fd', text: '#1565c0' };
+      return { label: t.pending, bg: '#ffeebf', text: '#b78103' };
+    }
+  };
+
   const renderItem = ({ item }) => {
-    const st = statusConfig[item.status] || { label: item.status, color: '#f5f5f5', textColor: '#888' };
-    const productName = item.orderDetail?.product?.name || 'Sản phẩm không xác định';
-    const branchName = item.orderDetail?.order?.branch?.name || 'Chi nhánh Kingfood';
+    const st = getStatusTheme(item.status);
+    const productName = item.orderDetail?.product?.name || (language === 'vi' ? 'Sản phẩm không xác định' : 'Unknown Product');
+    const branchName = item.orderDetail?.order?.branch?.name || (language === 'vi' ? 'Chi nhánh Kingfood' : 'Kingfood Branch');
     const orderId = item.orderDetail?.orderId || '';
-    const locName = item.location?.name || 'Chưa phân khu';
+    const locName = item.location?.name ? cleanLocationName(item.location.name) : t.unassignedZone;
     const progressText = `${item.quantityPicked}/${item.quantityToPick}`;
     const timeStr = item.createdAt
-      ? new Date(item.createdAt).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })
+      ? new Date(item.createdAt).toLocaleTimeString(language === 'vi' ? 'vi-VN' : 'en-US', { hour: '2-digit', minute: '2-digit' })
       : '';
 
     return (
       <TouchableOpacity 
-        style={styles.taskCard} 
+        style={[styles.taskCard, { backgroundColor: activeCardBg, borderColor: activeBorderColor }]} 
         onPress={() => handleTaskPress(item)}
         activeOpacity={0.85}
       >
         {/* Header row: task ID + status */}
         <View style={styles.cardHeader}>
           <View style={{ flex: 1, marginRight: 8 }}>
-            <Text style={styles.taskId} numberOfLines={1}>
-              #{item.id} <Text style={styles.orderLabel}>· Đơn #{orderId}</Text>
+            <Text style={[styles.taskId, { color: activeTextColor }]} numberOfLines={1}>
+              #{item.id} <Text style={[styles.orderLabel, { color: activeTextGrayColor }]}>· {t.orderText} #{orderId}</Text>
             </Text>
           </View>
-          <View style={[styles.statusTag, { backgroundColor: st.color }]}>
-            <Text style={[styles.statusText, { color: st.textColor }]}>{st.label}</Text>
+          <View style={[styles.statusTag, { backgroundColor: st.bg }]}>
+            <Text style={[styles.statusText, { color: st.text }]}>{st.label}</Text>
           </View>
         </View>
 
         {/* Product name */}
-        <Text style={styles.productName} numberOfLines={2}>{productName}</Text>
-        <Text style={styles.branchName} numberOfLines={1}>{branchName}</Text>
+        <Text style={[styles.productName, { color: activeTextColor }]} numberOfLines={2}>{productName}</Text>
+        <Text style={[styles.branchName, { color: activeTextGrayColor }]} numberOfLines={1}>{branchName}</Text>
 
         {/* Footer: clean tag chips in a wrapping row */}
-        <View style={styles.cardFooter}>
-          <View style={styles.chipTag}>
-            <Ionicons name="location-outline" size={12} color="#64748b" />
-            <Text style={styles.chipText} numberOfLines={1}>{locName}</Text>
+        <View style={[styles.cardFooter, { borderTopColor: activeBorderColor }]}>
+          <View style={[styles.chipTag, { backgroundColor: activeTabBg }]}>
+            <Ionicons name="location-outline" size={12} color={activeTextGrayColor} />
+            <Text style={[styles.chipText, { color: activeTextColor }]} numberOfLines={1}>{locName}</Text>
           </View>
-          <View style={[styles.chipTag, styles.chipProgress]}>
+          <View style={[styles.chipTag, { backgroundColor: darkMode ? 'rgba(46, 125, 50, 0.15)' : '#e8f5e9' }]}>
             <Ionicons name="cube-outline" size={12} color={COLORS.primary} />
-            <Text style={[styles.chipText, { color: COLORS.primary, fontWeight: '700' }]}>{progressText} sp</Text>
+            <Text style={[styles.chipText, { color: COLORS.primary, fontWeight: '700' }]}>{progressText} {t.sp}</Text>
           </View>
           {timeStr ? (
-            <View style={styles.chipTag}>
-              <Ionicons name="time-outline" size={12} color="#64748b" />
-              <Text style={styles.chipText}>{timeStr}</Text>
+            <View style={[styles.chipTag, { backgroundColor: activeTabBg }]}>
+              <Ionicons name="time-outline" size={12} color={activeTextGrayColor} />
+              <Text style={[styles.chipText, { color: activeTextColor }]}>{timeStr}</Text>
             </View>
           ) : null}
         </View>
@@ -137,20 +200,28 @@ export default function OrderSearchScreen() {
     );
   };
 
+  if (loading) {
+    return (
+      <SafeAreaView style={[styles.safeArea, { backgroundColor: activeBg, justifyContent: 'center', alignItems: 'center' }]}>
+        <ActivityIndicator color={COLORS.primary} size="large" />
+      </SafeAreaView>
+    );
+  }
+
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView style={[styles.safeArea, { backgroundColor: activeBg }]}>
       {/* Header */}
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Tìm kiếm nhiệm vụ hôm nay</Text>
+      <View style={[styles.header, { backgroundColor: activeHeaderBg, borderBottomColor: activeBorderColor }]}>
+        <Text style={[styles.headerTitle, { color: activeTextColor }]}>{t.headerTitle}</Text>
         <Text style={styles.count}>{filtered.length}</Text>
       </View>
 
       {/* Search Bar */}
-      <View style={styles.searchBar}>
+      <View style={[styles.searchBar, { backgroundColor: activeInputBg }]}>
         <TextInput
-          style={styles.searchInput}
-          placeholder="Tìm theo sản phẩm, mã đơn hoặc chi nhánh..."
-          placeholderTextColor="#aaa"
+          style={[styles.searchInput, { color: activeInputText }]}
+          placeholder={t.searchPlaceholder}
+          placeholderTextColor={darkMode ? '#64748b' : '#aaa'}
           value={query}
           onChangeText={setQuery}
           autoFocus={false}
@@ -169,7 +240,11 @@ export default function OrderSearchScreen() {
           return (
             <TouchableOpacity
               key={tab.key}
-              style={[styles.filterTab, isActive && styles.filterTabActive]}
+              style={[
+                styles.filterTab, 
+                { backgroundColor: activeTabBg, borderColor: activeTabBorder },
+                isActive && styles.filterTabActive
+              ]}
               onPress={() => setStatusFilter(tab.key)}
               activeOpacity={0.8}
             >
@@ -182,24 +257,18 @@ export default function OrderSearchScreen() {
       </View>
 
       {/* Task List */}
-      {loading ? (
-        <View style={styles.center}>
-          <ActivityIndicator size="large" color={COLORS.primary} />
-        </View>
-      ) : (
-        <FlatList
-          data={filtered}
-          keyExtractor={(item) => String(item.id)}
-          renderItem={renderItem}
-          contentContainerStyle={styles.list}
-          ItemSeparatorComponent={() => <View style={styles.separator} />}
-          ListEmptyComponent={
-            <View style={styles.center}>
-              <Text style={styles.emptyText}>Không tìm thấy nhiệm vụ nào trong hôm nay</Text>
-            </View>
-          }
-        />
-      )}
+      <FlatList
+        data={filtered}
+        keyExtractor={(item) => String(item.id)}
+        renderItem={renderItem}
+        contentContainerStyle={styles.list}
+        ItemSeparatorComponent={() => <View style={styles.separator} />}
+        ListEmptyComponent={
+          <View style={styles.center}>
+            <Text style={[styles.emptyText, { color: activeTextGrayColor }]}>{t.emptyTasks}</Text>
+          </View>
+        }
+      />
 
       <StaffBottomNav active="search" />
     </SafeAreaView>

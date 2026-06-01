@@ -122,7 +122,9 @@ export default function SkuSearchScreen(){
 
 {/* Danh sách kết quả */}
 {loading ? (
-    <ActivityIndicator color={COLORS.primary} style={{ marginTop: 20 }} />
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingTop: 80 }}>
+        <ActivityIndicator color={COLORS.primary} size="large" />
+    </View>
 ) : results.length === 0 && query.trim() ? (
     <Text style={styles.emptyText}>Không tìm thấy sản phẩm nào</Text>
 ) : (

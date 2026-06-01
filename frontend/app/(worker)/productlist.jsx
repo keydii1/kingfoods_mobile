@@ -1,7 +1,7 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { Text, View, TouchableOpacity, StyleSheet, FlatList, ActivityIndicator, RefreshControl } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import {getAssignedTasks} from '../../constants/services/api'
+import {getAssignedTasks, getCachedData} from '../../constants/services/api'
 import { COLORS } from '../../constants/colors';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useNavigation } from '@react-navigation/native';
@@ -41,12 +41,47 @@ export default function productListScreen() {
   const params = useLocalSearchParams();
   const taskId = params.taskId;
   const navigation = useNavigation();
-  const [loading, setLoading] = useState(true);
-  const [products, setProducts] = useState([]);
   const { userRole } = useAuth();
+
+  const cachedTasks = getCachedData('/admin/picking/assigned');
+  const [loading, setLoading] = useState(!cachedTasks);
   const [refreshing, setRefreshing] = useState(false);
 
-  const [taskInfo, setTaskInfo] = useState(null);
+  const initialProductsState = useMemo(() => {
+    if (!cachedTasks) return [];
+    const arr = Array.isArray(cachedTasks) ? cachedTasks : [];
+    const task = arr.find(t => String(t.id) === String(taskId));
+    if (!task) return [];
+    const orderId = task.orderDetail?.order?.id;
+    const orderTasks = orderId
+      ? arr.filter(t => t.orderDetail?.order?.id === orderId)
+      : [task];
+    return orderTasks.map(t => {
+      const prod = t.orderDetail?.product;
+      const remaining = (t.quantityToPick ?? 1) - (t.quantityPicked ?? 0);
+      const loc = t.location;
+      const catLoc = t.orderDetail?.product?.category?.location;
+      return {
+        taskId: t.id,
+        location: loc?.name || catLoc?.name || '',
+        locationCode: loc?.code || catLoc?.code || '',
+        name: prod?.name || 'Unknown',
+        sku: String(prod?.id ?? t.id),
+        qty: Math.max(0, remaining),
+        unit: 'cái',
+        done: t.status === 'completed' || remaining <= 0,
+      };
+    });
+  }, [cachedTasks, taskId]);
+
+  const initialTaskInfo = useMemo(() => {
+    if (!cachedTasks) return null;
+    const arr = Array.isArray(cachedTasks) ? cachedTasks : [];
+    return arr.find(t => String(t.id) === String(taskId)) || null;
+  }, [cachedTasks, taskId]);
+
+  const [products, setProducts] = useState(initialProductsState);
+  const [taskInfo, setTaskInfo] = useState(initialTaskInfo);
 
   const loadItems = useCallback(async (silent = false) => {
     try{
@@ -246,6 +281,14 @@ export default function productListScreen() {
     );
   }
 
+  if (loading) {
+    return (
+      <SafeAreaView style={[styles.safeArea, { justifyContent: 'center', alignItems: 'center' }]}>
+        <ActivityIndicator color={COLORS.primary} size="large" />
+      </SafeAreaView>
+    );
+  }
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.contentArea}>
@@ -272,9 +315,7 @@ export default function productListScreen() {
         </View>
       </View>
       <View style={{ flex: 1 }}>
-        {loading ? (
-            <ActivityIndicator color={COLORS.primary} size="large" style={{ marginTop: 40 }} />
-        ) : products.length === 0 ? (
+        {products.length === 0 ? (
             <Text style={{ textAlign: 'center', marginTop: 40, color: '#888' }}>
                 Không có sản phẩm nào
             </Text>
@@ -293,12 +334,7 @@ export default function productListScreen() {
       {/* Confirm Order Button — luôn hiển thị dưới cùng */}
       <View style={styles.confirmBar}>
         {allDone ? (
-          <>
-            <Text style={styles.confirmText}>Đã hoàn thành tất cả sản phẩm</Text>
-            <TouchableOpacity style={styles.confirmBtn} onPress={confirmOrder}>
-              <Text style={styles.confirmBtnText}>Xác nhận hoàn thành đơn hàng</Text>
-            </TouchableOpacity>
-          </>
+          <Text style={styles.confirmText}>Đã hoàn thành tất cả sản phẩm</Text>
         ) : (
           <Text style={styles.confirmText}>Còn {remaining} sản phẩm chưa lấy</Text>
         )}

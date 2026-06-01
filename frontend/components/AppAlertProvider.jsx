@@ -82,19 +82,25 @@ export function AppAlertProvider({ children }) {
   const [config, setConfig] = useState(null);
   const slide = useRef(new Animated.Value(36)).current;
   const fade = useRef(new Animated.Value(0)).current;
+  const activeConfigRef = useRef(null);
 
   const dismiss = useCallback(() => {
+    const configToDismiss = activeConfigRef.current;
     Animated.parallel([
       Animated.timing(fade, { toValue: 0, duration: 160, useNativeDriver: true }),
       Animated.timing(slide, { toValue: 24, duration: 160, useNativeDriver: true }),
     ]).start(() => {
-      setVisible(false);
-      setConfig(null);
+      if (activeConfigRef.current === configToDismiss) {
+        setVisible(false);
+        setConfig(null);
+        activeConfigRef.current = null;
+      }
     });
   }, [fade, slide]);
 
   const show = useCallback(
     (next) => {
+      activeConfigRef.current = next;
       setConfig(next);
       setVisible(true);
       slide.setValue(36);

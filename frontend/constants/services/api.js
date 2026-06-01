@@ -1,16 +1,23 @@
 import Constants from 'expo-constants';
+import { Platform } from 'react-native';
 
 const getBaseUrl = () => {
-    // Dynamically detect local host IP to work on both simulators and physical devices
-    const debuggerHost = Constants.expoConfig?.hostUri || '';
-    const localhost = debuggerHost.split(':')[0];
-    
-    if (__DEV__ && localhost) {
-        return `http://${localhost}:3000/api/v1`;
-    }
-    // Fallback to localhost for local testing
     if (__DEV__) {
-        return 'http://localhost:3000/api/v1';
+        // Dynamically detect the dev machine's IP from Expo's debugger host
+        // This works for both Simulator AND real devices on the same WiFi network
+        const debuggerHost = Constants.expoConfig?.hostUri || '';
+        const localhost = debuggerHost.split(':')[0];
+        
+        if (localhost && localhost !== '127.0.0.1') {
+            return `http://${localhost}:9999/api/v1`;
+        }
+        
+        // Fallback: iOS Simulator can use 127.0.0.1 (shares host network)
+        // For Android emulator, 10.0.2.2 maps to host machine
+        if (Platform.OS === 'android') {
+            return 'http://10.0.2.2:9999/api/v1';
+        }
+        return 'http://127.0.0.1:9999/api/v1';
     }
     return 'https://kingfood-wms-backend.onrender.com/api/v1';
 };
@@ -20,27 +27,46 @@ console.log('[WMS] Connected to API URL:', BASE_URL);
 
 
 let authToken = null;
-let onUnauthorized = null;
 
-// On web, restore token from localStorage
-const storage = typeof window !== 'undefined' && window.localStorage;
-if (storage) {
-  const saved = storage.getItem('authToken');
-  if (saved) authToken = saved;
+// Lightweight high-performance in-memory cache for GET requests
+const apiCache = new Map();
+
+export function clearApiCache() {
+    apiCache.clear();
 }
 
-export function setToken(token){
-  authToken = token;
-  if (storage) {
-    if (token) storage.setItem('authToken', token);
-    else storage.removeItem('authToken');
-  }
+export function setToken(token) {
+    authToken = token;
+    clearApiCache(); // Clear cache on token changes (login/logout)
 }
-export function getToken(){return authToken;}
 
-export function setOnUnauthorized(cb) { onUnauthorized = cb; }
+export function getToken() {
+    return authToken;
+}
+
+export function getCachedData(endpoint, body = null) {
+    const cacheKey = `${endpoint}:${body ? JSON.stringify(body) : ''}`;
+    const cached = apiCache.get(cacheKey);
+    if (cached) {
+        return cached.data;
+    }
+    return null;
+}
 
 async function request(method, endpoint, body = null, extraHeaders = {}) {
+    const isGet = method === 'GET';
+    const cacheKey = `${endpoint}:${body ? JSON.stringify(body) : ''}`;
+
+    if (isGet) {
+        const cached = apiCache.get(cacheKey);
+        if (cached && Date.now() - cached.timestamp < 60000) { // Extended to 60s TTL
+            return cached.data;
+        }
+    } else {
+        // Automatically clear cache on any state mutation to guarantee fresh data
+        apiCache.clear();
+    }
+
     const headers = {};
     if (authToken) headers['Authorization'] = `Bearer ${authToken}`;
     Object.assign(headers, extraHeaders);
@@ -55,14 +81,18 @@ async function request(method, endpoint, body = null, extraHeaders = {}) {
     const res = await fetch(`${BASE_URL}${endpoint}`, config);
     const json = await res.json();
 
-    if (!res.ok) {
-      if (res.status === 401 && onUnauthorized) {
-        onUnauthorized();
-      }
-      throw new Error(json.message || 'Lỗi server');
+    if (!res.ok) throw new Error(json.message || 'Lỗi server');
+
+    const result = json.metadata ?? json;
+
+    if (isGet) {
+        apiCache.set(cacheKey, {
+            data: result,
+            timestamp: Date.now()
+        });
     }
 
-    return json.metadata ?? json;
+    return result;
 }
 // AUTH
 export const login = (username, password) => 
@@ -91,6 +121,12 @@ export const updateProfile = (data) =>
 // PICKING
 export const getAssignedTasks = () =>
     request ('GET', '/admin/picking/assigned');
+export const getAllTasksAdmin = (params = {}) => {
+    const queryStr = Object.keys(params)
+        .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`)
+        .join('&');
+    return request('GET', `/admin/tasks?limit=1000${queryStr ? `&${queryStr}` : ''}`);
+};
 export const packItem = (taskId, containerCode, quantity) =>
     request ('POST', '/admin/picking/pack', {taskId, containerCode, quantity});
 export const moveItem = (productId, oldContainerCode, newContainerCode, quantity = 1) =>
@@ -136,6 +172,8 @@ export const getProducts = (query = '') => {
 };
 export const getByProductId = (id) =>
     request ('GET', `/public/products/${id}`);
+export const getPublicCategories = () =>
+    request('GET', '/public/categories?limit=100');
 // Admin
 export const getUsers = () =>
     request ('GET', '/admin/users');

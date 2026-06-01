@@ -93,7 +93,7 @@ export default function BatchPickingScreen() {
                 .filter(t => t.status !== 'completed')
                 .map((t, ti) => ({
                     id: t.id,
-                    location: t.location?.name || '',
+                    location: t.location?.name ? t.location.name.replace(/^[🥦🥫🧴❄️\s]+/, '').replace(/^[^a-zA-Z0-9À-ỹđĐ\s]+/, '').trim() : '',
                     name: `${t.orderDetail?.product?.name || 'Sản phẩm'} (${t.quantityToPick} cái)`,
                     bins: [{
                         color: '#fff3e0',
@@ -130,6 +130,14 @@ export default function BatchPickingScreen() {
         { value: String(new Set(items.map(i => i.location)).size), label: 'Vị trí kệ' },
         { value: String(new Set(items.flatMap(i => i.bins.map(b => b.label))).size), label: 'Thùng đích' },
     ];
+
+    if (loading) {
+        return (
+            <SafeAreaView style={[styles.safeArea, { justifyContent: 'center', alignItems: 'center' }]}>
+                <ActivityIndicator color={COLORS.primary} size="large" />
+            </SafeAreaView>
+        );
+    }
 
     return (
         <SafeAreaView style={styles.safeArea}>
@@ -187,17 +195,13 @@ export default function BatchPickingScreen() {
                     <Text style={styles.cardTitle}>
                         Thứ tự Pick ({doneCount}/{items.length} xong)
                     </Text>
-                    {loading ? (
-                        <ActivityIndicator color={COLORS.primary} size="large" style={{ marginTop: 40 }} />
-                    ) : (
-                        items.map((item) => (
-                            <BatchItem
-                                key={item.id}
-                                item={item}
-                                onToggle={handleToggle}
-                            />
-                        ))
-                    )}
+                    {items.map((item) => (
+                        <BatchItem
+                            key={item.id}
+                            item={item}
+                            onToggle={handleToggle}
+                        />
+                    ))}
                 </View>
 
                 {/* Nút quét mã */}

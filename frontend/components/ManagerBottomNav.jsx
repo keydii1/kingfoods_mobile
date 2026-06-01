@@ -5,20 +5,22 @@ import { COLORS } from '../constants/colors';
 import { useAppPreferences } from '../contexts/AppPreferencesContext';
 
 const getTabs = (lang) => [
-  { key: 'dashboard', icon: 'home', iconOutline: 'home-outline', label: lang === 'vi' ? 'Trang chủ' : 'Home', route: '/dashboard' },
-  { key: 'search', icon: 'cube', iconOutline: 'cube-outline', label: lang === 'vi' ? 'Soạn hàng' : 'Picking', route: '/ordersearch' },
-  { key: 'incident', icon: 'alert-circle', iconOutline: 'alert-circle-outline', label: lang === 'vi' ? 'Sự cố' : 'Incidents', route: '/incidentreport' },
-  { key: 'profile', icon: 'person-circle', iconOutline: 'person-circle-outline', label: lang === 'vi' ? 'Tài khoản' : 'Account', route: '/profile' },
+  { key: 'dashboard', icon: 'stats-chart', iconOutline: 'stats-chart-outline', label: lang === 'vi' ? 'Dashboard' : 'Dashboard', route: '/managerdashboard' },
+  { key: 'team', icon: 'people', iconOutline: 'people-outline', label: lang === 'vi' ? 'Nhân viên' : 'Staff', route: '/team' },
+  { key: 'storelist', icon: 'business', iconOutline: 'business-outline', label: lang === 'vi' ? 'Cửa hàng' : 'Stores', route: '/storelist' },
+  { key: 'incident', icon: 'warning', iconOutline: 'warning-outline', label: lang === 'vi' ? 'Sự cố' : 'Incidents', route: '/incidentreport' },
+  { key: 'setting', icon: 'settings', iconOutline: 'settings-outline', label: lang === 'vi' ? 'Cài đặt' : 'Settings', route: '/setting' },
 ];
 
-export default function StaffBottomNav({ active }) {
+export default function ManagerBottomNav({ active }) {
   const pathname = usePathname();
   const { darkMode, language } = useAppPreferences();
 
   const activeNavBg = darkMode ? '#1e1e1e' : '#fff';
-  const activeBorderColor = darkMode ? '#2d2d2d' : '#f1f5f9';
-  const inactiveTextColor = darkMode ? '#9ca3af' : '#94a3b8';
+  const activeBorderColor = darkMode ? '#2d2d2d' : '#eee';
+  const inactiveTextColor = darkMode ? '#9ca3af' : '#888';
   const tabs = getTabs(language);
+
 
   return (
     <View style={[styles.bottomNav, { backgroundColor: activeNavBg, borderTopColor: activeBorderColor }]}>
@@ -29,7 +31,7 @@ export default function StaffBottomNav({ active }) {
             key={tab.key}
             style={styles.navItem}
             disabled={isActive}
-            onPress={() => router.navigate(tab.route)}
+            onPress={() => router.replace(tab.route)}
             activeOpacity={0.8}
           >
             <Ionicons
@@ -54,7 +56,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
     borderTopWidth: 1,
+    borderTopColor: '#eee',
     paddingVertical: 10,
+    backgroundColor: '#fff',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: -4 },
     shadowOpacity: 0.02,
@@ -62,7 +66,6 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   navItem: { alignItems: 'center', flex: 1 },
-  navLabel: { fontSize: 10, fontWeight: '600' },
+  navLabel: { fontSize: 10, color: '#888', fontWeight: '600' },
   navActive: { color: COLORS.primary, fontWeight: '800' },
 });
-

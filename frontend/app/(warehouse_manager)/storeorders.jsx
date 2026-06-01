@@ -4,9 +4,48 @@ import { Alert } from '../../utils/appAlert';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
 import { COLORS } from '../../constants/colors';
-import { getOrders, updateOrderStatus, deleteOrder } from '../../constants/services/api';
+import { getOrders, updateOrderStatus, deleteOrder, getUsers, assignPickingTask, BASE_URL } from '../../constants/services/api';
 import { Ionicons } from '@expo/vector-icons';
 import { playSound } from '../../utils/soundService';
+import { useAppPreferences } from '../../contexts/AppPreferencesContext';
+
+// Timezone date helpers for Vietnam (UTC+7)
+const formatVietnamDate = (dateStr) => {
+  if (!dateStr) return '';
+  let date = new Date(dateStr);
+  if (isNaN(date.getTime())) return dateStr;
+  
+  // Workaround: If connecting to Render (which has the timezone bug), compensate by adding 7 hours
+  if (BASE_URL && BASE_URL.includes('onrender.com')) {
+    date = new Date(date.getTime() + (7 * 60 * 60 * 1000));
+  }
+  
+  const d = String(date.getDate()).padStart(2, '0');
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const y = date.getFullYear();
+  const h = String(date.getHours()).padStart(2, '0');
+  const min = String(date.getMinutes()).padStart(2, '0');
+  const sec = String(date.getSeconds()).padStart(2, '0');
+  
+  return `${h}:${min}:${sec} ${d}/${m}/${y}`;
+};
+
+const formatVietnamDateOnly = (dateStr) => {
+  if (!dateStr) return '';
+  let date = new Date(dateStr);
+  if (isNaN(date.getTime())) return dateStr;
+  
+  // Workaround: If connecting to Render (which has the timezone bug), compensate by adding 7 hours
+  if (BASE_URL && BASE_URL.includes('onrender.com')) {
+    date = new Date(date.getTime() + (7 * 60 * 60 * 1000));
+  }
+  
+  const d = String(date.getDate()).padStart(2, '0');
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const y = date.getFullYear();
+  
+  return `${d}/${m}/${y}`;
+};
 
 const statusConfig = {
   pending: { label: 'Chờ duyệt', color: '#fff3e0', textColor: '#e65100' },
@@ -24,12 +63,105 @@ const filters = [
 ];
 
 export default function StoreOrdersScreen() {
+  const { language, darkMode } = useAppPreferences();
+  const isEn = language === 'en';
   const { customerId, storeName, initialFilter } = useLocalSearchParams();
   const [orders, setOrders] = useState([]);
   const [branchName, setBranchName] = useState(storeName || 'Cửa hàng');
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState(initialFilter || 'all');
   const [selectedOrder, setSelectedOrder] = useState(null);
+
+  // Task assignment states
+  const [showAssignModal, setShowAssignModal] = useState(false);
+  const [staffList, setStaffList] = useState([]);
+  const [loadingStaff, setLoadingStaff] = useState(false);
+  const [selectedStaff, setSelectedStaff] = useState(null);
+  const [assignQuantities, setAssignQuantities] = useState({}); // mapping: productId -> quantity
+  const [selectedProducts, setSelectedProducts] = useState({}); // mapping: productId -> boolean
+  const [assigning, setAssigning] = useState(false);
+
+  const fetchStaff = async () => {
+    try {
+      setLoadingStaff(true);
+      const res = await getUsers();
+      const allUsers = Array.isArray(res) ? res : (res?.data || []);
+      // Filter for staff role only
+      const staffOnly = allUsers.filter(u => u.role === 'staff');
+      // Sort staff: 1. Free first (activePickingTasksCount === 0), 2. Workload ascending
+      const sortedStaff = [...staffOnly].sort((a, b) => {
+        const aTasks = a.activePickingTasksCount || 0;
+        const bTasks = b.activePickingTasksCount || 0;
+        return aTasks - bTasks;
+      });
+      setStaffList(sortedStaff);
+      if (sortedStaff.length > 0) {
+        setSelectedStaff(sortedStaff[0].id || sortedStaff[0]._id);
+      }
+    } catch (err) {
+      console.log('Error fetching staff:', err.message);
+    } finally {
+      setLoadingStaff(false);
+    }
+  };
+
+  const openAssignModal = (order) => {
+    const initialQtys = {};
+    const initialSelected = {};
+    order.orderDetails?.forEach(detail => {
+      if (detail.product) {
+        initialQtys[detail.product.id] = detail.quantity;
+        initialSelected[detail.product.id] = true;
+      }
+    });
+    setAssignQuantities(initialQtys);
+    setSelectedProducts(initialSelected);
+    setSelectedOrder(order);
+    setShowAssignModal(true);
+    fetchStaff();
+  };
+
+  const handleAssignTask = async () => {
+    if (!selectedStaff) {
+      Alert.alert('Lỗi', 'Vui lòng chọn nhân viên để giao việc');
+      return;
+    }
+
+    const tasksToSubmit = [];
+    selectedOrder.orderDetails?.forEach(detail => {
+      const pId = detail.product?.id;
+      if (pId && selectedProducts[pId]) {
+        const qty = assignQuantities[pId] || detail.quantity;
+        tasksToSubmit.push({
+          productId: pId,
+          staffId: selectedStaff,
+          quantity: qty
+        });
+      }
+    });
+
+    if (tasksToSubmit.length === 0) {
+      Alert.alert('Lỗi', 'Vui lòng chọn ít nhất một sản phẩm để giao việc');
+      return;
+    }
+
+    setAssigning(true);
+    try {
+      await assignPickingTask({
+        orderId: selectedOrder.id || selectedOrder._id,
+        tasks: tasksToSubmit
+      });
+      playSound('success');
+      Alert.alert('Thành công', 'Đã phân công và giao nhiệm vụ soạn hàng thành công!');
+      setShowAssignModal(false);
+      setSelectedOrder(null);
+      fetchOrders();
+    } catch (err) {
+      Alert.alert('Lỗi', err.message || 'Không thể giao việc');
+    } finally {
+      setAssigning(false);
+    }
+  };
 
   useEffect(() => {
     fetchOrders();
@@ -126,7 +258,7 @@ export default function StoreOrdersScreen() {
             {item.totalPrice ? item.totalPrice.toLocaleString() : '0'}đ
           </Text>
           <Text style={styles.orderDate}>
-            {item.createdAt ? new Date(item.createdAt).toLocaleDateString('vi-VN') : ''}
+            {formatVietnamDateOnly(item.createdAt)}
           </Text>
         </View>
       </TouchableOpacity>
@@ -135,8 +267,8 @@ export default function StoreOrdersScreen() {
 
   if (loading) {
     return (
-      <SafeAreaView style={styles.safeArea}>
-        <View style={styles.center}><ActivityIndicator size="large" color={COLORS.primary} /></View>
+      <SafeAreaView style={[styles.safeArea, { justifyContent: 'center', alignItems: 'center' }]}>
+        <ActivityIndicator color={COLORS.primary} size="large" />
       </SafeAreaView>
     );
   }
@@ -149,7 +281,7 @@ export default function StoreOrdersScreen() {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()}>
+        <TouchableOpacity onPress={() => router.replace('/managerdashboard')}>
           <Ionicons name="chevron-back" size={24} color={COLORS.primary} style={{ marginRight: 8 }} />
         </TouchableOpacity>
         <View style={styles.headerInfo}>
@@ -251,7 +383,7 @@ export default function StoreOrdersScreen() {
                   <View style={styles.detailRow}>
                     <Text style={styles.detailLabel}>Ngày đặt hàng</Text>
                     <Text style={styles.detailVal}>
-                      {selectedOrder.createdAt ? new Date(selectedOrder.createdAt).toLocaleString('vi-VN') : ''}
+                      {formatVietnamDate(selectedOrder.createdAt)}
                     </Text>
                   </View>
                   <View style={styles.detailRow}>
@@ -277,35 +409,191 @@ export default function StoreOrdersScreen() {
                       onPress={() => handleReject(selectedOrder.id || selectedOrder._id)}
                     >
                       <Ionicons name="close-circle-outline" size={20} color="#fff" style={{ marginRight: 4 }} />
-                      <Text style={styles.btnText}>Từ chối</Text>
+                      <Text style={styles.btnText}>{isEn ? 'Reject' : 'Từ chối'}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity 
                       style={[styles.actionBtn, styles.btnConfirm]} 
                       onPress={() => handleConfirm(selectedOrder.id || selectedOrder._id)}
                     >
                       <Ionicons name="checkmark-circle-outline" size={20} color="#fff" style={{ marginRight: 4 }} />
-                      <Text style={styles.btnText}>Xác nhận duyệt</Text>
+                      <Text style={styles.btnText}>{isEn ? 'Approve' : 'Xác nhận duyệt'}</Text>
                     </TouchableOpacity>
                   </View>
-                ) : selectedOrder.status === 'processing' ? (
-                  <TouchableOpacity 
-                    style={[styles.actionBtn, styles.btnGoToTask, { width: '100%' }]} 
-                    onPress={() => {
-                      setSelectedOrder(null);
-                      router.push({ pathname: '/(worker)/productlist', params: { taskId: selectedOrder.id || selectedOrder._id } });
-                    }}
-                  >
-                    <Ionicons name="cube-outline" size={20} color="#fff" style={{ marginRight: 6 }} />
-                    <Text style={styles.btnText}>Chuyển sang Picker soạn hàng</Text>
-                  </TouchableOpacity>
                 ) : (
                   <TouchableOpacity 
                     style={[styles.actionBtn, styles.btnCloseFooter, { width: '100%' }]} 
                     onPress={() => setSelectedOrder(null)}
                   >
-                    <Text style={styles.btnText}>Đóng</Text>
+                    <Text style={styles.btnText}>{isEn ? 'Close' : 'Đóng'}</Text>
                   </TouchableOpacity>
                 )}
+              </View>
+
+            </View>
+          </View>
+        </Modal>
+      )}
+
+      {/* Modal Phân Chia & Giao Việc Cho Nhân Viên */}
+      {showAssignModal && selectedOrder && (
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={showAssignModal}
+          onRequestClose={() => setShowAssignModal(false)}
+        >
+          <View style={styles.modalOverlay}>
+            <View style={[styles.modalContent, { height: '85%' }]}>
+              
+              {/* Modal Header */}
+              <View style={styles.modalHeader}>
+                <View>
+                  <Text style={styles.modalTitle}>Giao việc · Đơn #{selectedOrder.id || selectedOrder._id}</Text>
+                  <Text style={styles.modalSub}>{branchName}</Text>
+                </View>
+                <TouchableOpacity onPress={() => setShowAssignModal(false)} style={styles.closeBtn}>
+                  <Ionicons name="close-circle" size={28} color="#aaa" />
+                </TouchableOpacity>
+              </View>
+
+              <ScrollView style={styles.modalBody}>
+                {/* 1. CHỌN NHÂN VIÊN */}
+                <Text style={[styles.sectionTitle, { marginBottom: 12 }]}>1. Chọn nhân viên soạn hàng:</Text>
+                {loadingStaff ? (
+                  <ActivityIndicator color={COLORS.primary} size="small" style={{ marginVertical: 12 }} />
+                ) : staffList.length > 0 ? (
+                  <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 20 }}>
+                    {staffList.map(staff => {
+                      const isSelected = selectedStaff === staff.id;
+                      const activeTasks = staff.activePickingTasksCount || 0;
+                      const isFree = activeTasks === 0;
+                      
+                      return (
+                        <TouchableOpacity
+                          key={staff.id}
+                          style={{
+                            paddingHorizontal: 12,
+                            paddingVertical: 8,
+                            borderRadius: 10,
+                            borderWidth: 1.5,
+                            borderColor: isSelected ? COLORS.primary : '#eee',
+                            backgroundColor: isSelected ? COLORS.warningBg : '#fff',
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            gap: 6
+                          }}
+                          onPress={() => setSelectedStaff(staff.id)}
+                        >
+                          <Ionicons name="person" size={14} color={isSelected ? COLORS.primary : '#888'} />
+                          <Text style={{ fontSize: 13, fontWeight: isSelected ? '700' : '500', color: isSelected ? COLORS.primary : '#444' }}>
+                            {staff.name || staff.username}
+                          </Text>
+                          
+                          {/* Availability Tag */}
+                          <View style={{ 
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            backgroundColor: isFree ? COLORS.successBg : COLORS.errorBg, 
+                            paddingHorizontal: 6,
+                            paddingVertical: 2,
+                            borderRadius: 4,
+                            gap: 4
+                          }}>
+                            <View style={{
+                              width: 6,
+                              height: 6,
+                              borderRadius: 3,
+                              backgroundColor: isFree ? COLORS.success : COLORS.error
+                            }} />
+                            <Text style={{ 
+                              fontSize: 10, 
+                              fontWeight: '700', 
+                              color: isFree ? COLORS.success : COLORS.error, 
+                            }}>
+                              {isFree ? (isEn ? 'Idle' : 'Rảnh') : (isEn ? `Busy (${activeTasks})` : `Bận (${activeTasks})`)}
+                            </Text>
+                          </View>
+                        </TouchableOpacity>
+                      );
+                    })}
+                  </View>
+                ) : (
+                  <Text style={{ color: '#888', fontStyle: 'italic', marginBottom: 20 }}>Không tìm thấy nhân viên nào trong hệ thống</Text>
+                )}
+
+                {/* 2. CHỌN SẢN PHẨM & SỐ LƯỢNG */}
+                <Text style={[styles.sectionTitle, { marginBottom: 12 }]}>2. Chọn sản phẩm & Số lượng giao:</Text>
+                {selectedOrder.orderDetails?.map((detail, idx) => {
+                  const p = detail.product;
+                  if (!p) return null;
+                  const isChecked = selectedProducts[p.id] ?? false;
+                  const qty = assignQuantities[p.id] ?? detail.quantity;
+
+                  return (
+                    <View key={idx} style={[styles.productRow, { opacity: isChecked ? 1 : 0.5, paddingVertical: 10 }]}>
+                      {/* Checkbox toggle */}
+                      <TouchableOpacity
+                        onPress={() => setSelectedProducts(prev => ({ ...prev, [p.id]: !isChecked }))}
+                        style={{ padding: 4 }}
+                      >
+                        <Ionicons
+                          name={isChecked ? "checkbox" : "square-outline"}
+                          size={22}
+                          color={isChecked ? COLORS.primary : '#aaa'}
+                        />
+                      </TouchableOpacity>
+
+                      <View style={{ flex: 1, marginLeft: 4 }}>
+                        <Text style={[styles.productName, { fontSize: 13 }]}>{p.name}</Text>
+                        <Text style={{ fontSize: 11, color: '#888', marginTop: 2 }}>Cần soạn: {detail.quantity} {p.unit || 'cái'}</Text>
+                      </View>
+
+                      {/* Quantity Selector */}
+                      {isChecked && (
+                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                          <TouchableOpacity
+                            onPress={() => setAssignQuantities(prev => ({ ...prev, [p.id]: Math.max(1, qty - 1) }))}
+                            style={{ width: 28, height: 28, borderRadius: 14, backgroundColor: '#f0f0f0', alignItems: 'center', justifyContent: 'center' }}
+                          >
+                            <Text style={{ fontWeight: '700', fontSize: 16 }}>−</Text>
+                          </TouchableOpacity>
+                          <Text style={{ fontSize: 14, fontWeight: '700', minWidth: 20, textAlign: 'center' }}>{qty}</Text>
+                          <TouchableOpacity
+                            onPress={() => setAssignQuantities(prev => ({ ...prev, [p.id]: Math.min(detail.quantity, qty + 1) }))}
+                            style={{ width: 28, height: 28, borderRadius: 14, backgroundColor: '#f0f0f0', alignItems: 'center', justifyContent: 'center' }}
+                          >
+                            <Text style={{ fontWeight: '700', fontSize: 16 }}>+</Text>
+                          </TouchableOpacity>
+                        </View>
+                      )}
+                    </View>
+                  );
+                })}
+              </ScrollView>
+
+              {/* Modal Footer */}
+              <View style={styles.modalFooter}>
+                <TouchableOpacity
+                  style={[
+                    styles.actionBtn,
+                    {
+                      backgroundColor: COLORS.primary,
+                      width: '100%',
+                      opacity: assigning ? 0.7 : 1
+                    }
+                  ]}
+                  onPress={handleAssignTask}
+                  disabled={assigning}
+                >
+                  {assigning ? (
+                    <ActivityIndicator color="#fff" size="small" />
+                  ) : (
+                    <>
+                      <Ionicons name="checkmark-done" size={20} color="#fff" style={{ marginRight: 6 }} />
+                      <Text style={styles.btnText}>Xác nhận giao việc</Text>
+                    </>
+                  )}
+                </TouchableOpacity>
               </View>
 
             </View>

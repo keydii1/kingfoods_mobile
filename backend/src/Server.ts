@@ -2,7 +2,7 @@ import { Configuration, PlatformApplication } from "@tsed/common";
 import "@tsed/platform-express";
 import "@tsed/ajv";
 import "@tsed/swagger";
-import "@tsed/typeorm";
+import { TypeORMService } from "@tsed/typeorm";
 import { AppDataSource } from "./config/DataSource";
 import { ErrorHandlerMiddleware } from "./middleware/ErrorHandlerMiddleware";
 import { RequestIdMiddleware } from "./middleware/RequestIdMiddleware";
@@ -108,7 +108,28 @@ import { Request, Response } from "express";
   ],
 })
 export class Server {
-  constructor(protected app: PlatformApplication) {}
+  constructor(
+    protected app: PlatformApplication,
+    private typeORMService: TypeORMService
+  ) {}
+
+  $afterInit() {
+    try {
+      const connection = this.typeORMService.get("default");
+      if (connection) {
+        const driver = connection.driver as any;
+        if (driver && driver.pool) {
+          driver.pool.on("connection", (conn: any) => {
+            conn.query("SET time_zone = '+07:00'");
+          });
+          // Also set the timezone for the initial/current connection in the pool
+          connection.query("SET time_zone = '+07:00'").catch(() => {});
+        }
+      }
+    } catch (err) {
+      console.error("Error configuring database connection timezone:", err);
+    }
+  }
 
   $afterRoutesInit() {
     this.app.use(ErrorHandlerMiddleware);

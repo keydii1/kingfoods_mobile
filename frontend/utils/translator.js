@@ -1,0 +1,150 @@
+// Category translation dictionary
+const CATEGORIES = {
+  "Hóa phẩm": "Chemicals",
+  "Tẩy rửa": "Cleaning Supplies",
+  "Thực phẩm tươi sống": "Fresh Produce",
+  "Trái cây nội địa": "Local Fruits",
+  "Thịt, Cá": "Meat & Fish",
+  "Đồ đông lạnh": "Frozen Food",
+  "Gia vị & Đồ khô": "Spices & Dry Goods"
+};
+
+// Unit translation dictionary
+const UNITS = {
+  "cái": "piece",
+  "gói": "pack",
+  "chai": "bottle",
+  "hộp": "box",
+  "khay": "tray",
+  "quả": "piece",
+  "miếng": "piece",
+  "kg": "kg",
+  "lốc": "pack",
+  "lon": "can",
+  "ống": "tube",
+  "con": "piece",
+  "túi": "bag",
+  "nải": "bunch"
+};
+
+// Product translation dictionary
+const PRODUCTS = {
+  "Dầu gội Head & Shoulders 625ml": "Head & Shoulders Shampoo 625ml",
+  "Sữa tắm Lifebuoy Bảo vệ vượt trội 800g": "Lifebuoy Body Wash Total 10 800g",
+  "Xà bông cục Safeguard Trắng tinh khiết": "Safeguard Soap Bar Pure White",
+  "Dầu xả Pantene Mượt Mà 300ml": "Pantene Conditioner Smooth 300ml",
+  "Sữa rửa mặt Senka Perfect Whip 120g": "Senka Perfect Whip Cleanser 120g",
+  "Kem đánh răng Colgate Ngừa Sâu Răng 225g": "Colgate Cavity Protection Toothpaste 225g",
+  "Nước súc miệng Listerine Cool Mint 250ml": "Listerine Mouthwash Cool Mint 250ml",
+  "Bọt cạo râu Gillette hương Chanh 175g": "Gillette Shaving Foam Lemon 175g",
+  "Sữa tắm Enchanteur Charming 650g": "Enchanteur Charming Shower Gel 650g",
+  "Dầu gội Romano Force 650g": "Romano Force Shampoo 650g",
+  "Lăn khử mùi Nivea nam 50ml": "Nivea Men Roll-On Deodorant 50ml",
+  "Kem dưỡng da Pond's Trắng Hồng 50g": "Pond's White Beauty Cream 50g",
+  "Bông tẩy trang Silcot 82 miếng": "Silcot Cotton Pads 82pcs",
+  "Nước tẩy trang L'Oreal 400ml": "L'Oreal Micellar Water 400ml",
+  "Sữa tắm em bé Johnson's Baby 200ml": "Johnson's Baby Bath 200ml",
+  "Nước rửa chén Sunlight Chanh 3.6kg": "Sunlight Lemon Dishwashing Liquid 3.6kg",
+  "Nước lau sàn Sunlight Hương hoa 3.8kg": "Sunlight Floral Floor Cleaner 3.8kg",
+  "Nước tẩy Javel Mỹ Hảo 1L": "My Hao Javel Bleach 1L",
+  "Nước giặt Ariel Cửa Trước túi 3.2kg": "Ariel Front Load Liquid Detergent Bag 3.2kg",
+  "Nước xả vải Downy Huyền Bí túi 3L": "Downy Mystique Fabric Softener Bag 3L",
+  "Nước tẩy bồn cầu Vim Đậm Đặc 900ml": "Vim Concentrated Toilet Cleaner 900ml",
+  "Nước lau kính Sunlight túi 650ml": "Sunlight Glass Cleaner Bag 650ml",
+  "Nước giặt OMO Matic túi 3.6kg": "OMO Matic Liquid Detergent Bag 3.6kg",
+  "Nước xả Comfort Một Lần Xả túi 2.8L": "Comfort One Rinse Fabric Softener Bag 2.8L",
+  "Sáp thơm Glade hương Oải hương": "Glade Lavender Scented Gel",
+  "Xịt côn trùng Raid hương Cam 600ml": "Raid Orange Insect Killer Spray 600ml",
+  "Nước lau bếp Sunlight Cif 500ml": "Cif Sunlight Kitchen Cleaner 500ml",
+  "Nước rửa tay Lifebuoy hương Chanh túi 450g": "Lifebuoy Lemon Handwash Bag 450g",
+  "Thịt ba chỉ bò Mỹ khay 500g": "US Beef Short Plate Tray 500g",
+  "Trứng gà Ba Huân hộp 10 quả": "Ba Huan Chicken Eggs Box of 10",
+  "Thịt đùi heo VietGAP 500g": "VietGAP Pork Leg Meat 500g",
+  "Xà lách búp mỡ VietGAP 250g": "VietGAP Butterhead Lettuce 250g",
+  "Cà chua beef Đà Lạt túi 500g": "Da Lat Beef Tomatoes Bag 500g",
+  "Dưa leo sạch VietGAP túi 500g": "VietGAP Clean Cucumber Bag 500g",
+  "Cà rốt Đà Lạt túi 500g": "Da Lat Carrots Bag 500g",
+  "Bông cải xanh túi 300g": "Broccoli Bag 300g",
+  "Khoai tây Đà Lạt túi 1kg": "Da Lat Potatoes Bag 1kg",
+  "Trứng vịt sạch hộp 10 quả": "Clean Duck Eggs Box of 10",
+  "Trứng cút sạch hộp 30 quả": "Clean Quail Eggs Box of 30",
+  "Nấm đùi gà túi 200g": "King Oyster Mushrooms Bag 200g",
+  "Nấm kim châm Hàn Quốc gói 150g": "Korean Enoki Mushrooms Pack 150g",
+  "Rau muống nước VietGAP túi 500g": "VietGAP Water Spinach Bag 500g",
+  "Cải thìa VietGAP túi 500g": "VietGAP Bok Choy Bag 500g",
+  "Bưởi da xanh túi 1.2kg": "Green Skin Pomelo Bag 1.2kg",
+  "Cam sành túi lưới 2kg": "King Mandarin Net Bag 2kg",
+  "Xoài Cát Hòa Lộc 1kg": "Hoa Loc Mango 1kg",
+  "Táo Rockit ống 4 quả": "Rockit Apples Tube of 4",
+  "Nho đen Mỹ không hạt hộp 500g": "US Seedless Black Grapes Box 500g",
+  "Dâu tây giống Nhật hộp 250g": "Japanese Strawberry Box 250g",
+  "Kiwi vàng New Zealand hộp 4 quả": "New Zealand Gold Kiwi Box of 4",
+  "Chuối Laba Đà Lạt nải 1kg": "Da Lat Laba Bananas Bunch 1kg",
+  "Đu đủ ruột đỏ VietGAP quả 1kg": "VietGAP Red Fleshed Papaya 1kg",
+  "Dưa hấu không hạt VietGAP quả 3kg": "VietGAP Seedless Watermelon 3kg",
+  "Lê Nam Phi túi 1kg": "South African Pears Bag 1kg",
+  "Thanh long ruột đỏ túi 1kg": "Red Dragon Fruit Bag 1kg",
+  "Ổi trân châu VietGAP túi 1kg": "VietGAP Pearl Guava Bag 1kg",
+  "Filet cá hồi Na Uy 300g": "Norwegian Salmon Fillet 300g",
+  "Tôm thẻ chân trắng size 30 con": "White Leg Shrimp size of 30",
+  "Mực lá tươi Phan Thiết 500g": "Fresh Phan Thiet Bigfin Reef Squid 500g",
+  "Thịt bò xay khay 300g": "Ground Beef Tray 300g",
+  "Sườn non heo VietGAP 500g": "VietGAP Pork Spareribs 500g",
+  "Ức gà phi lê khay 500g": "Chicken Breast Fillet Tray 500g",
+  "Cánh gà CP khay 500g": "CP Chicken Wings Tray 500g",
+  "Đùi gà tỏi CP khay 500g": "CP Chicken Drumsticks Tray 500g",
+  "Thịt bò Mỹ cuộn khay 500g": "US Rolled Beef Tray 500g",
+  "Cá thu cắt lát khay 300g": "Sliced Mackerel Tray 300g",
+  "Lươn đồng làm sạch khay 250g": "Cleaned Swamp Eel Tray 250g",
+  "Cá điêu hồng làm sạch con 1kg": "Cleaned Red Tilapia 1kg",
+  "Cá thác lác nạo gói 150g": "Scraped Bronze Featherback Fish Pack 150g",
+  "Cá viên CP gói 500g": "CP Fish Balls Pack 500g",
+  "Xúc xích Đức Vissan gói 500g": "Vissan German Sausages Pack 500g",
+  "Há cảo tôm CP gói 300g": "CP Shrimp Dumplings Pack 300g",
+  "Sủi cảo thịt heo gói 350g": "Pork Dumplings Pack 350g",
+  "Khoai tây sợi vàng gói 1kg": "French Fries Pack 1kg",
+  "Kem Merino đậu đỏ hộp 450ml": "Merino Red Bean Ice Cream Box 450ml",
+  "Kem Celano hương Vani hộp 450ml": "Celano Vanilla Ice Cream Box 450ml",
+  "Chả giò tôm thịt gói 400g": "Shrimp and Pork Spring Rolls Pack 400g",
+  "Bánh xếp Mandu nhân thịt gói 350g": "Pork Mandu Dumplings Pack 350g",
+  "Cá viên thắt bính CP gói 200g": "CP Braided Fish Balls Pack 200g",
+  "Xúc xích phô mai gói 200g": "Cheese Sausages Pack 200g",
+  "Mì Hảo Hảo Tôm Chua Cay thùng 30 gói": "Hao Hao Hot & Sour Shrimp Noodles Box of 30",
+  "Dầu đậu nành Simply 2L": "Simply Soybean Oil 2L",
+  "Hạt nêm Knorr 900g": "Knorr Seasoning Powder 900g",
+  "Nước mắm Chinsu Cá Hồi chai 500ml": "Chinsu Salmon Fish Sauce Bottle 500ml",
+  "Tương ớt Chinsu chai 250g": "Chinsu Chili Sauce Bottle 250g",
+  "Sữa tươi TH True Milk ít đường hộp 1L": "TH True Milk Low Sugar Box 1L",
+  "Sữa chua Vinamilk lốc 4 hộp": "Vinamilk Yogurt Pack of 4",
+  "Bia Heineken lon 330ml lốc 6": "Heineken Beer 330ml Can Pack of 6",
+  "Nước ngọt Coca Cola lốc 6 lon": "Coca Cola Pack of 6 Cans",
+  "Nước suối Aquafina chai 500ml lốc 6": "Aquafina Water 500ml Bottle Pack of 6",
+  "Sữa đặc Ông Thọ lon đỏ 380g": "Ong Tho Red Condensed Milk Can 380g",
+  "Gạo thơm ST25 túi 5kg": "ST25 Fragrant Rice Bag 5kg",
+  "Mì ly Modern Tôm Chua Cay lốc 6": "Modern Hot & Sour Shrimp Cup Noodles Pack of 6",
+  "Nước tương Nam Dương chai 280ml": "Nam Duong Soy Sauce Bottle 280ml",
+  "Đường tinh luyện Biên Hòa gói 1kg": "Bien Hoa Refined Sugar Pack 1kg",
+  "Muối i-ốt gói 500g": "Iodized Salt Pack 500g",
+  "Bánh quy Cosy Marie gói 200g": "Cosy Marie Biscuits Pack 200g",
+  "Kẹo dẻo Haribo Gấu gói 80g": "Haribo Goldbears Pack 80g",
+  "Trà xanh Không Độ chai 455ml": "Zero Degree Green Tea Bottle 455ml",
+  "Nước tăng lực Sting Dâu chai 320ml": "Sting Strawberry Energy Drink Bottle 320ml",
+  "Bánh xốp Imperial gói 100g": "Imperial Wafers Pack 100g",
+  "Nước dừa tươi đóng lon Coco 330ml": "Coco Fresh Coconut Water Can 330ml",
+  "Hạt hướng dương Chacha gói 100g": "Chacha Sunflower Seeds Pack 100g"
+};
+
+export function translateCategoryName(name, lang) {
+  if (lang !== 'en') return name;
+  return CATEGORIES[name] || name;
+}
+
+export function translateUnit(unit, lang) {
+  if (lang !== 'en') return unit;
+  return UNITS[unit] || unit;
+}
+
+export function translateProductName(name, lang) {
+  if (lang !== 'en') return name;
+  return PRODUCTS[name] || name;
+}

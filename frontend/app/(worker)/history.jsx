@@ -127,6 +127,14 @@ export default function HistoryScreen(){
         ...section,
         data: filter === 'all' ? section.data : section.data.filter((item) => item.type === filter),
     })).filter((section) => section.data.length > 0);
+    if (loading) {
+        return (
+            <SafeAreaView style={[styles.safeArea, { justifyContent: 'center', alignItems: 'center' }]}>
+                <ActivityIndicator color={COLORS.primary} size="large" />
+            </SafeAreaView>
+        );
+    }
+
     return (
         <SafeAreaView style = {styles.safeArea}>
             {/* header */}
@@ -149,24 +157,20 @@ export default function HistoryScreen(){
                 ))}
             </View>
             {/* Danh sách lịch sử */}
-            {loading ? (
-                <ActivityIndicator color={COLORS.primary} size="large" style={{ marginTop: 40 }} />
-                ) : (   
-                <SectionList
-                sections = {filteredSections}
-                keyExtractor={(item) => item.id}
-                renderItem={({item}) => <HistoryItem item = {item} />}
-                renderSectionHeader={({section}) => (
-                    <Text style = {styles.sectionHeader}>{section.title}</Text>
-                )}
-                contentContainerStyle = {styles.list}
-                ListEmptyComponent={
-                    <View style = {styles.emptyBox}>
-                        <Text style = {styles.emptyText}>Không có lịch sử</Text>
-                    </View>
-                }
-                />
+            <SectionList
+            sections = {filteredSections}
+            keyExtractor={(item) => item.id}
+            renderItem={({item}) => <HistoryItem item = {item} />}
+            renderSectionHeader={({section}) => (
+                <Text style = {styles.sectionHeader}>{section.title}</Text>
             )}
+            contentContainerStyle = {styles.list}
+            ListEmptyComponent={
+                <View style = {styles.emptyBox}>
+                    <Text style = {styles.emptyText}>Không có lịch sử</Text>
+                </View>
+            }
+            />
         <StaffBottomNav />
         </SafeAreaView>
     );
